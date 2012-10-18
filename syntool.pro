@@ -15,13 +15,17 @@ SOURCES = \
     windowwidget.cpp \
     topmenu.cpp \
     aboutwidget.cpp \
-    earthview.cpp
+    earthview.cpp \
+    customproxy.cpp \
+    timeline.cpp
 HEADERS = \
     mainwidget.h \
     windowwidget.h \
     topmenu.h \
     aboutwidget.h \
-    earthview.h
+    earthview.h \
+    customproxy.h \
+    timeline.h
 RESOURCES += \
     syntool.qrc
 DEPENDPATH += resources

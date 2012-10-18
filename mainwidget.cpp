@@ -9,8 +9,6 @@ MainWindow::MainWindow(QWidget *parent)
     vlayout->setSpacing(0);
     vlayout->setContentsMargins(5,0,5,2);
 
-//    hlayout = new QHBoxLayout(this);
-
     centralwgt = new QWidget;
     centralwgt->setLayout(vlayout);
     setCentralWidget(centralwgt);
@@ -23,11 +21,7 @@ MainWindow::MainWindow(QWidget *parent)
     glwgt = new WindowWidget(this);
     glwgt->setMinimumSize(200, 200);
 
-//    QPushButton* button = new QPushButton("aaaaaaaaaAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaa");
-
-//    QVBoxLayout* tempLayout = new QVBoxLayout;
-//    tempLayout->addWidget(button);
-//    glwgt->setLayout(tempLayout);
+    timeLine = new TimeLine;
 
 //    create right toolBox
     rightWgt = new QToolBox;

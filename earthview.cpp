@@ -59,6 +59,7 @@
 #include <QKeyEvent>
 #include <GL/freeglut.h>
 #include <QMatrix4x4>
+#include <QTimer>
 
 /* Constants (WGS ellipsoid) */
 //Средний радиус 6371,0 км
@@ -184,38 +185,13 @@ void EarthView::keyPressEvent(QKeyEvent *e)
 
         case Qt::Key_Plus:
         {
-            if (scale < 2000)
-            {
-                scale += scale*0.1;
-                scale2F = QSizeF(1/scale,1/scale);
-                qDebug() << "scale: " << scale;
-
-                float fov = camera()->fieldOfView();
-                if (fov != 0.0f)
-    //                camera()->setFieldOfView(camera()->fieldOfView() / scale_plus);
-                    camera()->setFieldOfView(scale);
-                else
-    //                camera()->setViewSize(camera()->viewSize() / scale_plus);
-                    camera()->setViewSize(scale2F);
-            }
+            scalePlus();
         }
         break;
 
         case Qt::Key_Minus:
         {
-            if (scale > 1)
-            {
-                scale -= scale*0.1;
-                scale2F = QSizeF(1/scale,1/scale);
-                qDebug() << "scale: " << scale;
-
-                float fov = camera()->fieldOfView();
-                if (fov != 0.0f)
-                    camera()->setFieldOfView(scale);
-                else
-                    camera()->setViewSize(scale2F);
-            }
-
+            scaleMinus();
         }
         break;
 
@@ -242,12 +218,14 @@ void EarthView::wheelEvent(QWheelEvent *e)
 {
     if (e->delta() > 0)
     {
-        QKeyEvent key(QKeyEvent::KeyPress, Qt::Key_Plus, Qt::NoModifier, "Plus", false, 0 );
-        EarthView::keyPressEvent(&key);
+        scalePlus();
+//        QKeyEvent key(QKeyEvent::KeyPress, Qt::Key_Plus, Qt::NoModifier, "Plus", false, 0 );
+//        EarthView::keyPressEvent(&key);
     }
     else {
-        QKeyEvent key(QKeyEvent::KeyPress, Qt::Key_Minus, Qt::NoModifier, "Minus", false, 0 );
-        EarthView::keyPressEvent(&key);
+        scaleMinus();
+//        QKeyEvent key(QKeyEvent::KeyPress, Qt::Key_Minus, Qt::NoModifier, "Minus", false, 0 );
+//        EarthView::keyPressEvent(&key);
     }
 }
 
@@ -269,6 +247,56 @@ void EarthView::rotate(int deltax, int deltay)
 //    qDebug() << anglex << angley;
     q *= camera()->tilt(-angley);
     camera()->rotateCenter(q);
+}
+
+void EarthView::scalePlus()
+{
+    if (scale < 2000)
+    {
+        for (int i = 0; i < 10; i++)
+        {
+            QTimer::singleShot(i*25, this, SLOT(scalePlus_slot()));
+        }
+    }
+    qDebug() << "scale: " << scale;
+}
+
+void EarthView::scalePlus_slot()
+{
+    float dscale = scale/50.0;
+    scale += dscale;
+    scale2F = QSizeF(1/scale,1/scale);
+
+    float fov = camera()->fieldOfView();
+    if (fov != 0.0f)
+        camera()->setFieldOfView(scale);
+    else
+        camera()->setViewSize(scale2F);
+}
+
+void EarthView::scaleMinus()
+{
+    if (scale > 1)
+    {
+        for (int i = 0; i < 10; i++)
+        {
+            QTimer::singleShot(i*25, this, SLOT(scaleMinus_slot()));
+        }
+    }
+    qDebug() << "scale: " << scale;
+}
+
+void EarthView::scaleMinus_slot()
+{
+    float dscale = scale/50.0;
+    scale -= dscale;
+    scale2F = QSizeF(1/scale,1/scale);
+
+    float fov = camera()->fieldOfView();
+    if (fov != 0.0f)
+        camera()->setFieldOfView(scale);
+    else
+        camera()->setViewSize(scale2F);
 }
 
 void EarthView::mouseMoveEvent(QMouseEvent *e)

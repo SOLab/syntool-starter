@@ -10,6 +10,7 @@
 #include <QToolBox>
 #include <QSplitter>
 #include <QMenuBar>
+#include "timeline.h"
 
 class MainWindow : public QMainWindow
 {
@@ -25,7 +26,7 @@ protected:
     QSplitter *splitter;
     WindowWidget* glwgt;
     TopMenu* topMenu;
-//    QTabWidget* leftwgt;
+    TimeLine* timeLine;
     QToolBox* rightWgt;
 
     QVBoxLayout* vlayout;

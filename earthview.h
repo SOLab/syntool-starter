@@ -110,6 +110,12 @@ private:
 
     QGLSceneNode *createScene();
     void rotate(int deltax, int deltay);
+    void scalePlus();
+    void scaleMinus();
+protected slots:
+    void scalePlus_slot();
+    void scaleMinus_slot();
+
 };
 
 #endif
