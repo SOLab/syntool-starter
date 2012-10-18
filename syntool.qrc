@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file alias="earth_6_3.jpg">resources/earth_6_3.jpg</file>
+    </qresource>
+</RCC>
