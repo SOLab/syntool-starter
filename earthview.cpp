@@ -118,9 +118,6 @@ EarthView::EarthView(QWindow *parent)
     setOptions(QGLView::FOVZoom | QGLView::CameraNavigation | QGLView::ObjectPicking);
     //Set up the camera
     camera()->setEye(QVector3D(0, 0, 10));
-//    qDebug() << camera()->screenRotation();
-//    camera()->setScreenRotation(90);
-//    qDebug() << camera()->screenRotation();
 
     scale = 1;
     scale2F = QSizeF(1/scale,1/scale);
@@ -134,47 +131,6 @@ EarthView::EarthView(QWindow *parent)
     startPan = QPoint(-1, -1);
     lastPan = QPoint(-1, -1);
     panModifiers = Qt::NoModifier;
-
-//    //Create the animation for the rotation of the Sun
-//    QPropertyAnimation *animation;
-//    animation = new QPropertyAnimation(this, "angle1", this);
-//    animation->setStartValue(0.0f);
-//    animation->setEndValue(360.0f);
-//    animation->setDuration(7000);
-//    animation->setLoopCount(-1);
-//    animation->start();
-//    animation->stop();
-
-//    //Create the animation for the rotation of the Planet
-//    QPropertyAnimation *animation2;
-//    animation2 = new QPropertyAnimation(this, "angle2", this);
-//    animation2->setStartValue(0.0f);
-//    animation2->setEndValue(360.0f);
-//    animation2->setDuration(3000);
-//    animation2->setLoopCount(-1);
-//    animation2->start();
-//    animation2->stop();
-
-//    //Create the animation for the rotation of the Solar-System
-//    QPropertyAnimation *animation3;
-//    animation3 = new QPropertyAnimation(this, "angle3", this);
-//    animation3->setStartValue(0.0f);
-//    animation3->setEndValue(360.0f);
-//    animation3->setDuration(30000);
-//    animation3->setLoopCount(-1);
-//    animation3->start();
-//    animation3->stop();
-
-//    //Create the animation for the glow effect
-//    QPropertyAnimation *glowAnimation;
-//    glowAnimation = new QPropertyAnimation(this, "glowFactor", this);
-//    glowAnimation->setStartValue(0.0f);
-//    glowAnimation->setEndValue(0.0f);
-//    glowAnimation->setKeyValueAt(0.5, 1.0f);
-//    glowAnimation->setDuration(3000);
-//    glowAnimation->setLoopCount(-1);
-//    glowAnimation->start();
-//    glowAnimation->stop();
 }
 
 EarthView::~EarthView()
@@ -193,16 +149,6 @@ void EarthView::initializeGL(QGLPainter *painter)
 
 void EarthView::paintGL(QGLPainter *painter)
 {
-//    sunRotation->setAngle(-m_angle1);
-//    planetRotation->setAngle(m_angle2);
-//    systemRotation->setAngle(m_angle3);
-    // Set the effect active to make sure that the program is created
-    // and bound so that we can update our uniform
-//    sunEffect->setActive(painter,true);
-//    sunEffect->program()->setUniformValue("glowFactor", m_glowFactor);
-//    painter->modelViewMatrix().rotate(45.0f, 1.0f, 1.0f, 1.0f);
-//    painter->modelViewMatrix().scale(3);
-
     spaceScene->draw(painter);
 }
 
@@ -317,8 +263,8 @@ void EarthView::rotate(int deltax, int deltay)
     if (rotation == 180 || rotation == 270) {
         deltay = -deltay;
     }
-    float anglex = deltax * 90.0f / width();
-    float angley = deltay * 90.0f / height();
+    float anglex = 2*deltax * 90.0f / (width() * scale);
+    float angley = 2*deltay * 90.0f / (height() * scale);
     QQuaternion q = camera()->pan(-anglex);
 //    qDebug() << anglex << angley;
     q *= camera()->tilt(-angley);
@@ -439,13 +385,9 @@ QGLSceneNode *EarthView::createScene()
 
     builder.currentNode()->setMaterialIndex(sunMat);
 
-//    sunEffect = new QGLShaderProgramEffect();
-//    sunEffect->setVertexShaderFromFile(":/solar.vsh");
-//    sunEffect->setFragmentShaderFromFile(":/solar.fsh");
     builder.currentNode()->setEffect(QGL::LitModulateTexture2D);
-//    builder.currentNode()->setUserEffect(sunEffect);
 
-//    //create and add rotations for axial tilt and rotation
+    //create and add rotations for axial tilt and rotation
     sunRotation = new QGraphicsRotation3D();
     QGraphicsRotation3D *axialTilt1 = new QGraphicsRotation3D();
     axialTilt1->setAngle(270.0f);
@@ -457,83 +399,3 @@ QGLSceneNode *EarthView::createScene()
      //completed building, so finalise
     return builder.finalizedSceneNode();
 }
-
-
-//void SolarSystemView::drawText(QGLPainter *painter)
-//{
-//    QString _str = "ggggggggggggggggggggrrrrrrrrrrrrrrrrrrrrrrrrrreeeeeeeeeeeeeeeeeeeeeeeeeeee";
-
-//qreal _red = 1;
-//qreal _green = 0;
-//qreal _blue = 0;
-//qreal _alpha = 1;
-
-//int _x, _y, _z;
-
-//QFont _font = QFont();
-//QFontMetrics fm(_font);
-//QRect rect = fm.boundingRect(_str); // text bounding box rect.adjust(0, 0, 1, 1);
-//QImage image(rect.size(), QImage::Format_ARGB32);
-//image.fill(0); // set to transparent
-
-//// draw the text on an image
-//QPainter p2d(&image);
-//p2d.setFont(_font);
-//p2d.setPen(QColor(_red * 255, _green * 255, _blue * 255, _alpha * 255));
-//p2d.drawText(0, 0, rect.width(), rect.height(), Qt::AlignCenter, _str);
-//p2d.end();
-
-//// convert the object coordinate to screen coordinate
-//GLdouble winx, winy, winz;
-//QMatrix4x4 model = painter->modelViewMatrix().top();
-//QMatrix4x4 proj = painter->projectionMatrix().top();
-
-
-//QGLUtils::objectToWindowCoord(_x, _y, _z, model.data(), proj.data(), &winx, &winy, &winz);
-//winy -= rect.height()/2.0; // align center of height
-//int x = (int)winx, y = (int)winy;
-//QVector2DArray vertices;
-//vertices.append(x, y + rect.height());
-//vertices.append(x, y);
-//vertices.append(x + rect.width(), y);
-//vertices.append(x + rect.width(), y + rect.height());
-
-//// texture coordinates
-//QVector2DArray texCoord;
-//texCoord.append(0.0f, 0.0f);
-//texCoord.append(0.0f, 1.0f);
-//texCoord.append(1.0f, 1.0f);
-//texCoord.append(1.0f, 0.0f);
-
-//// map the image to texture
-//QGLTexture2D texture;
-//texture.setImage(image);
-
-//// get viewport
-//GLint view4;
-//glGetIntegerv(GL_VIEWPORT, &view0);
-//painter->modelViewMatrix().push();
-//painter->modelViewMatrix().setToIdentity();
-//QMatrix4x4 projm;
-//projm.ortho(view0, view2, view3, view1, 0, 1);
-//painter->projectionMatrix().push();
-//painter->projectionMatrix() = projm;
-
-//// move to the actual position from the screen origin
-//painter->modelViewMatrix().translate(0, 0, -winz);
-
-//// enable blend to make the background transaprecy of the text
-//glEnable(GL_BLEND);
-//glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-//painter->clearAttributes();
-//painter->setStandardEffect(QGL::FlatReplaceTexture2D);
-//texture.bind();
-//painter->setVertexAttribute(QGL::Position, vertices);
-//painter->setVertexAttribute(QGL::TextureCoord0, texCoord);
-//painter->draw(QGL::TriangleFan, 4);
-//painter->setStandardEffect(QGL::FlatColor);
-//glBindTexture(GL_TEXTURE_2D, 0);
-//glDisable(GL_BLEND);
-//painter->projectionMatrix().pop();
-//painter->modelViewMatrix().pop();
-//}
