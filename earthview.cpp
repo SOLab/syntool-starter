@@ -320,6 +320,7 @@ void EarthView::rotate(int deltax, int deltay)
     float anglex = deltax * 90.0f / width();
     float angley = deltay * 90.0f / height();
     QQuaternion q = camera()->pan(-anglex);
+//    qDebug() << anglex << angley;
     q *= camera()->tilt(-angley);
     camera()->rotateCenter(q);
 }
@@ -328,7 +329,25 @@ void EarthView::mouseMoveEvent(QMouseEvent *e)
 {
     if (mousePressed)
     {
-        QPoint delta = e->pos();
+        QPoint delta = e->pos() - startPan;
+        if (e->modifiers() == panModifiers) {
+            camera()->setEye(startEye);
+            camera()->setCenter(startCenter);
+            camera()->setUpVector(startUpVector);
+        } else {
+//            d->startPan = d->lastPan;
+//            delta = e->pos() - d->startPan;
+//            d->startEye = d->camera->eye();
+//            d->startCenter = d->camera->center();
+//            d->startUpVector = d->camera->upVector();
+//            d->panModifiers = e->modifiers();
+        }
+        lastPan = e->pos();
+//        if ((e->modifiers() & Qt::ControlModifier) != 0)
+//            wheel(delta.y() * -60);
+//        else if ((e->modifiers() & Qt::ShiftModifier) != 0)
+//            pan(delta.x(), delta.y());
+//        else
         rotate(delta.x(), delta.y());
     }
 //    if (d->panning) {
@@ -379,12 +398,16 @@ void EarthView::mouseMoveEvent(QMouseEvent *e)
 //            d->enteredObject = 0;
 //        }
 //    }
-    //    QWindow::mouseMoveEvent(e);
+        QWindow::mouseMoveEvent(e);
 }
 
 void EarthView::mousePressEvent(QMouseEvent *e)
 {
     mousePressed = true;
+    startPan = e->pos();
+    startEye = camera()->eye();
+    startCenter = camera()->center();
+    startUpVector = camera()->upVector();
 }
 
 void EarthView::mouseReleaseEvent(QMouseEvent *e)
@@ -393,7 +416,7 @@ void EarthView::mouseReleaseEvent(QMouseEvent *e)
 }
 
 QGLSceneNode *EarthView::createScene()
-{ 
+{
     QGLBuilder builder;
     QGLSceneNode *root = builder.sceneNode();
     QUrl url;

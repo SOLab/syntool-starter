@@ -90,7 +90,11 @@ private:
     float scale;
     bool mousePressed;
     QPoint startPan, lastPan;
+    int panModifiers;
     QSizeF scale2F;
+    QVector3D startEye;
+    QVector3D startCenter;
+    QVector3D startUpVector;
 //    float m_angle1;
 //    float m_angle2;
 //    float m_angle3;
