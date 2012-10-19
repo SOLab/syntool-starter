@@ -2,6 +2,7 @@
 #define WINDOWWIDGET_H
 
 #include <QWidget>
+#include <QKeyEvent>
 
 class QWindow;
 

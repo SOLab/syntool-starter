@@ -1,6 +1,8 @@
 #include "mainwidget.h"
 #include "aboutwidget.h"
 #include <QDebug>
+#include <QKeyEvent>
+#include "earthview.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -20,8 +22,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     glwgt = new WindowWidget(this);
     glwgt->setMinimumSize(200, 200);
-
-    timeLine = new TimeLine;
+//    timeLine = new TimeLine;
 
 //    create right toolBox
     rightWgt = new QToolBox;
@@ -45,6 +46,7 @@ MainWindow::MainWindow(QWidget *parent)
     vlayout->addWidget(splitter);
 
     createMenuBar();
+    setFocusPolicy(Qt::StrongFocus);
 }
 
 void MainWindow::setHostedWindow(QWindow *window)
@@ -98,4 +100,11 @@ void MainWindow::createMenuBar()
     aboutAction->setShortcutContext(Qt::ApplicationShortcut);
     connect(aboutAction, SIGNAL(triggered()), this, SLOT(aboutProgram()));
     helpMenu->addAction(aboutAction);
+}
+
+
+void MainWindow::keyPress(QKeyEvent *e)
+{
+    qDebug() << 5666565;
+    this->keyPressEvent(e);
 }

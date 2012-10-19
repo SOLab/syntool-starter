@@ -2,7 +2,7 @@ TEMPLATE = app
 TARGET = syntool
 CONFIG += qt warn_on
 
-QT       += core gui opengl
+QT += core gui opengl
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 QT += 3d
@@ -25,7 +25,8 @@ HEADERS = \
     aboutwidget.h \
     earthview.h \
     customproxy.h \
-    timeline.h
+    timeline.h \
+    myapplication.h
 RESOURCES += \
     syntool.qrc
 DEPENDPATH += resources

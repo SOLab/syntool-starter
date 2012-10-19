@@ -11,6 +11,7 @@
 #include <QSplitter>
 #include <QMenuBar>
 #include "timeline.h"
+#include <QApplication>
 
 class MainWindow : public QMainWindow
 {
@@ -18,15 +19,16 @@ class MainWindow : public QMainWindow
 
 public:
     MainWindow(QWidget *parent = 0);
-    ~MainWindow(){};
+    ~MainWindow(){}
     void setHostedWindow(QWindow *window);
+    void keyPress(QKeyEvent* e);
 //    void resizeEvent(QResizeEvent *e);
 
 protected:
     QSplitter *splitter;
     WindowWidget* glwgt;
     TopMenu* topMenu;
-    TimeLine* timeLine;
+//    TimeLine* timeLine;
     QToolBox* rightWgt;
 
     QVBoxLayout* vlayout;
@@ -34,6 +36,7 @@ protected:
     QWidget* centralwgt;
 
     void createMenuBar();
+//    void keyPressEvent(QKeyEvent *e);
 
 public slots:
     void aboutProgram();

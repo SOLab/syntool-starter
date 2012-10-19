@@ -5,6 +5,7 @@
 #include <QGraphicsScene>
 #include <QGraphicsItem>
 #include <QMouseEvent>
+#include <QAbstractTableModel>
 
 using namespace Qt;
 

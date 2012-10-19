@@ -153,6 +153,11 @@ void EarthView::paintGL(QGLPainter *painter)
     spaceScene->draw(painter);
 }
 
+void EarthView::keyPress(QKeyEvent *e)
+{
+    this->keyPressEvent(e);
+}
+
 void EarthView::keyPressEvent(QKeyEvent *e)
 {
     //QGLView keys
@@ -276,7 +281,7 @@ void EarthView::scalePlus_slot()
 
 void EarthView::scaleMinus()
 {
-    if (scale > 1)
+    if (scale > 0.8)
     {
         for (int i = 0; i < 10; i++)
         {
@@ -298,6 +303,7 @@ void EarthView::scaleMinus_slot()
     else
         camera()->setViewSize(scale2F);
 }
+
 
 void EarthView::mouseMoveEvent(QMouseEvent *e)
 {
@@ -377,6 +383,7 @@ void EarthView::mouseMoveEvent(QMouseEvent *e)
 
 void EarthView::mousePressEvent(QMouseEvent *e)
 {
+    Q_UNUSED(e);
     mousePressed = true;
     startPan = e->pos();
     startEye = camera()->eye();
@@ -386,6 +393,7 @@ void EarthView::mousePressEvent(QMouseEvent *e)
 
 void EarthView::mouseReleaseEvent(QMouseEvent *e)
 {
+    Q_UNUSED(e);
     mousePressed = false;
 }
 

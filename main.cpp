@@ -40,6 +40,7 @@
 
 #include "earthview.h"
 #include "mainwidget.h"
+#include "myapplication.h"
 
 #include <QGuiApplication>
 #include <QApplication>
@@ -47,10 +48,11 @@
 
 int main(int argc, char *argv[])
 {
-    QApplication app(argc, argv);
+    myApplication app(argc, argv);
 
 //    SolarSystemView* view = new SolarSystemView;
     EarthView view;
+    app.set_view(&view);
 
 //    view->resize(800, 600);
 

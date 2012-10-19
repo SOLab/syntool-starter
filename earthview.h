@@ -74,6 +74,7 @@ public:
 //    void setGlowFactor(float arg) { m_glowFactor = arg; update(); }
 
     void setupViewport(int width, int height);
+    void keyPress(QKeyEvent* e);
 protected:
     void initializeGL(QGLPainter *painter);
     void paintGL(QGLPainter *painter);
@@ -90,7 +91,7 @@ private:
     float scale;
     bool mousePressed;
     QPoint startPan, lastPan;
-    int panModifiers;
+    Qt::KeyboardModifiers panModifiers;
     QSizeF scale2F;
     QVector3D startEye;
     QVector3D startCenter;
@@ -115,7 +116,6 @@ private:
 protected slots:
     void scalePlus_slot();
     void scaleMinus_slot();
-
 };
 
 #endif
