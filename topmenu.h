@@ -32,7 +32,10 @@ public:
 protected:
     TopMenuButton* addLineButton;
     TopMenuButton* addLayerButton;
+    TopMenuButton* PythonScriptButton;
     QHBoxLayout* topLayout;
+    QHBoxLayout* leftLayout;
+    QHBoxLayout* rightLayout;
 
 signals:
     

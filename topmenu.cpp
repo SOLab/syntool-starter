@@ -1,4 +1,5 @@
 #include "topmenu.h"
+#include "QDebug"
 
 TopMenu::TopMenu(QWidget *parent) :
     QWidget(parent)
@@ -24,7 +25,22 @@ TopMenu::TopMenu(QWidget *parent) :
     addLayerButton->setIcon(QPixmap("/usr/share/icons/oxygen/16x16/status/image-loading.png"));
     addLayerButton->setToolTip("overlay an image");
 
-    topLayout->addWidget(addLineButton);
-    topLayout->addWidget(addLayerButton);
+    PythonScriptButton = new TopMenuButton;
+//    PythonScriptButton->setIcon(QPixmap("/usr/share/icons/oxygen/16x16/mimetypes/text-x-python.png"));
+    PythonScriptButton->setIcon(QIcon().fromTheme("text-x-python"));
+    qDebug() << PythonScriptButton->icon();
+    PythonScriptButton->setToolTip("PythonQt Script");
+
+    leftLayout = new QHBoxLayout;
+    rightLayout = new QHBoxLayout;
+
+    leftLayout->addWidget(addLineButton);
+    leftLayout->addWidget(addLayerButton);
+    rightLayout->addWidget(PythonScriptButton, 0, Qt::AlignRight);
+
+    topLayout->addLayout(leftLayout, 10);
+    topLayout->setAlignment(leftLayout, Qt::AlignLeft);
+    topLayout->addLayout(rightLayout, 0);
+    topLayout->setAlignment(rightLayout, Qt::AlignRight);
     setLayout(topLayout);
 }

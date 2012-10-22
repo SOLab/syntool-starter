@@ -39,7 +39,6 @@
 ****************************************************************************/
 
 #include "earthview.h"
-#include "qglbuilder.h"
 #include "qglmaterialcollection.h"
 #include "qgltexture2d.h"
 #include "qglmaterial.h"
@@ -54,12 +53,10 @@
 #include <QOpenGLShaderProgram>
 #include <QMatrix4x4>
 #include <qmath.h>
-#include <QDebug>
-#include <QSphere3D>
-#include <QKeyEvent>
-#include <GL/freeglut.h>
-#include <QMatrix4x4>
+//#include <QDebug>
 #include <QTimer>
+
+#include "qglcylinder.h"
 
 /* Constants (WGS ellipsoid) */
 //Средний радиус 6371,0 км
@@ -74,11 +71,11 @@ struct geoDetic
 
 geoDetic convert_ecef_to_wgs84(double x, double y, double z)
 {
+    QGLCylinder();
     geoDetic pos;
     pos.lon = 0;
     pos.lat = 0;
     pos.alt = 0;
-
 
     double deg = 0.01745329252;
     double r = qSqrt(x * x + y * y);
@@ -115,7 +112,7 @@ EarthView::EarthView(QWindow *parent)
 //    , sunEffect(0)
 {
     //Generate geometry for the scene
-    spaceScene = createScene();
+//    spaceScene = createScene();
     setOptions(QGLView::FOVZoom | QGLView::CameraNavigation | QGLView::ObjectPicking);
     //Set up the camera
     camera()->setEye(QVector3D(0, 0, 10));
@@ -132,6 +129,9 @@ EarthView::EarthView(QWindow *parent)
     startPan = QPoint(-1, -1);
     lastPan = QPoint(-1, -1);
     panModifiers = Qt::NoModifier;
+
+    QSharedPointer<QGLMaterialCollection> palette(new QGLMaterialCollection());
+    earth = new Earth(this, palette);
 }
 
 EarthView::~EarthView()
@@ -150,7 +150,9 @@ void EarthView::initializeGL(QGLPainter *painter)
 
 void EarthView::paintGL(QGLPainter *painter)
 {
-    spaceScene->draw(painter);
+//    spaceScene->draw(painter);
+    earth->draw(painter);
+//    qDebug() << 1111111111111111111;
 }
 
 void EarthView::keyPress(QKeyEvent *e)
@@ -395,43 +397,4 @@ void EarthView::mouseReleaseEvent(QMouseEvent *e)
 {
     Q_UNUSED(e);
     mousePressed = false;
-}
-
-QGLSceneNode *EarthView::createScene()
-{
-    QGLBuilder builder;
-    QGLSceneNode *root = builder.sceneNode();
-    QUrl url;
-
-    //set up our materials palette - this describes all
-    //of the materials we will use for this scene.
-
-    //solar surface
-    QGLMaterial *mat1 = new QGLMaterial;
-    url.setPath(QLatin1String(":/earth_6_3.jpg"));
-    url.setScheme(QLatin1String("file"));
-    mat1->setTextureUrl(url,0);
-    m_LoadedTextures.push_back(mat1->texture(0));
-    int sunMat = root->palette()->addMaterial(mat1);
-
-
-    // create the sun for our solar system
-    builder.pushNode()->setObjectName(QLatin1String("Solar"));
-    builder<<QGLSphere(1);
-
-    builder.currentNode()->setMaterialIndex(sunMat);
-
-    builder.currentNode()->setEffect(QGL::LitModulateTexture2D);
-
-    //create and add rotations for axial tilt and rotation
-    sunRotation = new QGraphicsRotation3D();
-    QGraphicsRotation3D *axialTilt1 = new QGraphicsRotation3D();
-    axialTilt1->setAngle(270.0f);
-    axialTilt1->setAxis(QVector3D(1,0,0));
-    sunRotation->setAngle(0.0f);
-    builder.currentNode()->addTransform(sunRotation);
-    builder.currentNode()->addTransform(axialTilt1);
-
-     //completed building, so finalise
-    return builder.finalizedSceneNode();
 }

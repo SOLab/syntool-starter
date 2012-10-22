@@ -51,7 +51,7 @@ public:
       //else do the regular processing
       else
       {
-          QApplication::notify(object, event);
+          return QApplication::notify(object, event);
       }
 
     }

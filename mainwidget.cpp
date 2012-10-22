@@ -1,8 +1,10 @@
 #include "mainwidget.h"
 #include "aboutwidget.h"
 #include <QDebug>
-#include <QKeyEvent>
-#include "earthview.h"
+
+
+//#include "PythonQt.h"
+//#include "gui/PythonQtScriptingConsole.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -46,18 +48,15 @@ MainWindow::MainWindow(QWidget *parent)
     vlayout->addWidget(splitter);
 
     createMenuBar();
+    createPythonConsole();
     setFocusPolicy(Qt::StrongFocus);
 }
 
 void MainWindow::setHostedWindow(QWindow *window)
 {
-    QPushButton* button = new QPushButton("aaaaaaaaaAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaa", glwgt);
-    button->resize(200,200);
+//    QPushButton* button = new QPushButton("aaaaaaaaaAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaa", glwgt);
+//    button->resize(200,200);
     glwgt->setHostedWindow(window);
-
-//    QVBoxLayout* tempLayout = new QVBoxLayout;
-//    tempLayout->addWidget(button);
-//    glwgt->setLayout(tempLayout);
 }
 
 void MainWindow::aboutProgram()
@@ -100,6 +99,32 @@ void MainWindow::createMenuBar()
     aboutAction->setShortcutContext(Qt::ApplicationShortcut);
     connect(aboutAction, SIGNAL(triggered()), this, SLOT(aboutProgram()));
     helpMenu->addAction(aboutAction);
+}
+
+void MainWindow::createPythonConsole()
+{
+//    PythonQt::init(PythonQt::IgnoreSiteModule | PythonQt::RedirectStdOut);
+//    PythonQt_QtAll::init();
+
+//    PythonQtObjectPtr  mainContext = PythonQt::self()->getMainModule();
+//    PythonQtScriptingConsole console(NULL, mainContext);
+
+//    mainContext.evalFile(":example.py");
+
+//    QWidget *window = new QWidget;
+//    QPushButton *button1 = new QPushButton("One");
+//    QPushButton *button2 = new QPushButton("Two");
+
+//    QVBoxLayout *layout = new QVBoxLayout;
+//    layout->addWidget(button1);
+//    layout->addWidget(button2);
+//    vlayout->addWidget(&console);
+
+//    window->setLayout(layout);
+//    window->show();
+//    mainContext.addObject("window", window);
+//    mainContext.addObject("button1", button1);
+//    mainContext.addObject("button2", button2);
 }
 
 

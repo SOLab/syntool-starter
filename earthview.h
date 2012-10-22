@@ -43,6 +43,9 @@
 
 #include "qglview.h"
 #include "qgraphicsrotation3d.h"
+#include "qglbuilder.h"
+#include "earth.h"
+#include <QKeyEvent>
 
 QT_BEGIN_NAMESPACE
 class QGLSceneNode;
@@ -76,6 +79,7 @@ public:
     void setupViewport(int width, int height);
     void keyPress(QKeyEvent* e);
 protected:
+    Earth *earth;
     void initializeGL(QGLPainter *painter);
     void paintGL(QGLPainter *painter);
     void keyPressEvent(QKeyEvent *e);
@@ -87,6 +91,7 @@ protected:
     void mousePressEvent(QMouseEvent *e);
     void mouseReleaseEvent(QMouseEvent *e);
 
+    QGLBuilder builder;
 private:
     float scale;
     bool mousePressed;
@@ -109,7 +114,6 @@ private:
 
 //    QGLShaderProgramEffect* sunEffect;
 
-    QGLSceneNode *createScene();
     void rotate(int deltax, int deltay);
     void scalePlus();
     void scaleMinus();

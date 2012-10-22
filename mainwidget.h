@@ -36,6 +36,7 @@ protected:
     QWidget* centralwgt;
 
     void createMenuBar();
+    void createPythonConsole();
 //    void keyPressEvent(QKeyEvent *e);
 
 public slots:
