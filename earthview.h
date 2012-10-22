@@ -42,8 +42,6 @@
 #define BUILDER_H
 
 #include "qglview.h"
-#include "qgraphicsrotation3d.h"
-#include "qglbuilder.h"
 #include "earth.h"
 #include <QKeyEvent>
 
@@ -105,14 +103,6 @@ private:
 //    float m_angle2;
 //    float m_angle3;
 //    float m_glowFactor;
-    QGraphicsRotation3D *sunRotation;
-//    QGraphicsRotation3D *planetRotation;
-//    QGraphicsRotation3D *moonRotation;
-//    QGraphicsRotation3D *systemRotation;
-    QGLSceneNode *spaceScene;
-    QList<QGLTexture2D*> m_LoadedTextures;
-
-//    QGLShaderProgramEffect* sunEffect;
 
     void rotate(int deltax, int deltay);
     void scalePlus();

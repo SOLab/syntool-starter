@@ -39,24 +39,20 @@
 ****************************************************************************/
 
 #include "earthview.h"
-#include "qglmaterialcollection.h"
-#include "qgltexture2d.h"
-#include "qglmaterial.h"
+//#include "qglmaterialcollection.h"
+//#include "qgltexture2d.h"
+//#include "qglmaterial.h"
 #include "qglscenenode.h"
-#include "qgllightmodel.h"
-#include "qglsphere.h"
-#include "qgraphicsrotation3d.h"
-#include "qgraphicstranslation3d.h"
-#include "qglshaderprogrameffect.h"
+//#include "qgllightmodel.h"
+//#include "qgraphicsrotation3d.h"
+//#include "qgraphicstranslation3d.h"
+//#include "qglshaderprogrameffect.h"
 
-#include <QPropertyAnimation>
-#include <QOpenGLShaderProgram>
-#include <QMatrix4x4>
+//#include <QPropertyAnimation>
+//#include <QOpenGLShaderProgram>
 #include <qmath.h>
 //#include <QDebug>
 #include <QTimer>
-
-#include "qglcylinder.h"
 
 /* Constants (WGS ellipsoid) */
 //Средний радиус 6371,0 км
@@ -71,7 +67,6 @@ struct geoDetic
 
 geoDetic convert_ecef_to_wgs84(double x, double y, double z)
 {
-    QGLCylinder();
     geoDetic pos;
     pos.lon = 0;
     pos.lat = 0;
@@ -108,7 +103,7 @@ geoDetic convert_ecef_to_wgs84(double x, double y, double z)
 
 EarthView::EarthView(QWindow *parent)
     : QGLView(parent)
-    , spaceScene(new QGLSceneNode(this))
+
 //    , sunEffect(0)
 {
     //Generate geometry for the scene
@@ -135,11 +130,8 @@ EarthView::EarthView(QWindow *parent)
 }
 
 EarthView::~EarthView()
-{    
-    for (int i=0; i<m_LoadedTextures.count(); ++i) {
-        m_LoadedTextures.at(i)->cleanupResources();
-    }
-    delete spaceScene;
+{
+    delete earth;
 //    delete sunEffect;
 }
 
