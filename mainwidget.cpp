@@ -24,7 +24,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     glwgt = new WindowWidget(this);
     glwgt->setMinimumSize(200, 200);
-//    timeLine = new TimeLine;
+//    timeLine = new TimeLine(this);
+//    timeLine->setFixedHeight(70);
 
 //    create right toolBox
     rightWgt = new QToolBox;
@@ -45,6 +46,7 @@ MainWindow::MainWindow(QWidget *parent)
     splitter->setStretchFactor(1, 1);
 
     vlayout->addWidget(topMenu);
+//    vlayout->addWidget(timeLine);
     vlayout->addWidget(splitter);
 
     createMenuBar();

@@ -28,7 +28,7 @@ protected:
     QSplitter *splitter;
     WindowWidget* glwgt;
     TopMenu* topMenu;
-//    TimeLine* timeLine;
+    TimeLine* timeLine;
     QToolBox* rightWgt;
 
     QVBoxLayout* vlayout;

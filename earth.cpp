@@ -14,7 +14,7 @@ Earth::Earth(QObject *parent, QSharedPointer<QGLMaterialCollection> materials)
     : QGLSceneNode(parent)
     , m_texture(0)
 {
-//    setPalette(materials);
+    setPalette(materials);
 
 //    float ico[12][3] = {
 //        { 0.0f, 1.0f, phi },    // A - 0
@@ -164,6 +164,7 @@ Earth::Earth(QObject *parent, QSharedPointer<QGLMaterialCollection> materials)
 //    setMaterial(mat);
 //    QGLSceneNode *n = b.finalizedSceneNode();
 //    addNode(n);
+
     QGLBuilder builder;
     builder.newSection();
     QGLSceneNode *root = builder.sceneNode();
@@ -177,36 +178,40 @@ Earth::Earth(QObject *parent, QSharedPointer<QGLMaterialCollection> materials)
     url.setPath(QLatin1String(":/earth_6_3.jpg"));
     url.setScheme(QLatin1String("file"));
     mat1->setTextureUrl(url,0);
+
     m_LoadedTextures.push_back(mat1->texture(0));
-    int sunMat = root->palette()->addMaterial(mat1);
+    int earthMat = root->palette()->addMaterial(mat1);
 
-
-    // create the sun for our solar system
-    builder.pushNode()->setObjectName(QLatin1String("Solar"));
+    // create sphere
+    builder.pushNode()->setObjectName(QLatin1String("Earth"));
     builder<<QGLSphere(1);
 
-    builder.currentNode()->setMaterialIndex(sunMat);
+    builder.currentNode()->setMaterialIndex(earthMat);
     builder.currentNode()->setEffect(QGL::LitModulateTexture2D);
 
     //create and add rotations for axial tilt and rotation
-    sunRotation = new QGraphicsRotation3D();
+    earthRotation = new QGraphicsRotation3D();
     QGraphicsRotation3D *axialTilt1 = new QGraphicsRotation3D();
     axialTilt1->setAngle(270.0f);
     axialTilt1->setAxis(QVector3D(1,0,0));
-    sunRotation->setAngle(0.0f);
-    builder.currentNode()->addTransform(sunRotation);
+    earthRotation->setAngle(0.0f);
+    builder.currentNode()->addTransform(earthRotation);
     builder.currentNode()->addTransform(axialTilt1);
 
 
+//    QImage uv(QString(":/earth_6_3.jpg"));
 //    QGLMaterial *mat = new QGLMaterial;
 //    mat->setAmbientColor(QColor(32, 64, 196));
 //    mat->setDiffuseColor(QColor(32, 32, 32));
 
+//    builder.pushNode()->setObjectName(QLatin1String("Earth2"));
+
 //    QGLTexture2D *texture = new QGLTexture2D(mat);
-////    texture->setImage(uv);
+//    texture->setImage(uv);
 //    mat->setTexture(texture);
 //    m_texture = texture;
 
+//    builder.currentNode()->setMaterial(mat);
 //    setMaterial(mat);
 
      //completed building, so finalise

@@ -20,7 +20,7 @@ public:
 private:
     QList<QGLTexture2D*> m_LoadedTextures;
     QGLTexture2D *m_texture;
-    QGraphicsRotation3D *sunRotation;
+    QGraphicsRotation3D *earthRotation;
 };
 
 #endif // EARTH_H

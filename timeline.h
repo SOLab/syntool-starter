@@ -1,34 +1,48 @@
 #ifndef TIMELINE_H
 #define TIMELINE_H
 
-#include <QGraphicsView>
+#include <QWidget>
+#include <QPainter>
+#include <QPaintEvent>
+#include <QRect>
+#include <QPoint>
+#include <QMouseEvent>
+#include <QDebug>
+#include <QCursor>
+#include <QTimer>
 
-class QGraphicsScene;
-class QMouseEvent;
-
-class TimeLine : public QGraphicsView
+class TimeLine : public QWidget
 {
     Q_OBJECT
 
-protected:
-    void mouseMoveEvent(QMouseEvent *anEvent);
-    void mousePressEvent(QMouseEvent *anEvent);
-    /*void mouseReleaseEvent(QMouseEvent *anEvent);
-    void wheelEvent(QWheelEvent *anEvent);*/
-
 public:
-    TimeLine(QWidget *aParent = 0);
+    TimeLine(QWidget *parent = 0);
     ~TimeLine();
+    void paintEvent(QPaintEvent * pe);
+    void checkMouse();
+
+private slots:
+    void mousePressEvent ( QMouseEvent * pe );
+    void mouseMoveEvent(QMouseEvent * pe);
+    void mouseReleaseEvent ( QMouseEvent * pe );
+    void moveEnabled();
+    void backToMouseAndCursor(bool inDirection);
+
 
 private:
-    QGraphicsScene *scene_;
-
-    qreal prev_translate_;
-    quint64 value_;
-    quint64 prev_value_;
-
-    void drawGraduation();
-    void followTimeline();
+    struct param
+    {
+        int max_;
+        int min_;
+        int curMin_;
+        int curMax_;
+        int current_;
+        QRect cursorRect_;
+        bool move_;
+        bool flagMovedIntervalos_;
+        QPoint pos_;
+    };
+    param control_;
 };
 
 #endif // TIMELINE_H
