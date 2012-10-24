@@ -16,21 +16,21 @@ SOURCES = \
     topmenu.cpp \
     aboutwidget.cpp \
     earthview.cpp \
-    customproxy.cpp \
     timeline.cpp \
     earth.cpp \
-    buttons.cpp
+    buttons.cpp \
+    earthscene.cpp
 HEADERS = \
     mainwidget.h \
     windowwidget.h \
     topmenu.h \
     aboutwidget.h \
     earthview.h \
-    customproxy.h \
     timeline.h \
     myapplication.h \
     earth.h \
-    buttons.h
+    buttons.h \
+    earthscene.h
 RESOURCES += \
     syntool.qrc
 DEPENDPATH += resources

@@ -54,11 +54,15 @@ public:
     ~Buttons();
     void draw(QGLPainter *painter);
     void clearPositions();
+    void createButton();
 private:
     QGLSceneNode *m_left;
     QGLSceneNode *m_right;
+    QGLSceneNode *m_up;
+    QGLSceneNode *m_down;
     QSize m_size;
     QList<QGLTexture2D*> m_LoadedTextures;
+    QList<QGLTexture2D*> m_LoadedTextures_up;
 };
 
 #endif // BUTTONS_H

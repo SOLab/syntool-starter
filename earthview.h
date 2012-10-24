@@ -53,6 +53,9 @@ class QGLBuilder;
 class QGLShaderProgramEffect;
 QT_END_NAMESPACE
 
+class Buttons;
+class EarthScene;
+
 class EarthView : public QGLView
 {
     Q_OBJECT
@@ -77,13 +80,13 @@ public:
 
     void setupViewport(int width, int height);
     void keyPress(QKeyEvent* e);
-    void drawText(QGLPainter *painter, const QRect& posn, const QString& str);
+    EarthScene *scene() { return m_scene; }
 protected:
     Earth *earth;
     void initializeGL(QGLPainter *painter);
     void paintGL(QGLPainter *painter);
     void keyPressEvent(QKeyEvent *e);
-//    void resizeGL(int w, int h);
+    void resizeGL(int w, int h);
 //    void setupViewport(int width, int height);
     void resizeEvent(QResizeEvent *e);
     void wheelEvent(QWheelEvent *e);
@@ -93,6 +96,7 @@ protected:
 
     QGLBuilder builder;
 private:
+    EarthScene *m_scene;
     float scale;
     bool mousePressed;
     QPoint startPan, lastPan;
@@ -102,6 +106,7 @@ private:
     QVector3D startCenter;
     QVector3D startUpVector;
     Buttons* m_buttons;
+    QSharedPointer<QGLMaterialCollection> m_palette;
 //    float m_angle1;
 //    float m_angle2;
 //    float m_angle3;

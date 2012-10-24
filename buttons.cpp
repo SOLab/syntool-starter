@@ -41,6 +41,7 @@
 
 #include "buttons.h"
 #include "qglpainter.h"
+#include "qdebug.h"
 
 Buttons::Buttons(QObject *parent, QSharedPointer<QGLMaterialCollection> palette)
     : QGLSceneNode(parent)
@@ -49,14 +50,82 @@ Buttons::Buttons(QObject *parent, QSharedPointer<QGLMaterialCollection> palette)
     setPalette(palette);
     setOption(QGLSceneNode::CullBoundingBox, false);
 
+    createButton();
+}
+
+Buttons::~Buttons()
+{
+    for (int i=0; i<m_LoadedTextures.count(); ++i) {
+        m_LoadedTextures.at(i)->cleanupResources();
+    }
+    for (int i=0; i<m_LoadedTextures_up.count(); ++i) {
+        m_LoadedTextures_up.at(i)->cleanupResources();
+    }
+}
+
+void Buttons::draw(QGLPainter *painter)
+{
+    painter->projectionMatrix().push();
+    painter->modelViewMatrix().push();
+
+    QRect rect = painter->currentSurface()->viewportRect();
+    QMatrix4x4 projm;
+    projm.ortho(rect);
+    painter->projectionMatrix() = projm;
+    painter->modelViewMatrix().setToIdentity();
+
+//    if (m_left->position().isNull())
+//    {
+//        QVector2D pos(m_size.width() / 2, rect.height() - m_size.height() / 2);
+//        m_left->setPosition(pos);
+//        pos.setX(rect.width() - (m_size.width() / 2));
+//        m_right->setPosition(pos);
+//    }
+
+    if (m_left->position().isNull())
+    {
+        QVector2D pos(m_size.width() / 2, m_size.height() + m_size.height() / 2);
+        m_left->setPosition(pos);
+        pos.setX(5 * m_size.width()/2);
+        m_right->setPosition(pos);
+
+        QVector2D pos2(3*m_size.width()/2, m_size.height() / 2);
+        m_up->setPosition(pos2);
+        pos2.setY(5 * m_size.height() / 2);
+        m_down->setPosition(pos2);
+    }
+
+    glDisable(GL_DEPTH_TEST);
+
+    QGLSceneNode::draw(painter);
+
+    glEnable(GL_DEPTH_TEST);
+
+    painter->projectionMatrix().pop();
+    painter->modelViewMatrix().pop();
+}
+
+void Buttons::clearPositions()
+{
+    m_left->setPosition(QVector3D());
+    m_right->setPosition(QVector3D());
+}
+
+void Buttons::createButton()
+{
     m_left = new QGLSceneNode(this);
     m_left->setObjectName("Left Button");
     m_right = new QGLSceneNode(this);
     m_right->setObjectName("Right Button");
 
+    m_up = new QGLSceneNode(this);
+    m_up->setObjectName("Left Button");
+    m_down = new QGLSceneNode(this);
+    m_down->setObjectName("Right Button");
+
     QGLMaterial *mat = new QGLMaterial;
-    QImage im(":/controls/arrows-left.png");
-    m_size = im.size();
+    QImage im(":/arrow.png");
+    m_size = im.size() / 2;
     QGLTexture2D *tex = new QGLTexture2D(mat);
     m_LoadedTextures.push_back(tex);
     tex->setImage(im);
@@ -66,7 +135,7 @@ Buttons::Buttons(QObject *parent, QSharedPointer<QGLMaterialCollection> palette)
     setEffect(QGL::FlatReplaceTexture2D);
 
     QGeometryData data;
-    QSize f = im.size() / 2;
+    QSize f = im.size() / 4;
     QVector2D a(-f.width(), -f.height());
     QVector2D b(f.width(), -f.height());
     QVector2D c(f.width(), f.height());
@@ -97,46 +166,39 @@ Buttons::Buttons(QObject *parent, QSharedPointer<QGLMaterialCollection> palette)
     m_right->setStart(6);
     m_right->setCount(6);
     m_left->setOption(QGLSceneNode::CullBoundingBox, false);
-}
 
-Buttons::~Buttons()
-{
-    for (int i=0; i<m_LoadedTextures.count(); ++i) {
-        m_LoadedTextures.at(i)->cleanupResources();
-    }
-}
 
-void Buttons::draw(QGLPainter *painter)
-{
-    painter->projectionMatrix().push();
-    painter->modelViewMatrix().push();
+    QGeometryData data_up;
+    QSize f_up = im.size() / 4;
+    QVector2D a_up(-f_up.width(), f_up.height());
+    QVector2D b_up(-f_up.width(), -f_up.height());
+    QVector2D c_up(f_up.width(), -f_up.height());
+    QVector2D d_up(f_up.width(), f_up.height());
+    QVector2D ta_up(0, 1);
+    QVector2D tb_up(1, 1);
+    QVector2D tc_up(1, 0);
+    QVector2D td_up(0, 0);
+    data_up.appendVertex(a_up, b_up, c_up, d_up);
+    data_up.appendTexCoord(ta_up, tb_up, tc_up, td_up);
+    data_up.appendIndices(0, 1, 2);
+    data_up.appendIndices(0, 2, 3);
 
-    QRect rect = painter->currentSurface()->viewportRect();
-    QMatrix4x4 projm;
-    projm.ortho(rect);
-    painter->projectionMatrix() = projm;
-    painter->modelViewMatrix().setToIdentity();
+    // the right hand arrow geometry is same as above, flipped X <-> -X
+    data_up.appendGeometry(data_up);
+    data_up.texCoord(4).setX(1);
+    data_up.texCoord(5).setX(0);
+    data_up.texCoord(6).setX(0);
+    data_up.texCoord(7).setX(1);
+    data_up.appendIndices(4, 5, 6);
+    data_up.appendIndices(4, 6, 7);
 
-    if (m_left->position().isNull())
-    {
-        QVector2D pos(m_size.width() / 2, rect.height() - m_size.height() / 2);
-        m_left->setPosition(pos);
-        pos.setX(rect.width() - (m_size.width() / 2));
-        m_right->setPosition(pos);
-    }
+    m_up->setGeometry(data_up);
+    m_up->setStart(6);
+    m_up->setCount(6);
+    m_up->setOption(QGLSceneNode::CullBoundingBox, false);
 
-    glDisable(GL_DEPTH_TEST);
+    m_down->setGeometry(data_up);
+    m_down->setCount(6);
+    m_down->setOption(QGLSceneNode::CullBoundingBox, false);
 
-    QGLSceneNode::draw(painter);
-
-    glEnable(GL_DEPTH_TEST);
-
-    painter->projectionMatrix().pop();
-    painter->modelViewMatrix().pop();
-}
-
-void Buttons::clearPositions()
-{
-    m_left->setPosition(QVector3D());
-    m_right->setPosition(QVector3D());
 }

@@ -39,21 +39,12 @@
 ****************************************************************************/
 
 #include "earthview.h"
-//#include "qglmaterialcollection.h"
-//#include "qgltexture2d.h"
-//#include "qglmaterial.h"
 #include "qglscenenode.h"
-//#include "qgllightmodel.h"
-//#include "qgraphicsrotation3d.h"
-//#include "qgraphicstranslation3d.h"
-//#include "qglshaderprogrameffect.h"
 
-//#include <QPropertyAnimation>
-//#include <QOpenGLShaderProgram>
 #include <qmath.h>
-//#include <QDebug>
 #include <QTimer>
 #include <QApplication>
+#include "earthscene.h"
 
 /* Constants (WGS ellipsoid) */
 //Средний радиус 6371,0 км
@@ -105,6 +96,8 @@ geoDetic convert_ecef_to_wgs84(double x, double y, double z)
 
 EarthView::EarthView(QWindow *parent)
     : QGLView(parent)
+    , m_scene(0)
+    , m_palette(new QGLMaterialCollection())
 //    , sunEffect(0)
 {
     //Generate geometry for the scene
@@ -126,12 +119,12 @@ EarthView::EarthView(QWindow *parent)
     lastPan = QPoint(-1, -1);
     panModifiers = Qt::NoModifier;
 
+    m_scene = new EarthScene(this);
+    m_buttons = new Buttons(this, m_palette);
+    m_scene->mainNode()->addNode(m_buttons);
+    m_scene->setPickable(true);
 
-    QSharedPointer<QGLMaterialCollection> palette(new QGLMaterialCollection());
-    earth = new Earth(this, palette);
-
-    m_buttons = new Buttons(this, palette);
-    earth->addNode(m_buttons);
+    earth = new Earth(this, m_palette);
 }
 
 EarthView::~EarthView()
@@ -147,62 +140,14 @@ void EarthView::initializeGL(QGLPainter *painter)
 
 void EarthView::paintGL(QGLPainter *painter)
 {
-//    spaceScene->draw(painter);
+    glEnable(GL_BLEND);
     earth->draw(painter);
     m_buttons->draw(painter);
-//    drawText(painter, QRect(100, 100, 100, 100), "eeeeeeee");
-//    qDebug() << 1111111111111111111;
-//    QTimer::singleShot(20, this, SLOT(update()));
 }
 
 void EarthView::keyPress(QKeyEvent *e)
 {
     this->keyPressEvent(e);
-}
-
-void EarthView::drawText(QGLPainter *painter, const QRect &posn, const QString &str)
-{
-    QFont f = QApplication::font();
-    QFontMetrics metrics(f);
-    QRect rect = metrics.boundingRect(str);
-    rect.adjust(0, 0, 1, 1);
-
-    QImage image(rect.size(), QImage::Format_ARGB32);
-    image.fill(0);
-    QPainter p2(&image);
-    p2.setFont(f);
-    p2.setPen(Qt::white);
-    p2.drawText(-rect.x(), metrics.ascent(), str);
-    p2.end();
-
-    QGLTexture2D texture;
-    texture.setImage(image);
-
-    int x = posn.x() + (posn.width() - rect.width()) / 2;
-    int y = posn.y() + posn.height() - metrics.ascent() - metrics.descent();
-    y -= 10;
-
-    QVector2DArray vertices;
-    vertices.append(x + rect.x(), y + metrics.ascent());
-    vertices.append(x + rect.x(), y - metrics.descent());
-    vertices.append(x + rect.x() + rect.width(), y - metrics.descent());
-    vertices.append(x + rect.x() + rect.width(), y + metrics.ascent());
-
-    QVector2DArray texCoord;
-    texCoord.append(0.0f, 0.0f);
-    texCoord.append(0.0f, 1.0f);
-    texCoord.append(1.0f, 1.0f);
-    texCoord.append(1.0f, 0.0f);
-
-    painter->clearAttributes();
-    painter->setStandardEffect(QGL::FlatReplaceTexture2D);
-    texture.bind();
-    painter->setVertexAttribute(QGL::Position, vertices);
-    painter->setVertexAttribute(QGL::TextureCoord0, texCoord);
-    painter->draw(QGL::TriangleFan, 4);
-    painter->setStandardEffect(QGL::FlatColor);
-    glBindTexture(GL_TEXTURE_2D, 0);
-    texture.cleanupResources();
 }
 
 void EarthView::keyPressEvent(QKeyEvent *e)
@@ -258,6 +203,13 @@ void EarthView::keyPressEvent(QKeyEvent *e)
     qDebug() << "lat" << pos.lat;
     qDebug() << "alt" << pos.alt;
 
+}
+
+void EarthView::resizeGL(int w, int h)
+{
+    Q_UNUSED(w);
+    Q_UNUSED(h);
+    m_buttons->clearPositions();
 }
 
 void EarthView::resizeEvent(QResizeEvent *e)
