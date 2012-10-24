@@ -55,6 +55,7 @@ QT_END_NAMESPACE
 
 class Buttons;
 class EarthScene;
+class SkyBox;
 
 class EarthView : public QGLView
 {
@@ -106,6 +107,7 @@ private:
     QVector3D startCenter;
     QVector3D startUpVector;
     Buttons* m_buttons;
+    SkyBox *m_skybox;
     QSharedPointer<QGLMaterialCollection> m_palette;
 //    float m_angle1;
 //    float m_angle2;

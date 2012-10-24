@@ -45,6 +45,7 @@
 #include <QTimer>
 #include <QApplication>
 #include "earthscene.h"
+#include "skybox.h"
 
 /* Constants (WGS ellipsoid) */
 //Средний радиус 6371,0 км
@@ -125,6 +126,9 @@ EarthView::EarthView(QWindow *parent)
     m_scene->setPickable(true);
 
     earth = new Earth(this, m_palette);
+
+    QString path = ":/skybox";
+    m_skybox = new SkyBox(this, path);
 }
 
 EarthView::~EarthView()
@@ -141,6 +145,7 @@ void EarthView::initializeGL(QGLPainter *painter)
 void EarthView::paintGL(QGLPainter *painter)
 {
     glEnable(GL_BLEND);
+    m_skybox->draw(painter);
     earth->draw(painter);
     m_buttons->draw(painter);
 }

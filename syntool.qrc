@@ -5,4 +5,9 @@
         <file alias="earth.jpg">resources/earth.jpg</file>
         <file alias="arrow.png">resources/arrow.png</file>
     </qresource>
+    <qresource prefix="/skybox">
+        <file alias="top">resources/stars.png</file>
+        <file>resources/sky.png</file>
+        <file>resources/stars_mini.jpg</file>
+    </qresource>
 </RCC>

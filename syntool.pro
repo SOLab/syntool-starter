@@ -19,7 +19,8 @@ SOURCES = \
     timeline.cpp \
     earth.cpp \
     buttons.cpp \
-    earthscene.cpp
+    earthscene.cpp \
+    skybox.cpp
 HEADERS = \
     mainwidget.h \
     windowwidget.h \
@@ -30,7 +31,8 @@ HEADERS = \
     myapplication.h \
     earth.h \
     buttons.h \
-    earthscene.h
+    earthscene.h \
+    skybox.h
 RESOURCES += \
     syntool.qrc
 DEPENDPATH += resources
