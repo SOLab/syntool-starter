@@ -150,63 +150,26 @@ SkyBox::~SkyBox()
 
 void SkyBox::setImagePath(const QString &imagePath)
 {
-    static QStringList expected2;
-    static QStringList expected;
-
-//    if (expected.isEmpty())
-//        expected << QLatin1String("east") << QLatin1String("up") << QLatin1String("west")
-//                 << QLatin1String("down") << QLatin1String("south") << QLatin1String("north");
-//    if (expected2.isEmpty())
-//        expected2 << QLatin1String("right") << QLatin1String("top") << QLatin1String("left")
-//                  << QLatin1String("bottom") << QLatin1String("front") << QLatin1String("back");
-    if (expected.isEmpty())
-        expected << QLatin1String("top") << QLatin1String("top") << QLatin1String("top")
-                 << QLatin1String("top") << QLatin1String("top") << QLatin1String("top");
-    if (expected2.isEmpty())
-        expected2 << QLatin1String("top") << QLatin1String("top") << QLatin1String("top")
-                  << QLatin1String("top") << QLatin1String("top") << QLatin1String("top");
-
     if (imagePath != m_imagePath)
     {
         m_imagePath = imagePath;
-        QStringList notFound = expected;
         QFileInfo info(m_imagePath);
         if (info.exists() && info.isDir())
         {
             QDir imDir(imagePath);
             QFileInfoList files = imDir.entryInfoList(QDir::Files);
             QFileInfoList::const_iterator it = files.constBegin();
-            for ( ; it != files.constEnd() && notFound.size() > 0; ++it)
-            {
-                QFileInfo ent = *it;
-                QString tok = ent.baseName().toLower();
-                int ix = 0;
-                for ( ; ix < 6; ++ix)
-                    if (tok.contains(expected.at(ix)))
-                        break;
-                if (ix == 6)
-                {
-                    ix = 0;
-                    for ( ; ix < 6; ++ix)
-                        if (tok.contains(expected2.at(ix)))
-                            break;
-                }
-                if (ix != 6)
-                {
-                    notFound.removeOne(expected.at(ix));
-                    QUrl url;
-                    url.setScheme("file");
-                    url.setPath(ent.absoluteFilePath());
-                    m_faces[ix]->material()->setTextureUrl(url);
-                    m_faces[ix]->material()->texture()->setHorizontalWrap(QGL::ClampToEdge);
-                    m_faces[ix]->material()->texture()->setVerticalWrap(QGL::ClampToEdge);
-                }
-            }
-            if (notFound.size() > 2)
-            {
-                qWarning("Could not load textures for");
-                for (int i = 0; i < notFound.size(); ++i)
-                    qWarning("\t%s", qPrintable(notFound.at(i)));
+
+            QFileInfo ent = *it;
+            QUrl url;
+            url.setScheme("file");
+            url.setPath(ent.absoluteFilePath());
+
+            int ix = 0;
+            for ( ; ix < 6; ++ix){
+                m_faces[ix]->material()->setTextureUrl(url);
+                m_faces[ix]->material()->texture()->setHorizontalWrap(QGL::ClampToEdge);
+                m_faces[ix]->material()->texture()->setVerticalWrap(QGL::ClampToEdge);
             }
         }
         else
