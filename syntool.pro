@@ -18,7 +18,8 @@ SOURCES = \
     earthview.cpp \
     customproxy.cpp \
     timeline.cpp \
-    earth.cpp
+    earth.cpp \
+    buttons.cpp
 HEADERS = \
     mainwidget.h \
     windowwidget.h \
@@ -28,7 +29,8 @@ HEADERS = \
     customproxy.h \
     timeline.h \
     myapplication.h \
-    earth.h
+    earth.h \
+    buttons.h
 RESOURCES += \
     syntool.qrc
 DEPENDPATH += resources

@@ -53,9 +53,11 @@
 #include <qmath.h>
 //#include <QDebug>
 #include <QTimer>
+#include <QApplication>
 
 /* Constants (WGS ellipsoid) */
 //Средний радиус 6371,0 км
+
 const double a = 6378137.0;
 const double e = 8.1819190842622e-2;
 const double pi = 3.1415926535897932384626433832795;
@@ -103,7 +105,6 @@ geoDetic convert_ecef_to_wgs84(double x, double y, double z)
 
 EarthView::EarthView(QWindow *parent)
     : QGLView(parent)
-
 //    , sunEffect(0)
 {
     //Generate geometry for the scene
@@ -125,8 +126,12 @@ EarthView::EarthView(QWindow *parent)
     lastPan = QPoint(-1, -1);
     panModifiers = Qt::NoModifier;
 
+
     QSharedPointer<QGLMaterialCollection> palette(new QGLMaterialCollection());
     earth = new Earth(this, palette);
+
+    m_buttons = new Buttons(this, palette);
+    earth->addNode(m_buttons);
 }
 
 EarthView::~EarthView()
@@ -144,12 +149,60 @@ void EarthView::paintGL(QGLPainter *painter)
 {
 //    spaceScene->draw(painter);
     earth->draw(painter);
+    m_buttons->draw(painter);
+//    drawText(painter, QRect(100, 100, 100, 100), "eeeeeeee");
 //    qDebug() << 1111111111111111111;
+//    QTimer::singleShot(20, this, SLOT(update()));
 }
 
 void EarthView::keyPress(QKeyEvent *e)
 {
     this->keyPressEvent(e);
+}
+
+void EarthView::drawText(QGLPainter *painter, const QRect &posn, const QString &str)
+{
+    QFont f = QApplication::font();
+    QFontMetrics metrics(f);
+    QRect rect = metrics.boundingRect(str);
+    rect.adjust(0, 0, 1, 1);
+
+    QImage image(rect.size(), QImage::Format_ARGB32);
+    image.fill(0);
+    QPainter p2(&image);
+    p2.setFont(f);
+    p2.setPen(Qt::white);
+    p2.drawText(-rect.x(), metrics.ascent(), str);
+    p2.end();
+
+    QGLTexture2D texture;
+    texture.setImage(image);
+
+    int x = posn.x() + (posn.width() - rect.width()) / 2;
+    int y = posn.y() + posn.height() - metrics.ascent() - metrics.descent();
+    y -= 10;
+
+    QVector2DArray vertices;
+    vertices.append(x + rect.x(), y + metrics.ascent());
+    vertices.append(x + rect.x(), y - metrics.descent());
+    vertices.append(x + rect.x() + rect.width(), y - metrics.descent());
+    vertices.append(x + rect.x() + rect.width(), y + metrics.ascent());
+
+    QVector2DArray texCoord;
+    texCoord.append(0.0f, 0.0f);
+    texCoord.append(0.0f, 1.0f);
+    texCoord.append(1.0f, 1.0f);
+    texCoord.append(1.0f, 0.0f);
+
+    painter->clearAttributes();
+    painter->setStandardEffect(QGL::FlatReplaceTexture2D);
+    texture.bind();
+    painter->setVertexAttribute(QGL::Position, vertices);
+    painter->setVertexAttribute(QGL::TextureCoord0, texCoord);
+    painter->draw(QGL::TriangleFan, 4);
+    painter->setStandardEffect(QGL::FlatColor);
+    glBindTexture(GL_TEXTURE_2D, 0);
+    texture.cleanupResources();
 }
 
 void EarthView::keyPressEvent(QKeyEvent *e)

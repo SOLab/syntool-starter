@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include "windowwidget.h"
 #include "topmenu.h"
+#include "aboutwidget.h"
 
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QHBoxLayout>
@@ -35,12 +36,15 @@ protected:
     QHBoxLayout* hlayout;
     QWidget* centralwgt;
 
+    AboutWidget* aboutWgt;
+
     void createMenuBar();
     void createPythonConsole();
 //    void keyPressEvent(QKeyEvent *e);
 
 public slots:
     void aboutProgram();
+    void showTimeLine();
 };
 
 #endif // MAINWIDGET_H

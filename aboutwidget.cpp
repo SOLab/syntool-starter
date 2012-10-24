@@ -1,4 +1,5 @@
 #include "aboutwidget.h"
+#include <QDebug>
 
 AboutWidget::AboutWidget(QWidget *parent) :
     QWidget(parent)
@@ -11,5 +12,11 @@ AboutWidget::AboutWidget(QWidget *parent) :
     setLayout(topLayout);
     setWindowTitle(tr("About programm"));
     resize(250, 200);
+
+    setAttribute(Qt::WA_DeleteOnClose);
+    setWindowModality(Qt::ApplicationModal);
+
+    setFocusPolicy(Qt::StrongFocus);
+    hide();
     show();
 }

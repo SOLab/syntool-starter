@@ -61,7 +61,7 @@ void TimeLine::paintEvent(QPaintEvent * pe)
     painter.drawText(maxWidth - 20, height()-60, QString::number(control_.curMax_));
 
     //  длина 1 отрезка, в цикле рисуем их дофига(50 штук, как и заказывали)
-    int widthOnePart = (width() - 3)/ partCount;
+    int widthOnePart = (width() - 3)/ float(partCount);
     for (int i = 0; i <= partCount; i++)
     {
         painter.drawLine(widthOnePart*i, height()-40, widthOnePart*i, height()-20);
@@ -144,6 +144,8 @@ void TimeLine::checkMouse()
                 control_.flagMovedIntervalos_ = false;
                 backToMouseAndCursor(false);
             }
+            // перерисовываем
+            repaint();
         }
         // если минимум, сдвигаем на -25
         if (control_.current_ == 0)
@@ -155,11 +157,10 @@ void TimeLine::checkMouse()
                 control_.flagMovedIntervalos_ = false;
                 backToMouseAndCursor(true);
             }
+            // перерисовываем
+            repaint();
         }
-
     }
-    // перерисовываем
-    repaint();
 }
 
 // отжатие - снимаем флаг.

@@ -6,6 +6,7 @@
 #include <QHBoxLayout>
 #include <QPushButton>
 #include <QStyle>
+#include <QDebug>
 
 class TopMenuButton : public QPushButton
 {
@@ -16,7 +17,7 @@ public:
         setContentsMargins(0,0,0,0);
         setFixedSize(24,24);
 
-        int size = style()->pixelMetric(QStyle::PM_ToolBarIconSize);
+        int size = 16;//style()->pixelMetric(QStyle::PM_ToolBarIconSize);
         QSize iconSize(size, size);
         setIconSize(iconSize);
         setFocusPolicy(Qt::NoFocus);
@@ -32,6 +33,7 @@ public:
 protected:
     TopMenuButton* addLineButton;
     TopMenuButton* addLayerButton;
+    TopMenuButton* TimeLineButton;
     TopMenuButton* PythonScriptButton;
     QHBoxLayout* topLayout;
     QHBoxLayout* leftLayout;

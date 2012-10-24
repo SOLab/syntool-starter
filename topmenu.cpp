@@ -14,16 +14,19 @@ TopMenu::TopMenu(QWidget *parent) :
 //    setStyleSheet("background-color: rgb(0, 0, 255); border:1px solid rgb(0, 0, 255);");
 
     addLineButton = new TopMenuButton;
-//    QIcon ico;
-//    ico.fromTheme("draw-line");
-//    addLineButton->setIcon(ico);
-    addLineButton->setIcon(QPixmap("/usr/share/icons/oxygen/16x16/actions/draw-line.png"));
-    addLineButton->setToolTip("add line");
+    addLineButton->setIcon(QIcon().fromTheme("draw-line"));
+//    addLineButton->setIcon(QPixmap("/usr/share/icons/oxygen/16x16/actions/draw-line.png"));
+    addLineButton->setToolTip("Add line");
 
     addLayerButton = new TopMenuButton;
-//    addLayerButton->setIcon(QIcon().fromTheme("image-loading"));
-    addLayerButton->setIcon(QPixmap("/usr/share/icons/oxygen/16x16/status/image-loading.png"));
-    addLayerButton->setToolTip("overlay an image");
+    addLayerButton->setIcon(QIcon().fromTheme("image-loading"));
+//    addLayerButton->setIcon(QPixmap("/usr/share/icons/oxygen/16x16/status/image-loading.png"));
+    addLayerButton->setToolTip("Overlay an image");
+
+    TimeLineButton = new TopMenuButton;
+    TimeLineButton->setIcon(QIcon().fromTheme("view-time-schedule"));
+    TimeLineButton->setToolTip("TimeLine");
+    connect(TimeLineButton, SIGNAL(clicked()), parent, SLOT(showTimeLine()));
 
     PythonScriptButton = new TopMenuButton;
 //    PythonScriptButton->setIcon(QPixmap("/usr/share/icons/oxygen/16x16/mimetypes/text-x-python.png"));
@@ -36,6 +39,7 @@ TopMenu::TopMenu(QWidget *parent) :
 
     leftLayout->addWidget(addLineButton);
     leftLayout->addWidget(addLayerButton);
+    rightLayout->addWidget(TimeLineButton, 0, Qt::AlignRight);
     rightLayout->addWidget(PythonScriptButton, 0, Qt::AlignRight);
 
     topLayout->addLayout(leftLayout, 10);

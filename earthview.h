@@ -44,6 +44,8 @@
 #include "qglview.h"
 #include "earth.h"
 #include <QKeyEvent>
+#include <QDialog>
+#include <QVBoxLayout>
 
 QT_BEGIN_NAMESPACE
 class QGLSceneNode;
@@ -61,7 +63,6 @@ class EarthView : public QGLView
 public:
     EarthView(QWindow *parent = 0);
     ~EarthView();
-
 //    float angle1() const { return m_angle1; }
 //    void setAngle1(float angle) { m_angle1 = angle; update(); }
 
@@ -76,6 +77,7 @@ public:
 
     void setupViewport(int width, int height);
     void keyPress(QKeyEvent* e);
+    void drawText(QGLPainter *painter, const QRect& posn, const QString& str);
 protected:
     Earth *earth;
     void initializeGL(QGLPainter *painter);
@@ -99,6 +101,7 @@ private:
     QVector3D startEye;
     QVector3D startCenter;
     QVector3D startUpVector;
+    Buttons* m_buttons;
 //    float m_angle1;
 //    float m_angle2;
 //    float m_angle3;

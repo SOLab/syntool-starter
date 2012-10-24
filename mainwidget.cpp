@@ -1,5 +1,4 @@
 #include "mainwidget.h"
-#include "aboutwidget.h"
 #include <QDebug>
 
 
@@ -24,8 +23,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     glwgt = new WindowWidget(this);
     glwgt->setMinimumSize(200, 200);
-//    timeLine = new TimeLine(this);
-//    timeLine->setFixedHeight(70);
 
 //    create right toolBox
     rightWgt = new QToolBox;
@@ -45,27 +42,48 @@ MainWindow::MainWindow(QWidget *parent)
     splitter->setStretchFactor(0, 4);
     splitter->setStretchFactor(1, 1);
 
+
+    timeLine = new TimeLine(this);
+    timeLine->setFixedHeight(70);
+    timeLine->hide();
+
     vlayout->addWidget(topMenu);
-//    vlayout->addWidget(timeLine);
     vlayout->addWidget(splitter);
+    vlayout->addWidget(timeLine);
 
     createMenuBar();
     createPythonConsole();
     setFocusPolicy(Qt::StrongFocus);
+
+//    QWidget* wgt = new QWidget(this);
+//    QVBoxLayout layout2;
+//    QPushButton* button = new QPushButton("eeeeeeeeeeeeee");
+//    layout2.addWidget(button);
+//    wgt->setLayout(&layout2);
+//    wgt->move(10, 100);
+//    wgt->setFixedSize(140, 100);
+//    wgt->setAttribute(Qt::WA_NoSystemBackground);
+//    wgt->setAttribute(Qt::WA_OpaquePaintEvent);
+//    wgt->setAttribute(Qt::WA_TranslucentBackground);
+//    button->setFixedSize(400,400);
 }
 
 void MainWindow::setHostedWindow(QWindow *window)
 {
-//    QPushButton* button = new QPushButton("aaaaaaaaaAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaa", glwgt);
-//    button->resize(200,200);
     glwgt->setHostedWindow(window);
 }
 
 void MainWindow::aboutProgram()
 {
-    AboutWidget* aboutWgt =new AboutWidget;
-    Q_UNUSED(aboutWgt);
-//    aboutWgt->show();
+    aboutWgt = new AboutWidget;
+}
+
+void MainWindow::showTimeLine()
+{
+    if (timeLine->isVisible())
+        timeLine->hide();
+    else
+        timeLine->show();
 }
 
 void MainWindow::createMenuBar()

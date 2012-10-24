@@ -5,7 +5,6 @@
 
 #include <QImage>
 #include <QPainter>
-
 // icosahedron is defined by phi, derived from the golden section
 // http://en.wikipedia.org/wiki/Icosahedron#Cartesian_coordinates
 const float phi = 1.618033988749894848f;
@@ -164,7 +163,6 @@ Earth::Earth(QObject *parent, QSharedPointer<QGLMaterialCollection> materials)
 //    setMaterial(mat);
 //    QGLSceneNode *n = b.finalizedSceneNode();
 //    addNode(n);
-
     QGLBuilder builder;
     builder.newSection();
     QGLSceneNode *root = builder.sceneNode();
@@ -184,10 +182,11 @@ Earth::Earth(QObject *parent, QSharedPointer<QGLMaterialCollection> materials)
 
     // create sphere
     builder.pushNode()->setObjectName(QLatin1String("Earth"));
-    builder<<QGLSphere(1);
+    builder<<QGLSphere(1, 10);
 
     builder.currentNode()->setMaterialIndex(earthMat);
-    builder.currentNode()->setEffect(QGL::LitModulateTexture2D);
+//    builder.currentNode()->setEffect(QGL::LitModulateTexture2D);
+    builder.currentNode()->setEffect(QGL::FlatReplaceTexture2D);
 
     //create and add rotations for axial tilt and rotation
     earthRotation = new QGraphicsRotation3D();
@@ -217,7 +216,6 @@ Earth::Earth(QObject *parent, QSharedPointer<QGLMaterialCollection> materials)
      //completed building, so finalise
     QGLSceneNode *n = builder.finalizedSceneNode();
     addNode(n);
-
 }
 
 Earth::~Earth()

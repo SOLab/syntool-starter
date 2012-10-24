@@ -1,7 +1,7 @@
 #ifndef ABOUTWIDGET_H
 #define ABOUTWIDGET_H
 
-#include <QWidget>
+#include <QDialog>
 #include <QLabel>
 #include <QHBoxLayout>
 
@@ -14,8 +14,6 @@ public:
 protected:
     QLabel* statusLabel;
     QHBoxLayout *topLayout;
-
-signals:
     
 public slots:
     
