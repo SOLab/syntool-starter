@@ -101,6 +101,10 @@ private:
     EarthScene *m_scene;
     float scale;
     bool mousePressed;
+    bool navigateButtonPressed;
+    QVector3D centerNavigateButton;
+    int radiusNavigateButton;
+
     QPoint startPan, lastPan;
     Qt::KeyboardModifiers panModifiers;
     QSizeF scale2F;
@@ -124,6 +128,8 @@ protected slots:
     void scalePlus_slot();
     void scaleMinus_slot();
     void leftSlot();
+
+    void navigateButtonPress();
 };
 
 #endif

@@ -117,6 +117,7 @@ EarthView::EarthView(QWindow *parent)
         camera()->setViewSize(scale2F);
 //    camera()->setFarPlane(1000);
     mousePressed = false;
+    navigateButtonPressed = false;
     startPan = QPoint(-1, -1);
     lastPan = QPoint(-1, -1);
     panModifiers = Qt::NoModifier;
@@ -150,6 +151,11 @@ void EarthView::paintGL(QGLPainter *painter)
     m_skybox->draw(painter);
     earth->draw(painter);
     navigateButton->draw(painter);
+
+    // calculate position 2D buttons
+    centerNavigateButton = navigateButton->subButton->boundingBox().center();
+    radiusNavigateButton =  (navigateButton->subButton->boundingBox().maximum().x() -
+                  navigateButton->subButton->boundingBox().minimum().x()) / 2;
 }
 
 void EarthView::keyPress(QKeyEvent *e)
@@ -396,22 +402,17 @@ void EarthView::mousePressEvent(QMouseEvent *e)
 {
     Q_UNUSED(e);
 
-    QVector3D center = navigateButton->subButton->boundingBox().center();
-    int radius =  (navigateButton->subButton->boundingBox().maximum().x() -
-                  navigateButton->subButton->boundingBox().minimum().x()) / 2;
-
-    int centerX = qRound(center.x());
-    int centerY = qRound(center.y());
+    int centerX = qRound(centerNavigateButton.x());
+    int centerY = qRound(centerNavigateButton.y());
     int mouseX = e->pos().x();
     int mouseY = e->pos().y();
     int dX = mouseX - centerX;
     int dY = mouseY - centerY;
 
-    if (qSqrt(qPow(dX, 2)+qPow(dY, 2)) < radius)
+    if (qSqrt(qPow(dX, 2)+qPow(dY, 2)) < radiusNavigateButton)
     {
-        QVector2D vector(dX, dY);
-//        qDebug() << vector;
-        rotate(-2*dX, -2*dY);
+        navigateButtonPressed = true;
+        navigateButtonPress();
         return;
     }
 
@@ -420,12 +421,30 @@ void EarthView::mousePressEvent(QMouseEvent *e)
     startEye = camera()->eye();
     startCenter = camera()->center();
     startUpVector = camera()->upVector();
-//    qDebug() << e->pos();
-//    qDebug() << navigateButton->subButton->boundingBox();
 }
 
 void EarthView::mouseReleaseEvent(QMouseEvent *e)
 {
     Q_UNUSED(e);
     mousePressed = false;
+    navigateButtonPressed = false;
+}
+
+void EarthView::navigateButtonPress()
+{
+    if (navigateButtonPressed)
+    {
+        QPoint pos = this->mapFromGlobal(QCursor::pos());
+
+        int dX = qRound(centerNavigateButton.x()) - pos.x();
+        int dY = qRound(centerNavigateButton.y()) - pos.y();
+
+        if (dX > 40) dX = 40;
+        if (dX < -40) dX = -40;
+        if (dY > 40) dY = 40;
+        if (dY < -40) dY = -40;
+
+        rotate(dX, dY);
+        QTimer::singleShot(50, this, SLOT(navigateButtonPress()));
+    }
 }
