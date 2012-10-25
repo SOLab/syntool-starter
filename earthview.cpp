@@ -46,6 +46,7 @@
 #include <QApplication>
 #include "earthscene.h"
 #include "skybox.h"
+#include "navigatebutton.h"
 
 /* Constants (WGS ellipsoid) */
 //Средний радиус 6371,0 км
@@ -121,9 +122,10 @@ EarthView::EarthView(QWindow *parent)
     panModifiers = Qt::NoModifier;
 
     m_scene = new EarthScene(this);
-    m_buttons = new Buttons(this, m_palette);
-    m_scene->mainNode()->addNode(m_buttons);
+    navigateButton = new NavigateButton(this, m_palette);
+
     m_scene->setPickable(true);
+    m_scene->mainNode()->addNode(navigateButton);
 
     earth = new Earth(this, m_palette);
 
@@ -147,7 +149,7 @@ void EarthView::paintGL(QGLPainter *painter)
     glEnable(GL_BLEND);
     m_skybox->draw(painter);
     earth->draw(painter);
-    m_buttons->draw(painter);
+    navigateButton->draw(painter);
 }
 
 void EarthView::keyPress(QKeyEvent *e)
@@ -214,7 +216,7 @@ void EarthView::resizeGL(int w, int h)
 {
     Q_UNUSED(w);
     Q_UNUSED(h);
-    m_buttons->clearPositions();
+//    m_buttons->clearPositions();
 }
 
 void EarthView::resizeEvent(QResizeEvent *e)
@@ -308,6 +310,11 @@ void EarthView::scaleMinus_slot()
         camera()->setViewSize(scale2F);
 }
 
+void EarthView::leftSlot()
+{
+    qDebug() << "left";
+}
+
 
 void EarthView::mouseMoveEvent(QMouseEvent *e)
 {
@@ -388,11 +395,33 @@ void EarthView::mouseMoveEvent(QMouseEvent *e)
 void EarthView::mousePressEvent(QMouseEvent *e)
 {
     Q_UNUSED(e);
+
+    QVector3D center = navigateButton->subButton->boundingBox().center();
+    int radius =  (navigateButton->subButton->boundingBox().maximum().x() -
+                  navigateButton->subButton->boundingBox().minimum().x()) / 2;
+
+    int centerX = qRound(center.x());
+    int centerY = qRound(center.y());
+    int mouseX = e->pos().x();
+    int mouseY = e->pos().y();
+    int dX = mouseX - centerX;
+    int dY = mouseY - centerY;
+
+    if (qSqrt(qPow(dX, 2)+qPow(dY, 2)) < radius)
+    {
+        QVector2D vector(dX, dY);
+//        qDebug() << vector;
+        rotate(-2*dX, -2*dY);
+        return;
+    }
+
     mousePressed = true;
     startPan = e->pos();
     startEye = camera()->eye();
     startCenter = camera()->center();
     startUpVector = camera()->upVector();
+//    qDebug() << e->pos();
+//    qDebug() << navigateButton->subButton->boundingBox();
 }
 
 void EarthView::mouseReleaseEvent(QMouseEvent *e)

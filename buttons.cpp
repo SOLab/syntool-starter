@@ -49,8 +49,7 @@ Buttons::Buttons(QObject *parent, QSharedPointer<QGLMaterialCollection> palette)
     setObjectName("Buttons");
     setPalette(palette);
     setOption(QGLSceneNode::CullBoundingBox, false);
-
-    createButton();
+    createButton(palette);
 }
 
 Buttons::~Buttons()
@@ -73,14 +72,6 @@ void Buttons::draw(QGLPainter *painter)
     projm.ortho(rect);
     painter->projectionMatrix() = projm;
     painter->modelViewMatrix().setToIdentity();
-
-//    if (m_left->position().isNull())
-//    {
-//        QVector2D pos(m_size.width() / 2, rect.height() - m_size.height() / 2);
-//        m_left->setPosition(pos);
-//        pos.setX(rect.width() - (m_size.width() / 2));
-//        m_right->setPosition(pos);
-//    }
 
     if (m_left->position().isNull())
     {
@@ -111,17 +102,17 @@ void Buttons::clearPositions()
     m_right->setPosition(QVector3D());
 }
 
-void Buttons::createButton()
+void Buttons::createButton(QSharedPointer<QGLMaterialCollection> palette)
 {
-    m_left = new QGLSceneNode(this);
+    m_left = new SubButton(this, palette);
     m_left->setObjectName("Left Button");
-    m_right = new QGLSceneNode(this);
+    m_right = new SubButton(this, palette);
     m_right->setObjectName("Right Button");
 
-    m_up = new QGLSceneNode(this);
-    m_up->setObjectName("Left Button");
-    m_down = new QGLSceneNode(this);
-    m_down->setObjectName("Right Button");
+    m_up = new SubButton(this, palette);
+    m_up->setObjectName("Up Button");
+    m_down = new SubButton(this, palette);
+    m_down->setObjectName("Down Button");
 
     QGLMaterial *mat = new QGLMaterial;
     QImage im(":/arrow.png");

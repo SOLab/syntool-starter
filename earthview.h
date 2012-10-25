@@ -46,6 +46,7 @@
 #include <QKeyEvent>
 #include <QDialog>
 #include <QVBoxLayout>
+#include <QGLPickNode>
 
 QT_BEGIN_NAMESPACE
 class QGLSceneNode;
@@ -53,9 +54,9 @@ class QGLBuilder;
 class QGLShaderProgramEffect;
 QT_END_NAMESPACE
 
-class Buttons;
 class EarthScene;
 class SkyBox;
+class NavigateButton;
 
 class EarthView : public QGLView
 {
@@ -95,7 +96,7 @@ protected:
     void mousePressEvent(QMouseEvent *e);
     void mouseReleaseEvent(QMouseEvent *e);
 
-    QGLBuilder builder;
+//    QGLBuilder builder;
 private:
     EarthScene *m_scene;
     float scale;
@@ -106,20 +107,23 @@ private:
     QVector3D startEye;
     QVector3D startCenter;
     QVector3D startUpVector;
-    Buttons* m_buttons;
+    NavigateButton* navigateButton;
     SkyBox *m_skybox;
     QSharedPointer<QGLMaterialCollection> m_palette;
+
+    QGLPickNode* pick_left;
 //    float m_angle1;
 //    float m_angle2;
 //    float m_angle3;
 //    float m_glowFactor;
 
-    void rotate(int deltax, int deltay);
     void scalePlus();
     void scaleMinus();
 protected slots:
+    void rotate(int deltax, int deltay);
     void scalePlus_slot();
     void scaleMinus_slot();
+    void leftSlot();
 };
 
 #endif

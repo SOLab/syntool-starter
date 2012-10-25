@@ -55,17 +55,7 @@ MainWindow::MainWindow(QWidget *parent)
     createPythonConsole();
     setFocusPolicy(Qt::StrongFocus);
 
-//    QWidget* wgt = new QWidget(this);
-//    QVBoxLayout layout2;
-//    QPushButton* button = new QPushButton("eeeeeeeeeeeeee");
-//    layout2.addWidget(button);
-//    wgt->setLayout(&layout2);
-//    wgt->move(10, 100);
-//    wgt->setFixedSize(140, 100);
-//    wgt->setAttribute(Qt::WA_NoSystemBackground);
-//    wgt->setAttribute(Qt::WA_OpaquePaintEvent);
-//    wgt->setAttribute(Qt::WA_TranslucentBackground);
-//    button->setFixedSize(400,400);
+    setWindowTitle("Syntool");
 }
 
 void MainWindow::setHostedWindow(QWindow *window)

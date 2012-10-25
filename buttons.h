@@ -43,26 +43,87 @@
 #define BUTTONS_H
 
 #include "qglscenenode.h"
+#include <QMouseEvent>
+#include "qglpainter.h"
 
 #include <Qt>
+
+class SubButton :public QGLSceneNode
+{
+    Q_OBJECT
+public:
+    explicit SubButton(QObject *parent, QSharedPointer<QGLMaterialCollection> palette)
+        : QGLSceneNode(parent)
+    {
+        Q_UNUSED(palette);
+    }
+    ~SubButton(){}
+
+protected:
+    bool event(QEvent *e)
+    {
+        // Convert the raw event into a signal representing the user's action.
+        if (e->type() == QEvent::MouseButtonPress) {
+            QMouseEvent *me = (QMouseEvent *)e;
+            if (me->button() == Qt::LeftButton)
+                emit pressed();
+        } else if (e->type() == QEvent::MouseButtonRelease) {
+            QMouseEvent *me = (QMouseEvent *)e;
+            if (me->button() == Qt::LeftButton) {
+                emit released();
+                if (me->x() >= 0)   // Positive: inside object, Negative: outside.
+                    emit clicked();
+            }
+        } else if (e->type() == QEvent::MouseButtonDblClick) {
+            emit doubleClicked();
+        } else if (e->type() == QEvent::Enter) {
+            m_hovering = true;
+            emit hoverChanged();
+        } else if (e->type() == QEvent::Leave) {
+            m_hovering = false;
+            emit hoverChanged();
+        }
+        return QObject::event(e);
+    }
+private:
+    bool m_hovering;
+
+signals:
+    void pressed();
+    void released();
+    void clicked();
+    void doubleClicked();
+    void hoverChanged();
+};
 
 class Buttons : public QGLSceneNode
 {
     Q_OBJECT
 public:
-    explicit Buttons(QObject *parent, QSharedPointer<QGLMaterialCollection> palette);
+    explicit Buttons(QObject *parent,
+                     QSharedPointer<QGLMaterialCollection> palette);
     ~Buttons();
     void draw(QGLPainter *painter);
     void clearPositions();
     void createButton();
+    SubButton *m_left;
+    SubButton *m_right;
+    SubButton *m_up;
+    SubButton *m_down;
+
+    void createButton(QSharedPointer<QGLMaterialCollection> palette);
 private:
-    QGLSceneNode *m_left;
-    QGLSceneNode *m_right;
-    QGLSceneNode *m_up;
-    QGLSceneNode *m_down;
     QSize m_size;
     QList<QGLTexture2D*> m_LoadedTextures;
     QList<QGLTexture2D*> m_LoadedTextures_up;
+    bool m_hovering;
+
+signals:
+    void pressed();
+    void released();
+    void clicked();
+    void doubleClicked();
+    void hoverChanged();
 };
 
 #endif // BUTTONS_H
