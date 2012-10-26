@@ -1,7 +1,6 @@
 #include "windowwidget.h"
 #include <QWindow>
 #include <QGuiApplication>
-#include <QDebug>
 #include <QPushButton>
 #include <QVBoxLayout>
 

@@ -1,5 +1,4 @@
 #include "mainwidget.h"
-#include <QDebug>
 
 
 //#include "PythonQt.h"
@@ -140,6 +139,5 @@ void MainWindow::createPythonConsole()
 
 void MainWindow::keyPress(QKeyEvent *e)
 {
-    qDebug() << 5666565;
-    this->keyPressEvent(e);
+    keyPressEvent(e);
 }

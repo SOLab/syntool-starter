@@ -4,7 +4,6 @@
 #include "qglbuilder.h"
 #include "qgraphicsrotation3d.h"
 #include <QGLSphere>
-#include <buttons.h>
 
 #include <QImage>
 

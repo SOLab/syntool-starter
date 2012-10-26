@@ -1,4 +1,8 @@
 #include "navigatebutton.h"
+#include "QVector3DArray"
+#include "QGLVertexBundle"
+#include <QArray>
+#include <qmath.h>
 
 NavigateButton::NavigateButton(QObject *parent, QSharedPointer<QGLMaterialCollection> palette)
     : QGLSceneNode(parent)
@@ -36,6 +40,54 @@ void NavigateButton::draw(QGLPainter *painter)
     glDisable(GL_DEPTH_TEST);
 
     QGLSceneNode::draw(painter);
+
+///////////////////////////////////////////////////
+    painter->setStandardEffect(QGL::FlatColor);
+    painter->setColor(QColor(88, 131, 190, 255));
+
+    QGLVertexBundle vertices1;
+    QVector3DArray positions;
+    positions.append(QVector3D(boundingBox().center().x(),  boundingBox().center().y()-20,  0.0f));
+    positions.append(QVector3D(boundingBox().center().x()+8,  boundingBox().center().y()-12,  0.0f));
+    positions.append(QVector3D(boundingBox().center().x()-8,  boundingBox().center().y()-12,  0.0f));
+    vertices1.addAttribute(QGL::Position, positions);
+    vertices1.upload();
+
+    QGLVertexBundle vertices2;
+    positions.clear();
+    positions.append(QVector3D(boundingBox().center().x(),  boundingBox().center().y()+20,  0.0f));
+    positions.append(QVector3D(boundingBox().center().x()+8,  boundingBox().center().y()+12,  0.0f));
+    positions.append(QVector3D(boundingBox().center().x()-8,  boundingBox().center().y()+12,  0.0f));
+    vertices2.addAttribute(QGL::Position, positions);
+    vertices2.upload();
+
+    QGLVertexBundle vertices3;
+    positions.clear();
+    positions.append(QVector3D(boundingBox().center().x()+20,  boundingBox().center().y(),  0.0f));
+    positions.append(QVector3D(boundingBox().center().x()+12,  boundingBox().center().y()-8,  0.0f));
+    positions.append(QVector3D(boundingBox().center().x()+12,  boundingBox().center().y()+8,  0.0f));
+    vertices3.addAttribute(QGL::Position, positions);
+    vertices3.upload();
+
+    QGLVertexBundle vertices4;
+    positions.clear();
+    positions.append(QVector3D(boundingBox().center().x()-20,  boundingBox().center().y(),  0.0f));
+    positions.append(QVector3D(boundingBox().center().x()-12,  boundingBox().center().y()-8,  0.0f));
+    positions.append(QVector3D(boundingBox().center().x()-12,  boundingBox().center().y()+8,  0.0f));
+    vertices4.addAttribute(QGL::Position, positions);
+    vertices4.upload();
+
+
+    painter->setVertexBundle(vertices1);
+    painter->draw(QGL::Triangles, 3);
+    painter->setVertexBundle(vertices2);
+    painter->draw(QGL::Triangles, 3);
+    painter->setVertexBundle(vertices3);
+    painter->draw(QGL::Triangles, 3);
+    painter->setVertexBundle(vertices4);
+    painter->draw(QGL::Triangles, 3);
+//    painter->draw(QGL::LineLoop, 3);
+////////////////////////////////////////////////////
 
     glEnable(GL_DEPTH_TEST);
 
@@ -91,4 +143,81 @@ void NavigateButton::createButton()
     subButton->setGeometry(data);
     subButton->setCount(6);
     subButton->setOption(QGLSceneNode::CullBoundingBox, false);
+}
+
+void NavigateButton::drawSector(QVector2D navigateVector, QGLPainter *painter)
+{
+    painter->projectionMatrix().push();
+    painter->modelViewMatrix().push();
+
+    QRect rect = painter->currentSurface()->viewportRect();
+    QMatrix4x4 projm;
+    projm.ortho(rect);
+    painter->projectionMatrix() = projm;
+    painter->modelViewMatrix().setToIdentity();
+
+    glDisable(GL_DEPTH_TEST);
+
+    QGLSceneNode::draw(painter);
+
+///////////////////////////////////////////////////
+//    painter->setStandardEffect(QGL::FlatColor);
+    int alpha = qSqrt(qPow(navigateVector.x(), 2)+qPow(navigateVector.y(), 2));
+    painter->setColor(QColor(88, 131, 190, alpha*4));
+
+    QVector2DArray vertices;
+    QVector3DArray normals;
+
+    QVector3D pos = subButton->position();
+    int radius = subButton->boundingBox().maximum().x() - pos.x();
+
+    float a=qAtan(navigateVector.y()/navigateVector.x());
+//    a = a * M_PI / 180;
+    qDebug() << "a"<< a;
+
+
+    vertices.append(pos.x(), pos.y());
+    int x[5] = {};
+    int y[5] = {};
+    for (int i= -2; i<3; i++)
+    {
+        x[i]= (navigateVector.x() >= 0) ? pos.x()-radius*qCos(a+i/6.0) : pos.x()+radius*qCos(a+i/6.0);
+        y[i]= (navigateVector.x() >= 0) ? pos.y()-radius*qSin(a+i/6.0) : pos.y()+radius*qSin(a+i/6.0);
+        vertices.append(x[i], y[i]);
+    }
+//    qDebug() << "pos" << pos;
+//    qDebug() << "x" << x1;
+//    qDebug() << "y" << y1;
+
+//    vertices.append(pos.x(), pos.y());
+//    vertices.append(x[0]-navigateVector.x() -3, y[0]-navigateVector.y()+3);
+//    vertices.append(x[1]-navigateVector.x() -1, y[1]-navigateVector.y()+1);
+//    vertices.append(x[2]-navigateVector.x() +1, y[2]-navigateVector.y()-1);
+//    vertices.append(x[3]-navigateVector.x() +3, y[3]-navigateVector.y()-3);
+//    vertices.append(x[4]-navigateVector.x() +3, y[4]-navigateVector.y()-3);
+
+//    vertices.append(midx - step, midy + step);
+//    vertices.append(midx + step * 2, midy + step * 2);
+//    vertices.append(midx + step * 2, midy);
+//    vertices.append(midx + step, midy - step);
+//    vertices.append(midx - step, midy - step * 2);
+
+    normals.append(0.0f, 0.0f, 1.0f);
+    normals.append(0.0f, 0.0f, 1.0f);
+    normals.append(0.0f, 0.0f, 1.0f);
+    normals.append(0.0f, 0.0f, 1.0f);
+    normals.append(0.0f, 0.0f, 1.0f);
+    normals.append(0.0f, 0.0f, 1.0f);
+
+    painter->clearAttributes();
+    painter->setVertexAttribute(QGL::Position, vertices);
+    painter->setVertexAttribute(QGL::Normal, normals);
+    painter->draw(QGL::TriangleFan, 6);
+
+////////////////////////////////////////////////////
+
+    glEnable(GL_DEPTH_TEST);
+
+    painter->projectionMatrix().pop();
+    painter->modelViewMatrix().pop();
 }

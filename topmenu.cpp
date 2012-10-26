@@ -31,7 +31,7 @@ TopMenu::TopMenu(QWidget *parent) :
     PythonScriptButton = new TopMenuButton;
 //    PythonScriptButton->setIcon(QPixmap("/usr/share/icons/oxygen/16x16/mimetypes/text-x-python.png"));
     PythonScriptButton->setIcon(QIcon().fromTheme("text-x-python"));
-    qDebug() << PythonScriptButton->icon();
+//    qDebug() << PythonScriptButton->icon();
     PythonScriptButton->setToolTip("PythonQt Script");
 
     leftLayout = new QHBoxLayout;

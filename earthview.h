@@ -101,8 +101,11 @@ private:
     EarthScene *m_scene;
     float scale;
     bool mousePressed;
+
     bool navigateButtonPressed;
+    bool navigateValueInit;
     QVector3D centerNavigateButton;
+    QVector2D navigateVector;
     int radiusNavigateButton;
 
     QPoint startPan, lastPan;

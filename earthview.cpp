@@ -118,6 +118,8 @@ EarthView::EarthView(QWindow *parent)
 //    camera()->setFarPlane(1000);
     mousePressed = false;
     navigateButtonPressed = false;
+    navigateValueInit = false;
+
     startPan = QPoint(-1, -1);
     lastPan = QPoint(-1, -1);
     panModifiers = Qt::NoModifier;
@@ -143,6 +145,7 @@ EarthView::~EarthView()
 void EarthView::initializeGL(QGLPainter *painter)
 {
     Q_UNUSED(painter);
+
 }
 
 void EarthView::paintGL(QGLPainter *painter)
@@ -152,10 +155,20 @@ void EarthView::paintGL(QGLPainter *painter)
     earth->draw(painter);
     navigateButton->draw(painter);
 
+    if (navigateButtonPressed)
+    {
+        navigateButton->drawSector(navigateVector ,painter);
+    }
+
     // calculate position 2D buttons
-    centerNavigateButton = navigateButton->subButton->boundingBox().center();
-    radiusNavigateButton =  (navigateButton->subButton->boundingBox().maximum().x() -
-                  navigateButton->subButton->boundingBox().minimum().x()) / 2;
+    if (!navigateValueInit)
+    {
+        qDebug() << 22222;
+        centerNavigateButton = navigateButton->subButton->boundingBox().center();
+        radiusNavigateButton =  (navigateButton->subButton->boundingBox().maximum().x() -
+                      navigateButton->subButton->boundingBox().minimum().x()) / 2;
+        navigateValueInit = true;
+    }
 }
 
 void EarthView::keyPress(QKeyEvent *e)
@@ -248,6 +261,7 @@ void EarthView::wheelEvent(QWheelEvent *e)
 
 void EarthView::rotate(int deltax, int deltay)
 {
+    float temp_scale = scale > 1.2 ? scale : 1.2;
     int rotation = camera()->screenRotation();
     if (rotation == 90 || rotation == 270) {
         qSwap(deltax, deltay);
@@ -258,10 +272,10 @@ void EarthView::rotate(int deltax, int deltay)
     if (rotation == 180 || rotation == 270) {
         deltay = -deltay;
     }
-    float anglex = 2*deltax * 90.0f / (width() * scale);
-    float angley = 2*deltay * 90.0f / (height() * scale);
+    float anglex = 2*deltax * 90.0f / (width() * temp_scale);
+    float angley = 2*deltay * 90.0f / (height() * temp_scale);
     QQuaternion q = camera()->pan(-anglex);
-//    qDebug() << anglex << angley;
+
     q *= camera()->tilt(-angley);
     camera()->rotateCenter(q);
 }
@@ -412,6 +426,7 @@ void EarthView::mousePressEvent(QMouseEvent *e)
     if (qSqrt(qPow(dX, 2)+qPow(dY, 2)) < radiusNavigateButton)
     {
         navigateButtonPressed = true;
+        navigateVector = QVector2D(dX, dY);
         navigateButtonPress();
         return;
     }
@@ -444,7 +459,14 @@ void EarthView::navigateButtonPress()
         if (dY > 40) dY = 40;
         if (dY < -40) dY = -40;
 
+        navigateVector = QVector2D(dX, dY);
         rotate(dX, dY);
+
+//        navigateButton->drawSector(3,3, this->context());
         QTimer::singleShot(50, this, SLOT(navigateButtonPress()));
+    }
+    else
+    {
+        update();
     }
 }

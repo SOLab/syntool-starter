@@ -4,6 +4,8 @@
 #include <qglscenenode.h>
 #include <qglpainter.h>
 
+class EarthView;
+
 class NavigateButton : public QGLSceneNode
 {
     Q_OBJECT
@@ -14,6 +16,7 @@ public:
     void draw(QGLPainter *painter);
     void clearPositions();
     void createButton();
+    void drawSector(QVector2D navigateVector, QGLPainter *painter);
     QGLSceneNode* subButton;
 private:
     QSize m_size;
