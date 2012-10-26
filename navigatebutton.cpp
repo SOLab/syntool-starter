@@ -158,10 +158,10 @@ void NavigateButton::drawSector(QVector2D navigateVector, QGLPainter *painter)
 
     glDisable(GL_DEPTH_TEST);
 
-    QGLSceneNode::draw(painter);
+//    QGLSceneNode::draw(painter);
 
 ///////////////////////////////////////////////////
-//    painter->setStandardEffect(QGL::FlatColor);
+    painter->setStandardEffect(QGL::FlatColor);
     int alpha = qSqrt(qPow(navigateVector.x(), 2)+qPow(navigateVector.y(), 2));
     painter->setColor(QColor(88, 131, 190, alpha*4));
 
@@ -172,9 +172,6 @@ void NavigateButton::drawSector(QVector2D navigateVector, QGLPainter *painter)
     int radius = subButton->boundingBox().maximum().x() - pos.x();
 
     float a=qAtan(navigateVector.y()/navigateVector.x());
-//    a = a * M_PI / 180;
-    qDebug() << "a"<< a;
-
 
     vertices.append(pos.x(), pos.y());
     int x[5] = {};
@@ -185,22 +182,6 @@ void NavigateButton::drawSector(QVector2D navigateVector, QGLPainter *painter)
         y[i]= (navigateVector.x() >= 0) ? pos.y()-radius*qSin(a+i/6.0) : pos.y()+radius*qSin(a+i/6.0);
         vertices.append(x[i], y[i]);
     }
-//    qDebug() << "pos" << pos;
-//    qDebug() << "x" << x1;
-//    qDebug() << "y" << y1;
-
-//    vertices.append(pos.x(), pos.y());
-//    vertices.append(x[0]-navigateVector.x() -3, y[0]-navigateVector.y()+3);
-//    vertices.append(x[1]-navigateVector.x() -1, y[1]-navigateVector.y()+1);
-//    vertices.append(x[2]-navigateVector.x() +1, y[2]-navigateVector.y()-1);
-//    vertices.append(x[3]-navigateVector.x() +3, y[3]-navigateVector.y()-3);
-//    vertices.append(x[4]-navigateVector.x() +3, y[4]-navigateVector.y()-3);
-
-//    vertices.append(midx - step, midy + step);
-//    vertices.append(midx + step * 2, midy + step * 2);
-//    vertices.append(midx + step * 2, midy);
-//    vertices.append(midx + step, midy - step);
-//    vertices.append(midx - step, midy - step * 2);
 
     normals.append(0.0f, 0.0f, 1.0f);
     normals.append(0.0f, 0.0f, 1.0f);
