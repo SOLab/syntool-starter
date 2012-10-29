@@ -11,8 +11,9 @@
 #include <QToolBox>
 #include <QSplitter>
 #include <QMenuBar>
-#include "timeline.h"
 #include <QApplication>
+
+class TimeLine;
 
 class MainWindow : public QMainWindow
 {

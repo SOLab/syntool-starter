@@ -5,7 +5,7 @@ CONFIG += qt warn_on
 QT += core gui opengl
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
-QT += 3d
+QT += 3d network
 
 include(./pkg.pri)
 
@@ -16,12 +16,13 @@ SOURCES = \
     topmenu.cpp \
     aboutwidget.cpp \
     earthview.cpp \
-    timeline.cpp \
     earth.cpp \
     buttons.cpp \
     earthscene.cpp \
     skybox.cpp \
-    navigatebutton.cpp
+    navigatebutton.cpp \
+    lightmaps.cpp \
+    timeline.cpp
 HEADERS = \
     mainwidget.h \
     windowwidget.h \
@@ -34,7 +35,8 @@ HEADERS = \
     buttons.h \
     earthscene.h \
     skybox.h \
-    navigatebutton.h
+    navigatebutton.h \
+    lightmaps.h
 RESOURCES += \
     syntool.qrc
 DEPENDPATH += resources

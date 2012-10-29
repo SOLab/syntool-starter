@@ -157,7 +157,7 @@ void EarthView::paintGL(QGLPainter *painter)
 
     if (navigateButtonPressed)
     {
-        navigateButton->drawSector(navigateVector ,painter);
+        navigateButton->drawSector(navigateVector, painter);
     }
 
     // calculate position 2D buttons
@@ -283,17 +283,17 @@ void EarthView::scalePlus()
 {
     if (scale < 2000)
     {
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < 5; i++)
         {
-            QTimer::singleShot(i*25, this, SLOT(scalePlus_slot()));
+            QTimer::singleShot(i*50, this, SLOT(scalePlus_slot()));
         }
     }
-    qDebug() << "scale: " << scale;
+//    qDebug() << "scale: " << scale;
 }
 
 void EarthView::scalePlus_slot()
 {
-    float dscale = scale/50.0;
+    float dscale = scale/20.0;
     scale += dscale;
     scale2F = QSizeF(1/scale,1/scale);
 
@@ -302,23 +302,25 @@ void EarthView::scalePlus_slot()
         camera()->setFieldOfView(scale);
     else
         camera()->setViewSize(scale2F);
+    qDebug() << "scale: " << scale;
+    qDebug() << log10(scale)/log10(2);
 }
 
 void EarthView::scaleMinus()
 {
     if (scale > 0.8)
     {
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < 5; i++)
         {
-            QTimer::singleShot(i*25, this, SLOT(scaleMinus_slot()));
+            QTimer::singleShot(i*50, this, SLOT(scaleMinus_slot()));
         }
     }
-    qDebug() << "scale: " << scale;
+//    qDebug() << "scale: " << scale;
 }
 
 void EarthView::scaleMinus_slot()
 {
-    float dscale = scale/50.0;
+    float dscale = scale/20.0;
     scale -= dscale;
     scale2F = QSizeF(1/scale,1/scale);
 
@@ -327,6 +329,8 @@ void EarthView::scaleMinus_slot()
         camera()->setFieldOfView(scale);
     else
         camera()->setViewSize(scale2F);
+    qDebug() << "scale: " << scale;
+    qDebug() << log10(scale)/log10(2);
 }
 
 void EarthView::leftSlot()
@@ -462,7 +466,7 @@ void EarthView::navigateButtonPress()
         rotate(dX, dY);
 
 //        navigateButton->drawSector(3,3, this->context());
-        QTimer::singleShot(50, this, SLOT(navigateButtonPress()));
+        QTimer::singleShot(60, this, SLOT(navigateButtonPress()));
     }
     else
     {

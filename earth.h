@@ -4,6 +4,7 @@
 #include "qglbuilder.h"
 #include "qgraphicsrotation3d.h"
 #include <QGLSphere>
+#include <QGLPainter>
 
 #include <QImage>
 
@@ -16,6 +17,9 @@ class Earth : public QGLSceneNode
 public:
     Earth(QObject *parent, QSharedPointer<QGLMaterialCollection> materials);
     ~Earth();
+
+    void drawImage(QGLPainter *painter, QSharedPointer<QGLMaterialCollection> materials);
+
 private:
     QList<QGLTexture2D*> m_LoadedTextures;
     QGLTexture2D *m_texture;

@@ -50,7 +50,7 @@ int main(int argc, char *argv[])
 {
     myApplication app(argc, argv);
 
-//    SolarSystemView* view = new SolarSystemView;
+//    EarthView* view = new EarthView;
     EarthView view;
     app.set_view(&view);
 

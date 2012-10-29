@@ -1,5 +1,6 @@
 #include "mainwidget.h"
 
+#include "timeline.h"
 
 //#include "PythonQt.h"
 //#include "gui/PythonQtScriptingConsole.h"
