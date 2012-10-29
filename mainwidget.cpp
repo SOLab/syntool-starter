@@ -28,12 +28,14 @@ MainWindow::MainWindow(QWidget *parent)
     rightWgt = new QToolBox;
     rightWgt->setMinimumWidth(100);
 
-    QWidget* NavigationWgt = new QWidget(centralwgt);
-    QWidget* MapsWgt = new QWidget(centralwgt);
-    QWidget* LayersWgt = new QWidget(centralwgt);
+    PlaceWgt = new PlaceWidget(centralwgt);
+    MapsWgt = new MapsWidget(centralwgt);
+    ProductsWgt = new ProductsWidget(centralwgt);
+    LayersWgt = new LayersWidget(centralwgt);
 
-    rightWgt->addItem(NavigationWgt, "Navigation");
+    rightWgt->addItem(PlaceWgt, "Places");
     rightWgt->addItem(MapsWgt, "Maps");
+    rightWgt->addItem(ProductsWgt, "Products");
     rightWgt->addItem(LayersWgt, "Layers");
 
 //    add all main widget

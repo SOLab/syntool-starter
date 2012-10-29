@@ -22,7 +22,11 @@ SOURCES = \
     skybox.cpp \
     navigatebutton.cpp \
     lightmaps.cpp \
-    timeline.cpp
+    timeline.cpp \
+    toolboxwidgets/layerswidget.cpp \
+    toolboxwidgets/mapswidget.cpp \
+    toolboxwidgets/placewidget.cpp \
+    toolboxwidgets/productswidget.cpp
 HEADERS = \
     mainwidget.h \
     windowwidget.h \
@@ -36,7 +40,11 @@ HEADERS = \
     earthscene.h \
     skybox.h \
     navigatebutton.h \
-    lightmaps.h
+    lightmaps.h \
+    toolboxwidgets/layerswidget.h \
+    toolboxwidgets/mapswidget.h \
+    toolboxwidgets/placewidget.h \
+    toolboxwidgets/productswidget.h
 RESOURCES += \
     syntool.qrc
 DEPENDPATH += resources

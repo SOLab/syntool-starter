@@ -12,6 +12,10 @@
 #include <QSplitter>
 #include <QMenuBar>
 #include <QApplication>
+#include <toolboxwidgets/layerswidget.h>
+#include <toolboxwidgets/placewidget.h>
+#include <toolboxwidgets/mapswidget.h>
+#include <toolboxwidgets/productswidget.h>
 
 class TimeLine;
 
@@ -32,6 +36,11 @@ protected:
     TopMenu* topMenu;
     TimeLine* timeLine;
     QToolBox* rightWgt;
+
+    PlaceWidget* PlaceWgt;
+    MapsWidget* MapsWgt;
+    ProductsWidget* ProductsWgt;
+    LayersWidget* LayersWgt;
 
     QVBoxLayout* vlayout;
     QHBoxLayout* hlayout;
