@@ -43,7 +43,6 @@
 #include "myapplication.h"
 
 #include <QGuiApplication>
-#include <QApplication>
 #include <QScreen>
 
 int main(int argc, char *argv[])

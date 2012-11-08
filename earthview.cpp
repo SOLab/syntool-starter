@@ -131,6 +131,7 @@ EarthView::EarthView(QWindow *parent)
     m_scene->mainNode()->addNode(navigateButton);
 
     earth = new Earth(this, m_palette);
+    m_scene->mainNode()->addNode(earth);
 
     QString path = ":/skybox";
     m_skybox = new SkyBox(this, path);
@@ -145,7 +146,6 @@ EarthView::~EarthView()
 void EarthView::initializeGL(QGLPainter *painter)
 {
     Q_UNUSED(painter);
-
 }
 
 void EarthView::paintGL(QGLPainter *painter)
@@ -158,6 +158,9 @@ void EarthView::paintGL(QGLPainter *painter)
     if (navigateButtonPressed)
     {
         navigateButton->drawSector(navigateVector, painter);
+//        earth->drawImage(painter);
+//        float zoom = log10(scale)/log10(2);
+//        earth->changeTexture(painter, zoom);
     }
 
     // calculate position 2D buttons

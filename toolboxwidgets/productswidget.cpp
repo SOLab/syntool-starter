@@ -4,15 +4,18 @@
 ProductsWidget::ProductsWidget(QWidget *parent) :
     QWidget(parent)
 {
+    QStringList productsList;
+    productsList << "--not selected--"
+                 << "ASCAT L2 12km"
+                 << "ERSST-V3B"
+                 << "OISST-AVHRR-AMSR-V2"
+                 << "EUR-L2P-AVHRR_METOP_A"
+                 << "IFR-L4-SSTfnd-ODYSSEA-GLOB_010"
+                 << "IFR-L4-SSTfnd-ODYSSEA-MED_002"
+                 << "OISST-AVHRR-V2";
+
     comboProducts = new QComboBox(this);
-    comboProducts->addItem("--not selected--");
-    comboProducts->addItem("ASCAT L2 12km");
-    comboProducts->addItem("ERSST-V3B");
-    comboProducts->addItem("OISST-AVHRR-AMSR-V2");
-    comboProducts->addItem("EUR-L2P-AVHRR_METOP_A");
-    comboProducts->addItem("IFR-L4-SSTfnd-ODYSSEA-GLOB_010");
-    comboProducts->addItem("IFR-L4-SSTfnd-ODYSSEA-MED_002");
-    comboProducts->addItem("OISST-AVHRR-V2");
+    comboProducts->addItems(productsList);
 
     vLayout = new QVBoxLayout(this);
     vLayout->setContentsMargins(0,0,0,0);
