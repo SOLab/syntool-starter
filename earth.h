@@ -19,10 +19,11 @@ public:
     ~Earth();
 
 //    void drawImage(QGLPainter *painter);
-    void changeTexture(QGLPainter *painter, qreal zoom);
+    void changeTexture(qreal zoom);
     QGLSceneNode *sphere;
 
 private:
+    int zoom;
     QList<QGLTexture2D*> m_LoadedTextures;
     QGLTexture2D *m_texture;
     QGraphicsRotation3D *earthRotation;
@@ -30,8 +31,7 @@ private:
     QGLSceneNode *sn2;
     QGLSceneNode *sn3;
     QGLSceneNode *sn4;
-    QGLSceneNode *buildGeometry(qreal radius = 1.0,
-                                     int divisions = 5);
+    QGLSceneNode *buildEarthNode(qreal radius = 1.0, int divisions = 5, int cur_zoom = 1);
 };
 
 #endif // EARTH_H
