@@ -11,6 +11,7 @@
         <file alias="1-0.png">resources/1-0.png</file>
         <file alias="1-1.png">resources/1-1.png</file>
         <file alias="zoom0.png">resources/zoom0.png</file>
+        <file alias="navigate.png">resources/circle2.png</file>
     </qresource>
     <qresource prefix="/skybox">
         <file alias="top">resources/stars.png</file>

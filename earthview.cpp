@@ -289,8 +289,8 @@ void EarthView::scalePlus()
             QTimer::singleShot(i*50, this, SLOT(scalePlus_slot()));
         }
     }
-    float zoom = log10(scale)/log10(2);
-    earth->changeTexture(zoom);
+//    float zoom = log10(scale)/log10(2);
+    earth->changeTexture(scale);
 //    qDebug() << "scale: " << scale;
 }
 
@@ -305,8 +305,8 @@ void EarthView::scalePlus_slot()
         camera()->setFieldOfView(scale);
     else
         camera()->setViewSize(scale2F);
-//    qDebug() << "scale: " << scale;
-//    qDebug() << log10(scale)/log10(2);
+    qDebug() << "scale: " << scale;
+    qDebug() << log10(scale)/log10(2);
 }
 
 void EarthView::scaleMinus()
@@ -335,8 +335,8 @@ void EarthView::scaleMinus_slot()
         camera()->setFieldOfView(scale);
     else
         camera()->setViewSize(scale2F);
-//    qDebug() << "scale: " << scale;
-//    qDebug() << log10(scale)/log10(2);
+    qDebug() << "scale: " << scale;
+    qDebug() << log10(scale)/log10(2);
 }
 
 void EarthView::leftSlot()

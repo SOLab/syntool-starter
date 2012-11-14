@@ -31,7 +31,7 @@ private:
     QGLSceneNode *sn2;
     QGLSceneNode *sn3;
     QGLSceneNode *sn4;
-    QGLSceneNode *buildEarthNode(qreal radius = 1.0, int divisions = 5, int cur_zoom = 1);
+    QGLSceneNode *buildEarthNode(qreal radius = 1.0, int divisions = 5, int separation = 1);
 };
 
 #endif // EARTH_H

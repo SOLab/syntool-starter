@@ -7,6 +7,7 @@
 #include <QImage>
 #include <QPainter>
 #include <qgl.h>
+#include "lightmaps.h"
 
 inline double mercator(double x) {
     return 0.5*log((1.0+sin(x))/(1.0-sin(x)));
@@ -101,9 +102,9 @@ QGLSceneNode *Earth::buildEarthNode(qreal radius, int divisions, int cur_zoom)
 //    divisions = 1;
 
     int separation = qPow(2, cur_zoom);
+    qDebug() << "=====>" << separation;
     if (separation > 2)
         separation = 2;
-//    qDebug() << "=>" << separation;
 
     QGLBuilder builder;
     // Determine the number of slices and stacks to generate.
@@ -167,7 +168,7 @@ QGLSceneNode *Earth::buildEarthNode(qreal radius, int divisions, int cur_zoom)
         {
             QGLBuilder tempBuilder;
             for (int stack = cur_stacks_part - stacks_part; stack < cur_stacks_part; ++stack) {
-                qDebug() << "stack === "<<stack;
+//                qDebug() << "stack === "<<stack;
                 QGeometryData prim;
                 qreal z = radius * stackCos[stack];
                 qreal nextz = radius * stackCos[stack + 1];
@@ -185,7 +186,7 @@ QGLSceneNode *Earth::buildEarthNode(qreal radius, int divisions, int cur_zoom)
 
                 prim.clear();
                 for (int slice = cur_slices_part - slices_part; slice <= cur_slices_part; ++slice) {
-                    qDebug() << "slice"<<slice;
+//                    qDebug() << "slice"<<slice;
                     prim.appendVertex
                         (QVector3D(nextr * sliceSin[slice],
                                    nextr * sliceCos[slice], nextz));
@@ -230,7 +231,7 @@ QGLSceneNode *Earth::buildEarthNode(qreal radius, int divisions, int cur_zoom)
             tex->setSize(QSize(512, 256));
 
             QUrl url;
-            QString path = ":"+QString::number(slice_num)+"-"+QString::number(stack_num)+".png";
+            QString path = ":"+QString::number(separation-slice_num-1)+"-"+QString::number(qAbs(stack_num))+".png";
             url.setPath(path);
             url.setScheme(QLatin1String("file"));
             tex->setUrl(url);
@@ -372,7 +373,7 @@ void Earth::changeTexture(qreal cur_zoom)
             removeNode(sphere);
 //            delete sphere;
 
-            sphere = buildEarthNode(0.5, 10, 1);
+            sphere = buildEarthNode(0.5, 10, cur_zoom);
             sphere->setObjectName("Earth");
 
             QGLTexture2D * tex;
@@ -392,6 +393,12 @@ void Earth::changeTexture(qreal cur_zoom)
 
             sphere->setMaterialIndex(earthMat);
             sphere->setEffect(QGL::LitModulateTexture2D);
+
+//            QGraphicsRotation3D *circular_rotate = new QGraphicsRotation3D();
+//            circular_rotate->setAngle(180.0f);
+//            circular_rotate->setAxis(QVector3D(0,1,0));
+
+//            sphere->addTransform(circular_rotate);
 
             addNode(sphere);
         }
