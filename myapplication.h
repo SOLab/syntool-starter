@@ -8,7 +8,6 @@
 #include "mainwidget.h"
 #include <QKeyEvent>
 #include <QApplication>
-#include <QDebug>
 
 class myApplication : public QApplication
 {

@@ -1,5 +1,4 @@
 #include "aboutwidget.h"
-#include <QDebug>
 
 AboutWidget::AboutWidget(QWidget *parent) :
     QWidget(parent)
@@ -9,6 +8,7 @@ AboutWidget::AboutWidget(QWidget *parent) :
     topLayout = new QHBoxLayout;
     topLayout->addWidget(statusLabel);
 //    topLayout->addWidget();
+
     setLayout(topLayout);
     setWindowTitle(tr("About programm"));
     resize(250, 200);

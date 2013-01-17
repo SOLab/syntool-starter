@@ -41,7 +41,6 @@
 
 #include "buttons.h"
 #include "qglpainter.h"
-#include "qdebug.h"
 
 Buttons::Buttons(QObject *parent, QSharedPointer<QGLMaterialCollection> palette)
     : QGLSceneNode(parent)

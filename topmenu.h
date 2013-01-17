@@ -6,7 +6,6 @@
 #include <QHBoxLayout>
 #include <QPushButton>
 #include <QStyle>
-#include <QDebug>
 
 class TopMenuButton : public QPushButton
 {

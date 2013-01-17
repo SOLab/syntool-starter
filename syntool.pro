@@ -28,7 +28,8 @@ SOURCES = \
     toolboxwidgets/productswidget.cpp \
     tiledownloader.cpp \
     rightsidebar.cpp \
-    toolboxwidgets/imagebutton.cpp
+    toolboxwidgets/imagebutton.cpp \
+    toolboxwidgets/inputbox.cpp
 HEADERS = \
     mainwidget.h \
     windowwidget.h \
@@ -48,7 +49,8 @@ HEADERS = \
     toolboxwidgets/productswidget.h \
     tiledownloader.h \
     rightsidebar.h \
-    toolboxwidgets/imagebutton.h
+    toolboxwidgets/imagebutton.h \
+    toolboxwidgets/inputbox.h
 RESOURCES += \
     syntool.qrc
 DEPENDPATH += resources

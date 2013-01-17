@@ -1,5 +1,4 @@
 #include "topmenu.h"
-#include "QDebug"
 #include "QSplitter"
 
 TopMenu::TopMenu(QWidget *parent) :
