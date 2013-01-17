@@ -43,15 +43,59 @@
 #include "myapplication.h"
 
 #include <QGuiApplication>
-#include <QScreen>
+#include <QDir>
+#include <QProcess>
 
 int main(int argc, char *argv[])
 {
     myApplication app(argc, argv);
 
-//    EarthView* view = new EarthView;
     EarthView view;
     app.set_view(&view);
+    QDir cacheDir("/tmp/syntool");
+    if (!cacheDir.exists()){
+        cacheDir.mkdir(cacheDir.path());
+    }
+
+    // process id
+    qDebug() << app.applicationPid();
+
+//    QProcess *Process1 = new QProcess();
+//    QProcess *Process2 = new QProcess();
+//    Process1->setStandardOutputProcess(Process2);
+
+////    p.start("ps u -p 9948 | awk '!/MEM/ {print($4)}'");
+
+//    Process1->start(QString("ps u -p %1").arg(app.applicationPid()));
+//    Process2->start("awk \"!/MEM/ {print($4)}\"");
+
+//    Process2->waitForFinished();
+////    qDebug() << Process2->readAllStandardError();
+//    QString mem_percent = Process2->readAll();
+//    qDebug() << mem_percent.toFloat();
+
+
+
+//    QProcess p;
+//    p.start("awk", QStringList() << "/MemTotal/ { print $2 }" << "/proc/meminfo");
+//    p.waitForFinished();
+//    QString memory = p.readAllStandardOutput();
+//    qDebug() << memory.toFloat();
+
+//    qDebug() << Process2->errorString();
+
+    QProcess *Process1 = new QProcess();
+    QProcess *Process2 = new QProcess();
+    Process1->setStandardOutputProcess(Process2);
+
+    Process1->start(QString("cat /proc/%1/status").arg(app.applicationPid()));
+    Process2->start("awk \"/VmRSS:/ {print($2)}\"");
+
+    Process2->waitForFinished();
+    QString mem_percent = Process2->readAll();
+    qDebug() << mem_percent.toFloat();
+    delete Process1;
+    delete Process2;
 
 //    view->resize(800, 600);
 

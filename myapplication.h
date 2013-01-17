@@ -17,7 +17,7 @@ public:
     QApplication( argc, argv)
     {
         _view = NULL;
-    };
+    }
     ~myApplication()
     {}
 

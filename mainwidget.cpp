@@ -25,22 +25,22 @@ MainWindow::MainWindow(QWidget *parent)
     glwgt->setMinimumSize(200, 200);
 
 //    create right toolBox
-    rightWgt = new QToolBox;
-    rightWgt->setMinimumWidth(100);
+    rightSidebar = new RightSidebar;
+//    rightSidebar->setMinimumWidth(100);
 
-    PlaceWgt = new PlaceWidget(centralwgt);
     MapsWgt = new MapsWidget(centralwgt);
     ProductsWgt = new ProductsWidget(centralwgt);
+    PlaceWgt = new PlaceWidget(centralwgt);
     LayersWgt = new LayersWidget(centralwgt);
 
-    rightWgt->addItem(PlaceWgt, "Places");
-    rightWgt->addItem(MapsWgt, "Maps");
-    rightWgt->addItem(ProductsWgt, "Products");
-    rightWgt->addItem(LayersWgt, "Layers");
+    rightSidebar->addItem(MapsWgt, "Maps");
+    rightSidebar->addItem(ProductsWgt, "Products");
+    rightSidebar->addItem(PlaceWgt, "Places");
+    rightSidebar->addItem(LayersWgt, "Layers");
 
 //    add all main widget
     splitter->addWidget(glwgt);
-    splitter->addWidget(rightWgt);
+    splitter->addWidget(rightSidebar);
     splitter->setStretchFactor(0, 4);
     splitter->setStretchFactor(1, 1);
 
@@ -81,15 +81,21 @@ void MainWindow::showTimeLine()
 void MainWindow::createMenuBar()
 {
     menuBar()->setContentsMargins(0,0,0,0);
+
     QMenu* fileMenu = menuBar()->addMenu(tr("&File"));
     QIcon::setThemeName("oxygen");
-    QAction* openAction = new QAction(QIcon().fromTheme("document-open"), tr("&Open"), this);
+
+    QAction* openAction = new QAction(QIcon(":/icons/open.png"), tr("&Open"), this);
     openAction->setShortcut(QKeySequence::Open);
-    QAction* saveAction = new QAction(QIcon().fromTheme("document-save"), tr("&Save"), this);
+
+
+    QAction* saveAction = new QAction(QIcon(":/icons/save.png"), tr("&Save"), this);
     saveAction->setShortcut(QKeySequence::Save);
-    QAction* exitAction = new QAction(QIcon().fromTheme("application-exit"), tr("E&xit"), this);
-//    exitAction->setShortcut(QKeySequence( Qt::CTRL + Qt::Key_Q ));
-    exitAction->setShortcut(QKeySequence::Quit);
+
+
+    QAction* exitAction = new QAction(QIcon(":/icons/exit.png"), tr("E&xit"), this);
+    exitAction->setShortcut(Qt::Key_Q+Qt::CTRL);
+//    exitAction->setShortcut(QKeySequence::Quit);
     exitAction->setShortcutContext(Qt::ApplicationShortcut);
 
 //    connect(openAction, SIGNAL(triggered()), this, SLOT(open()));
@@ -101,16 +107,64 @@ void MainWindow::createMenuBar()
     fileMenu->addSeparator();
     fileMenu->addAction(exitAction);
 
-    menuBar()->addMenu(tr("&Edit"));
-    menuBar()->addMenu(tr("&View"));
-    menuBar()->addMenu(tr("&Setting"));
+/////////////// Edit tab
+    QMenu* editMenu = menuBar()->addMenu(tr("&Edit"));
 
+    QAction* findAction = new QAction(QIcon(":/icons/find.png"), tr("Find"), this);
+    // properties current object
+    QAction* propertiesAction = new QAction(QIcon(":/icons/properties.png"), tr("Properties"), this);
+
+    editMenu->addAction(findAction);
+    editMenu->addSeparator();
+    editMenu->addAction(propertiesAction);
+
+/////////////// View tab
+    QMenu* viewMenu = menuBar()->addMenu(tr("&View"));
+
+    QAction* showToolbarAction = new QAction(tr("Toolbar"), this);
+    showToolbarAction->setCheckable(true);
+    showToolbarAction->setChecked(true);
+    connect(showToolbarAction, SIGNAL(triggered(bool)), topMenu, SLOT(setVisible(bool)));
+
+    QAction* showSidebarAction = new QAction(tr("Sidebar"), this);
+    showSidebarAction->setCheckable(true);
+    showSidebarAction->setChecked(true);
+    connect(showSidebarAction, SIGNAL(triggered(bool)), rightSidebar, SLOT(setVisible(bool)));
+
+    viewMenu->addAction(showToolbarAction);
+    viewMenu->addAction(showSidebarAction);
+
+/////////////// Settings tab
+    QMenu* toolsMenu = menuBar()->addMenu(tr("&Tools"));
+
+    QAction* settingAction = new QAction(QIcon(":/icons/settings.png"), tr("Settings"), this);
+
+    QAction* rulerAction = new QAction(QIcon(":/icons/ruler.png"), tr("Ruler"), this);
+
+    toolsMenu->addAction(rulerAction);
+    toolsMenu->addAction(settingAction);
+
+/////////////// Help tab
     QMenu* helpMenu = menuBar()->addMenu(tr("&Help"));
-    QAction* aboutAction = new QAction(QIcon().fromTheme("help-about"), tr("&About"), this);
-    aboutAction->setShortcut(QKeySequence::HelpContents);
-    aboutAction->setShortcutContext(Qt::ApplicationShortcut);
+
+    QAction* aboutAction = new QAction(QIcon(":/icons/help.png"), tr("&About"), this);
+//    aboutAction->setShortcut(QKeySequence::HelpContents);
+//    aboutAction->setShortcutContext(Qt::ApplicationShortcut);
     connect(aboutAction, SIGNAL(triggered()), this, SLOT(aboutProgram()));
+
+    QAction* bugsAction = new QAction(QIcon(":/icons/e-mail.png"), tr("Send &bugs"), this);
+    bugsAction->setShortcut(Qt::Key_B);
+
+    QAction* handbookAction = new QAction(QIcon(":/icons/help_book.png"), tr("&Handbook"), this);
+    handbookAction->setShortcut(QKeySequence::HelpContents);
+
+    QAction* aboutQtAction = new QAction(QIcon(":/icons/qt.png"), tr("&About Qt"), this);
+    connect(aboutQtAction, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
+
     helpMenu->addAction(aboutAction);
+    helpMenu->addAction(handbookAction);
+    helpMenu->addAction(bugsAction);
+    helpMenu->addAction(aboutQtAction);
 }
 
 void MainWindow::createPythonConsole()

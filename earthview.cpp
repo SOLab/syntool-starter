@@ -154,6 +154,7 @@ void EarthView::paintGL(QGLPainter *painter)
     m_skybox->draw(painter);
     earth->draw(painter);
     navigateButton->draw(painter);
+    getMemUsage();
 
     if (navigateButtonPressed)
     {
@@ -284,19 +285,20 @@ void EarthView::scalePlus()
 {
     if (scale < 2000)
     {
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 1; i++)
         {
             QTimer::singleShot(i*50, this, SLOT(scalePlus_slot()));
         }
     }
 //    float zoom = log10(scale)/log10(2);
     earth->changeTexture(scale);
+    update();
 //    qDebug() << "scale: " << scale;
 }
 
 void EarthView::scalePlus_slot()
 {
-    float dscale = scale/20.0;
+    float dscale = scale/20.0 * 5;
     scale += dscale;
     scale2F = QSizeF(1/scale,1/scale);
 
@@ -313,7 +315,7 @@ void EarthView::scaleMinus()
 {
     if (scale > 0.8)
     {
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 1; i++)
         {
             QTimer::singleShot(i*50, this, SLOT(scaleMinus_slot()));
         }
@@ -321,12 +323,13 @@ void EarthView::scaleMinus()
 
     float zoom = log10(scale)/log10(2);
     earth->changeTexture(zoom);
+    update();
 //    qDebug() << "scale: " << scale;
 }
 
 void EarthView::scaleMinus_slot()
 {
-    float dscale = scale/20.0;
+    float dscale = scale/20.0 * 5;
     scale -= dscale;
     scale2F = QSizeF(1/scale,1/scale);
 
@@ -478,4 +481,22 @@ void EarthView::navigateButtonPress()
     {
         update();
     }
+}
+
+float EarthView::getMemUsage()
+{
+    QProcess *Process1 = new QProcess();
+    QProcess *Process2 = new QProcess();
+    Process1->setStandardOutputProcess(Process2);
+
+    Process1->start(QString("cat /proc/%1/status").arg(QApplication::applicationPid()));
+    Process2->start("awk \"/VmRSS:/ {print($2)}\"");
+
+    Process1->waitForFinished();
+    Process2->waitForFinished();
+    QString mem_percent = Process2->readAll();
+    qDebug() << "Usage " << mem_percent.toFloat() << "Kb";
+    delete Process1;
+    delete Process2;
+    return mem_percent.toFloat();
 }

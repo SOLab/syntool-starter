@@ -7,6 +7,7 @@
 #include <QGLPainter>
 
 #include <QImage>
+#include "tiledownloader.h"
 
 QT_BEGIN_NAMESPACE
 class QGLTexture2D;
@@ -22,6 +23,7 @@ public:
     void changeTexture(qreal zoom);
     QGLSceneNode *sphere;
 
+    QString tileDownload(int tx, int ty, int zoom);
 private:
     int zoom;
     QList<QGLTexture2D*> m_LoadedTextures;

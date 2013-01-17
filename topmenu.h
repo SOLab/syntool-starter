@@ -31,8 +31,15 @@ public:
     explicit TopMenu(QWidget *parent = 0);
     
 protected:
+    TopMenuButton* moveButton;
     TopMenuButton* addLineButton;
+    TopMenuButton* addRectButton;
+    TopMenuButton* addTagButton;
+    TopMenuButton* addPinButton;
     TopMenuButton* addLayerButton;
+    TopMenuButton* addShowButton;
+    TopMenuButton* addPictureButton;
+    TopMenuButton* addGridButton;
     TopMenuButton* TimeLineButton;
     TopMenuButton* PythonScriptButton;
     QHBoxLayout* topLayout;

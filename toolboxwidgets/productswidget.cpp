@@ -14,12 +14,18 @@ ProductsWidget::ProductsWidget(QWidget *parent) :
                  << "IFR-L4-SSTfnd-ODYSSEA-MED_002"
                  << "OISST-AVHRR-V2";
 
-    comboProducts = new QComboBox(this);
-    comboProducts->addItems(productsList);
 
     vLayout = new QVBoxLayout(this);
     vLayout->setContentsMargins(0,0,0,0);
-    vLayout->addWidget(comboProducts, 0, Qt::AlignTop);
+    vLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+
+    QLabel* productsLbl = new QLabel("Products list:", this);
+    productsLbl->setContentsMargins(4,4,0,0);
+    vLayout->addWidget(productsLbl);
+
+    comboProducts = new QComboBox(this);
+    comboProducts->addItems(productsList);
+    vLayout->addWidget(comboProducts);
 
     setObjectName("ProductsWidget");
     setStyleSheet(QString("QWidget#ProductsWidget {background-color: "

@@ -17,6 +17,8 @@
 #include <toolboxwidgets/mapswidget.h>
 #include <toolboxwidgets/productswidget.h>
 
+#include <rightsidebar.h>
+
 class TimeLine;
 
 class MainWindow : public QMainWindow
@@ -35,7 +37,7 @@ protected:
     WindowWidget* glwgt;
     TopMenu* topMenu;
     TimeLine* timeLine;
-    QToolBox* rightWgt;
+    RightSidebar* rightSidebar;
 
     PlaceWidget* PlaceWgt;
     MapsWidget* MapsWgt;

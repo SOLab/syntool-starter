@@ -47,6 +47,7 @@
 #include <QDialog>
 #include <QVBoxLayout>
 #include <QGLPickNode>
+#include <QProcess>
 
 QT_BEGIN_NAMESPACE
 class QGLSceneNode;
@@ -83,6 +84,7 @@ public:
     void setupViewport(int width, int height);
     void keyPress(QKeyEvent* e);
     EarthScene *scene() { return m_scene; }
+    float getMemUsage();
 protected:
     Earth *earth;
     void initializeGL(QGLPainter *painter);

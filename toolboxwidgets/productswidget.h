@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QComboBox>
+#include <QLabel>
 
 class ProductsWidget : public QWidget
 {

@@ -3,6 +3,10 @@
 
 #include <QWidget>
 #include <QVBoxLayout>
+#include <QLabel>
+#include <QComboBox>
+#include <QScrollArea>
+#include <toolboxwidgets/imagebutton.h>
 
 class MapsWidget : public QWidget
 {
@@ -12,6 +16,11 @@ public:
 
 protected:
     QVBoxLayout* vLayout;
+
+    QComboBox* supportedProjections;
+    QScrollArea* themesArea;
+    ImageButton* firstTheme;
+    ImageButton* secondTheme;
 signals:
     
 public slots:

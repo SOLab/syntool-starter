@@ -16,4 +16,44 @@
     <qresource prefix="/skybox">
         <file alias="top">resources/stars.png</file>
     </qresource>
+    <qresource prefix="/icons">
+        <file alias="about.png">resources/icons/About.png</file>
+        <file alias="add.png">resources/icons/Add.png</file>
+        <file alias="apply.png">resources/icons/Apply.png</file>
+        <file alias="close.png">resources/icons/Close.png</file>
+        <file alias="close_file.png">resources/icons/Close file.png</file>
+        <file alias="delete.png">resources/icons/Delete.png</file>
+        <file alias="error.png">resources/icons/Error.png</file>
+        <file alias="exit.png">resources/icons/Exit.png</file>
+        <file alias="graphic_file.png">resources/icons/Graphic file.png</file>
+        <file alias="grid.png">resources/icons/Grid.png</file>
+        <file alias="help.png">resources/icons/Help.png</file>
+        <file alias="help_book.png">resources/icons/Help book.png</file>
+        <file alias="layers.png">resources/icons/Layers.png</file>
+        <file alias="line.png">resources/icons/Line.png</file>
+        <file alias="open.png">resources/icons/Open.png</file>
+        <file alias="pencil.png">resources/icons/Pencil.png</file>
+        <file alias="pick_color.png">resources/icons/Pick color.png</file>
+        <file alias="picture.png">resources/icons/Picture.png</file>
+        <file alias="pin.png">resources/icons/Pin.png</file>
+        <file alias="redo.png">resources/icons/Redo.png</file>
+        <file alias="rectangle.png">resources/icons/Restangle.png</file>
+        <file alias="save.png">resources/icons/Save.png</file>
+        <file alias="save_as.png">resources/icons/Save as.png</file>
+        <file alias="selection.png">resources/icons/Selection.png</file>
+        <file alias="settings.png">resources/icons/Settings.png</file>
+        <file alias="show.png">resources/icons/Show.png</file>
+        <file alias="square.png">resources/icons/Square.png</file>
+        <file alias="tag.png">resources/icons/Tag.png</file>
+        <file alias="undo.png">resources/icons/Undo.png</file>
+        <file alias="yes.png">resources/icons/Yes.png</file>
+        <file alias="script.png">resources/icons/Script.png</file>
+        <file alias="time_line.png">resources/icons/Test line.png</file>
+        <file alias="e-mail.png">resources/icons/E-mail.png</file>
+        <file alias="find.png">resources/icons/Find.png</file>
+        <file alias="ruler.png">resources/icons/Ruler.png</file>
+        <file alias="properties.png">resources/icons/Properties.png</file>
+        <file alias="qt.png">resources/icons/qt-logo.png</file>
+        <file alias="move.png">resources/icons/Move.png</file>
+    </qresource>
 </RCC>
