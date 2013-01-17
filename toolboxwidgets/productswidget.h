@@ -5,6 +5,10 @@
 #include <QVBoxLayout>
 #include <QComboBox>
 #include <QLabel>
+#include <QDate>
+#include <QTime>
+#include <QDateEdit>
+#include <QTimeEdit>
 #include <toolboxwidgets/inputbox.h>
 
 class ProductsWidget : public QWidget
@@ -20,6 +24,16 @@ protected:
     InputBox* South;
     InputBox* West;
     InputBox* East;
+
+    QDate* startProductDateValue;
+    QTime* startProductTimeValue;
+    QDateEdit* productDateStart;
+    QDateEdit* productDateEnd;
+
+    QDate* endProductDateValue;
+    QTime* endProductTimeValue;
+    QTimeEdit* productTimeStart;
+    QTimeEdit* productTimeEnd;
 signals:
     
 public slots:
