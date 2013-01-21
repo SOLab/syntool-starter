@@ -1,5 +1,5 @@
 #include "productswidget.h"
-#include <QCalendarWidget>
+#include <QSizePolicy>
 
 ProductsWidget::ProductsWidget(QWidget *parent) :
     QWidget(parent)
@@ -8,28 +8,24 @@ ProductsWidget::ProductsWidget(QWidget *parent) :
     vLayout->setContentsMargins(0,0,0,0);
     vLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
 
-// Add Product list
-
-    QStringList productsList;
-    productsList << "--not selected--"
-                 << "ASCAT L2 12km"
-                 << "ERSST-V3B"
-                 << "OISST-AVHRR-AMSR-V2"
-                 << "EUR-L2P-AVHRR_METOP_A"
-                 << "IFR-L4-SSTfnd-ODYSSEA-GLOB_010"
-                 << "IFR-L4-SSTfnd-ODYSSEA-MED_002"
-                 << "OISST-AVHRR-V2";
-
-    QLabel* productsLbl = new QLabel("Products list:", this);
-    productsLbl->setContentsMargins(4,4,0,0);
-    vLayout->addWidget(productsLbl);
+    productsLbl = new QLabel("Products list:", this);
 
     comboProducts = new QComboBox(this);
-    comboProducts->addItems(productsList);
-    comboProducts->setMaximumWidth(100);
+    comboProducts->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Fixed);
     connect(comboProducts, SIGNAL(currentIndexChanged(int)), this, SLOT(currentProductChanged(int)));
 
+    reloadProductsButton = new QPushButton("Reload list", this);
+    connect(reloadProductsButton, SIGNAL(clicked()), this, SLOT(reloadProductsList()));
+    reloadProductsButton->hide();
+
+    vLayout->addWidget(productsLbl);
     vLayout->addWidget(comboProducts);
+    vLayout->addWidget(reloadProductsButton);
+
+// Create request Url
+    url = QUrl("http://staging.satin.rshu.ru/api/products");
+
+    reloadProductsList();
 
 // Add widgets for select Area
 
@@ -101,6 +97,114 @@ ProductsWidget::ProductsWidget(QWidget *parent) :
                   .arg(parent->palette().background().color().red())
                   .arg(parent->palette().background().color().green())
                   .arg(parent->palette().background().color().blue()));
+}
+
+void ProductsWidget::slotReadyRead()
+{
+    qDebug() << "++++++++++++++++++++++++++++++";
+    reloadProductsButton->hide();
+
+    QStringList productsList;
+    productsList << "--not selected--";
+    QNetworkReply *reply=qobject_cast<QNetworkReply*>(sender());
+//    disconnect(reply, SIGNAL(readyRead()), this, SLOT(slotReadyRead()));
+//    disconnect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
+//               this, SLOT(getError(QNetworkReply::NetworkError)));
+//    QNetworkAccessManager *manager=qobject_cast<QNetworkAccessManager *>(reply->manager());
+
+    int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+
+    qDebug() << "=================================";
+    if (reply->error() == QNetworkReply::NoError)
+    {
+        qDebug() << "status code: " << statusCode;
+
+        switch (statusCode)
+        {
+            case 200:
+            {
+                QByteArray bytes = reply->readAll();
+                QString string(bytes);
+//                qDebug() << string;
+
+                QDomDocument mDocument;
+                bool namespaceProcessing;
+                QString errorMsg;
+                int errorLine;
+                int errorColumn;
+                if (!mDocument.setContent(bytes, namespaceProcessing, &errorMsg, &errorLine, &errorColumn))
+                {
+                    qDebug() << "Error XML";
+                    qDebug() << errorMsg;
+                    qDebug() << errorLine;
+                    qDebug() << errorColumn;
+                    if (errorLine > 1)
+                    {
+                        currentRequest = bytes;
+                        return;
+                    }
+                    else
+                    {
+                        currentRequest = currentRequest + bytes;
+                        bytes = currentRequest;
+                        if (!mDocument.setContent(bytes, namespaceProcessing,
+                                                  &errorMsg, &errorLine, &errorColumn))
+                        {
+                                qDebug() << "Error XML";
+                                qDebug() << errorMsg;
+                                qDebug() << errorLine;
+                                qDebug() << errorColumn;
+                                return;
+                        }
+                    }
+                }
+                currentRequest.clear();
+
+                QDomElement  mElement = mDocument.documentElement().firstChildElement("Product");
+                while ( !mElement.isNull() )
+                {
+                    // do all you need to do with <name> element
+                    QDomElement de = mElement.firstChildElement("NaiadProductId");
+                    productsList << de.text();
+                    mElement = mElement.nextSiblingElement("Product");
+                }
+            }
+        }
+    }
+
+    comboProducts->clear();
+    comboProducts->addItems(productsList);
+
+//    disconnect(reply, SIGNAL(readyRead()), this, SLOT(slotReadyRead()));
+//    disconnect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
+//            this, SLOT(getError(QNetworkReply::NetworkError)));
+//    reply->close();
+//    delete reply;
+}
+
+void ProductsWidget::getError(QNetworkReply::NetworkError)
+{
+    reloadProductsButton->show();
+    comboProducts->clear();
+    comboProducts->addItem("Connection Error");
+}
+
+void ProductsWidget::reloadProductsList()
+{
+    qDebug() << url;
+
+    QNetworkRequest request;
+    request.setUrl(url);
+    request.setRawHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
+    request.setRawHeader("Accept-Language", "ru,en-us;q=0.7,en;q=0.3");
+    request.setRawHeader("Accept-Charset", "utf-8;q=0.7,*;q=0.7");
+    request.setRawHeader("Content-Type", "text/xml");
+
+    networkManager = new QNetworkAccessManager (this);
+    QNetworkReply* reply = networkManager->get(request);
+    connect(reply, SIGNAL(readyRead()), this, SLOT(slotReadyRead()));
+    connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
+            this, SLOT(getError(QNetworkReply::NetworkError)));
 }
 
 void ProductsWidget::currentProductChanged(int index)

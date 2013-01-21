@@ -31,7 +31,7 @@ MapsWidget::MapsWidget(QWidget *parent) :
     QWidget* themesWgt = new QWidget(this);
     QVBoxLayout* themesLayout = new QVBoxLayout(themesWgt);
 
-    firstTheme = new ImageButton(":/icons/qt.png", "OpenStreetMap", themesWgt);
+    firstTheme = new ImageButton(":/osm.png", "OpenStreetMap", themesWgt);
     secondTheme = new ImageButton(":/icons/picture.png", "Satellite View", themesWgt);
 
     themesLayout->addWidget(firstTheme);

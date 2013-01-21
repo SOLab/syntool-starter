@@ -5,7 +5,7 @@ CONFIG += qt warn_on
 QT += core gui opengl
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
-QT += 3d network
+QT += 3d network xml
 
 include(./pkg.pri)
 
@@ -29,7 +29,8 @@ SOURCES = \
     tiledownloader.cpp \
     rightsidebar.cpp \
     toolboxwidgets/imagebutton.cpp \
-    toolboxwidgets/inputbox.cpp
+    toolboxwidgets/inputbox.cpp \
+    toolboxwidgets/networkrequest.cpp
 HEADERS = \
     mainwidget.h \
     windowwidget.h \
@@ -50,7 +51,8 @@ HEADERS = \
     tiledownloader.h \
     rightsidebar.h \
     toolboxwidgets/imagebutton.h \
-    toolboxwidgets/inputbox.h
+    toolboxwidgets/inputbox.h \
+    toolboxwidgets/networkrequest.h
 RESOURCES += \
     syntool.qrc
 DEPENDPATH += resources
