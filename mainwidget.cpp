@@ -1,6 +1,5 @@
 #include "mainwidget.h"
 
-#include "timeline.h"
 
 //#include "PythonQt.h"
 //#include "gui/PythonQtScriptingConsole.h"
@@ -46,7 +45,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 
     timeLine = new TimeLine(this);
-    timeLine->setFixedHeight(70);
+    timeLine->setFixedHeight(100);
     timeLine->hide();
 
     vlayout->addWidget(topMenu);

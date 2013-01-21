@@ -5,6 +5,7 @@
 #include "windowwidget.h"
 #include "topmenu.h"
 #include "aboutwidget.h"
+#include "timeline.h"
 
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QHBoxLayout>

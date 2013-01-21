@@ -11,6 +11,8 @@
 #include <QCursor>
 #include <QTimer>
 
+#include <QDateTime>
+
 class TimeLine : public QWidget
 {
     Q_OBJECT
@@ -19,28 +21,34 @@ public:
     TimeLine(QWidget *parent = 0);
     ~TimeLine();
     void paintEvent(QPaintEvent * pe);
-    void checkMouse();
+
+protected:
+    void createBottomRect();
+    void createTopRect();
 
 private slots:
     void mousePressEvent ( QMouseEvent * pe );
     void mouseMoveEvent(QMouseEvent * pe);
     void mouseReleaseEvent ( QMouseEvent * pe );
     void moveEnabled();
-    void backToMouseAndCursor(bool inDirection);
 
 
 private:
     struct param
     {
-        int max_;
-        int min_;
-        int curMin_;
-        int curMax_;
-        int current_;
-        QRect cursorRect_;
-        bool move_;
+        QDateTime maxDate;
+        QDateTime minDate;
+//        QDateTime curMinDate;
+//        QDateTime curMaxDate;
+        QDateTime currentDate;
+        QRect dayRect;
+        QRect weekRect;
+        bool moveDay;
+        bool moveWeek;
         bool flagMovedIntervalos_;
         QPoint pos_;
+
+        int markerDistance;
     };
     param control_;
 };

@@ -124,7 +124,7 @@ void ProductsWidget::slotReadyRead()
             case 200:
             {
                 QByteArray bytes = reply->readAll();
-                QString string(bytes);
+//                QString string(bytes);
 //                qDebug() << string;
 
                 QDomDocument mDocument;
