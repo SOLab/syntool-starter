@@ -16,6 +16,7 @@ InputBox::InputBox(QString textLabel, QWidget *parent) :
                             background: #EFEBE7;}\
                             QLineEdit:enabled {border: 1px solid black; border-radius: 3px;\
                             background: #FFFFFF;}");
+//    vLayout->setContentsMargins(2,2,2,0);
     vLayout->setContentsMargins(0,2,0,0);
 //    vLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     setAutoFillBackground(true);

@@ -19,6 +19,8 @@
 #include <QPushButton>
 #include <QtXml/QDomDocument>
 
+#include <QHash>
+
 class ProductsWidget : public QWidget
 {
     Q_OBJECT
@@ -51,6 +53,11 @@ protected:
     QTime* endProductTimeValue;
     QTimeEdit* productTimeStart;
     QTimeEdit* productTimeEnd;
+
+    QLabel* parametersLbl;
+    QComboBox* comboParameters;
+
+    QHash<QString, QStringList> productsParametersList;
 signals:
     
 public slots:

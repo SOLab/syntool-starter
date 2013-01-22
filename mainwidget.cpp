@@ -25,7 +25,6 @@ MainWindow::MainWindow(QWidget *parent)
 
 //    create right toolBox
     rightSidebar = new RightSidebar;
-//    rightSidebar->setMinimumWidth(100);
 
     MapsWgt = new MapsWidget(centralwgt);
     ProductsWgt = new ProductsWidget(centralwgt);
@@ -55,6 +54,8 @@ MainWindow::MainWindow(QWidget *parent)
     createMenuBar();
     createPythonConsole();
     setFocusPolicy(Qt::StrongFocus);
+
+    rightSidebar->setMinimumWidth(120);
 
     setWindowTitle("Syntool");
 }

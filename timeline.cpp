@@ -29,11 +29,18 @@ TimeLine::TimeLine(QWidget *parent)
     QHBoxLayout* hLayout = new QHBoxLayout(this);
     QPushButton* calendarButton = new QPushButton("Set date", this);
     calendarButton->setFixedSize(60, 24);
+    calendarButton->setStyleSheet(" QPushButton {\
+                                        border: 1px solid #8f8f91; border-radius: 10px; \
+                                        background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,\
+                                                                          stop: 0 #f6f7fa, stop: 1 #dadbde);\
+                                        min-width: 80px;}\
+                                    QPushButton:pressed {\
+                                        background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,\
+                                                                          stop: 0 #dadbde, stop: 1 #f6f7fa);}");
 
     connect(calendarButton, SIGNAL(clicked()), this, SLOT(setDate()));
 
     hLayout->addWidget(calendarButton, 0, Qt::AlignRight | Qt::AlignTop);
-
 }
 
 TimeLine::~TimeLine()
@@ -191,21 +198,6 @@ void TimeLine::createTopRect()
     }
 }
 
-void TimeLine::setDate()
-{
-    calendar = new Calendar;
-    connect(calendar->okButton, SIGNAL(clicked()), this, SLOT(setCurrentDate()));
-    calendar->show();
-}
-
-void TimeLine::setCurrentDate()
-{
-    control_.currentDate.setDate(calendar->calendar->selectedDate());
-    calendar->close();
-    calendar->deleteLater();
-    repaint();
-}
-
 void TimeLine::createBottomRect()
 {
     QPainter painter(this);
@@ -260,4 +252,35 @@ void TimeLine::createBottomRect()
         painter.drawText(halfWidth + afterNextWeekPixel + 2, height() - 6, getFirstDayOfWeekMonth(control_.currentDate.addDays(14)));
     }
 
+}
+
+void TimeLine::setDate()
+{
+    calendar = new Calendar;
+    connect(calendar->okButton, SIGNAL(clicked()), this, SLOT(setCurrentDate()));
+    calendar->show();
+}
+
+void TimeLine::setCurrentDate()
+{
+    control_.currentDate.setDate(calendar->calendar->selectedDate());
+    calendar->close();
+    calendar->deleteLater();
+    repaint();
+
+//    QDateTime dt(calendar->calendar->selectedDate());
+//    addGeoPoint(dt, 11,11);
+}
+
+void TimeLine::addGeoPoint(QDateTime dateTime, float lat, float lon)
+{
+    geoPoint newPoint = {dateTime, lat, lon};
+    geoPointList.append(newPoint);
+    qDebug() << dateTime;
+}
+
+void TimeLine::addGeoSegment(QDateTime startDateTime, QDateTime endDateTime, float lat, float lon)
+{
+     geoSegment newPoint = {startDateTime, endDateTime, lat, lon};
+     geoSegmentList.append(newPoint);
 }

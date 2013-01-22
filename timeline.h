@@ -16,6 +16,27 @@
 #include <QPushButton>
 #include <additionalwidgets/calendar.h>
 
+#include <QList>
+
+#pragma pack(push, 1)
+struct geoPoint
+{
+    QDateTime timeSnapshot;
+    // center of latitude and longitude
+    float lat;
+    float lon;
+};
+
+struct geoSegment
+{
+    QDateTime startTime;
+    QDateTime endTime;
+    // center of latitude and longitude
+    float lat;
+    float lon;
+};
+#pragma pack(pop)
+
 class TimeLine : public QWidget
 {
     Q_OBJECT
@@ -30,9 +51,15 @@ protected:
     void createTopRect();
     Calendar* calendar;
 
+    QList<geoPoint> geoPointList;
+    QList<geoSegment> geoSegmentList;
+
 public slots:
     void setDate();
     void setCurrentDate();
+
+    void addGeoPoint(QDateTime dateTime, float lat, float lon);
+    void addGeoSegment(QDateTime startDateTime, QDateTime endDateTime, float lat, float lon);
 
 private slots:
     void mousePressEvent ( QMouseEvent * pe );

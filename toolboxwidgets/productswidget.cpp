@@ -5,7 +5,8 @@ ProductsWidget::ProductsWidget(QWidget *parent) :
     QWidget(parent)
 {
     vLayout = new QVBoxLayout(this);
-    vLayout->setContentsMargins(0,0,0,0);
+    vLayout->setContentsMargins(0,2,0,0);
+//    vLayout->setSpacing(3);
     vLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
 
     productsLbl = new QLabel("Products list:", this);
@@ -57,12 +58,16 @@ ProductsWidget::ProductsWidget(QWidget *parent) :
 // Add widgets for temporal area
 // From
 
+    QLabel* fromDate = new QLabel("From: ", this);
+    vLayout->addWidget(fromDate);
+
     startProductDateValue = new QDate;
 
     productDateStart = new QDateEdit;
     productDateStart->setCalendarPopup(true);
     productDateStart->setDate(startProductDateValue->currentDate());
     productDateStart->setDisabled(true);
+    productDateStart->setContentsMargins(2,0,2,0);
     vLayout->addWidget(productDateStart);
 
     startProductTimeValue = new QTime;
@@ -70,9 +75,13 @@ ProductsWidget::ProductsWidget(QWidget *parent) :
     productTimeStart = new QTimeEdit;
     productTimeStart->setTime(startProductTimeValue->currentTime());
     productTimeStart->setDisabled(true);
+    productTimeStart->setContentsMargins(2,0,2,0);
     vLayout->addWidget(productTimeStart);
 
 // To
+
+    QLabel* toDate = new QLabel("To: ", this);
+    vLayout->addWidget(toDate);
 
     endProductDateValue = new QDate;
 
@@ -88,6 +97,16 @@ ProductsWidget::ProductsWidget(QWidget *parent) :
     productTimeEnd->setTime(endProductTimeValue->currentTime());
     productTimeEnd->setDisabled(true);
     vLayout->addWidget(productTimeEnd);
+
+// select parameters
+
+    parametersLbl = new QLabel("Select parameter: ", this);
+    comboParameters = new QComboBox(this);
+    comboParameters->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Fixed);
+    comboParameters->setDisabled(true);
+
+    vLayout->addWidget(parametersLbl);
+    vLayout->addWidget(comboParameters);
 
 // Set style
 
@@ -164,22 +183,20 @@ void ProductsWidget::slotReadyRead()
                 while ( !mElement.isNull() )
                 {
                     // do all you need to do with <name> element
-                    QDomElement de = mElement.firstChildElement("NaiadProductId");
-                    productsList << de.text();
+                    QDomElement productID = mElement.firstChildElement("NaiadProductId");
+                    QDomElement productParameters = mElement.firstChildElement("Parameters");
+                    productsList << productID.text();
+                    productsParametersList.insert(productID.text(), productParameters.text().split(" "));
                     mElement = mElement.nextSiblingElement("Product");
                 }
             }
         }
     }
 
+    qDebug() << productsParametersList;
+
     comboProducts->clear();
     comboProducts->addItems(productsList);
-
-//    disconnect(reply, SIGNAL(readyRead()), this, SLOT(slotReadyRead()));
-//    disconnect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
-//            this, SLOT(getError(QNetworkReply::NetworkError)));
-//    reply->close();
-//    delete reply;
 }
 
 void ProductsWidget::getError(QNetworkReply::NetworkError)
@@ -191,7 +208,7 @@ void ProductsWidget::getError(QNetworkReply::NetworkError)
 
 void ProductsWidget::reloadProductsList()
 {
-    qDebug() << url;
+//    qDebug() << url;
 
     QNetworkRequest request;
     request.setUrl(url);
@@ -218,12 +235,23 @@ void ProductsWidget::currentProductChanged(int index)
     {
         enabledFlag = true;
     }
-    North->setEnabled(enabledFlag);
-    South->setEnabled(enabledFlag);
-    West->setEnabled(enabledFlag);
-    East->setEnabled(enabledFlag);
-    productDateStart->setEnabled(enabledFlag);
-    productTimeStart->setEnabled(enabledFlag);
-    productDateEnd->setEnabled(enabledFlag);
-    productTimeEnd->setEnabled(enabledFlag);
+
+    if (enabledFlag != North->isEnabled())
+    {
+        North->setEnabled(enabledFlag);
+        South->setEnabled(enabledFlag);
+        West->setEnabled(enabledFlag);
+        East->setEnabled(enabledFlag);
+        productDateStart->setEnabled(enabledFlag);
+        productTimeStart->setEnabled(enabledFlag);
+        productDateEnd->setEnabled(enabledFlag);
+        productTimeEnd->setEnabled(enabledFlag);
+        comboParameters->setEnabled(enabledFlag);
+    }
+
+    comboParameters->clear();
+    if (enabledFlag)
+    {
+        comboParameters->addItems(productsParametersList[comboProducts->currentText()]);
+    }
 }

@@ -17,4 +17,5 @@ Calendar::Calendar(QWidget *parent) :
     gridLayout->addWidget(cancelButton, 2,1);
 
     resize(sizeHint());
+    setWindowModality(Qt::ApplicationModal);
 }
