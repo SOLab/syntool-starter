@@ -12,6 +12,9 @@
 #include <QTimer>
 
 #include <QDateTime>
+#include <QHBoxLayout>
+#include <QPushButton>
+#include <additionalwidgets/calendar.h>
 
 class TimeLine : public QWidget
 {
@@ -25,21 +28,22 @@ public:
 protected:
     void createBottomRect();
     void createTopRect();
+    Calendar* calendar;
+
+public slots:
+    void setDate();
+    void setCurrentDate();
 
 private slots:
     void mousePressEvent ( QMouseEvent * pe );
     void mouseMoveEvent(QMouseEvent * pe);
     void mouseReleaseEvent ( QMouseEvent * pe );
-    void moveEnabled();
-
 
 private:
     struct param
     {
         QDateTime maxDate;
         QDateTime minDate;
-//        QDateTime curMinDate;
-//        QDateTime curMaxDate;
         QDateTime currentDate;
         QRect dayRect;
         QRect weekRect;

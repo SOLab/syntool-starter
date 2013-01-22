@@ -30,7 +30,8 @@ SOURCES = \
     rightsidebar.cpp \
     toolboxwidgets/imagebutton.cpp \
     toolboxwidgets/inputbox.cpp \
-    toolboxwidgets/networkrequest.cpp
+    toolboxwidgets/networkrequest.cpp \
+    additionalwidgets/calendar.cpp
 HEADERS = \
     mainwidget.h \
     windowwidget.h \
@@ -52,7 +53,8 @@ HEADERS = \
     rightsidebar.h \
     toolboxwidgets/imagebutton.h \
     toolboxwidgets/inputbox.h \
-    toolboxwidgets/networkrequest.h
+    toolboxwidgets/networkrequest.h \
+    additionalwidgets/calendar.h
 RESOURCES += \
     syntool.qrc
 DEPENDPATH += resources
