@@ -11,7 +11,7 @@
 #include <QTime>
 #include <QDateEdit>
 #include <QTimeEdit>
-#include <toolboxwidgets/inputbox.h>
+#include <additionalwidgets/inputbox.h>
 
 #include <QNetworkReply>
 #include <QXmlStreamReader>
@@ -20,6 +20,36 @@
 #include <QtXml/QDomDocument>
 
 #include <QHash>
+#include <network/downloadimage.h>
+#include <QFile>
+
+struct Product{
+    QString Description;
+    QString ImageUrl;
+    QString NaiadProductId;
+    QString Name;
+    QStringList Platforms;
+    QString ProcessingCenters;
+    QString ProcessingLevels;
+    QString ProductionInterval;
+    QStringList Sensors;
+    QString SpatialResolutions;
+
+    bool IsGlobalCoverage;
+    bool IsMapModeSupported;
+    bool IsOnGoing;
+    bool IsPresentationModeSupported;
+    bool IsPrivate;
+    bool NoQuiklooks;
+
+    QHash<QString, int> productsParameters;
+
+    QDateTime StartDate;
+    QDateTime EndDate;
+    int FilteredGranulesCount;
+    int Id;
+    int TotalGranulesCount;
+};
 
 class ProductsWidget : public QWidget
 {
@@ -31,6 +61,7 @@ protected:
     QVBoxLayout* vLayout;
     QDomDocument* dom;
 
+    QString serverName;
     QUrl url;
     QNetworkAccessManager *networkManager;
 //    QNetworkReply *reply;
@@ -57,7 +88,8 @@ protected:
     QLabel* parametersLbl;
     QComboBox* comboParameters;
 
-    QHash<QString, QStringList> productsParametersList;
+    QHash<QString, int> parametersList;
+    QHash<QString, Product> productsHash;
 signals:
     
 public slots:

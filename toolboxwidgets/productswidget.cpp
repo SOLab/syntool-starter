@@ -24,7 +24,8 @@ ProductsWidget::ProductsWidget(QWidget *parent) :
     vLayout->addWidget(reloadProductsButton);
 
 // Create request Url
-    url = QUrl("http://staging.satin.rshu.ru/api/products");
+    serverName = "http://staging.satin.rshu.ru";
+    url = QUrl(serverName + "/api/products");
 
     reloadProductsList();
 
@@ -118,18 +119,45 @@ ProductsWidget::ProductsWidget(QWidget *parent) :
                   .arg(parent->palette().background().color().blue()));
 }
 
+// create Product structure from xml (from QDomElement)
+Product createProductFromXml(QDomElement domElement)
+{
+    Product newProduct;
+
+    // Get main fields
+    newProduct.Name = domElement.firstChildElement("Name").text();
+    newProduct.NaiadProductId = domElement.firstChildElement("NaiadProductId").text();
+    newProduct.Description = domElement.firstChildElement("Description").text();
+    newProduct.ProductionInterval = domElement.firstChildElement("ProductionInterval").text();
+    newProduct.ImageUrl = domElement.firstChildElement("ImageUrl").text();
+
+    // get start and end date
+    newProduct.StartDate = QDateTime::fromString(domElement.firstChildElement("StartDate").text(),
+                                                 Qt::ISODate);
+    newProduct.EndDate = QDateTime::fromString(domElement.firstChildElement("EndDate").text(),
+                                               Qt::ISODate);
+
+    // Get parameters
+    QDomElement productParameters = domElement.firstChildElement("Parameters");
+    QDomElement productParameter = productParameters.firstChildElement("Parameter");
+
+    while ( !productParameter.isNull() )
+    {
+        newProduct.productsParameters[productParameter.firstChildElement("Name").text()] = \
+                                      productParameter.firstChildElement("Id").text().toInt();
+        productParameter = productParameter.nextSiblingElement("Parameter");
+    }
+
+    return newProduct;
+}
+
 void ProductsWidget::slotReadyRead()
 {
-    qDebug() << "++++++++++++++++++++++++++++++";
     reloadProductsButton->hide();
 
     QStringList productsList;
     productsList << "--not selected--";
     QNetworkReply *reply=qobject_cast<QNetworkReply*>(sender());
-//    disconnect(reply, SIGNAL(readyRead()), this, SLOT(slotReadyRead()));
-//    disconnect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
-//               this, SLOT(getError(QNetworkReply::NetworkError)));
-//    QNetworkAccessManager *manager=qobject_cast<QNetworkAccessManager *>(reply->manager());
 
     int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
 
@@ -151,7 +179,8 @@ void ProductsWidget::slotReadyRead()
                 QString errorMsg;
                 int errorLine;
                 int errorColumn;
-                if (!mDocument.setContent(bytes, namespaceProcessing, &errorMsg, &errorLine, &errorColumn))
+                if (!mDocument.setContent(bytes, namespaceProcessing, &errorMsg,
+                                          &errorLine, &errorColumn))
                 {
                     qDebug() << "Error XML";
                     qDebug() << errorMsg;
@@ -182,18 +211,40 @@ void ProductsWidget::slotReadyRead()
                 QDomElement  mElement = mDocument.documentElement().firstChildElement("Product");
                 while ( !mElement.isNull() )
                 {
-                    // do all you need to do with <name> element
+                    Product newProduct = createProductFromXml(mElement);
+
+                    QString imagePath = QString("/tmp/%1.jpg").arg(newProduct.NaiadProductId);
+
+                    // download product image
+                    if (!newProduct.ImageUrl.isEmpty())
+                    {
+                        if ( ! QFile::exists(imagePath) ) {
+                            DownloadImage* downloadImage = new DownloadImage;
+                            downloadImage->setImageUrl(serverName+newProduct.ImageUrl,
+                                                       imagePath);
+                            downloadImage->run();
+                        }
+                    }
+
                     QDomElement productID = mElement.firstChildElement("NaiadProductId");
-                    QDomElement productParameters = mElement.firstChildElement("Parameters");
+                    productsHash[productID.text()] = newProduct;
+
+                    // create parametersList <parameterName, parameterId>
+                    QHash<QString, int>::const_iterator k = newProduct.productsParameters.constBegin();
+                    while ( k != newProduct.productsParameters.constEnd() )
+                    {
+                        if (!parametersList.contains(k.key()))
+                            parametersList[k.key()] = k.value();
+                        ++k;
+                    }
+
                     productsList << productID.text();
-                    productsParametersList.insert(productID.text(), productParameters.text().split(" "));
+
                     mElement = mElement.nextSiblingElement("Product");
                 }
             }
         }
     }
-
-    qDebug() << productsParametersList;
 
     comboProducts->clear();
     comboProducts->addItems(productsList);
@@ -252,6 +303,8 @@ void ProductsWidget::currentProductChanged(int index)
     comboParameters->clear();
     if (enabledFlag)
     {
-        comboParameters->addItems(productsParametersList[comboProducts->currentText()]);
+        comboParameters->addItems( \
+                    productsHash[comboProducts->currentText()].productsParameters.keys());
+        comboParameters->model()->sort(0);
     }
 }

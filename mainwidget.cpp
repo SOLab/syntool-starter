@@ -138,6 +138,7 @@ void MainWindow::createMenuBar()
     QMenu* toolsMenu = menuBar()->addMenu(tr("&Tools"));
 
     QAction* settingAction = new QAction(QIcon(":/icons/settings.png"), tr("Settings"), this);
+    connect (settingAction, SIGNAL(triggered()), this, SLOT(showSettings()));
 
     QAction* rulerAction = new QAction(QIcon(":/icons/ruler.png"), tr("Ruler"), this);
 
@@ -165,6 +166,12 @@ void MainWindow::createMenuBar()
     helpMenu->addAction(handbookAction);
     helpMenu->addAction(bugsAction);
     helpMenu->addAction(aboutQtAction);
+}
+
+void MainWindow::showSettings()
+{
+    settingsWidget = new SettingsWidget();
+    settingsWidget->show();
 }
 
 void MainWindow::createPythonConsole()

@@ -17,8 +17,9 @@
 #include <toolboxwidgets/placewidget.h>
 #include <toolboxwidgets/mapswidget.h>
 #include <toolboxwidgets/productswidget.h>
-
 #include <rightsidebar.h>
+
+#include <topmenuwidgets/settingswidget.h>
 
 class TimeLine;
 
@@ -50,6 +51,7 @@ protected:
     QWidget* centralwgt;
 
     AboutWidget* aboutWgt;
+    SettingsWidget* settingsWidget;
 
     void createMenuBar();
     void createPythonConsole();
@@ -58,6 +60,8 @@ protected:
 public slots:
     void aboutProgram();
     void showTimeLine();
+
+    void showSettings();
 };
 
 #endif // MAINWIDGET_H

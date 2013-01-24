@@ -28,10 +28,15 @@ SOURCES = \
     toolboxwidgets/productswidget.cpp \
     tiledownloader.cpp \
     rightsidebar.cpp \
-    toolboxwidgets/imagebutton.cpp \
-    toolboxwidgets/inputbox.cpp \
     toolboxwidgets/networkrequest.cpp \
-    additionalwidgets/calendar.cpp
+    additionalwidgets/calendar.cpp \
+    additionalwidgets/inputbox.cpp \
+    additionalwidgets/imagebutton.cpp \
+    topmenuwidgets/settingswidget.cpp \
+    topmenuwidgets/settingstabwidget.cpp \
+    topmenuwidgets/cachetabwidget.cpp \
+    topmenuwidgets/commontabwidget.cpp \
+    network/downloadimage.cpp
 HEADERS = \
     mainwidget.h \
     windowwidget.h \
@@ -51,10 +56,15 @@ HEADERS = \
     toolboxwidgets/productswidget.h \
     tiledownloader.h \
     rightsidebar.h \
-    toolboxwidgets/imagebutton.h \
-    toolboxwidgets/inputbox.h \
     toolboxwidgets/networkrequest.h \
-    additionalwidgets/calendar.h
+    additionalwidgets/calendar.h \
+    additionalwidgets/inputbox.h \
+    additionalwidgets/imagebutton.h \
+    topmenuwidgets/settingswidget.h \
+    topmenuwidgets/settingstabwidget.h \
+    topmenuwidgets/cachetabwidget.h \
+    topmenuwidgets/commontabwidget.h \
+    network/downloadimage.h
 RESOURCES += \
     syntool.qrc
 DEPENDPATH += resources

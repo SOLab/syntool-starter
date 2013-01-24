@@ -56,5 +56,7 @@
         <file alias="properties.png">resources/icons/Properties.png</file>
         <file alias="qt.png">resources/icons/qt-logo.png</file>
         <file alias="move.png">resources/icons/Move.png</file>
+        <file alias="clear.png">resources/icons/Clear.png</file>
+        <file alias="warning.png">resources/icons/Warning.png</file>
     </qresource>
 </RCC>

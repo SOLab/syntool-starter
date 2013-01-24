@@ -211,7 +211,7 @@ QGLSceneNode *Earth::buildEarthNode(qreal radius, int divisions, int cur_zoom)
                         else
                             distal = (separation / 2) + 1 - (cur_stacks_part / stacks_part);
                     }
-                    qDebug() << distal;
+//                    qDebug() << distal;
 
                     yTexCoordNext = 1.0f - qreal(stack + 1) / stacks;
                     yTexCoordNext = Mercator2SphereAnalytic(yTexCoordNext)*separation * qreal(distal);
