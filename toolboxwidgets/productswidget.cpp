@@ -176,6 +176,13 @@ Product createProductFromXml(QDomElement domElement)
     newProduct.Description = domElement.firstChildElement("Description").text();
     newProduct.ProductionInterval = domElement.firstChildElement("ProductionInterval").text();
     newProduct.ImageUrl = domElement.firstChildElement("ImageUrl").text();
+    newProduct.ProcessingLevels = domElement.firstChildElement("ProcessingLevels").text();
+
+    if (domElement.firstChildElement("TotalGranulesCount").text().isEmpty())
+        newProduct.TotalGranulesCount = 0;
+    else
+        newProduct.TotalGranulesCount = \
+                        domElement.firstChildElement("TotalGranulesCount").text().toInt();
 
     // get start and end date
     newProduct.StartDate = QDateTime::fromString(domElement.firstChildElement("StartDate").text(),
@@ -415,5 +422,8 @@ void ProductsWidget::setSelectedProducts(QHash<QString, selectedProduct> *_selec
 
 void ProductsWidget::slotProductInfo()
 {
+    ProductInfoWidget* productInfo = new ProductInfoWidget;
+    productInfo->setProduct(productsHash[comboProducts->currentText()], productImagePixmap);
+    productInfo->show();
     qDebug() << "Product information";
 }

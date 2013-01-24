@@ -12,6 +12,7 @@
 #include <QDateEdit>
 #include <QTimeEdit>
 #include <additionalwidgets/inputbox.h>
+#include <additionalwidgets/productinfowidget.h>
 
 #include <QNetworkReply>
 #include <QXmlStreamReader>
