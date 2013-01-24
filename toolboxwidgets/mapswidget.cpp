@@ -27,6 +27,7 @@ MapsWidget::MapsWidget(QWidget *parent) :
     vLayout->addWidget(themesLbl);
 
     themesArea = new QScrollArea(this);
+    themesArea->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
 
     QWidget* themesWgt = new QWidget(this);
     QVBoxLayout* themesLayout = new QVBoxLayout(themesWgt);
@@ -34,8 +35,8 @@ MapsWidget::MapsWidget(QWidget *parent) :
     firstTheme = new ImageButton(":/osm.png", "OpenStreetMap", themesWgt);
     secondTheme = new ImageButton(":/icons/picture.png", "Satellite View", themesWgt);
 
-    themesLayout->addWidget(firstTheme);
-    themesLayout->addWidget(secondTheme);
+    themesLayout->addWidget(firstTheme, 0, Qt::AlignHCenter);
+    themesLayout->addWidget(secondTheme, 0, Qt::AlignHCenter);
 
     themesLayout->setContentsMargins(0,8,0,0);
 

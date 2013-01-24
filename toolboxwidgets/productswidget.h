@@ -68,6 +68,8 @@ protected:
     QByteArray currentRequest;
     QLabel* productsLbl;
     QComboBox* comboProducts;
+    QLabel* productImageLbl;
+    QPixmap* productImagePixmap;
     QPushButton* reloadProductsButton;
 
     InputBox* North;

@@ -15,12 +15,17 @@ ProductsWidget::ProductsWidget(QWidget *parent) :
     comboProducts->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Fixed);
     connect(comboProducts, SIGNAL(currentIndexChanged(int)), this, SLOT(currentProductChanged(int)));
 
+    productImageLbl = new QLabel(this);
+    productImageLbl->hide();
+    productImagePixmap = new QPixmap;
+
     reloadProductsButton = new QPushButton("Reload list", this);
     connect(reloadProductsButton, SIGNAL(clicked()), this, SLOT(reloadProductsList()));
     reloadProductsButton->hide();
 
     vLayout->addWidget(productsLbl);
     vLayout->addWidget(comboProducts);
+    vLayout->addWidget(productImageLbl);
     vLayout->addWidget(reloadProductsButton);
 
 // Create request Url
@@ -287,6 +292,7 @@ void ProductsWidget::currentProductChanged(int index)
         enabledFlag = true;
     }
 
+    // if product not selected -> set disabled all elements
     if (enabledFlag != North->isEnabled())
     {
         North->setEnabled(enabledFlag);
@@ -303,8 +309,28 @@ void ProductsWidget::currentProductChanged(int index)
     comboParameters->clear();
     if (enabledFlag)
     {
+        // add new parameters in comboParameters
         comboParameters->addItems( \
                     productsHash[comboProducts->currentText()].productsParameters.keys());
         comboParameters->model()->sort(0);
+
+        // set product image to productImageLbl
+        if (QFile::exists(QString("/tmp/%1.jpg").\
+                          arg(productsHash[comboProducts->currentText()].NaiadProductId)))
+        {
+            productImagePixmap->load(QString("/tmp/%1.jpg").\
+                                 arg(productsHash[comboProducts->currentText()].NaiadProductId));
+            *productImagePixmap = productImagePixmap->scaled(116,116);
+
+            productImageLbl->setPixmap(*productImagePixmap);
+            productImageLbl->show();
+        }
+        else {
+            productImageLbl->hide();
+        }
+    }
+    else
+    {
+        productImageLbl->hide();
     }
 }
