@@ -10,6 +10,8 @@ void ProductInfoWidget::setProduct(struct Product product, QPixmap* productImage
 {
     Name = new QLabel(this);
     Name->setText("Product name: "+product.Name);
+    setWindowTitle("Information about "+product.Name);
+
     NaiadProductId = new QLabel(this);
     NaiadProductId->setText("Naiad product Id: "+product.NaiadProductId);
     StartDate = new QLabel(this);
@@ -25,8 +27,24 @@ void ProductInfoWidget::setProduct(struct Product product, QPixmap* productImage
     gridLayout->addWidget(StartDate,2,0);
     gridLayout->addWidget(EndDate,3,0);
 
+    // Add parameters
+    QLabel* productParameters = new QLabel(this);
+    QString parametersString;
 
-    int i = 4;
+    for (int i = 0; i < product.productsParameters.keys().size(); ++i)
+    {
+        if (!parametersString.isEmpty())
+            parametersString += ", ";
+        else
+            parametersString += "Product parameters: ";
+        parametersString += product.productsParameters.keys().at(i);
+    }
+    productParameters->setText(parametersString);
+    productParameters->setWordWrap(true);
+    gridLayout->addWidget(productParameters,4,0);
+
+    // add more values
+    int i = 5;
     if (!product.ProcessingLevels.isEmpty())    {
         QLabel* ProcessingLevels = new QLabel(this);
         ProcessingLevels->setText("Processing levels: "+product.ProcessingLevels);

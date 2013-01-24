@@ -63,12 +63,12 @@ ProductsWidget::ProductsWidget(QWidget *parent) :
 
     South = new InputBox("South: ", this);
     South->setValidator("double");
-    South->setText("90.00");
+    South->setText("-90.00");
     South->setDisabled(true);
 
     West = new InputBox("West: ", this);
     West->setValidator("double");
-    West->setText("180.00");
+    West->setText("-180.00");
     West->setDisabled(true);
 
     East = new InputBox("East: ", this);

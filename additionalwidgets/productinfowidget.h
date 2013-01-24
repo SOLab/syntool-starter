@@ -21,9 +21,6 @@ protected:
     QLabel* NaiadProductId;
     QLabel* Name;
 
-//    ProductionInterval
-//    TotalGranulesCount
-
 private slots:
     void closeEvent(QCloseEvent *event);
 
