@@ -13,6 +13,7 @@ class InputBox : public QWidget
 public:
     explicit InputBox(QString textLabel, QWidget *parent = 0);
     QString text();
+    void setText(QString text);
     bool setValidator(QString ValidType);
 
 protected:

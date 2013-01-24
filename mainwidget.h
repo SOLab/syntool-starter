@@ -20,6 +20,7 @@
 #include <rightsidebar.h>
 
 #include <topmenuwidgets/settingswidget.h>
+#include <QHash>
 
 class TimeLine;
 
@@ -33,6 +34,8 @@ public:
     void setHostedWindow(QWindow *window);
     void keyPress(QKeyEvent* e);
 //    void resizeEvent(QResizeEvent *e);
+
+    QHash<QString, selectedProduct>* selectedProducts;
 
 protected:
     QSplitter *splitter;

@@ -51,11 +51,23 @@ struct Product{
     int TotalGranulesCount;
 };
 
+struct selectedProduct{
+    QString productName;
+    QDateTime startDate;
+    QDateTime endDate;
+    float west;
+    float east;
+    float south;
+    float north;
+    QString parameter;
+};
+
 class ProductsWidget : public QWidget
 {
     Q_OBJECT
 public:
     explicit ProductsWidget(QWidget *parent = 0);
+    void setSelectedProducts(QHash<QString, selectedProduct>* _selectedProducts);
 
 protected:
     QVBoxLayout* vLayout;
@@ -66,7 +78,10 @@ protected:
     QNetworkAccessManager *networkManager;
 //    QNetworkReply *reply;
     QByteArray currentRequest;
+
     QLabel* productsLbl;
+    QPushButton* viewProductInfo;
+
     QComboBox* comboProducts;
     QLabel* productImageLbl;
     QPixmap* productImagePixmap;
@@ -90,8 +105,12 @@ protected:
     QLabel* parametersLbl;
     QComboBox* comboParameters;
 
+    QPushButton* addProductLabel;
+
     QHash<QString, int> parametersList;
     QHash<QString, Product> productsHash;
+
+    QHash<QString, selectedProduct>* selectedProducts;
 signals:
     
 public slots:
@@ -99,6 +118,8 @@ public slots:
     void slotReadyRead();
     void getError(QNetworkReply::NetworkError);
     void reloadProductsList();
+    void addProduct();
+    void slotProductInfo();
 };
 
 #endif // PRODUCTSWIDGET_H

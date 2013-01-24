@@ -9,7 +9,18 @@ ProductsWidget::ProductsWidget(QWidget *parent) :
 //    vLayout->setSpacing(3);
     vLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
 
+    QHBoxLayout* infoLayout = new QHBoxLayout;
     productsLbl = new QLabel("Products list:", this);
+    viewProductInfo = new QPushButton(this);
+    viewProductInfo->setIcon(QIcon(":/icons/info.png"));
+    viewProductInfo->setIconSize(QSize(16,16));
+    viewProductInfo->setFixedSize(24,24);
+    viewProductInfo->setToolTip(tr("View information about selected product"));
+    viewProductInfo->setDisabled(true);
+    connect(viewProductInfo, SIGNAL(clicked()), this, SLOT(slotProductInfo()));
+
+    infoLayout->addWidget(productsLbl);
+    infoLayout->addWidget(viewProductInfo);
 
     comboProducts = new QComboBox(this);
     comboProducts->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Fixed);
@@ -23,11 +34,16 @@ ProductsWidget::ProductsWidget(QWidget *parent) :
     connect(reloadProductsButton, SIGNAL(clicked()), this, SLOT(reloadProductsList()));
     reloadProductsButton->hide();
 
-    vLayout->addWidget(productsLbl);
+    vLayout->addLayout(infoLayout);
+//    vLayout->addWidget(productsLbl);
     vLayout->addWidget(comboProducts);
     vLayout->addWidget(productImageLbl);
     vLayout->addWidget(reloadProductsButton);
 
+    QFrame* hLine1 = new QFrame();
+    hLine1->setFrameShape(QFrame::HLine);
+    hLine1->setFrameShadow(QFrame::Sunken);
+    vLayout->addWidget(hLine1);
 // Create request Url
     serverName = "http://staging.satin.rshu.ru";
     url = QUrl(serverName + "/api/products");
@@ -37,29 +53,38 @@ ProductsWidget::ProductsWidget(QWidget *parent) :
 // Add widgets for select Area
 
     QLabel* AreaLbl = new QLabel("Select Area:", this);
-    AreaLbl->setContentsMargins(4,4,0,0);
+    AreaLbl->setContentsMargins(0,2,0,0);
     vLayout->addWidget(AreaLbl);
 
     North = new InputBox("North: ", this);
     North->setValidator("double");
+    North->setText("90.00");
     North->setDisabled(true);
 
     South = new InputBox("South: ", this);
     South->setValidator("double");
+    South->setText("90.00");
     South->setDisabled(true);
 
     West = new InputBox("West: ", this);
     West->setValidator("double");
+    West->setText("180.00");
     West->setDisabled(true);
 
     East = new InputBox("East: ", this);
     East->setValidator("double");
+    East->setText("180.00");
     East->setDisabled(true);
 
     vLayout->addWidget(North);
     vLayout->addWidget(South);
     vLayout->addWidget(West);
     vLayout->addWidget(East);
+
+    QFrame* hLine2 = new QFrame();
+    hLine2->setFrameShape(QFrame::HLine);
+    hLine2->setFrameShadow(QFrame::Sunken);
+    vLayout->addWidget(hLine2);
 
 // Add widgets for temporal area
 // From
@@ -104,6 +129,10 @@ ProductsWidget::ProductsWidget(QWidget *parent) :
     productTimeEnd->setDisabled(true);
     vLayout->addWidget(productTimeEnd);
 
+    QFrame* hLine3 = new QFrame();
+    hLine3->setFrameShape(QFrame::HLine);
+    hLine3->setFrameShadow(QFrame::Sunken);
+    vLayout->addWidget(hLine3);
 // select parameters
 
     parametersLbl = new QLabel("Select parameter: ", this);
@@ -113,6 +142,18 @@ ProductsWidget::ProductsWidget(QWidget *parent) :
 
     vLayout->addWidget(parametersLbl);
     vLayout->addWidget(comboParameters);
+
+// add button
+    QFrame* hLine4 = new QFrame();
+    hLine4->setFrameShape(QFrame::HLine);
+    hLine4->setFrameShadow(QFrame::Sunken);
+    vLayout->addWidget(hLine4);
+
+    addProductLabel = new QPushButton(tr("Add product"), this);
+    addProductLabel->setDisabled(true);
+    connect(addProductLabel, SIGNAL(clicked()), this, SLOT(addProduct()));
+
+    vLayout->addWidget(addProductLabel);
 
 // Set style
 
@@ -280,6 +321,36 @@ void ProductsWidget::reloadProductsList()
             this, SLOT(getError(QNetworkReply::NetworkError)));
 }
 
+void ProductsWidget::addProduct()
+{
+    selectedProduct newSelectedProduct;
+
+    newSelectedProduct.productName = comboProducts->currentText();
+    newSelectedProduct.startDate = QDateTime(productDateStart->date(), productTimeStart->time());
+    newSelectedProduct.endDate = QDateTime(productDateEnd->date(), productTimeEnd->time());
+    newSelectedProduct.parameter = comboParameters->currentText();
+    newSelectedProduct.north = North->text().toFloat();
+    newSelectedProduct.east = East->text().toFloat();
+    newSelectedProduct.south = South->text().toFloat();
+    newSelectedProduct.west = West->text().toFloat();
+
+//    qDebug() << newSelectedProduct.productName;
+//    qDebug() << newSelectedProduct.startDate;
+//    qDebug() << newSelectedProduct.endDate;
+//    qDebug() << newSelectedProduct.parameter;
+//    qDebug() << newSelectedProduct.north;
+//    qDebug() << newSelectedProduct.east;
+//    qDebug() << newSelectedProduct.south;
+//    qDebug() << newSelectedProduct.west;
+
+    if (!selectedProducts->keys().contains(newSelectedProduct.productName))
+    {
+        selectedProducts->insert(newSelectedProduct.productName, newSelectedProduct);
+    }
+    qDebug() << selectedProducts->keys();
+    //    addToTimeLine
+}
+
 void ProductsWidget::currentProductChanged(int index)
 {
     bool enabledFlag;
@@ -304,6 +375,8 @@ void ProductsWidget::currentProductChanged(int index)
         productDateEnd->setEnabled(enabledFlag);
         productTimeEnd->setEnabled(enabledFlag);
         comboParameters->setEnabled(enabledFlag);
+        addProductLabel->setEnabled(enabledFlag);
+        viewProductInfo->setEnabled(enabledFlag);
     }
 
     comboParameters->clear();
@@ -333,4 +406,14 @@ void ProductsWidget::currentProductChanged(int index)
     {
         productImageLbl->hide();
     }
+}
+
+void ProductsWidget::setSelectedProducts(QHash<QString, selectedProduct> *_selectedProducts)
+{
+    selectedProducts = _selectedProducts;
+}
+
+void ProductsWidget::slotProductInfo()
+{
+    qDebug() << "Product information";
 }

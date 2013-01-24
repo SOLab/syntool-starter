@@ -55,6 +55,9 @@ MainWindow::MainWindow(QWidget *parent)
     createPythonConsole();
     setFocusPolicy(Qt::StrongFocus);
 
+    selectedProducts = new QHash<QString, selectedProduct>;
+    ProductsWgt->setSelectedProducts(selectedProducts);
+
     rightSidebar->setMinimumWidth(120);
 
     setWindowTitle("Syntool");
