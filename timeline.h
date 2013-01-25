@@ -17,6 +17,7 @@
 #include <additionalwidgets/calendar.h>
 
 #include <QList>
+#include <qmath.h>
 
 #pragma pack(push, 1)
 struct geoPoint
@@ -37,6 +38,8 @@ struct geoSegment
 };
 #pragma pack(pop)
 
+struct selectedProduct;
+
 class TimeLine : public QWidget
 {
     Q_OBJECT
@@ -45,6 +48,7 @@ public:
     TimeLine(QWidget *parent = 0);
     ~TimeLine();
     void paintEvent(QPaintEvent * pe);
+    void setSelectedProducts(QHash<QString, selectedProduct>* _selectedProducts);
 
 protected:
     void createBottomRect();
@@ -53,6 +57,7 @@ protected:
 
     QList<geoPoint> geoPointList;
     QList<geoSegment> geoSegmentList;
+    QHash<QString, selectedProduct>* selectedProducts;
 
 public slots:
     void setDate();

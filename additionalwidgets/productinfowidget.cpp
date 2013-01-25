@@ -21,6 +21,7 @@ void ProductInfoWidget::setProduct(struct Product product, QPixmap* productImage
     Description = new QLabel(this);
     Description->setText(product.Description);
     Description->setWordWrap(true);
+    Description->setTextInteractionFlags(Qt::TextSelectableByMouse | Qt::TextSelectableByKeyboard);
 
     gridLayout->addWidget(Name,0,0);
     gridLayout->addWidget(NaiadProductId,1,0);

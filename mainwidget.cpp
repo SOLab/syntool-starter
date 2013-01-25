@@ -57,6 +57,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     selectedProducts = new QHash<QString, selectedProduct>;
     ProductsWgt->setSelectedProducts(selectedProducts);
+    timeLine->setSelectedProducts(selectedProducts);
 
     rightSidebar->setMinimumWidth(120);
 

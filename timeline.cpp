@@ -54,8 +54,8 @@ void TimeLine::paintEvent(QPaintEvent * pe)
     control_.dayRect.setCoords(0, 0, width(), height() - 24);
     control_.weekRect.setCoords(0, height() - 24, width(), height());
 //    painter.end();
-    createBottomRect();
     createTopRect();
+    createBottomRect();
 
     QPainter painter(this);
 
@@ -78,6 +78,11 @@ void TimeLine::paintEvent(QPaintEvent * pe)
     pen.setColor(Qt::red);
     painter.setPen(pen);
     painter.drawLine(maxWidth/2, height(), maxWidth/2, 0);
+}
+
+void TimeLine::setSelectedProducts(QHash<QString, selectedProduct> *_selectedProducts)
+{
+    selectedProducts = _selectedProducts;
 }
 
 // нажатие мыши
@@ -176,25 +181,25 @@ void TimeLine::createTopRect()
     if (halfWidth > curDayPixel)
     {
         painter.drawLine(halfWidth - curDayPixel, height() - 24, halfWidth - curDayPixel, 0);
-        painter.drawText(halfWidth - curDayPixel + 2, height() - 26, getDayMonth(control_.currentDate));
+        painter.drawText(halfWidth - curDayPixel + 2, height() - 28, getDayMonth(control_.currentDate));
     }
 
     if (halfWidth > nextDayPixel)
     {
         painter.drawLine(halfWidth + nextDayPixel, height() - 24, halfWidth + nextDayPixel, 0);
-        painter.drawText(halfWidth + nextDayPixel + 2, height() - 26, getDayMonth(control_.currentDate.addDays(1)));
+        painter.drawText(halfWidth + nextDayPixel + 2, height() - 28, getDayMonth(control_.currentDate.addDays(1)));
     }
 
     if (halfWidth > prevDayPixel)
     {
         painter.drawLine(halfWidth - prevDayPixel, height() - 24, halfWidth - prevDayPixel, 0);
-        painter.drawText(halfWidth - prevDayPixel + 2, height() - 26, getDayMonth(control_.currentDate.addDays(-1)));
+        painter.drawText(halfWidth - prevDayPixel + 2, height() - 28, getDayMonth(control_.currentDate.addDays(-1)));
     }
 
     if (halfWidth > afterTomorrowDayPixel)
     {
         painter.drawLine(halfWidth + afterTomorrowDayPixel, height() - 24, halfWidth + afterTomorrowDayPixel, 0);
-        painter.drawText(halfWidth + afterTomorrowDayPixel + 2, height() - 26, getDayMonth(control_.currentDate.addDays(2)));
+        painter.drawText(halfWidth + afterTomorrowDayPixel + 2, height() - 28, getDayMonth(control_.currentDate.addDays(2)));
     }
 }
 
@@ -209,6 +214,12 @@ void TimeLine::createBottomRect()
 
     painter.setPen(pen);
     painter.drawRect(0, height() - 24, width(), height());
+
+// draw current section
+    painter.setBrush(QBrush(QColor(241,241,241)));
+    float width_part = width()/7.0;
+
+    painter.drawRect(qFloor(width_part*3 + 0.5), height() - 22, qFloor(width_part + 0.5), height());
 
 // draw markers
 
@@ -231,25 +242,25 @@ void TimeLine::createBottomRect()
     if (halfWidth > curWeekPixel)
     {
         painter.drawLine(halfWidth - curWeekPixel, height() - 24, halfWidth - curWeekPixel, height());
-        painter.drawText(halfWidth - curWeekPixel + 2, height() - 6, getFirstDayOfWeekMonth(control_.currentDate));
+        painter.drawText(halfWidth - curWeekPixel + 2, height() - 4, getFirstDayOfWeekMonth(control_.currentDate));
     }
 
     if (halfWidth > nextWeekPixel)
     {
         painter.drawLine(halfWidth + nextWeekPixel, height() - 24, halfWidth + nextWeekPixel, height());
-        painter.drawText(halfWidth + nextWeekPixel + 2, height() - 6, getFirstDayOfWeekMonth(control_.currentDate.addDays(7)));
+        painter.drawText(halfWidth + nextWeekPixel + 2, height() - 4, getFirstDayOfWeekMonth(control_.currentDate.addDays(7)));
     }
 
     if (halfWidth > prevWeekPixel)
     {
         painter.drawLine(halfWidth - prevWeekPixel, height() - 24, halfWidth - prevWeekPixel, height());
-        painter.drawText(halfWidth - prevWeekPixel + 2, height() - 6, getFirstDayOfWeekMonth(control_.currentDate.addDays(-7)));
+        painter.drawText(halfWidth - prevWeekPixel + 2, height() - 4, getFirstDayOfWeekMonth(control_.currentDate.addDays(-7)));
     }
 
     if (halfWidth > afterNextWeekPixel)
     {
         painter.drawLine(halfWidth + afterNextWeekPixel, height() - 24, halfWidth + afterNextWeekPixel, height());
-        painter.drawText(halfWidth + afterNextWeekPixel + 2, height() - 6, getFirstDayOfWeekMonth(control_.currentDate.addDays(14)));
+        painter.drawText(halfWidth + afterNextWeekPixel + 2, height() - 4, getFirstDayOfWeekMonth(control_.currentDate.addDays(14)));
     }
 
 }
