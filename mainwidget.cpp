@@ -56,8 +56,10 @@ MainWindow::MainWindow(QWidget *parent)
     setFocusPolicy(Qt::StrongFocus);
 
     selectedProducts = new QHash<QString, selectedProduct>;
-    ProductsWgt->setSelectedProducts(selectedProducts);
-    timeLine->setSelectedProducts(selectedProducts);
+    granulesHash = new QHash<QString, Granule>;
+
+    ProductsWgt->setSelectedProducts(selectedProducts, granulesHash);
+    timeLine->setSelectedProducts(selectedProducts, granulesHash);
 
     rightSidebar->setMinimumWidth(120);
 

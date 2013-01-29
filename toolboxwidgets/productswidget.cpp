@@ -341,21 +341,14 @@ void ProductsWidget::addProduct()
     newSelectedProduct.south = South->text().toFloat();
     newSelectedProduct.west = West->text().toFloat();
 
-//    qDebug() << newSelectedProduct.productName;
-//    qDebug() << newSelectedProduct.startDate;
-//    qDebug() << newSelectedProduct.endDate;
-//    qDebug() << newSelectedProduct.parameter;
-//    qDebug() << newSelectedProduct.north;
-//    qDebug() << newSelectedProduct.east;
-//    qDebug() << newSelectedProduct.south;
-//    qDebug() << newSelectedProduct.west;
-
     if (!selectedProducts->keys().contains(newSelectedProduct.productName))
     {
         selectedProducts->insert(newSelectedProduct.productName, newSelectedProduct);
     }
     qDebug() << selectedProducts->keys();
     //    addToTimeLine
+
+//    getProductGranules();
 }
 
 void ProductsWidget::currentProductChanged(int index)
@@ -415,9 +408,11 @@ void ProductsWidget::currentProductChanged(int index)
     }
 }
 
-void ProductsWidget::setSelectedProducts(QHash<QString, selectedProduct> *_selectedProducts)
+void ProductsWidget::setSelectedProducts(QHash<QString, selectedProduct> *_selectedProducts,
+                                         QHash<QString, Granule>* _granulesHash)
 {
     selectedProducts = _selectedProducts;
+    granulesHash = _granulesHash;
 }
 
 void ProductsWidget::slotProductInfo()

@@ -3,8 +3,10 @@
 
 #include <QWidget>
 #include <QKeyEvent>
-
-class QWindow;
+#include <QWindow>
+#include <QGuiApplication>
+#include <QPushButton>
+#include <QVBoxLayout>
 
 class WindowWidget : public QWidget
 {

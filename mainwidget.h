@@ -36,6 +36,7 @@ public:
 //    void resizeEvent(QResizeEvent *e);
 
     QHash<QString, selectedProduct>* selectedProducts;
+    QHash<QString, Granule>* granulesHash;
 
 protected:
     QSplitter *splitter;

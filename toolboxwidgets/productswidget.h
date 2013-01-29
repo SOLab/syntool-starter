@@ -24,51 +24,14 @@
 #include <network/downloadimage.h>
 #include <QFile>
 
-struct Product{
-    QString Description;
-    QString ImageUrl;
-    QString NaiadProductId;
-    QString Name;
-    QStringList Platforms;
-    QString ProcessingCenters;
-    QString ProcessingLevels;
-    QString ProductionInterval;
-    QStringList Sensors;
-    QString SpatialResolutions;
-
-    bool IsGlobalCoverage;
-    bool IsMapModeSupported;
-    bool IsOnGoing;
-    bool IsPresentationModeSupported;
-    bool IsPrivate;
-    bool NoQuiklooks;
-
-    QHash<QString, int> productsParameters;
-
-    QDateTime StartDate;
-    QDateTime EndDate;
-    int FilteredGranulesCount;
-    int Id;
-    int TotalGranulesCount;
-};
-
-struct selectedProduct{
-    QString productName;
-    QDateTime startDate;
-    QDateTime endDate;
-    float west;
-    float east;
-    float south;
-    float north;
-    QString parameter;
-};
+#include <more/ProductStructures.h>
 
 class ProductsWidget : public QWidget
 {
     Q_OBJECT
 public:
     explicit ProductsWidget(QWidget *parent = 0);
-    void setSelectedProducts(QHash<QString, selectedProduct>* _selectedProducts);
+    void setSelectedProducts(QHash<QString, selectedProduct>* _selectedProducts, QHash<QString, Granule> *_granulesHash);
 
 protected:
     QVBoxLayout* vLayout;
@@ -112,6 +75,7 @@ protected:
     QHash<QString, Product> productsHash;
 
     QHash<QString, selectedProduct>* selectedProducts;
+    QHash<QString, Granule>* granulesHash;
 signals:
     
 public slots:

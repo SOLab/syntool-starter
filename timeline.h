@@ -14,10 +14,11 @@
 #include <QDateTime>
 #include <QHBoxLayout>
 #include <QPushButton>
-#include <additionalwidgets/calendar.h>
 
 #include <QList>
 #include <qmath.h>
+#include <additionalwidgets/calendar.h>
+#include <more/ProductStructures.h>
 
 #pragma pack(push, 1)
 struct geoPoint
@@ -38,8 +39,6 @@ struct geoSegment
 };
 #pragma pack(pop)
 
-struct selectedProduct;
-
 class TimeLine : public QWidget
 {
     Q_OBJECT
@@ -48,7 +47,8 @@ public:
     TimeLine(QWidget *parent = 0);
     ~TimeLine();
     void paintEvent(QPaintEvent * pe);
-    void setSelectedProducts(QHash<QString, selectedProduct>* _selectedProducts);
+    void setSelectedProducts(QHash<QString, selectedProduct>* _selectedProducts,
+                             QHash<QString, Granule>* _granulesHash);
 
 protected:
     void createBottomRect();
@@ -58,6 +58,7 @@ protected:
     QList<geoPoint> geoPointList;
     QList<geoSegment> geoSegmentList;
     QHash<QString, selectedProduct>* selectedProducts;
+    QHash<QString, Granule>* granulesHash;
 
     QImage imageGeoPoint;
 

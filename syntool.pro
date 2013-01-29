@@ -66,7 +66,8 @@ HEADERS = \
     topmenuwidgets/cachetabwidget.h \
     topmenuwidgets/commontabwidget.h \
     network/downloadimage.h \
-    additionalwidgets/productinfowidget.h
+    additionalwidgets/productinfowidget.h \
+    more/ProductStructures.h
 RESOURCES += \
     syntool.qrc
 DEPENDPATH += resources

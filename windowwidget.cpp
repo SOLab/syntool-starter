@@ -1,8 +1,4 @@
 #include "windowwidget.h"
-#include <QWindow>
-#include <QGuiApplication>
-#include <QPushButton>
-#include <QVBoxLayout>
 
 WindowWidget::WindowWidget(QWidget *parent) :
     QWidget(parent), m_hostedWindow(0)
