@@ -35,7 +35,7 @@ void WindowWidget::setHostedWindowHelper(QWindow *window)
     m_hostedWindow = window;
     if (m_hostedWindow) {
         m_hostedWindow->installEventFilter(this);
-        m_hostedWindow->setWindowFlags(m_hostedWindow->windowFlags()|Qt::FramelessWindowHint);
+//        m_hostedWindow->setWindowFlags(m_hostedWindow->windowFlags()|Qt::FramelessWindowHint);
         m_hostedWindow->setParent(windowHandle());
         m_hostedWindow->resize(size());
         m_hostedWindow->setVisible(isVisible());

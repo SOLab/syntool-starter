@@ -59,6 +59,8 @@ protected:
     QList<geoSegment> geoSegmentList;
     QHash<QString, selectedProduct>* selectedProducts;
 
+    QImage imageGeoPoint;
+
 public slots:
     void setDate();
     void setCurrentDate();

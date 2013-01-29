@@ -13,6 +13,7 @@
         <file alias="zoom0.png">resources/zoom0.png</file>
         <file alias="navigate.png">resources/circle2.png</file>
         <file alias="osm.png">resources/OSM.png</file>
+        <file alias="orange-circle.png">resources/orange-circle.png</file>
     </qresource>
     <qresource prefix="/skybox">
         <file alias="top">resources/stars.png</file>

@@ -8,7 +8,6 @@ TimeLine::TimeLine(QWidget *parent)
 : QWidget(parent)
 
 {
-    // минимальное, максимальное, текущее показываемое мин-макс, текущее значение (на каком отрезке стоит), размеры курсора, флаги движения и обновления диапазона
     control_.minDate = QDateTime(QDate(1900, 1, 1), QTime(0, 0, 0));
     control_.currentDate = QDateTime(QDate().currentDate(), QTime().currentTime());
     control_.maxDate = control_.currentDate;
@@ -40,6 +39,8 @@ TimeLine::TimeLine(QWidget *parent)
 
     connect(calendarButton, SIGNAL(clicked()), this, SLOT(setDate()));
 
+    imageGeoPoint = QImage(":/orange-circle.png");
+
     hLayout->addWidget(calendarButton, 0, Qt::AlignRight | Qt::AlignTop);
 }
 
@@ -67,7 +68,7 @@ void TimeLine::paintEvent(QPaintEvent * pe)
 
     int partCount = 50;
     int maxWidth = partCount * (width()/partCount);
-    qDebug() << width();
+//    qDebug() << width();
     maxWidth = width() - 1;
 
 
@@ -108,30 +109,29 @@ void TimeLine::mouseMoveEvent(QMouseEvent * pe)
     if (control_.moveDay)
     {
         // вычисляем куда его тянет, меняем значение переменной
-        qDebug() << control_.pos_;
+//        qDebug() << control_.pos_;
         int dx = control_.pos_.x() - pe->pos().x();
         // 2 minutes in pixel + 60 seconds in minute
         control_.currentDate = (control_.currentDate.addSecs(2*60*dx));
-        qDebug() << control_.currentDate.time();
+//        qDebug() << control_.currentDate.time();
         control_.pos_ = pe->pos();
         repaint();
     }
     else if (control_.moveWeek)
     {
         // вычисляем куда его тянет, меняем значение переменной
-        qDebug() << control_.pos_;
+//        qDebug() << control_.pos_;
         int dx = control_.pos_.x() - pe->pos().x();
         // 2 minutes in pixel + 60 seconds in minute + 7 days in week
         control_.currentDate = (control_.currentDate.addSecs(7*2*60*dx));
-        qDebug() << control_.currentDate.time();
-//        checkMouse();
+//        qDebug() << control_.currentDate.time();
         control_.pos_ = pe->pos();
         repaint();
     }
     QWidget::mouseMoveEvent(pe);
 }
 
-// отжатие - снимаем флаг.
+    // отжатие - снимаем флаг.
 void TimeLine::mouseReleaseEvent ( QMouseEvent * pe )
 {
     control_.moveDay = false;
@@ -163,7 +163,7 @@ void TimeLine::createTopRect()
     painter.setPen(pen);
     painter.drawRect(0, 0, width(), height() - 24);
 
-
+    // create dotline for days
     pen.setColor(Qt::black);
     pen.setStyle(Qt::DotLine);
     painter.setPen(pen);
@@ -187,19 +187,22 @@ void TimeLine::createTopRect()
     if (halfWidth > nextDayPixel)
     {
         painter.drawLine(halfWidth + nextDayPixel, height() - 24, halfWidth + nextDayPixel, 0);
-        painter.drawText(halfWidth + nextDayPixel + 2, height() - 28, getDayMonth(control_.currentDate.addDays(1)));
+        painter.drawText(halfWidth + nextDayPixel + 2, height() - 28,
+                         getDayMonth(control_.currentDate.addDays(1)));
     }
 
     if (halfWidth > prevDayPixel)
     {
         painter.drawLine(halfWidth - prevDayPixel, height() - 24, halfWidth - prevDayPixel, 0);
-        painter.drawText(halfWidth - prevDayPixel + 2, height() - 28, getDayMonth(control_.currentDate.addDays(-1)));
+        painter.drawText(halfWidth - prevDayPixel + 2, height() - 28,
+                         getDayMonth(control_.currentDate.addDays(-1)));
     }
 
     if (halfWidth > afterTomorrowDayPixel)
     {
         painter.drawLine(halfWidth + afterTomorrowDayPixel, height() - 24, halfWidth + afterTomorrowDayPixel, 0);
-        painter.drawText(halfWidth + afterTomorrowDayPixel + 2, height() - 28, getDayMonth(control_.currentDate.addDays(2)));
+        painter.drawText(halfWidth + afterTomorrowDayPixel + 2, height() - 28,
+                         getDayMonth(control_.currentDate.addDays(2)));
     }
 }
 
@@ -227,7 +230,7 @@ void TimeLine::createBottomRect()
     pen.setStyle(Qt::DotLine);
     painter.setPen(pen);
 
-    qDebug() << "Day of week" << control_.currentDate.date().dayOfWeek();
+//    qDebug() << "Day of week" << control_.currentDate.date().dayOfWeek();
     int curWeekPixel = (control_.currentDate.time().hour() * 30 + (control_.currentDate.date().dayOfWeek() - 1)*24*30 \
                         + control_.currentDate.time().minute() / 2) /7;
 
@@ -242,27 +245,32 @@ void TimeLine::createBottomRect()
     if (halfWidth > curWeekPixel)
     {
         painter.drawLine(halfWidth - curWeekPixel, height() - 24, halfWidth - curWeekPixel, height());
-        painter.drawText(halfWidth - curWeekPixel + 2, height() - 4, getFirstDayOfWeekMonth(control_.currentDate));
+        painter.drawText(halfWidth - curWeekPixel + 2, height(), getFirstDayOfWeekMonth(control_.currentDate));
     }
 
     if (halfWidth > nextWeekPixel)
     {
         painter.drawLine(halfWidth + nextWeekPixel, height() - 24, halfWidth + nextWeekPixel, height());
-        painter.drawText(halfWidth + nextWeekPixel + 2, height() - 4, getFirstDayOfWeekMonth(control_.currentDate.addDays(7)));
+        painter.drawText(halfWidth + nextWeekPixel + 2, height(),
+                         getFirstDayOfWeekMonth(control_.currentDate.addDays(7)));
     }
 
     if (halfWidth > prevWeekPixel)
     {
         painter.drawLine(halfWidth - prevWeekPixel, height() - 24, halfWidth - prevWeekPixel, height());
-        painter.drawText(halfWidth - prevWeekPixel + 2, height() - 4, getFirstDayOfWeekMonth(control_.currentDate.addDays(-7)));
+        painter.drawText(halfWidth - prevWeekPixel + 2, height(),
+                         getFirstDayOfWeekMonth(control_.currentDate.addDays(-7)));
     }
 
     if (halfWidth > afterNextWeekPixel)
     {
         painter.drawLine(halfWidth + afterNextWeekPixel, height() - 24, halfWidth + afterNextWeekPixel, height());
-        painter.drawText(halfWidth + afterNextWeekPixel + 2, height() - 4, getFirstDayOfWeekMonth(control_.currentDate.addDays(14)));
+        painter.drawText(halfWidth + afterNextWeekPixel + 2, height(),
+                         getFirstDayOfWeekMonth(control_.currentDate.addDays(14)));
     }
 
+//    addGeoSegment(QDateTime().currentDateTime().addDays(-1), QDateTime().currentDateTime().addSecs(4444), 20, 20);
+//    addGeoPoint(QDateTime().currentDateTime().addDays(-1).addSecs(-4444), 20, 20);
 }
 
 void TimeLine::setDate()
@@ -287,11 +295,89 @@ void TimeLine::addGeoPoint(QDateTime dateTime, float lat, float lon)
 {
     geoPoint newPoint = {dateTime, lat, lon};
     geoPointList.append(newPoint);
-    qDebug() << dateTime;
+//    qDebug() << dateTime;
+
+
+    qint64 secsTo = control_.currentDate.secsTo(dateTime);
+    // secsTo/(2 * 60.0) = pixels
+    qint64 pixels = secsTo/(120.0);
+
+    // Draw in week box
+    int weekPixels = pixels/7;
+    if (qAbs(weekPixels) <= width()/2)
+    {
+        QPainter painter(this);
+        QPen pen = painter.pen();
+        pen.setColor(QColor(255, 100, 100));
+        pen.setWidth(2);
+        painter.setPen(pen);
+        // -5 because imege size 10x10
+        painter.drawLine(width()/2+weekPixels, height() - 20, width()/2+weekPixels, height() - 10);
+    }
+    else
+    {
+        return;
+    }
+
+    // draw in day box
+    if (qAbs(pixels) <= width()/2)
+    {
+        QPainter painter(this);
+        // -5 because imege size 10x10
+        painter.drawImage(width()/2+pixels - 5,20,imageGeoPoint);
+    }
 }
 
 void TimeLine::addGeoSegment(QDateTime startDateTime, QDateTime endDateTime, float lat, float lon)
 {
-     geoSegment newPoint = {startDateTime, endDateTime, lat, lon};
-     geoSegmentList.append(newPoint);
+    geoSegment newPoint = {startDateTime, endDateTime, lat, lon};
+    geoSegmentList.append(newPoint);
+
+    qint64 secsToStart = control_.currentDate.secsTo(startDateTime);
+    qint64 secsToEnd = control_.currentDate.secsTo(endDateTime);
+
+    qint64 pixelsToStart = secsToStart/(120.0);
+    qint64 pixelsToEnd = secsToEnd/(120.0);
+
+    // Draw in week box
+    int weekPixelsToStart = pixelsToStart/7;
+    int weekPixelsToEnd = pixelsToEnd/7;
+    if ((qAbs(weekPixelsToStart) <= width()/2 || qAbs(weekPixelsToEnd) <= width()/2) \
+            || (weekPixelsToStart < 0 && weekPixelsToEnd > 0))
+    {
+        QPainter painter(this);
+        QPen pen = painter.pen();
+        pen.setColor(QColor(196, 118, 0));
+        pen.setWidth(1);
+        painter.setPen(pen);
+
+        // left, right and bottom side
+        painter.drawLine(width()/2+weekPixelsToStart, height() - 15, width()/2+weekPixelsToStart, height() - 5);
+        painter.drawLine(width()/2+weekPixelsToEnd, height() - 15, width()/2+weekPixelsToEnd, height() - 5);
+        painter.drawLine(width()/2+weekPixelsToStart, height() - 5, width()/2+weekPixelsToEnd, height() - 5);
+    }
+    else
+    {
+        return;
+    }
+
+    // Draw in day box
+    if ((qAbs(pixelsToStart) <= width()/2 || qAbs(pixelsToEnd) <= width()/2) \
+            || (pixelsToStart < 0 && secsToEnd > 0))
+    {
+        QPainter painter(this);
+        QPen pen;
+        pen.setWidth(1);
+        QColor firstColor(246, 162, 0);
+        QColor secondColor(196, 118, 0);
+
+        QLinearGradient gradient(0, 0, 500, 100);
+        gradient.setColorAt(0, firstColor);
+        gradient.setColorAt(1, secondColor);
+        pen.setBrush(gradient);
+        painter.setPen(pen);
+        painter.setBrush(gradient);
+
+        painter.drawRect(width()/2+pixelsToStart, 30, pixelsToEnd-pixelsToStart, 8);
+    }
 }

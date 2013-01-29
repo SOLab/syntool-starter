@@ -85,6 +85,7 @@ RC_FILE = syntool.rc
 
 LIBS += -lglut -lGL -lGLU
 
+QTPLUGIN += xcb
 
 #unix:PYTHON_VERSION=2.7
 #unix:LIBS += $$system(python$${PYTHON_VERSION}-config --libs)
