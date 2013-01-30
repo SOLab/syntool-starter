@@ -88,6 +88,11 @@ void TimeLine::setSelectedProducts(QHash<QString, selectedProduct> *_selectedPro
     granulesHash = _granulesHash;
 }
 
+void TimeLine::setProductsWgtPointer(ProductsWidget *_ProductsWgtPointer)
+{
+    ProductsWgtPointer = _ProductsWgtPointer;
+}
+
 // нажатие мыши
 void TimeLine::mousePressEvent ( QMouseEvent * pe )
 {
@@ -273,6 +278,21 @@ void TimeLine::createBottomRect()
 
 //    addGeoSegment(QDateTime().currentDateTime().addDays(-1), QDateTime().currentDateTime().addSecs(4444), 20, 20);
 //    addGeoPoint(QDateTime().currentDateTime().addDays(-1).addSecs(-4444), 20, 20);
+
+    drawAllMarkers();
+}
+
+void TimeLine::drawAllMarkers()
+{
+    QHash<QString, Granule>::const_iterator k = granulesHash->constBegin();
+    while ( k != granulesHash->constEnd() )
+    {
+        addGeoPoint(k.value().startDate, 20,20);
+//        if (!parametersList.contains(k.key()))
+//            parametersList[k.key()] = k.value();
+        ++k;
+    }
+
 }
 
 void TimeLine::setDate()
@@ -288,9 +308,6 @@ void TimeLine::setCurrentDate()
     calendar->close();
     calendar->deleteLater();
     repaint();
-
-//    QDateTime dt(calendar->calendar->selectedDate());
-//    addGeoPoint(dt, 11,11);
 }
 
 void TimeLine::addGeoPoint(QDateTime dateTime, float lat, float lon)

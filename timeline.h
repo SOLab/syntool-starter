@@ -38,6 +38,22 @@ struct geoSegment
     float lon;
 };
 #pragma pack(pop)
+class ProductsWidget;
+
+struct param
+{
+    QDateTime maxDate;
+    QDateTime minDate;
+    QDateTime currentDate;
+    QRect dayRect;
+    QRect weekRect;
+    bool moveDay;
+    bool moveWeek;
+    bool flagMovedIntervalos_;
+    QPoint pos_;
+
+    int markerDistance;
+};
 
 class TimeLine : public QWidget
 {
@@ -49,6 +65,8 @@ public:
     void paintEvent(QPaintEvent * pe);
     void setSelectedProducts(QHash<QString, selectedProduct>* _selectedProducts,
                              QHash<QString, Granule>* _granulesHash);
+    void setProductsWgtPointer(ProductsWidget* _ProductsWgtPointer);
+    param control_;
 
 protected:
     void createBottomRect();
@@ -61,6 +79,10 @@ protected:
     QHash<QString, Granule>* granulesHash;
 
     QImage imageGeoPoint;
+    ProductsWidget* ProductsWgtPointer;
+
+    void drawAllMarkers();
+    QDate* notChangedDay;
 
 public slots:
     void setDate();
@@ -75,21 +97,6 @@ private slots:
     void mouseReleaseEvent ( QMouseEvent * pe );
 
 private:
-    struct param
-    {
-        QDateTime maxDate;
-        QDateTime minDate;
-        QDateTime currentDate;
-        QRect dayRect;
-        QRect weekRect;
-        bool moveDay;
-        bool moveWeek;
-        bool flagMovedIntervalos_;
-        QPoint pos_;
-
-        int markerDistance;
-    };
-    param control_;
 };
 
 #endif // TIMELINE_H

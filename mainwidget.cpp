@@ -61,6 +61,9 @@ MainWindow::MainWindow(QWidget *parent)
     ProductsWgt->setSelectedProducts(selectedProducts, granulesHash);
     timeLine->setSelectedProducts(selectedProducts, granulesHash);
 
+    ProductsWgt->setTimeLinePointer(timeLine);
+    timeLine->setProductsWgtPointer(ProductsWgt);
+
     rightSidebar->setMinimumWidth(120);
 
     setWindowTitle("Syntool");

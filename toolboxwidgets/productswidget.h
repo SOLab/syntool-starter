@@ -26,19 +26,23 @@
 
 #include <more/ProductStructures.h>
 
+#include <timeline.h>
+
 class ProductsWidget : public QWidget
 {
     Q_OBJECT
 public:
     explicit ProductsWidget(QWidget *parent = 0);
     void setSelectedProducts(QHash<QString, selectedProduct>* _selectedProducts, QHash<QString, Granule> *_granulesHash);
+    void setTimeLinePointer(TimeLine* _timeLinePointer);
 
 protected:
     QVBoxLayout* vLayout;
     QDomDocument* dom;
 
     QString serverName;
-    QUrl url;
+    QUrl urlProducts;
+    QUrl urlGranules;
     QNetworkAccessManager *networkManager;
 //    QNetworkReply *reply;
     QByteArray currentRequest;
@@ -56,15 +60,15 @@ protected:
     InputBox* West;
     InputBox* East;
 
-    QDate* startProductDateValue;
-    QTime* startProductTimeValue;
-    QDateEdit* productDateStart;
-    QDateEdit* productDateEnd;
+//    QDate* startProductDateValue;
+//    QTime* startProductTimeValue;
+//    QDateEdit* productDateStart;
+//    QDateEdit* productDateEnd;
 
-    QDate* endProductDateValue;
-    QTime* endProductTimeValue;
-    QTimeEdit* productTimeStart;
-    QTimeEdit* productTimeEnd;
+//    QDate* endProductDateValue;
+//    QTime* endProductTimeValue;
+//    QTimeEdit* productTimeStart;
+//    QTimeEdit* productTimeEnd;
 
     QLabel* parametersLbl;
     QComboBox* comboParameters;
@@ -76,12 +80,19 @@ protected:
 
     QHash<QString, selectedProduct>* selectedProducts;
     QHash<QString, Granule>* granulesHash;
+
+    void getGranulesForNewProduct();
+    TimeLine* timeLinePointer;
 signals:
     
 public slots:
     void currentProductChanged(int index);
-    void slotReadyRead();
-    void getError(QNetworkReply::NetworkError);
+    void slotReadyReadProductList();
+    void getErrorProductList(QNetworkReply::NetworkError);
+
+    void getErrorGranules(QNetworkReply::NetworkError);
+    void slotReadyReadGranules();
+
     void reloadProductsList();
     void addProduct();
     void slotProductInfo();

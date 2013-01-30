@@ -46,7 +46,8 @@ ProductsWidget::ProductsWidget(QWidget *parent) :
     vLayout->addWidget(hLine1);
 // Create request Url
     serverName = "http://staging.satin.rshu.ru";
-    url = QUrl(serverName + "/api/products");
+    urlProducts = QUrl(serverName + "/api/products");
+    urlGranules = QUrl(serverName + "/api/granules");
 
     reloadProductsList();
 
@@ -86,53 +87,6 @@ ProductsWidget::ProductsWidget(QWidget *parent) :
     hLine2->setFrameShadow(QFrame::Sunken);
     vLayout->addWidget(hLine2);
 
-// Add widgets for temporal area
-// From
-
-    QLabel* fromDate = new QLabel("From: ", this);
-    vLayout->addWidget(fromDate);
-
-    startProductDateValue = new QDate;
-
-    productDateStart = new QDateEdit;
-    productDateStart->setCalendarPopup(true);
-    productDateStart->setDate(startProductDateValue->currentDate());
-    productDateStart->setDisabled(true);
-    productDateStart->setContentsMargins(2,0,2,0);
-    vLayout->addWidget(productDateStart);
-
-    startProductTimeValue = new QTime;
-
-    productTimeStart = new QTimeEdit;
-    productTimeStart->setTime(startProductTimeValue->currentTime());
-    productTimeStart->setDisabled(true);
-    productTimeStart->setContentsMargins(2,0,2,0);
-    vLayout->addWidget(productTimeStart);
-
-// To
-
-    QLabel* toDate = new QLabel("To: ", this);
-    vLayout->addWidget(toDate);
-
-    endProductDateValue = new QDate;
-
-    productDateEnd = new QDateEdit;
-    productDateEnd->setCalendarPopup(true);
-    productDateEnd->setDate(endProductDateValue->currentDate());
-    productDateEnd->setDisabled(true);
-    vLayout->addWidget(productDateEnd);
-
-    endProductTimeValue = new QTime;
-
-    productTimeEnd = new QTimeEdit;
-    productTimeEnd->setTime(endProductTimeValue->currentTime());
-    productTimeEnd->setDisabled(true);
-    vLayout->addWidget(productTimeEnd);
-
-    QFrame* hLine3 = new QFrame();
-    hLine3->setFrameShape(QFrame::HLine);
-    hLine3->setFrameShadow(QFrame::Sunken);
-    vLayout->addWidget(hLine3);
 // select parameters
 
     parametersLbl = new QLabel("Select parameter: ", this);
@@ -144,10 +98,10 @@ ProductsWidget::ProductsWidget(QWidget *parent) :
     vLayout->addWidget(comboParameters);
 
 // add button
-    QFrame* hLine4 = new QFrame();
-    hLine4->setFrameShape(QFrame::HLine);
-    hLine4->setFrameShadow(QFrame::Sunken);
-    vLayout->addWidget(hLine4);
+    QFrame* hLine3 = new QFrame();
+    hLine3->setFrameShape(QFrame::HLine);
+    hLine3->setFrameShadow(QFrame::Sunken);
+    vLayout->addWidget(hLine3);
 
     addProductLabel = new QPushButton(tr("Add product"), this);
     addProductLabel->setDisabled(true);
@@ -173,6 +127,7 @@ Product createProductFromXml(QDomElement domElement)
     // Get main fields
     newProduct.Name = domElement.firstChildElement("Name").text();
     newProduct.NaiadProductId = domElement.firstChildElement("NaiadProductId").text();
+    newProduct.Id = domElement.firstChildElement("Id").text().toInt();
     newProduct.Description = domElement.firstChildElement("Description").text();
     newProduct.ProductionInterval = domElement.firstChildElement("ProductionInterval").text();
     newProduct.ImageUrl = domElement.firstChildElement("ImageUrl").text();
@@ -204,7 +159,7 @@ Product createProductFromXml(QDomElement domElement)
     return newProduct;
 }
 
-void ProductsWidget::slotReadyRead()
+void ProductsWidget::slotReadyReadProductList()
 {
     reloadProductsButton->hide();
 
@@ -303,7 +258,7 @@ void ProductsWidget::slotReadyRead()
     comboProducts->addItems(productsList);
 }
 
-void ProductsWidget::getError(QNetworkReply::NetworkError)
+void ProductsWidget::getErrorProductList(QNetworkReply::NetworkError)
 {
     reloadProductsButton->show();
     comboProducts->clear();
@@ -315,7 +270,7 @@ void ProductsWidget::reloadProductsList()
 //    qDebug() << url;
 
     QNetworkRequest request;
-    request.setUrl(url);
+    request.setUrl(urlProducts);
     request.setRawHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
     request.setRawHeader("Accept-Language", "ru,en-us;q=0.7,en;q=0.3");
     request.setRawHeader("Accept-Charset", "utf-8;q=0.7,*;q=0.7");
@@ -323,32 +278,9 @@ void ProductsWidget::reloadProductsList()
 
     networkManager = new QNetworkAccessManager (this);
     QNetworkReply* reply = networkManager->get(request);
-    connect(reply, SIGNAL(readyRead()), this, SLOT(slotReadyRead()));
+    connect(reply, SIGNAL(readyRead()), this, SLOT(slotReadyReadProductList()));
     connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
-            this, SLOT(getError(QNetworkReply::NetworkError)));
-}
-
-void ProductsWidget::addProduct()
-{
-    selectedProduct newSelectedProduct;
-
-    newSelectedProduct.productName = comboProducts->currentText();
-    newSelectedProduct.startDate = QDateTime(productDateStart->date(), productTimeStart->time());
-    newSelectedProduct.endDate = QDateTime(productDateEnd->date(), productTimeEnd->time());
-    newSelectedProduct.parameter = comboParameters->currentText();
-    newSelectedProduct.north = North->text().toFloat();
-    newSelectedProduct.east = East->text().toFloat();
-    newSelectedProduct.south = South->text().toFloat();
-    newSelectedProduct.west = West->text().toFloat();
-
-    if (!selectedProducts->keys().contains(newSelectedProduct.productName))
-    {
-        selectedProducts->insert(newSelectedProduct.productName, newSelectedProduct);
-    }
-    qDebug() << selectedProducts->keys();
-    //    addToTimeLine
-
-//    getProductGranules();
+            this, SLOT(getErrorProductList(QNetworkReply::NetworkError)));
 }
 
 void ProductsWidget::currentProductChanged(int index)
@@ -370,10 +302,7 @@ void ProductsWidget::currentProductChanged(int index)
         South->setEnabled(enabledFlag);
         West->setEnabled(enabledFlag);
         East->setEnabled(enabledFlag);
-        productDateStart->setEnabled(enabledFlag);
-        productTimeStart->setEnabled(enabledFlag);
-        productDateEnd->setEnabled(enabledFlag);
-        productTimeEnd->setEnabled(enabledFlag);
+
         comboParameters->setEnabled(enabledFlag);
         addProductLabel->setEnabled(enabledFlag);
         viewProductInfo->setEnabled(enabledFlag);
@@ -414,6 +343,169 @@ void ProductsWidget::setSelectedProducts(QHash<QString, selectedProduct> *_selec
     selectedProducts = _selectedProducts;
     granulesHash = _granulesHash;
 }
+
+void ProductsWidget::setTimeLinePointer(TimeLine *_timeLinePointer)
+{
+    timeLinePointer = _timeLinePointer;
+}
+
+void ProductsWidget::addProduct()
+{
+    selectedProduct newSelectedProduct;
+
+    newSelectedProduct.productName = comboProducts->currentText();
+    newSelectedProduct.parameter = comboParameters->currentText();
+    newSelectedProduct.north = North->text().toFloat();
+    newSelectedProduct.east = East->text().toFloat();
+    newSelectedProduct.south = South->text().toFloat();
+    newSelectedProduct.west = West->text().toFloat();
+
+    if (selectedProducts->keys().contains(newSelectedProduct.productName))
+        return;
+    else
+    {
+        selectedProducts->insert(newSelectedProduct.productName, newSelectedProduct);
+        getGranulesForNewProduct();
+    }
+    qDebug() << selectedProducts->keys();
+    //    addToTimeLine
+
+//    getProductGranules();
+}
+
+void ProductsWidget::getGranulesForNewProduct()
+{
+    QNetworkRequest request;
+    qDebug() << urlGranules;//.scheme() + "://" + urlGranules.host() + urlGranules.path() + "?$top=2";
+
+//    QString parameters = "?$top=2";
+
+    //create filter
+    QString filter = "?$filter=";
+
+    filter += "ProductId eq "+QString::number(productsHash[comboProducts->currentText()].Id);
+    qDebug() << filter;
+    filter += " and ";
+    // Date and Time filter
+
+    filter += "ProducedAt gt datetime'" + \
+                    timeLinePointer->control_.currentDate.addDays(-15).toString(Qt::ISODate) + "'";
+    filter += " and ";
+    filter += "ProducedAt lt datetime'" + \
+                    timeLinePointer->control_.currentDate.addDays(15).toString(Qt::ISODate) + "'";
+//    filter += " and ";
+
+
+    qDebug() << filter;
+
+    request.setUrl(QUrl(urlGranules.scheme() + "://" + urlGranules.host() + urlGranules.path() + filter));
+
+    request.setRawHeader("Content-Type", "text/xml");
+
+//    networkManager = new QNetworkAccessManager (this);
+    QNetworkReply* reply = networkManager->get(request);
+    connect(reply, SIGNAL(readyRead()), this, SLOT(slotReadyReadGranules()));
+    connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
+            this, SLOT(getErrorGranules(QNetworkReply::NetworkError)));
+}
+
+void ProductsWidget::getErrorGranules(QNetworkReply::NetworkError)
+{
+    qDebug() << "getErrorGranules";
+}
+
+// create Product structure from xml (from QDomElement)
+Granule createGranuleFromXml(QDomElement domElement)
+{
+    Granule newGranule;
+
+    // Get main fields
+    newGranule.granuleName = domElement.firstChildElement("GranuleName").text();
+    newGranule.granuleId = domElement.firstChildElement("Id").text().toInt();
+    newGranule.productName = domElement.firstChildElement("Product").text();
+    newGranule.productId = domElement.firstChildElement("ProductId").text().toInt();
+
+    // get start and end date
+    newGranule.startDate = QDateTime::fromString(domElement.firstChildElement("ProducedAt").text(),
+                                                 Qt::ISODate);
+//    newGranule.endDate = QDateTime::fromString(domElement.firstChildElement("EndDate").text(),
+//                                               Qt::ISODate);
+
+    return newGranule;
+}
+
+void ProductsWidget::slotReadyReadGranules()
+{
+    qDebug() << "slotReadyReadGranules";
+    QNetworkReply *reply=qobject_cast<QNetworkReply*>(sender());
+
+    int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+
+    qDebug() << "=================================";
+    if (reply->error() == QNetworkReply::NoError)
+    {
+        qDebug() << "status code: " << statusCode;
+
+        switch (statusCode)
+        {
+            case 200:
+            {
+                QByteArray bytes = reply->readAll();
+                QString string(bytes);
+                qDebug() << "==========================";
+                qDebug() << string;
+
+                QDomDocument mDocument;
+                bool namespaceProcessing;
+                QString errorMsg;
+                int errorLine;
+                int errorColumn;
+                if (!mDocument.setContent(bytes, namespaceProcessing, &errorMsg,
+                                          &errorLine, &errorColumn))
+                {
+                    qDebug() << "Error XML";
+                    qDebug() << errorMsg;
+                    qDebug() << errorLine;
+                    qDebug() << errorColumn;
+                    if (errorLine > 1)
+                    {
+                        currentRequest = bytes;
+                        return;
+                    }
+                    else
+                    {
+                        currentRequest = currentRequest + bytes;
+                        bytes = currentRequest;
+                        if (!mDocument.setContent(bytes, namespaceProcessing,
+                                                  &errorMsg, &errorLine, &errorColumn))
+                        {
+                                qDebug() << "Error XML";
+                                qDebug() << errorMsg;
+                                qDebug() << errorLine;
+                                qDebug() << errorColumn;
+                                return;
+                        }
+                    }
+                }
+
+                currentRequest.clear();
+
+                QDomElement  mElement = mDocument.documentElement().firstChildElement("Granule");
+                while ( !mElement.isNull() )
+                {
+                    Granule newGranule = createGranuleFromXml(mElement);
+                    granulesHash->insert(QString::number(newGranule.granuleId), newGranule);
+
+                    mElement = mElement.nextSiblingElement("Granule");
+                }
+// http://staging.satin.rshu.ru/Download.ashx?granule=<granule_id>&method=[ftp|opendap|image|kml]
+
+            }
+        }
+        timeLinePointer->repaint();
+    }
+}
+
 
 void ProductsWidget::slotProductInfo()
 {

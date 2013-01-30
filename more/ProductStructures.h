@@ -4,6 +4,8 @@
 struct Granule{
     qint32 granuleId;
     QString productName;
+    int productId;
+    QString granuleName;
     QDateTime startDate;
     QDateTime endDate;
     float lat;
@@ -40,8 +42,6 @@ struct Product{
 
 struct selectedProduct{
     QString productName;
-    QDateTime startDate;
-    QDateTime endDate;
     float west;
     float east;
     float south;
