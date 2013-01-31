@@ -10,6 +10,7 @@ TimeLine::TimeLine(QWidget *parent)
 {
     control_.minDate = QDateTime(QDate(1900, 1, 1), QTime(0, 0, 0));
     control_.currentDate = QDateTime(QDate().currentDate(), QTime().currentTime());
+    notChangedDate = control_.currentDate.date();
     control_.maxDate = control_.currentDate;
 
     control_.markerDistance = 720;
@@ -88,9 +89,11 @@ void TimeLine::setSelectedProducts(QHash<QString, selectedProduct> *_selectedPro
     granulesHash = _granulesHash;
 }
 
-void TimeLine::setProductsWgtPointer(ProductsWidget *_ProductsWgtPointer)
+void TimeLine::setObjectsPointer(ProductsWidget *_ProductsWgtPointer,
+                                 GetGranules* _getGranulesPointer)
 {
     ProductsWgtPointer = _ProductsWgtPointer;
+    getGranulesPointer = _getGranulesPointer;
 }
 
 // нажатие мыши
@@ -135,6 +138,14 @@ void TimeLine::mouseMoveEvent(QMouseEvent * pe)
         control_.pos_ = pe->pos();
         repaint();
     }
+
+    qint64 daysDiff = notChangedDate.daysTo(control_.currentDate.date());
+    if (qAbs(daysDiff) > 2)
+    {
+        notChangedDate = control_.currentDate.date();
+        changedDay();
+    }
+
     QWidget::mouseMoveEvent(pe);
 }
 
@@ -288,8 +299,6 @@ void TimeLine::drawAllMarkers()
     while ( k != granulesHash->constEnd() )
     {
         addGeoPoint(k.value().startDate, 20,20);
-//        if (!parametersList.contains(k.key()))
-//            parametersList[k.key()] = k.value();
         ++k;
     }
 
@@ -307,7 +316,14 @@ void TimeLine::setCurrentDate()
     control_.currentDate.setDate(calendar->calendar->selectedDate());
     calendar->close();
     calendar->deleteLater();
-    repaint();
+
+    qint64 daysDiff = notChangedDate.daysTo(control_.currentDate.date());
+    if (qAbs(daysDiff) > 3)
+    {
+        notChangedDate = control_.currentDate.date();
+        changedDay();
+    }
+//    repaint();
 }
 
 void TimeLine::addGeoPoint(QDateTime dateTime, float lat, float lon)
@@ -399,4 +415,38 @@ void TimeLine::addGeoSegment(QDateTime startDateTime, QDateTime endDateTime, flo
 
         painter.drawRect(width()/2+pixelsToStart, 30, pixelsToEnd-pixelsToStart, 8);
     }
+}
+
+void TimeLine::changedDay()
+{
+    qDebug() << "changedDay";
+
+    // Remove old granules from cache
+    QList<QString> granuleIdlist;
+
+    QHash<QString, Granule>::const_iterator k = granulesHash->constBegin();
+    while ( k != granulesHash->constEnd())
+    {
+        qint64 daysDiff = k.value().startDate.daysTo(control_.currentDate);
+        if (qAbs(daysDiff) > 15)
+        {
+            qDebug() << "REMOVE GRANULES";
+            granuleIdlist.append(k.key());
+        }
+        ++k;
+    }
+
+    QList<QString>::iterator cur = granuleIdlist.begin();
+    QList<QString>::iterator last = granuleIdlist.end();
+
+    while ( cur != last)
+    {
+        granulesHash->remove(granuleIdlist.takeFirst());
+        cur = granuleIdlist.begin();
+        last = granuleIdlist.end();
+    };
+
+    // get new granules for all products
+    emit getNewAllGranules();
+
 }

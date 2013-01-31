@@ -1,6 +1,9 @@
 #ifndef PRODUCTSTRUCTURES_H
 #define PRODUCTSTRUCTURES_H
 
+#include <QDateTime>
+#include <QStringList>
+
 struct Granule{
     qint32 granuleId;
     QString productName;

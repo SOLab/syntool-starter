@@ -18,6 +18,7 @@
 #include <toolboxwidgets/mapswidget.h>
 #include <toolboxwidgets/productswidget.h>
 #include <rightsidebar.h>
+#include <network/getgranules.h>
 
 #include <topmenuwidgets/settingswidget.h>
 #include <QHash>
@@ -56,6 +57,7 @@ protected:
 
     AboutWidget* aboutWgt;
     SettingsWidget* settingsWidget;
+    GetGranules* getGranules;
 
     void createMenuBar();
     void createPythonConsole();

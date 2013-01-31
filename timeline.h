@@ -19,6 +19,7 @@
 #include <qmath.h>
 #include <additionalwidgets/calendar.h>
 #include <more/ProductStructures.h>
+#include <network/getgranules.h>
 
 #pragma pack(push, 1)
 struct geoPoint
@@ -38,6 +39,7 @@ struct geoSegment
     float lon;
 };
 #pragma pack(pop)
+
 class ProductsWidget;
 
 struct param
@@ -65,7 +67,8 @@ public:
     void paintEvent(QPaintEvent * pe);
     void setSelectedProducts(QHash<QString, selectedProduct>* _selectedProducts,
                              QHash<QString, Granule>* _granulesHash);
-    void setProductsWgtPointer(ProductsWidget* _ProductsWgtPointer);
+    void setObjectsPointer(ProductsWidget* _ProductsWgtPointer,
+                           GetGranules* _getGranulesPointer);
     param control_;
 
 protected:
@@ -80,9 +83,10 @@ protected:
 
     QImage imageGeoPoint;
     ProductsWidget* ProductsWgtPointer;
+    GetGranules* getGranulesPointer;
 
     void drawAllMarkers();
-    QDate* notChangedDay;
+    QDate notChangedDate;
 
 public slots:
     void setDate();
@@ -91,10 +95,15 @@ public slots:
     void addGeoPoint(QDateTime dateTime, float lat, float lon);
     void addGeoSegment(QDateTime startDateTime, QDateTime endDateTime, float lat, float lon);
 
+    void changedDay();
+
 private slots:
     void mousePressEvent ( QMouseEvent * pe );
     void mouseMoveEvent(QMouseEvent * pe);
     void mouseReleaseEvent ( QMouseEvent * pe );
+
+signals:
+  void getNewAllGranules();
 
 private:
 };

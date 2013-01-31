@@ -37,7 +37,8 @@ SOURCES = \
     topmenuwidgets/cachetabwidget.cpp \
     topmenuwidgets/commontabwidget.cpp \
     network/downloadimage.cpp \
-    additionalwidgets/productinfowidget.cpp
+    additionalwidgets/productinfowidget.cpp \
+    network/getgranules.cpp
 HEADERS = \
     mainwidget.h \
     windowwidget.h \
@@ -67,7 +68,8 @@ HEADERS = \
     topmenuwidgets/commontabwidget.h \
     network/downloadimage.h \
     additionalwidgets/productinfowidget.h \
-    more/ProductStructures.h
+    more/ProductStructures.h \
+    network/getgranules.h
 RESOURCES += \
     syntool.qrc
 DEPENDPATH += resources

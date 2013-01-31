@@ -27,14 +27,17 @@
 #include <more/ProductStructures.h>
 
 #include <timeline.h>
+#include <network/getgranules.h>
 
 class ProductsWidget : public QWidget
 {
     Q_OBJECT
 public:
     explicit ProductsWidget(QWidget *parent = 0);
-    void setSelectedProducts(QHash<QString, selectedProduct>* _selectedProducts, QHash<QString, Granule> *_granulesHash);
-    void setTimeLinePointer(TimeLine* _timeLinePointer);
+    void setSelectedProducts(QHash<QString, selectedProduct>* _selectedProducts,
+                             QHash<QString, Granule> *_granulesHash);
+    void setObjectsPointer(TimeLine* _timeLinePointer,
+                           GetGranules* _getGranulesPointer);
 
 protected:
     QVBoxLayout* vLayout;
@@ -83,6 +86,7 @@ protected:
 
     void getGranulesForNewProduct();
     TimeLine* timeLinePointer;
+    GetGranules* getGranulesPointer;
 signals:
     
 public slots:
@@ -90,8 +94,7 @@ public slots:
     void slotReadyReadProductList();
     void getErrorProductList(QNetworkReply::NetworkError);
 
-    void getErrorGranules(QNetworkReply::NetworkError);
-    void slotReadyReadGranules();
+    void getNewGranules();
 
     void reloadProductsList();
     void addProduct();
