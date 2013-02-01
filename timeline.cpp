@@ -89,10 +89,8 @@ void TimeLine::setSelectedProducts(QHash<QString, selectedProduct> *_selectedPro
     granulesHash = _granulesHash;
 }
 
-void TimeLine::setObjectsPointer(ProductsWidget *_ProductsWgtPointer,
-                                 GetGranules* _getGranulesPointer)
+void TimeLine::setObjectsPointer(GetGranules* _getGranulesPointer)
 {
-    ProductsWgtPointer = _ProductsWgtPointer;
     getGranulesPointer = _getGranulesPointer;
 }
 
@@ -357,6 +355,7 @@ void TimeLine::addGeoPoint(QDateTime dateTime, float lat, float lon)
     // draw in day box
     if (qAbs(pixels) <= width()/2)
     {
+        qDebug() << width()/2+pixels - 5;
         QPainter painter(this);
         // -5 because imege size 10x10
         painter.drawImage(width()/2+pixels - 5,20,imageGeoPoint);
@@ -419,7 +418,7 @@ void TimeLine::addGeoSegment(QDateTime startDateTime, QDateTime endDateTime, flo
 
 void TimeLine::changedDay()
 {
-    qDebug() << "changedDay";
+//    qDebug() << "changedDay";
 
     // Remove old granules from cache
     QList<QString> granuleIdlist;

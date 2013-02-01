@@ -68,7 +68,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(timeLine, SIGNAL(getNewAllGranules()), ProductsWgt, SLOT(getNewGranules()));
 
     ProductsWgt->setObjectsPointer(timeLine, getGranules);
-    timeLine->setObjectsPointer(ProductsWgt, getGranules);
+    timeLine->setObjectsPointer(getGranules);
 
     rightSidebar->setMinimumWidth(120);
 

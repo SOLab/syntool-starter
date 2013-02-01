@@ -67,8 +67,7 @@ public:
     void paintEvent(QPaintEvent * pe);
     void setSelectedProducts(QHash<QString, selectedProduct>* _selectedProducts,
                              QHash<QString, Granule>* _granulesHash);
-    void setObjectsPointer(ProductsWidget* _ProductsWgtPointer,
-                           GetGranules* _getGranulesPointer);
+    void setObjectsPointer(GetGranules* _getGranulesPointer);
     param control_;
 
 protected:
@@ -82,7 +81,6 @@ protected:
     QHash<QString, Granule>* granulesHash;
 
     QImage imageGeoPoint;
-    ProductsWidget* ProductsWgtPointer;
     GetGranules* getGranulesPointer;
 
     void drawAllMarkers();
