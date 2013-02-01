@@ -61,7 +61,7 @@ MainWindow::MainWindow(QWidget *parent)
     ProductsWgt->setSelectedProducts(selectedProducts, granulesHash);
     timeLine->setSelectedProducts(selectedProducts, granulesHash);
 
-    getGranules = new GetGranules(this);
+    getGranules = new GetGranules();
     getGranules->setSelectedProducts(selectedProducts, granulesHash);
     connect(getGranules, SIGNAL(timeLineRepaint()), timeLine, SLOT(repaint()));
 

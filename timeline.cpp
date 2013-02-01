@@ -355,7 +355,6 @@ void TimeLine::addGeoPoint(QDateTime dateTime, float lat, float lon)
     // draw in day box
     if (qAbs(pixels) <= width()/2)
     {
-        qDebug() << width()/2+pixels - 5;
         QPainter painter(this);
         // -5 because imege size 10x10
         painter.drawImage(width()/2+pixels - 5,20,imageGeoPoint);
@@ -429,7 +428,7 @@ void TimeLine::changedDay()
         qint64 daysDiff = k.value().startDate.daysTo(control_.currentDate);
         if (qAbs(daysDiff) > 15)
         {
-            qDebug() << "REMOVE GRANULES";
+//            qDebug() << "REMOVE GRANULES";
             granuleIdlist.append(k.key());
         }
         ++k;
@@ -440,6 +439,7 @@ void TimeLine::changedDay()
 
     while ( cur != last)
     {
+        qDebug() << "REMOVE GRANULES: " << granuleIdlist.at(0);
         granulesHash->remove(granuleIdlist.takeFirst());
         cur = granuleIdlist.begin();
         last = granuleIdlist.end();

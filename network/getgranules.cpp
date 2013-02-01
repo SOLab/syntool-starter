@@ -1,12 +1,10 @@
 #include "getgranules.h"
 
 GetGranules::GetGranules(QObject *parent) :
-    QObject(parent)
+    QThread(parent)
 {
-    networkManager = new QNetworkAccessManager (this);
 
 }
-
 
 // create Product structure from xml (from QDomElement)
 Granule createGranuleFromXml(QDomElement domElement)
@@ -24,7 +22,6 @@ Granule createGranuleFromXml(QDomElement domElement)
                                                  Qt::ISODate);
 //    newGranule.endDate = QDateTime::fromString(domElement.firstChildElement("EndDate").text(),
 //                                               Qt::ISODate);
-
     return newGranule;
 }
 
@@ -35,9 +32,25 @@ void GetGranules::setSelectedProducts(QHash<QString, selectedProduct> *_selected
     granulesHash = _granulesHash;
 }
 
-void GetGranules::getGranulesForNewProduct(QNetworkRequest request)
+void GetGranules::setParameters(QNetworkRequest request, QString methodName)
 {
-    QNetworkReply* reply = networkManager->get(request);
+    _request = request;
+    _methodName = methodName;
+}
+
+void GetGranules::run()
+{
+    if (_methodName == "getGranulesForNewProduct")
+        getGranulesForNewProduct();
+    else
+        getNewGranules();
+}
+
+void GetGranules::getGranulesForNewProduct()
+{
+    QNetworkAccessManager* networkManager = new QNetworkAccessManager();
+
+    QNetworkReply* reply = networkManager->get(_request);
     connect(reply, SIGNAL(readyRead()), this, SLOT(slotReadyReadGranules()));
     connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
             this, SLOT(getErrorGranules(QNetworkReply::NetworkError)));
@@ -107,7 +120,11 @@ void GetGranules::slotReadyReadGranules()
                     Granule newGranule = createGranuleFromXml(mElement);
 
                     if (!granulesHash->contains(QString::number(newGranule.granuleId)))
+                    {
+                        lock.lockForWrite();
                         granulesHash->insert(QString::number(newGranule.granuleId), newGranule);
+                        lock.unlock();
+                    }
 
                     mElement = mElement.nextSiblingElement("Granule");
                 }
@@ -119,9 +136,10 @@ void GetGranules::slotReadyReadGranules()
 }
 
 
-void GetGranules::getNewGranules(QNetworkRequest request)
+void GetGranules::getNewGranules()
 {
-    QNetworkReply* reply = networkManager->get(request);
+    QNetworkAccessManager* networkManager = new QNetworkAccessManager ();
+    QNetworkReply* reply = networkManager->get(_request);
     connect(reply, SIGNAL(readyRead()), this, SLOT(slotReadyReadGranules()));
     connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
             this, SLOT(getErrorGranules(QNetworkReply::NetworkError)));
@@ -193,7 +211,11 @@ void GetGranules::slotReadyReadNewGranules()
                 {
                     Granule newGranule = createGranuleFromXml(mElement);
                     if (!granulesHash->contains(QString::number(newGranule.granuleId)))
+                    {
+                        lock.lockForWrite();
                         granulesHash->insert(QString::number(newGranule.granuleId), newGranule);
+                        lock.unlock();
+                    }
 
                     mElement = mElement.nextSiblingElement("Granule");
                 }

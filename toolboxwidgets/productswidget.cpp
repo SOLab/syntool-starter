@@ -393,7 +393,13 @@ void ProductsWidget::getNewGranules()
 
         request.setUrl(QUrl(urlGranules.scheme() + "://" + urlGranules.host() + urlGranules.path() + filter));
         request.setRawHeader("Content-Type", "text/xml");
-        getGranulesPointer->getNewGranules(request);
+
+        GetGranules* getGranules = new GetGranules();
+//        connect (getGranules, SIGNAL(finished()), getGranules, SLOT(deleteLater()));
+        getGranules->setSelectedProducts(selectedProducts, granulesHash);
+        getGranules->setParameters(request, "getNewGranules");
+        getGranules->start();
+//        getGranulesPointer->getNewGranules(request);
 
         ++k;
     }
@@ -422,7 +428,13 @@ void ProductsWidget::getGranulesForNewProduct()
     request.setUrl(QUrl(urlGranules.scheme() + "://" + urlGranules.host() + urlGranules.path() + filter));
     request.setRawHeader("Content-Type", "text/xml");
 
-    getGranulesPointer->getGranulesForNewProduct(request);
+    GetGranules* getGranules = new GetGranules();
+//    connect (getGranules, SIGNAL(finished()), getGranules, SLOT(deleteLater()));
+    getGranules->setSelectedProducts(selectedProducts, granulesHash);
+    getGranules->setParameters(request, "getGranulesForNewProduct");
+    getGranules->start();
+
+//    getGranulesPointer->getGranulesForNewProduct(request);
 }
 
 void ProductsWidget::slotProductInfo()
