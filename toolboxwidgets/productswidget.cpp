@@ -373,7 +373,6 @@ void ProductsWidget::addProduct()
 
 void ProductsWidget::getNewGranules()
 {
-
     QHash<QString, selectedProduct>::const_iterator k = selectedProducts->constBegin();
     while ( k != selectedProducts->constEnd())
     {
@@ -382,7 +381,7 @@ void ProductsWidget::getNewGranules()
         QNetworkRequest request;
         QString filter = "?$filter=";
 
-        filter += "ProductId eq "+QString::number(productsHash[comboProducts->currentText()].Id);
+        filter += "ProductId eq "+QString::number(productsHash[k.key()].Id);
         filter += " and ";
         filter += "ProducedAt gt datetime'" + \
                         timeLinePointer->control_.currentDate.addDays(-10).toString(Qt::ISODate) + "'";
@@ -398,6 +397,7 @@ void ProductsWidget::getNewGranules()
         getGranules->setSelectedProducts(selectedProducts, granulesHash);
         getGranules->setParameters(request, "getNewGranules");
         getGranules->run();
+//        getGranules->deleteLater();
 
         ++k;
     }
@@ -430,6 +430,7 @@ void ProductsWidget::getGranulesForNewProduct()
     getGranules->setSelectedProducts(selectedProducts, granulesHash);
     getGranules->setParameters(request, "getGranulesForNewProduct");
     getGranules->run();
+//    getGranules->deleteLater();
 }
 
 void ProductsWidget::slotProductInfo()

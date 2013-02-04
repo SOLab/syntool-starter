@@ -52,6 +52,7 @@ void GetGranules::getGranulesForNewProduct()
     QNetworkAccessManager* networkManager = new QNetworkAccessManager();
 
     QNetworkReply* reply = networkManager->get(_request);
+//    networkManager->deleteLater();
     connect(reply, SIGNAL(readyRead()), this, SLOT(slotReadyReadGranules()));
     connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
             this, SLOT(getErrorGranules(QNetworkReply::NetworkError)));
@@ -157,10 +158,10 @@ void GetGranules::slotReadyReadGranules()
     reply->deleteLater();
 }
 
-
 void GetGranules::getNewGranules()
 {
     QNetworkAccessManager* networkManager = new QNetworkAccessManager ();
+//    networkManager->deleteLater();
     QNetworkReply* reply = networkManager->get(_request);
     connect(reply, SIGNAL(readyRead()), this, SLOT(slotReadyReadGranules()));
     connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
