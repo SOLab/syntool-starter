@@ -426,7 +426,7 @@ void TimeLine::changedDay()
     while ( k != granulesHash->constEnd())
     {
         qint64 daysDiff = k.value().startDate.daysTo(control_.currentDate);
-        if (qAbs(daysDiff) > 15)
+        if (qAbs(daysDiff) > 10)
         {
 //            qDebug() << "REMOVE GRANULES";
             granuleIdlist.append(k.key());

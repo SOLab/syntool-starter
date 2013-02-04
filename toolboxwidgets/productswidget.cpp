@@ -377,7 +377,6 @@ void ProductsWidget::getNewGranules()
     QHash<QString, selectedProduct>::const_iterator k = selectedProducts->constBegin();
     while ( k != selectedProducts->constEnd())
     {
-
         qDebug() << k.key();
 
         QNetworkRequest request;
@@ -386,10 +385,10 @@ void ProductsWidget::getNewGranules()
         filter += "ProductId eq "+QString::number(productsHash[comboProducts->currentText()].Id);
         filter += " and ";
         filter += "ProducedAt gt datetime'" + \
-                        timeLinePointer->control_.currentDate.addDays(-15).toString(Qt::ISODate) + "'";
+                        timeLinePointer->control_.currentDate.addDays(-10).toString(Qt::ISODate) + "'";
         filter += " and ";
         filter += "ProducedAt lt datetime'" + \
-                        timeLinePointer->control_.currentDate.addDays(15).toString(Qt::ISODate) + "'";
+                        timeLinePointer->control_.currentDate.addDays(10).toString(Qt::ISODate) + "'";
 
         request.setUrl(QUrl(urlGranules.scheme() + "://" + urlGranules.host() + urlGranules.path() + filter));
         request.setRawHeader("Content-Type", "text/xml");
@@ -398,13 +397,11 @@ void ProductsWidget::getNewGranules()
 //        connect (getGranules, SIGNAL(finished()), getGranules, SLOT(deleteLater()));
         getGranules->setSelectedProducts(selectedProducts, granulesHash);
         getGranules->setParameters(request, "getNewGranules");
-        getGranules->start();
-//        getGranulesPointer->getNewGranules(request);
+        getGranules->run();
 
         ++k;
     }
 }
-
 
 void ProductsWidget::getGranulesForNewProduct()
 {
@@ -418,10 +415,10 @@ void ProductsWidget::getGranulesForNewProduct()
     // Date and Time filter
 
     filter += "ProducedAt gt datetime'" + \
-                    timeLinePointer->control_.currentDate.addDays(-15).toString(Qt::ISODate) + "'";
+                    timeLinePointer->control_.currentDate.addDays(-10).toString(Qt::ISODate) + "'";
     filter += " and ";
     filter += "ProducedAt lt datetime'" + \
-                    timeLinePointer->control_.currentDate.addDays(15).toString(Qt::ISODate) + "'";
+                    timeLinePointer->control_.currentDate.addDays(10).toString(Qt::ISODate) + "'";
 
 //    qDebug() << filter;
 
@@ -432,9 +429,7 @@ void ProductsWidget::getGranulesForNewProduct()
 //    connect (getGranules, SIGNAL(finished()), getGranules, SLOT(deleteLater()));
     getGranules->setSelectedProducts(selectedProducts, granulesHash);
     getGranules->setParameters(request, "getGranulesForNewProduct");
-    getGranules->start();
-
-//    getGranulesPointer->getGranulesForNewProduct(request);
+    getGranules->run();
 }
 
 void ProductsWidget::slotProductInfo()

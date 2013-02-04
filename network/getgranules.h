@@ -13,7 +13,7 @@
 
 #include <QDebug>
 
-class GetGranules : public QThread
+class GetGranules : public QObject
 {
     Q_OBJECT
 public:
@@ -21,7 +21,6 @@ public:
     void setSelectedProducts(QHash<QString, selectedProduct>* _selectedProducts,
                              QHash<QString, Granule> *_granulesHash);
     void setParameters(QNetworkRequest request, QString methodName);
-    void run();
 
 protected:
     QHash<QString, selectedProduct>* selectedProducts;
@@ -32,14 +31,17 @@ protected:
 
     QNetworkRequest _request;
     QString _methodName;
+    int countGranule;
 
 private:
     QReadWriteLock lock;
 
 signals:
   void timeLineRepaint();
+  void selfRun();
     
 public slots:
+    void run();
     void getNewGranules();
     void getGranulesForNewProduct();
 
@@ -47,7 +49,6 @@ public slots:
     void slotReadyReadGranules();
 
     void getErrorNewGranules(QNetworkReply::NetworkError);
-    void slotReadyReadNewGranules();
 
 };
 
