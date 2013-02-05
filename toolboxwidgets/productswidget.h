@@ -88,6 +88,7 @@ protected:
     TimeLine* timeLinePointer;
     GetGranules* getGranulesPointer;
 signals:
+    void productAdded(QString productId);
     
 public slots:
     void currentProductChanged(int index);
@@ -99,6 +100,8 @@ public slots:
     void reloadProductsList();
     void addProduct();
     void slotProductInfo();
+
+    void removeProduct(QString productId);
 };
 
 #endif // PRODUCTSWIDGET_H

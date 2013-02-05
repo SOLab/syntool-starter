@@ -26,7 +26,7 @@ protected:
     QHash<QString, selectedProduct>* selectedProducts;
     QHash<QString, Granule>* granulesHash;
 
-//    QNetworkAccessManager *networkManager;
+    QNetworkAccessManager *networkManager;
     QByteArray currentRequest;
 
     QNetworkRequest _request;

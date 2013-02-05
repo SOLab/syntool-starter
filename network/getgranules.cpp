@@ -4,6 +4,7 @@ GetGranules::GetGranules(QObject *parent) :
     QObject(parent)
 {
     countGranule = 0;
+    networkManager = new QNetworkAccessManager(this);
     connect(this, SIGNAL(selfRun()), this, SLOT(run()));
 }
 
@@ -49,7 +50,7 @@ void GetGranules::run()
 
 void GetGranules::getGranulesForNewProduct()
 {
-    QNetworkAccessManager* networkManager = new QNetworkAccessManager();
+//    QNetworkAccessManager* networkManager = new QNetworkAccessManager();
 
     QNetworkReply* reply = networkManager->get(_request);
 //    networkManager->deleteLater();
@@ -61,6 +62,22 @@ void GetGranules::getGranulesForNewProduct()
 void GetGranules::getErrorGranules(QNetworkReply::NetworkError)
 {
     qDebug() << "getErrorGranules";
+}
+
+void GetGranules::getNewGranules()
+{
+//    QNetworkAccessManager* networkManager = new QNetworkAccessManager ();
+//    networkManager->deleteLater();
+    QNetworkReply* reply = networkManager->get(_request);
+    connect(reply, SIGNAL(readyRead()), this, SLOT(slotReadyReadGranules()));
+    connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
+            this, SLOT(getErrorGranules(QNetworkReply::NetworkError)));
+}
+
+
+void GetGranules::getErrorNewGranules(QNetworkReply::NetworkError)
+{
+    qDebug() << "getErrorNewGranules";
 }
 
 void GetGranules::slotReadyReadGranules()
@@ -84,11 +101,10 @@ void GetGranules::slotReadyReadGranules()
 //                qDebug() << string;
 
                 QDomDocument mDocument;
-                bool namespaceProcessing;
                 QString errorMsg;
                 int errorLine;
                 int errorColumn;
-                if (!mDocument.setContent(bytes, namespaceProcessing, &errorMsg,
+                if (!mDocument.setContent(bytes, false, &errorMsg,
                                           &errorLine, &errorColumn))
                 {
                     qDebug() << "Error XML";
@@ -104,7 +120,7 @@ void GetGranules::slotReadyReadGranules()
                     {
                         currentRequest = currentRequest + bytes;
                         bytes = currentRequest;
-                        if (!mDocument.setContent(bytes, namespaceProcessing,
+                        if (!mDocument.setContent(bytes, false,
                                                   &errorMsg, &errorLine, &errorColumn))
                         {
                                 qDebug() << "Error XML";
@@ -156,22 +172,6 @@ void GetGranules::slotReadyReadGranules()
         emit timeLineRepaint();
     }
     reply->deleteLater();
-}
-
-void GetGranules::getNewGranules()
-{
-    QNetworkAccessManager* networkManager = new QNetworkAccessManager ();
-//    networkManager->deleteLater();
-    QNetworkReply* reply = networkManager->get(_request);
-    connect(reply, SIGNAL(readyRead()), this, SLOT(slotReadyReadGranules()));
-    connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
-            this, SLOT(getErrorGranules(QNetworkReply::NetworkError)));
-}
-
-
-void GetGranules::getErrorNewGranules(QNetworkReply::NetworkError)
-{
-    qDebug() << "getErrorNewGranules";
 }
 
 // http://staging.satin.rshu.ru/Download.ashx?granule=<granule_id>&method=[ftp|opendap|image|kml]

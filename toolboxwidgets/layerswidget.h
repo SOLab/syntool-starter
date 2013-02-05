@@ -16,12 +16,15 @@ public:
 
 protected:
     QVBoxLayout* vLayout;
+    QVBoxLayout* productsLayout;
+    QVBoxLayout* otherLayout;
     QLabel* productLayersLbl;
     QLabel* othersLayersLbl;
 
 signals:
     
 public slots:
+    void addProduct(QString ProductId);
     
 };
 

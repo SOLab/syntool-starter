@@ -183,11 +183,10 @@ void ProductsWidget::slotReadyReadProductList()
 //                qDebug() << string;
 
                 QDomDocument mDocument;
-                bool namespaceProcessing;
                 QString errorMsg;
                 int errorLine;
                 int errorColumn;
-                if (!mDocument.setContent(bytes, namespaceProcessing, &errorMsg,
+                if (!mDocument.setContent(bytes, false, &errorMsg,
                                           &errorLine, &errorColumn))
                 {
                     qDebug() << "Error XML";
@@ -203,7 +202,7 @@ void ProductsWidget::slotReadyReadProductList()
                     {
                         currentRequest = currentRequest + bytes;
                         bytes = currentRequest;
-                        if (!mDocument.setContent(bytes, namespaceProcessing,
+                        if (!mDocument.setContent(bytes, false,
                                                   &errorMsg, &errorLine, &errorColumn))
                         {
                                 qDebug() << "Error XML";
@@ -368,6 +367,8 @@ void ProductsWidget::addProduct()
     selectedProducts->insert(newSelectedProduct.productName, newSelectedProduct);
     getGranulesForNewProduct();
 
+    emit productAdded(newSelectedProduct.productName);
+
     qDebug() << selectedProducts->keys();
 }
 
@@ -439,4 +440,33 @@ void ProductsWidget::slotProductInfo()
     productInfo->setProduct(productsHash[comboProducts->currentText()], productImagePixmap);
     productInfo->show();
     qDebug() << "Product information";
+}
+
+void ProductsWidget::removeProduct(QString productId)
+{
+    //remove product from selectedProducts
+    if (selectedProducts->keys().contains(productId))
+        selectedProducts->remove(productId);
+
+    // remobe granules from granulesHash
+    QList<QString> granuleIdlist;
+
+    QHash<QString, Granule>::const_iterator k = granulesHash->constBegin();
+    while ( k != granulesHash->constEnd())
+    {
+        if (productId == QString::number(k.value().productId))
+            granuleIdlist.append(k.key());
+        ++k;
+    }
+
+    QList<QString>::iterator cur = granuleIdlist.begin();
+    QList<QString>::iterator last = granuleIdlist.end();
+
+    while ( cur != last)
+    {
+        qDebug() << "REMOVE GRANULES: " << granuleIdlist.at(0);
+        granulesHash->remove(granuleIdlist.takeFirst());
+        cur = granuleIdlist.begin();
+        last = granuleIdlist.end();
+    };
 }
