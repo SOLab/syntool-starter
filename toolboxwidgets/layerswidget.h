@@ -3,6 +3,10 @@
 
 #include <QWidget>
 #include <QVBoxLayout>
+#include <QLabel>
+#include <QDebug>
+
+#include <additionalwidgets/layerboxwidget.h>
 
 class LayersWidget : public QWidget
 {
@@ -12,6 +16,9 @@ public:
 
 protected:
     QVBoxLayout* vLayout;
+    QLabel* productLayersLbl;
+    QLabel* othersLayersLbl;
+
 signals:
     
 public slots:
