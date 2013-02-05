@@ -22,6 +22,9 @@ protected:
     QLabel* othersLayersLbl;
 
 signals:
+    void removeLayer(QString productId);
+    void showLayer(QString productId, int showState);
+    void changedTransparency(QString productId, int value);
     
 public slots:
     void addProduct(QString ProductId);

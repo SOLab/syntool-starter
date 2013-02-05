@@ -445,16 +445,20 @@ void ProductsWidget::slotProductInfo()
 void ProductsWidget::removeProduct(QString productId)
 {
     //remove product from selectedProducts
+    qDebug() << "removeProduct";
     if (selectedProducts->keys().contains(productId))
+    {
+        qDebug() << "Remove product" << productId;
         selectedProducts->remove(productId);
+    }
 
-    // remobe granules from granulesHash
+    // remobe granules from granulesHash (only for removed product)
     QList<QString> granuleIdlist;
 
     QHash<QString, Granule>::const_iterator k = granulesHash->constBegin();
     while ( k != granulesHash->constEnd())
     {
-        if (productId == QString::number(k.value().productId))
+        if (productsHash[productId].Id == k.value().productId)
             granuleIdlist.append(k.key());
         ++k;
     }

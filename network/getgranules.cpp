@@ -6,6 +6,7 @@ GetGranules::GetGranules(QObject *parent) :
     countGranule = 0;
     networkManager = new QNetworkAccessManager(this);
     connect(this, SIGNAL(selfRun()), this, SLOT(run()));
+    connect(this, &GetGranules::selfClose, this, &GetGranules::deleteLater);
 }
 
 // create Product structure from xml (from QDomElement)
@@ -50,7 +51,7 @@ void GetGranules::run()
 
 void GetGranules::getGranulesForNewProduct()
 {
-//    QNetworkAccessManager* networkManager = new QNetworkAccessManager();
+//    QNetworkAccessManager* networkManager = new QNetworkAccessManager(this);
 
     QNetworkReply* reply = networkManager->get(_request);
 //    networkManager->deleteLater();
@@ -66,7 +67,7 @@ void GetGranules::getErrorGranules(QNetworkReply::NetworkError)
 
 void GetGranules::getNewGranules()
 {
-//    QNetworkAccessManager* networkManager = new QNetworkAccessManager ();
+//    QNetworkAccessManager* networkManager = new QNetworkAccessManager (this);
 //    networkManager->deleteLater();
     QNetworkReply* reply = networkManager->get(_request);
     connect(reply, SIGNAL(readyRead()), this, SLOT(slotReadyReadGranules()));
@@ -101,6 +102,7 @@ void GetGranules::slotReadyReadGranules()
 //                qDebug() << string;
 
                 QDomDocument mDocument;
+//                bool namespaceProcessing;
                 QString errorMsg;
                 int errorLine;
                 int errorColumn;
@@ -120,8 +122,8 @@ void GetGranules::slotReadyReadGranules()
                     {
                         currentRequest = currentRequest + bytes;
                         bytes = currentRequest;
-                        if (!mDocument.setContent(bytes, false,
-                                                  &errorMsg, &errorLine, &errorColumn))
+                        if (!mDocument.setContent(bytes, false, &errorMsg,
+                                                  &errorLine, &errorColumn))
                         {
                                 qDebug() << "Error XML";
                                 qDebug() << errorMsg;
@@ -172,6 +174,7 @@ void GetGranules::slotReadyReadGranules()
         emit timeLineRepaint();
     }
     reply->deleteLater();
+    emit selfClose();
 }
 
 // http://staging.satin.rshu.ru/Download.ashx?granule=<granule_id>&method=[ftp|opendap|image|kml]

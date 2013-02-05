@@ -69,6 +69,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(ProductsWgt, &ProductsWidget::productAdded, LayersWgt, &LayersWidget::addProduct);
 
+    connect(LayersWgt, &LayersWidget::removeLayer, ProductsWgt, &ProductsWidget::removeProduct);
+
     ProductsWgt->setObjectsPointer(timeLine, getGranules);
     timeLine->setObjectsPointer(getGranules);
 

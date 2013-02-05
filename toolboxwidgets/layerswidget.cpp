@@ -42,5 +42,9 @@ LayersWidget::LayersWidget(QWidget *parent) :
 void LayersWidget::addProduct(QString ProductId)
 {
     LayerBoxWidget* test = new LayerBoxWidget(ProductId, this);
+    connect(test, &LayerBoxWidget::removeLayer, this, &LayersWidget::removeLayer);
+    connect(test, &LayerBoxWidget::showLayer, this, &LayersWidget::showLayer);
+    connect(test, &LayerBoxWidget::changedTransparency, this, &LayersWidget::changedTransparency);
+
     productsLayout->addWidget(test);
 }

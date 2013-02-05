@@ -14,7 +14,7 @@ LayerBoxWidget::LayerBoxWidget(QString ProductName, QWidget *parent) :
     removeLayerButton->setIconSize(QSize(12,12));
     removeLayerButton->setToolTip(tr("Remove layer"));
     connect(removeLayerButton, &QPushButton::clicked, this, &LayerBoxWidget::removeLayerSlot);
-    connect(removeLayerButton, &QPushButton::clicked, this, &LayerBoxWidget::close);
+//    connect(removeLayerButton, &QPushButton::clicked, this, &LayerBoxWidget::close);
 
     showLayerCheckBox = new QCheckBox(this);
     showLayerCheckBox->setToolTip(tr("Show layer"));
@@ -50,6 +50,7 @@ void LayerBoxWidget::removeLayerSlot()
 {
     qDebug() << _productName;
     emit removeLayer(_productName);
+    close();
 }
 
 void LayerBoxWidget::showChangedSlot(int state)

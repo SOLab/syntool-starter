@@ -39,6 +39,7 @@ private:
 signals:
   void timeLineRepaint();
   void selfRun();
+  void selfClose();
     
 public slots:
     void run();
