@@ -4,6 +4,7 @@ GetGranules::GetGranules(QObject *parent) :
     QObject(parent)
 {
     countGranule = 0;
+    currentCountGranule = 0;
     networkManager = new QNetworkAccessManager(this);
     connect(this, SIGNAL(selfRun()), this, SLOT(run()));
     connect(this, &GetGranules::selfClose, this, &GetGranules::deleteLater);
@@ -141,7 +142,8 @@ void GetGranules::slotReadyReadGranules()
                 {
                     Granule newGranule = createGranuleFromXml(mElement);
                     countGranule++;
-//                    if (newGranule.startDate.date() == QDate(2013, 01, 7))
+                    currentCountGranule++;
+//                    if (newGranule.startDate.date() == QDate(2013, 01, 4))
 //                        qDebug() << newGranule.startDate;
 
                     if (!granulesHash->contains(QString::number(newGranule.granuleId)))
@@ -155,8 +157,9 @@ void GetGranules::slotReadyReadGranules()
                 }
             }
 //            qDebug() << "countGranule" << countGranule;
-            if (!(countGranule % 100) && countGranule)
+            if (!(countGranule % 100) && currentCountGranule)
             {
+                currentCountGranule = 0;
                 if (_request.url().toString().indexOf("skip") == -1)
                 {
                     _request.setUrl(QUrl(_request.url().toString() + "&$skip=100"));
@@ -171,8 +174,8 @@ void GetGranules::slotReadyReadGranules()
                 return;
             }
         }
-        emit timeLineRepaint();
     }
+    emit timeLineRepaint();
     reply->deleteLater();
     emit selfClose();
 }

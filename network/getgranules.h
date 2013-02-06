@@ -32,6 +32,7 @@ protected:
     QNetworkRequest _request;
     QString _methodName;
     int countGranule;
+    int currentCountGranule;
 
 private:
     QReadWriteLock lock;

@@ -380,7 +380,7 @@ void ProductsWidget::getNewGranules()
         qDebug() << k.key();
 
         QNetworkRequest request;
-        QString filter = "?$filter=";
+        QString filter = "?$orderby=ProducedAt&$filter=";
 
         filter += "ProductId eq "+QString::number(productsHash[k.key()].Id);
         filter += " and ";
@@ -391,6 +391,7 @@ void ProductsWidget::getNewGranules()
                         timeLinePointer->control_.currentDate.addDays(10).toString(Qt::ISODate) + "'";
 
         request.setUrl(QUrl(urlGranules.scheme() + "://" + urlGranules.host() + urlGranules.path() + filter));
+
         request.setRawHeader("Content-Type", "text/xml");
 
         GetGranules* getGranules = new GetGranules();
@@ -409,7 +410,7 @@ void ProductsWidget::getGranulesForNewProduct()
     QNetworkRequest request;
 
     //create filter
-    QString filter = "?$filter=";
+    QString filter = "?$orderby=ProducedAt&$filter=";
 
     filter += "ProductId eq "+QString::number(productsHash[comboProducts->currentText()].Id);
     filter += " and ";
@@ -420,6 +421,8 @@ void ProductsWidget::getGranulesForNewProduct()
     filter += " and ";
     filter += "ProducedAt lt datetime'" + \
                     timeLinePointer->control_.currentDate.addDays(10).toString(Qt::ISODate) + "'";
+
+    filter += "&$orderby=ProducedAt";
 
 //    qDebug() << filter;
 
@@ -468,7 +471,7 @@ void ProductsWidget::removeProduct(QString productId)
 
     while ( cur != last)
     {
-        qDebug() << "REMOVE GRANULES: " << granuleIdlist.at(0);
+//        qDebug() << "REMOVE GRANULES: " << granuleIdlist.at(0);
         granulesHash->remove(granuleIdlist.takeFirst());
         cur = granuleIdlist.begin();
         last = granuleIdlist.end();
