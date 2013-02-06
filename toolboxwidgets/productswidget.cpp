@@ -343,11 +343,9 @@ void ProductsWidget::setSelectedProducts(QHash<QString, selectedProduct> *_selec
     granulesHash = _granulesHash;
 }
 
-void ProductsWidget::setObjectsPointer(TimeLine *_timeLinePointer,
-                                       GetGranules* _getGranulesPointer)
+void ProductsWidget::setObjectsPointer(TimeLine *_timeLinePointer)
 {
     timeLinePointer = _timeLinePointer;
-    getGranulesPointer = _getGranulesPointer;
 }
 
 void ProductsWidget::addProduct()
@@ -395,6 +393,7 @@ void ProductsWidget::getNewGranules()
         request.setRawHeader("Content-Type", "text/xml");
 
         GetGranules* getGranules = new GetGranules();
+        connect(getGranules, SIGNAL(timeLineRepaint()), timeLinePointer, SLOT(update()));
 //        connect (getGranules, SIGNAL(finished()), getGranules, SLOT(deleteLater()));
         getGranules->setSelectedProducts(selectedProducts, granulesHash);
         getGranules->setParameters(request, "getNewGranules");
@@ -430,6 +429,7 @@ void ProductsWidget::getGranulesForNewProduct()
     request.setRawHeader("Content-Type", "text/xml");
 
     GetGranules* getGranules = new GetGranules();
+    connect(getGranules, SIGNAL(timeLineRepaint()), timeLinePointer, SLOT(update()));
 //    connect (getGranules, SIGNAL(finished()), getGranules, SLOT(deleteLater()));
     getGranules->setSelectedProducts(selectedProducts, granulesHash);
     getGranules->setParameters(request, "getGranulesForNewProduct");

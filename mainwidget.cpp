@@ -61,18 +61,13 @@ MainWindow::MainWindow(QWidget *parent)
     ProductsWgt->setSelectedProducts(selectedProducts, granulesHash);
     timeLine->setSelectedProducts(selectedProducts, granulesHash);
 
-    getGranules = new GetGranules();
-    getGranules->setSelectedProducts(selectedProducts, granulesHash);
-    connect(getGranules, SIGNAL(timeLineRepaint()), timeLine, SLOT(repaint()));
-
     connect(timeLine, SIGNAL(getNewAllGranules()), ProductsWgt, SLOT(getNewGranules()));
 
     connect(ProductsWgt, &ProductsWidget::productAdded, LayersWgt, &LayersWidget::addProduct);
 
     connect(LayersWgt, &LayersWidget::removeLayer, ProductsWgt, &ProductsWidget::removeProduct);
 
-    ProductsWgt->setObjectsPointer(timeLine, getGranules);
-    timeLine->setObjectsPointer(getGranules);
+    ProductsWgt->setObjectsPointer(timeLine);
 
     rightSidebar->setMinimumWidth(120);
 

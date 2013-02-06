@@ -87,11 +87,6 @@ void TimeLine::setSelectedProducts(QHash<QString, selectedProduct> *_selectedPro
     granulesHash = _granulesHash;
 }
 
-void TimeLine::setObjectsPointer(GetGranules* _getGranulesPointer)
-{
-    getGranulesPointer = _getGranulesPointer;
-}
-
 // нажатие мыши
 void TimeLine::mousePressEvent ( QMouseEvent * pe )
 {

@@ -36,8 +36,7 @@ public:
     explicit ProductsWidget(QWidget *parent = 0);
     void setSelectedProducts(QHash<QString, selectedProduct>* _selectedProducts,
                              QHash<QString, Granule> *_granulesHash);
-    void setObjectsPointer(TimeLine* _timeLinePointer,
-                           GetGranules* _getGranulesPointer);
+    void setObjectsPointer(TimeLine* _timeLinePointer);
 
 protected:
     QVBoxLayout* vLayout;

@@ -57,7 +57,6 @@ protected:
 
     AboutWidget* aboutWgt;
     SettingsWidget* settingsWidget;
-    GetGranules* getGranules;
 
     void createMenuBar();
     void createPythonConsole();

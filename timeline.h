@@ -67,7 +67,6 @@ public:
     void paintEvent(QPaintEvent * pe);
     void setSelectedProducts(QHash<QString, selectedProduct>* _selectedProducts,
                              QHash<QString, Granule>* _granulesHash);
-    void setObjectsPointer(GetGranules* _getGranulesPointer);
     param control_;
 
 protected:
