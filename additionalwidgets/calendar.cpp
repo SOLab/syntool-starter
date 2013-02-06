@@ -11,6 +11,8 @@ Calendar::Calendar(QWidget *parent) :
     connect(cancelButton, SIGNAL(clicked()), this, SLOT(close()));
 
     calendar = new QCalendarWidget(this);
+    calendar->setGridVisible(true);
+    calendar->setStyleSheet("QSpinBox {width: 50px;}");
 
     gridLayout->addWidget(calendar, 0,0,2,2);
     gridLayout->addWidget(okButton, 2,0);

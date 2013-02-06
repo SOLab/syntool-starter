@@ -66,12 +66,10 @@ void TimeLine::paintEvent(QPaintEvent * pe)
     painter.setPen(pen);
 //    painter.save();
 
-
     int partCount = 50;
     int maxWidth = partCount * (width()/partCount);
 //    qDebug() << width();
     maxWidth = width() - 1;
-
 
     // рисуем значение текущее
     painter.drawText(0,16, control_.currentDate.date().toString("dd.MM.yyyy")+ \
@@ -299,7 +297,6 @@ void TimeLine::drawAllMarkers()
         addGeoPoint(k.value().startDate, 20,20);
         ++k;
     }
-
 }
 
 void TimeLine::setDate()
@@ -329,7 +326,6 @@ void TimeLine::addGeoPoint(QDateTime dateTime, float lat, float lon)
     geoPoint newPoint = {dateTime, lat, lon};
     geoPointList.append(newPoint);
 //    qDebug() << dateTime;
-
 
     qint64 secsTo = control_.currentDate.secsTo(dateTime);
     // secsTo/(2 * 60.0) = pixels
