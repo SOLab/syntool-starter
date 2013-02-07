@@ -4,7 +4,7 @@ int partCount = 50;
 int helper_cursop_position = 31;
 #include <qdebug.h>
 
-TimeLine::TimeLine(QWidget *parent)
+TimeLine::TimeLine(QString _serverName, QWidget *parent)
 : QWidget(parent)
 
 {
@@ -26,6 +26,8 @@ TimeLine::TimeLine(QWidget *parent)
 //    timer->start();
     setContentsMargins(0,0,0,0);
     rectsGranules = new QHash<qint32, QRect>;
+    currentGranuleId = 0;
+    serverName = _serverName;
 
     QHBoxLayout* hLayout = new QHBoxLayout(this);
     QPushButton* calendarButton = new QPushButton("Set date", this);
@@ -54,15 +56,54 @@ TimeLine::~TimeLine()
 void TimeLine::createGranulesContextMenu()
 {
     granulesContextMenu = new QMenu(this);
+
     QAction *actionImage = new QAction(QString::fromUtf8("View image"), this);
+    connect(actionImage, &QAction::triggered, this, &TimeLine::actionImageSlot);
     granulesContextMenu->addAction(actionImage);
+
     QAction *actionOpendap = new QAction(QString::fromUtf8("Open in OPeNDAP"), this);
+    connect(actionOpendap, &QAction::triggered, this, &TimeLine::actionOpendapSlot);
     granulesContextMenu->addAction(actionOpendap);
-    QAction *actionFtp = new QAction(QString::fromUtf8("Open in FTP"), this);
+
+    QAction *actionFtp = new QAction(QString::fromUtf8("Download"), this);
+    connect(actionFtp, &QAction::triggered, this, &TimeLine::actionFtpSlot);
     granulesContextMenu->addAction(actionFtp);
+
+    QAction *actionKml = new QAction(QString::fromUtf8("Get KML"), this);
+    connect(actionKml, &QAction::triggered, this, &TimeLine::actionKmlSlot);
+    granulesContextMenu->addAction(actionKml);
     granulesContextMenu->addSeparator();
+
     QAction *actionProperties = new QAction(QString::fromUtf8("Properties"), this);
+    connect(actionProperties, &QAction::triggered, this, &TimeLine::actionPropertiesSlot);
     granulesContextMenu->addAction(actionProperties);
+}
+
+void TimeLine::actionImageSlot() {
+    QDesktopServices::openUrl(QUrl(serverName + "/Download.ashx?granule=" \
+                                   +QString::number(currentGranuleId)+"&method=image"));
+// Request URL = http://staging.satin.rshu.ru/Download.ashx?granule=<granule_id>&method=[ftp|opendap|image|kml]
+}
+
+void TimeLine::actionOpendapSlot() {
+    QDesktopServices::openUrl(QUrl(serverName + "/Download.ashx?granule=" \
+                                   +QString::number(currentGranuleId)+"&method=opendap"));
+}
+
+void TimeLine::actionFtpSlot() {
+    QDesktopServices::openUrl(QUrl(serverName + "/Download.ashx?granule=" \
+                                   +QString::number(currentGranuleId)+"&method=ftp"));
+}
+
+void TimeLine::actionKmlSlot() {
+    QDesktopServices::openUrl(QUrl(serverName + "/Download.ashx?granule=" \
+                                   +QString::number(currentGranuleId)+"&method=kml"));
+}
+
+void TimeLine::actionPropertiesSlot() {
+    GranuleInfoWidget* currentGranuleWidget =
+            new GranuleInfoWidget(granulesHash->value(QString::number(currentGranuleId)));
+    currentGranuleWidget->show();
 }
 
 void TimeLine::paintEvent(QPaintEvent * pe)
@@ -111,9 +152,11 @@ void TimeLine::mousePressEvent ( QMouseEvent * pe )
         if (i.value().contains(pe->pos()))
         {
             if (pe->button() == Qt::LeftButton)
-                granulePressLeft(i.key());
+                granulePressLeft();
             else if(pe->button() == Qt::RightButton)
-                granulePressRight(i.key());
+                granulePressRight();
+
+            currentGranuleId = i.key();
             QWidget::mousePressEvent(pe);
             return;
         }
@@ -134,12 +177,12 @@ void TimeLine::mousePressEvent ( QMouseEvent * pe )
     QWidget::mousePressEvent(pe);
 }
 
-void TimeLine::granulePressLeft(qint32 granuleId)
+void TimeLine::granulePressLeft()
 {
     qDebug() << "granulePressLeft";
 }
 
-void TimeLine::granulePressRight(qint32 granuleId)
+void TimeLine::granulePressRight()
 {
     qDebug() << "granulePressRight";
     granulesContextMenu->popup(QCursor::pos());

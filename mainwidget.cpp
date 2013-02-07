@@ -23,11 +23,12 @@ MainWindow::MainWindow(QWidget *parent)
     glwgt = new WindowWidget(this);
     glwgt->setMinimumSize(200, 200);
 
+    QString serverName = "http://staging.satin.rshu.ru";
 //    create right toolBox
     rightSidebar = new RightSidebar;
 
     MapsWgt = new MapsWidget(centralwgt);
-    ProductsWgt = new ProductsWidget(centralwgt);
+    ProductsWgt = new ProductsWidget(serverName, centralwgt);
     DatasetsWgt = new DatasetsWidget(centralwgt);
     PlaceWgt = new PlaceWidget(centralwgt);
     LayersWgt = new LayersWidget(centralwgt);
@@ -45,7 +46,7 @@ MainWindow::MainWindow(QWidget *parent)
     splitter->setStretchFactor(1, 1);
 
 
-    timeLine = new TimeLine(this);
+    timeLine = new TimeLine(serverName, this);
     timeLine->setFixedHeight(100);
     timeLine->hide();
 

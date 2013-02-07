@@ -19,8 +19,11 @@
 #include <QList>
 #include <qmath.h>
 #include <additionalwidgets/calendar.h>
+#include <additionalwidgets/granuleinfowidget.h>
 #include <more/ProductStructures.h>
 #include <network/getgranules.h>
+
+#include <QDesktopServices>
 
 #pragma pack(push, 1)
 struct geoPoint
@@ -63,7 +66,7 @@ class TimeLine : public QWidget
     Q_OBJECT
 
 public:
-    TimeLine(QWidget *parent = 0);
+    TimeLine(QString _serverName, QWidget *parent = 0);
     ~TimeLine();
     void paintEvent(QPaintEvent * pe);
     void setSelectedProducts(QHash<QString, selectedProduct>* _selectedProducts,
@@ -88,7 +91,9 @@ protected:
     QDate notChangedDate;
 
     QMenu* granulesContextMenu;
+    qint32 currentGranuleId;
     void createGranulesContextMenu();
+    QString serverName;
 
 public slots:
     void setDate();
@@ -104,8 +109,14 @@ private slots:
     void mouseMoveEvent(QMouseEvent * pe);
     void mouseReleaseEvent (QMouseEvent * pe);
 
-    void granulePressLeft(qint32 granuleId);
-    void granulePressRight(qint32 granuleId);
+    void granulePressLeft();
+    void granulePressRight();
+
+    void actionImageSlot();
+    void actionOpendapSlot();
+    void actionFtpSlot();
+    void actionKmlSlot();
+    void actionPropertiesSlot();
 
 signals:
   void getNewAllGranules();

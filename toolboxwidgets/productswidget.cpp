@@ -1,7 +1,7 @@
 #include "productswidget.h"
 #include <QSizePolicy>
 
-ProductsWidget::ProductsWidget(QWidget *parent) :
+ProductsWidget::ProductsWidget(QString _serverName, QWidget *parent):
     QWidget(parent)
 {
     vLayout = new QVBoxLayout(this);
@@ -45,7 +45,7 @@ ProductsWidget::ProductsWidget(QWidget *parent) :
     hLine1->setFrameShadow(QFrame::Sunken);
     vLayout->addWidget(hLine1);
 // Create request Url
-    serverName = "http://staging.satin.rshu.ru";
+    serverName = _serverName;
     urlProducts = QUrl(serverName + "/api/products");
     urlGranules = QUrl(serverName + "/api/granules");
 
