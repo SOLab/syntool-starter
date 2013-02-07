@@ -179,5 +179,3 @@ void GetGranules::slotReadyReadGranules()
     reply->deleteLater();
     emit selfClose();
 }
-
-// http://staging.satin.rshu.ru/Download.ashx?granule=<granule_id>&method=[ftp|opendap|image|kml]

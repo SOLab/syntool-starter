@@ -25,7 +25,7 @@ TimeLine::TimeLine(QWidget *parent)
 //    connect( timer, SIGNAL(timeout()), SLOT( moveEnabled()));
 //    timer->start();
     setContentsMargins(0,0,0,0);
-    rectsGranules = new QHash<QString, QRect>;
+    rectsGranules = new QHash<qint32, QRect>;
 
     QHBoxLayout* hLayout = new QHBoxLayout(this);
     QPushButton* calendarButton = new QPushButton("Set date", this);
@@ -44,10 +44,25 @@ TimeLine::TimeLine(QWidget *parent)
     imageGeoPoint = QImage(":/orange-circle.png");
 
     hLayout->addWidget(calendarButton, 0, Qt::AlignRight | Qt::AlignTop);
+    createGranulesContextMenu();
 }
 
 TimeLine::~TimeLine()
 {
+}
+
+void TimeLine::createGranulesContextMenu()
+{
+    granulesContextMenu = new QMenu(this);
+    QAction *actionImage = new QAction(QString::fromUtf8("View image"), this);
+    granulesContextMenu->addAction(actionImage);
+    QAction *actionOpendap = new QAction(QString::fromUtf8("Open in OPeNDAP"), this);
+    granulesContextMenu->addAction(actionOpendap);
+    QAction *actionFtp = new QAction(QString::fromUtf8("Open in FTP"), this);
+    granulesContextMenu->addAction(actionFtp);
+    granulesContextMenu->addSeparator();
+    QAction *actionProperties = new QAction(QString::fromUtf8("Properties"), this);
+    granulesContextMenu->addAction(actionProperties);
 }
 
 void TimeLine::paintEvent(QPaintEvent * pe)
@@ -91,6 +106,21 @@ void TimeLine::setSelectedProducts(QHash<QString, selectedProduct> *_selectedPro
 // нажатие мыши
 void TimeLine::mousePressEvent ( QMouseEvent * pe )
 {
+    QHash<qint32, QRect>::const_iterator i = rectsGranules->constBegin();
+    while (i != rectsGranules->constEnd()) {
+        if (i.value().contains(pe->pos()))
+        {
+            if (pe->button() == Qt::LeftButton)
+                granulePressLeft(i.key());
+            else if(pe->button() == Qt::RightButton)
+                granulePressRight(i.key());
+            QWidget::mousePressEvent(pe);
+            return;
+        }
+        ++i;
+    }
+
+
     if (control_.dayRect.contains(pe->pos()))
         control_.moveDay = true;
     else if (control_.weekRect.contains(pe->pos()))
@@ -102,6 +132,17 @@ void TimeLine::mousePressEvent ( QMouseEvent * pe )
     }
     control_.pos_ = pe->pos();
     QWidget::mousePressEvent(pe);
+}
+
+void TimeLine::granulePressLeft(qint32 granuleId)
+{
+    qDebug() << "granulePressLeft";
+}
+
+void TimeLine::granulePressRight(qint32 granuleId)
+{
+    qDebug() << "granulePressRight";
+    granulesContextMenu->popup(QCursor::pos());
 }
 
 // движение мыши.
@@ -148,7 +189,6 @@ void TimeLine::mouseReleaseEvent ( QMouseEvent * pe )
     control_.moveWeek = false;
     QWidget::mouseReleaseEvent (pe);
 }
-
 
 QString getDayMonth(QDateTime dateTime)
 {
@@ -287,12 +327,15 @@ void TimeLine::createBottomRect()
 
 void TimeLine::drawAllMarkers()
 {
+    rectsGranules->clear();
     QHash<QString, Granule>::const_iterator k = granulesHash->constBegin();
     while ( k != granulesHash->constEnd() )
     {
-        addGeoPoint(k.value().startDate, 20,20);
+        addGeoPoint(k.value().startDate, k.value().granuleId, 20,20);
         ++k;
     }
+//    qDebug() << "Count Granules = " << rectsGranules->count();
+
 }
 
 void TimeLine::setDate()
@@ -317,7 +360,7 @@ void TimeLine::setCurrentDate()
 //    repaint();
 }
 
-void TimeLine::addGeoPoint(QDateTime dateTime, float lat, float lon)
+void TimeLine::addGeoPoint(QDateTime dateTime, qint32 granuleId, float lat, float lon)
 {
     geoPoint newPoint = {dateTime, lat, lon};
     geoPointList.append(newPoint);
@@ -350,6 +393,7 @@ void TimeLine::addGeoPoint(QDateTime dateTime, float lat, float lon)
         QPainter painter(this);
         // -5 because imege size 10x10
         painter.drawImage(width()/2+pixels - 5,20,imageGeoPoint);
+        rectsGranules->insert(granuleId, QRect(width()/2+pixels - 5, 20, 10, 10));
     }
 }
 

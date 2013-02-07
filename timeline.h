@@ -14,6 +14,7 @@
 #include <QDateTime>
 #include <QHBoxLayout>
 #include <QPushButton>
+#include <QMenu>
 
 #include <QList>
 #include <qmath.h>
@@ -78,7 +79,7 @@ protected:
     QList<geoSegment> geoSegmentList;
     QHash<QString, selectedProduct>* selectedProducts;
     QHash<QString, Granule>* granulesHash;
-    QHash<QString, QRect>* rectsGranules;
+    QHash<qint32, QRect>* rectsGranules;
 
     QImage imageGeoPoint;
     GetGranules* getGranulesPointer;
@@ -86,11 +87,14 @@ protected:
     void drawAllMarkers();
     QDate notChangedDate;
 
+    QMenu* granulesContextMenu;
+    void createGranulesContextMenu();
+
 public slots:
     void setDate();
     void setCurrentDate();
 
-    void addGeoPoint(QDateTime dateTime, float lat, float lon);
+    void addGeoPoint(QDateTime dateTime, qint32 granuleId, float lat, float lon);
     void addGeoSegment(QDateTime startDateTime, QDateTime endDateTime, float lat, float lon);
 
     void changedDay();
@@ -99,6 +103,9 @@ private slots:
     void mousePressEvent (QMouseEvent * pe);
     void mouseMoveEvent(QMouseEvent * pe);
     void mouseReleaseEvent (QMouseEvent * pe);
+
+    void granulePressLeft(qint32 granuleId);
+    void granulePressRight(qint32 granuleId);
 
 signals:
   void getNewAllGranules();
