@@ -17,6 +17,7 @@
 #include <toolboxwidgets/placewidget.h>
 #include <toolboxwidgets/mapswidget.h>
 #include <toolboxwidgets/productswidget.h>
+#include <toolboxwidgets/datasetswidget.h>
 #include <rightsidebar.h>
 #include <network/getgranules.h>
 
@@ -48,6 +49,7 @@ protected:
 
     PlaceWidget* PlaceWgt;
     MapsWidget* MapsWgt;
+    DatasetsWidget* DatasetsWgt;
     ProductsWidget* ProductsWgt;
     LayersWidget* LayersWgt;
 

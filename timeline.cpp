@@ -25,6 +25,7 @@ TimeLine::TimeLine(QWidget *parent)
 //    connect( timer, SIGNAL(timeout()), SLOT( moveEnabled()));
 //    timer->start();
     setContentsMargins(0,0,0,0);
+    rectsGranules = new QHash<QString, QRect>;
 
     QHBoxLayout* hLayout = new QHBoxLayout(this);
     QPushButton* calendarButton = new QPushButton("Set date", this);

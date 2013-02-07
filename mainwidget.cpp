@@ -28,11 +28,13 @@ MainWindow::MainWindow(QWidget *parent)
 
     MapsWgt = new MapsWidget(centralwgt);
     ProductsWgt = new ProductsWidget(centralwgt);
+    DatasetsWgt = new DatasetsWidget(centralwgt);
     PlaceWgt = new PlaceWidget(centralwgt);
     LayersWgt = new LayersWidget(centralwgt);
 
     rightSidebar->addItem(MapsWgt, "Maps");
     rightSidebar->addItem(ProductsWgt, "Products");
+    rightSidebar->addItem(DatasetsWgt, "Datasets");
     rightSidebar->addItem(PlaceWgt, "Places");
     rightSidebar->addItem(LayersWgt, "Layers");
 

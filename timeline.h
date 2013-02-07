@@ -78,6 +78,7 @@ protected:
     QList<geoSegment> geoSegmentList;
     QHash<QString, selectedProduct>* selectedProducts;
     QHash<QString, Granule>* granulesHash;
+    QHash<QString, QRect>* rectsGranules;
 
     QImage imageGeoPoint;
     GetGranules* getGranulesPointer;
@@ -95,9 +96,9 @@ public slots:
     void changedDay();
 
 private slots:
-    void mousePressEvent ( QMouseEvent * pe );
+    void mousePressEvent (QMouseEvent * pe);
     void mouseMoveEvent(QMouseEvent * pe);
-    void mouseReleaseEvent ( QMouseEvent * pe );
+    void mouseReleaseEvent (QMouseEvent * pe);
 
 signals:
   void getNewAllGranules();
