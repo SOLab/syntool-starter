@@ -159,6 +159,7 @@ Product createProductFromXml(QDomElement domElement)
     return newProduct;
 }
 
+// get xml response with products
 void ProductsWidget::slotReadyReadProductList()
 {
     reloadProductsButton->hide();
@@ -348,6 +349,7 @@ void ProductsWidget::setObjectsPointer(TimeLine *_timeLinePointer)
     timeLinePointer = _timeLinePointer;
 }
 
+// add new product
 void ProductsWidget::addProduct()
 {
     selectedProduct newSelectedProduct;
@@ -377,19 +379,20 @@ void ProductsWidget::getNewGranules()
     {
         qDebug() << k.key();
 
+        // create request
         QNetworkRequest request;
-        QString filter = "?$orderby=ProducedAt&$filter=";
+        QString filter = "?";
 
-        filter += "ProductId eq "+QString::number(productsHash[k.key()].Id);
-        filter += " and ";
-        filter += "ProducedAt gt datetime'" + \
-                        timeLinePointer->control_.currentDate.addDays(-10).toString(Qt::ISODate) + "'";
-        filter += " and ";
-        filter += "ProducedAt lt datetime'" + \
-                        timeLinePointer->control_.currentDate.addDays(10).toString(Qt::ISODate) + "'";
+        filter += "productId="+QString::number(productsHash[k.key()].Id);
+//        filter += " and ";
+        filter += "&date=" + \
+                timeLinePointer->control_.currentDate.date().toString("yyyy-MM-dd");
+//        filter += " and ";
+        filter += "&range=10";
 
         request.setUrl(QUrl(urlGranules.scheme() + "://" + urlGranules.host() + urlGranules.path() + filter));
 
+        qDebug() << request.url();
         request.setRawHeader("Content-Type", "text/xml");
 
         GetGranules* getGranules = new GetGranules();
@@ -409,21 +412,14 @@ void ProductsWidget::getGranulesForNewProduct()
     QNetworkRequest request;
 
     //create filter
-    QString filter = "?$orderby=ProducedAt&$filter=";
+    QString filter = "?";
 
-    filter += "ProductId eq "+QString::number(productsHash[comboProducts->currentText()].Id);
-    filter += " and ";
-    // Date and Time filter
-
-    filter += "ProducedAt gt datetime'" + \
-                    timeLinePointer->control_.currentDate.addDays(-10).toString(Qt::ISODate) + "'";
-    filter += " and ";
-    filter += "ProducedAt lt datetime'" + \
-                    timeLinePointer->control_.currentDate.addDays(10).toString(Qt::ISODate) + "'";
-
-    filter += "&$orderby=ProducedAt";
-
-//    qDebug() << filter;
+    filter += "productId="+QString::number(productsHash[comboProducts->currentText()].Id);
+//        filter += " and ";
+    filter += "&date=" + \
+            timeLinePointer->control_.currentDate.date().toString("yyyy-MM-dd");
+//        filter += " and ";
+    filter += "&range=10";
 
     request.setUrl(QUrl(urlGranules.scheme() + "://" + urlGranules.host() + urlGranules.path() + filter));
     request.setRawHeader("Content-Type", "text/xml");

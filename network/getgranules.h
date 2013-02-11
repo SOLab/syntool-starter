@@ -33,6 +33,7 @@ protected:
     QString _methodName;
     int countGranule;
     int currentCountGranule;
+    int currentStep;
 
 private:
     QReadWriteLock lock;

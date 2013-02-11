@@ -22,6 +22,7 @@
 #include <additionalwidgets/granuleinfowidget.h>
 #include <more/ProductStructures.h>
 #include <network/getgranules.h>
+//#include <network/getgranulecoords.h>
 
 #include <QDesktopServices>
 

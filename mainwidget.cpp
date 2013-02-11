@@ -35,9 +35,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     rightSidebar->addItem(MapsWgt, "Maps");
     rightSidebar->addItem(ProductsWgt, "Products");
+    rightSidebar->addItem(LayersWgt, "Layers");
     rightSidebar->addItem(DatasetsWgt, "Datasets");
     rightSidebar->addItem(PlaceWgt, "Places");
-    rightSidebar->addItem(LayersWgt, "Layers");
 
 //    add all main widget
     splitter->addWidget(glwgt);

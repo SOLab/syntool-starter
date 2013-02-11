@@ -13,6 +13,10 @@ struct Granule{
     QDateTime endDate;
     float lat;
     float lon;
+    float north;
+    float east;
+    float south;
+    float west;
 };
 
 struct Product{

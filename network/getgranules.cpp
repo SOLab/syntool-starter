@@ -5,6 +5,7 @@ GetGranules::GetGranules(QObject *parent) :
 {
     countGranule = 0;
     currentCountGranule = 0;
+    currentStep = 0;
     networkManager = new QNetworkAccessManager(this);
     connect(this, SIGNAL(selfRun()), this, SLOT(run()));
     connect(this, &GetGranules::selfClose, this, &GetGranules::deleteLater);
@@ -16,7 +17,7 @@ Granule createGranuleFromXml(QDomElement domElement)
     Granule newGranule;
 
     // Get main fields
-    newGranule.granuleName = domElement.firstChildElement("GranuleName").text();
+//    newGranule.granuleName = domElement.firstChildElement("GranuleName").text();
     newGranule.granuleId = domElement.firstChildElement("Id").text().toInt();
     newGranule.productName = domElement.firstChildElement("Product").text();
     newGranule.productId = domElement.firstChildElement("ProductId").text().toInt();
@@ -45,17 +46,16 @@ void GetGranules::setParameters(QNetworkRequest request, QString methodName)
 void GetGranules::run()
 {
     if (_methodName == "getGranulesForNewProduct")
+        // get granules for new added products
         getGranulesForNewProduct();
     else
+        // get new granules
         getNewGranules();
 }
 
 void GetGranules::getGranulesForNewProduct()
 {
-//    QNetworkAccessManager* networkManager = new QNetworkAccessManager(this);
-
     QNetworkReply* reply = networkManager->get(_request);
-//    networkManager->deleteLater();
     connect(reply, SIGNAL(readyRead()), this, SLOT(slotReadyReadGranules()));
     connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
             this, SLOT(getErrorGranules(QNetworkReply::NetworkError)));
@@ -68,14 +68,11 @@ void GetGranules::getErrorGranules(QNetworkReply::NetworkError)
 
 void GetGranules::getNewGranules()
 {
-//    QNetworkAccessManager* networkManager = new QNetworkAccessManager (this);
-//    networkManager->deleteLater();
     QNetworkReply* reply = networkManager->get(_request);
     connect(reply, SIGNAL(readyRead()), this, SLOT(slotReadyReadGranules()));
     connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
             this, SLOT(getErrorGranules(QNetworkReply::NetworkError)));
 }
-
 
 void GetGranules::getErrorNewGranules(QNetworkReply::NetworkError)
 {
@@ -88,6 +85,8 @@ void GetGranules::slotReadyReadGranules()
 
     int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
 
+    QString nextStepElement = "false";
+
     qDebug() << "=================================";
     if (reply->error() == QNetworkReply::NoError)
     {
@@ -98,9 +97,9 @@ void GetGranules::slotReadyReadGranules()
             case 200:
             {
                 QByteArray bytes = reply->readAll();
-//                QString string(bytes);
-//                qDebug() << "==========================";
-//                qDebug() << string;
+                QString string(bytes);
+                qDebug() << "==========================";
+                qDebug() << string;
 
                 QDomDocument mDocument;
 //                bool namespaceProcessing;
@@ -137,12 +136,16 @@ void GetGranules::slotReadyReadGranules()
 
                 currentRequest.clear();
 
+                qDebug() << "START SERIALIZED!!!";
+
+                nextStepElement = mDocument.documentElement().firstChildElement("NextStep").text();
+
                 QDomElement  mElement = mDocument.documentElement().firstChildElement("Granule");
                 while ( !mElement.isNull() )
                 {
                     Granule newGranule = createGranuleFromXml(mElement);
                     countGranule++;
-                    currentCountGranule++;
+//                    currentCountGranule++;
 //                    if (newGranule.startDate.date() == QDate(2013, 01, 4))
 //                        qDebug() << newGranule.startDate;
 
@@ -156,19 +159,21 @@ void GetGranules::slotReadyReadGranules()
                     mElement = mElement.nextSiblingElement("Granule");
                 }
             }
+
 //            qDebug() << "countGranule" << countGranule;
-            if (!(countGranule % 100) && currentCountGranule)
+            if (nextStepElement != "true")
             {
-                currentCountGranule = 0;
-                if (_request.url().toString().indexOf("skip") == -1)
+                currentStep += 1;
+//                currentCountGranule = 0;
+                if (_request.url().toString().indexOf("step=") == -1)
                 {
-                    _request.setUrl(QUrl(_request.url().toString() + "&$skip=100"));
+                    _request.setUrl(QUrl(_request.url().toString() + "&step="+QString::number(currentStep)));
                 }
                 else
                 {
                     _request.setUrl(QUrl(_request.url().toString().replace \
-                                             ("skip="+QString::number(countGranule-100),
-                                              "skip="+QString::number(countGranule))));
+                                             ("step="+QString::number(currentStep-1),
+                                              "step="+QString::number(currentStep))));
                 }
                 emit selfRun();
                 return;

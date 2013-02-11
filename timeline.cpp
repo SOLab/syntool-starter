@@ -25,6 +25,7 @@ TimeLine::TimeLine(QString _serverName, QWidget *parent)
 //    connect( timer, SIGNAL(timeout()), SLOT( moveEnabled()));
 //    timer->start();
     setContentsMargins(0,0,0,0);
+    // <granuleId, granuleRectCoords>
     rectsGranules = new QHash<qint32, QRect>;
     currentGranuleId = 0;
     serverName = _serverName;
@@ -53,6 +54,7 @@ TimeLine::~TimeLine()
 {
 }
 
+// right click on the granule
 void TimeLine::createGranulesContextMenu()
 {
     granulesContextMenu = new QMenu(this);
@@ -112,23 +114,25 @@ void TimeLine::paintEvent(QPaintEvent * pe)
 
     control_.dayRect.setCoords(0, 0, width(), height() - 24);
     control_.weekRect.setCoords(0, height() - 24, width(), height());
-//    painter.end();
+
+    // draw day and week rects (with markers and dates)
     createTopRect();
     createBottomRect();
+
+    drawAllMarkers();
 
     QPainter painter(this);
 
     QPen pen(Qt::black);
     pen.setWidth(1);
     painter.setPen(pen);
-//    painter.save();
 
     int partCount = 50;
     int maxWidth = partCount * (width()/partCount);
-//    qDebug() << width();
+
     maxWidth = width() - 1;
 
-    // рисуем значение текущее
+    // Draw current date and time
     painter.drawText(0,16, control_.currentDate.date().toString("dd.MM.yyyy")+ \
                      " "+control_.currentDate.time().toString("hh:mm"));
 
@@ -144,18 +148,22 @@ void TimeLine::setSelectedProducts(QHash<QString, selectedProduct> *_selectedPro
     granulesHash = _granulesHash;
 }
 
-// нажатие мыши
+// press mouse
 void TimeLine::mousePressEvent ( QMouseEvent * pe )
 {
+    // iterate all granules
     QHash<qint32, QRect>::const_iterator i = rectsGranules->constBegin();
     while (i != rectsGranules->constEnd()) {
+        // if user hit in the granule
         if (i.value().contains(pe->pos()))
         {
+            // left or right button
             if (pe->button() == Qt::LeftButton)
                 granulePressLeft();
             else if(pe->button() == Qt::RightButton)
                 granulePressRight();
 
+            // selected granule
             currentGranuleId = i.key();
             QWidget::mousePressEvent(pe);
             return;
@@ -163,7 +171,7 @@ void TimeLine::mousePressEvent ( QMouseEvent * pe )
         ++i;
     }
 
-
+    // if user hit in the day or week rectangle
     if (control_.dayRect.contains(pe->pos()))
         control_.moveDay = true;
     else if (control_.weekRect.contains(pe->pos()))
@@ -179,16 +187,19 @@ void TimeLine::mousePressEvent ( QMouseEvent * pe )
 
 void TimeLine::granulePressLeft()
 {
+//    GetGranuleCoords* getCoords = new GetGranuleCoords(this);
+//    getCoords->getCoords(serverName, currentGranuleId);
     qDebug() << "granulePressLeft";
 }
 
 void TimeLine::granulePressRight()
 {
     qDebug() << "granulePressRight";
+    // show context menu
     granulesContextMenu->popup(QCursor::pos());
 }
 
-// движение мыши.
+// move mouse
 void TimeLine::mouseMoveEvent(QMouseEvent * pe)
 {
     // если флаг на движение стоит(попали мышкой в нужное поле и тянем)
@@ -225,7 +236,7 @@ void TimeLine::mouseMoveEvent(QMouseEvent * pe)
     QWidget::mouseMoveEvent(pe);
 }
 
-    // отжатие - снимаем флаг.
+// release - remove the flags
 void TimeLine::mouseReleaseEvent ( QMouseEvent * pe )
 {
     control_.moveDay = false;
@@ -233,11 +244,13 @@ void TimeLine::mouseReleaseEvent ( QMouseEvent * pe )
     QWidget::mouseReleaseEvent (pe);
 }
 
+// get current QString dayMonth (ex. 14feb.)
 QString getDayMonth(QDateTime dateTime)
 {
     return QString::number(dateTime.date().day()) + dateTime.date().shortMonthName(dateTime.date().month());
 }
 
+// get first day of the week QString dayMonth (ex. 14feb.)
 QString getFirstDayOfWeekMonth(QDateTime dateTime)
 {
     QDateTime tempDate = dateTime.addDays(-1*dateTime.date().dayOfWeek() + 1);
@@ -254,13 +267,15 @@ void TimeLine::createTopRect()
     pen.setWidth(1);
 
     painter.setPen(pen);
+    // draw main rectangle
     painter.drawRect(0, 0, width(), height() - 24);
 
-    // create dotline for days
+    // create line style (dotline) for days
     pen.setColor(Qt::black);
     pen.setStyle(Qt::DotLine);
     painter.setPen(pen);
 
+    // calculate count pixels for every day
     int curDayPixel = control_.currentDate.time().hour() * 30 + control_.currentDate.time().minute() / 2;
 
     int prevDayPixel = curDayPixel + 720;
@@ -269,8 +284,10 @@ void TimeLine::createTopRect()
 
     int afterTomorrowDayPixel = nextDayPixel + 720;
 
+    // draw center (red) line
     int halfWidth = width()/2;
 
+    // draw days
     if (halfWidth > curDayPixel)
     {
         painter.drawLine(halfWidth - curDayPixel, height() - 24, halfWidth - curDayPixel, 0);
@@ -311,20 +328,22 @@ void TimeLine::createBottomRect()
     painter.setPen(pen);
     painter.drawRect(0, height() - 24, width(), height());
 
-// draw current section
+    // draw current section
     painter.setBrush(QBrush(QColor(241,241,241)));
     float width_part = width()/7.0;
 
     painter.drawRect(qFloor(width_part*3 + 0.5), height() - 22, qFloor(width_part + 0.5), height());
 
-// draw markers
-
+    // draw markers
     pen.setColor(Qt::black);
     pen.setStyle(Qt::DotLine);
     painter.setPen(pen);
 
 //    qDebug() << "Day of week" << control_.currentDate.date().dayOfWeek();
-    int curWeekPixel = (control_.currentDate.time().hour() * 30 + (control_.currentDate.date().dayOfWeek() - 1)*24*30 \
+
+    // calculate count pixels for every week
+    int curWeekPixel = (control_.currentDate.time().hour() * 30 +
+                        (control_.currentDate.date().dayOfWeek() - 1)*24*30
                         + control_.currentDate.time().minute() / 2) /7;
 
     int nextWeekPixel = (720 - curWeekPixel);
@@ -364,8 +383,6 @@ void TimeLine::createBottomRect()
 
 //    addGeoSegment(QDateTime().currentDateTime().addDays(-1), QDateTime().currentDateTime().addSecs(4444), 20, 20);
 //    addGeoPoint(QDateTime().currentDateTime().addDays(-1).addSecs(-4444), 20, 20);
-
-    drawAllMarkers();
 }
 
 void TimeLine::drawAllMarkers()
