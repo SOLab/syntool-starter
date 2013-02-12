@@ -10,12 +10,10 @@ LayersWidget::LayersWidget(QWidget *parent) :
 
     productsLayout = new QVBoxLayout(this);
     productsLayout->setContentsMargins(0,0,0,0);
-//    productsLayout->setSpacing(3);
     productsLayout->setAlignment(Qt::AlignTop);
 
     otherLayout = new QVBoxLayout(this);
     otherLayout->setContentsMargins(0,0,0,0);
-//    otherLayout->setSpacing(3);
     otherLayout->setAlignment(Qt::AlignTop);
 
     setObjectName("LayersWidget");
@@ -41,10 +39,11 @@ LayersWidget::LayersWidget(QWidget *parent) :
 
 void LayersWidget::addProduct(QString ProductId)
 {
-    LayerBoxWidget* test = new LayerBoxWidget(ProductId, this);
-    connect(test, &LayerBoxWidget::removeLayer, this, &LayersWidget::removeLayer);
-    connect(test, &LayerBoxWidget::showLayer, this, &LayersWidget::showLayer);
-    connect(test, &LayerBoxWidget::changedTransparency, this, &LayersWidget::changedTransparency);
+    LayerBoxWidget* layerBox = new LayerBoxWidget(ProductId, this);
 
-    productsLayout->addWidget(test);
+    connect(layerBox, &LayerBoxWidget::removeLayer, this, &LayersWidget::removeLayer);
+    connect(layerBox, &LayerBoxWidget::showLayer, this, &LayersWidget::showLayer);
+    connect(layerBox, &LayerBoxWidget::changedTransparency, this, &LayersWidget::changedTransparency);
+
+    productsLayout->addWidget(layerBox);
 }

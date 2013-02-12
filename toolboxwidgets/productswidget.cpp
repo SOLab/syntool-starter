@@ -390,6 +390,14 @@ void ProductsWidget::getNewGranules()
 //        filter += " and ";
         filter += "&range=10";
 
+//        // get coords and set area filter
+//        QString north = North->text();
+//        QString east = East->text();
+//        QString south = South->text();
+//        QString west = West->text();
+
+//        filter += "&area=POLYGON((" + QString("%1 %2, %3 %2, %3 %4, %1 %4, %1 %2").arg(west, north, east, south) + "))";
+
         request.setUrl(QUrl(urlGranules.scheme() + "://" + urlGranules.host() + urlGranules.path() + filter));
 
         qDebug() << request.url();
@@ -421,8 +429,18 @@ void ProductsWidget::getGranulesForNewProduct()
 //        filter += " and ";
     filter += "&range=10";
 
+//    // get coords and set area filter
+//    QString north = North->text();
+//    QString east = East->text();
+//    QString south = South->text();
+//    QString west = West->text();
+
+//    filter += "&area=POLYGON((" + QString("%1 %2, %3 %2, %3 %4, %1 %4, %1 %2").arg(north, east, south, west) + "))";
+
     request.setUrl(QUrl(urlGranules.scheme() + "://" + urlGranules.host() + urlGranules.path() + filter));
     request.setRawHeader("Content-Type", "text/xml");
+
+    qDebug() << request.url();
 
     GetGranules* getGranules = new GetGranules();
     connect(getGranules, SIGNAL(timeLineRepaint()), timeLinePointer, SLOT(update()));
