@@ -22,7 +22,7 @@
 #include <additionalwidgets/granuleinfowidget.h>
 #include <more/ProductStructures.h>
 #include <network/getgranules.h>
-//#include <network/getgranulecoords.h>
+#include <network/getgranulecoords.h>
 
 #include <QDesktopServices>
 
@@ -118,6 +118,8 @@ private slots:
     void actionFtpSlot();
     void actionKmlSlot();
     void actionPropertiesSlot();
+
+    void setCoordsGranule(qint32 granuleId, float north, float east, float south, float west);
 
 signals:
   void getNewAllGranules();

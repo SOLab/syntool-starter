@@ -24,6 +24,7 @@ protected:
     QByteArray currentRequest;
 
 signals:
+    void coordsSignal(qint32 granuleId, float north, float east, float south, float west);
     
 public slots:
     void getErrorCoords(QNetworkReply::NetworkError);

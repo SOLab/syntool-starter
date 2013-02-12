@@ -12,6 +12,7 @@ void GetGranuleCoords::getCoords(QString serverName, qint32 granuleId)
     _granuleId = granuleId;
 
     request = QNetworkRequest(QUrl(_serverName+"/api/granules/"+QString::number(_granuleId)+"/coordinates"));
+    request.setRawHeader("Content-Type", "text/xml");
 
     request.setUrl(request.url());
     qDebug() << "Request: " << request.url();
@@ -78,23 +79,21 @@ void GetGranuleCoords::slotReadyReadCoords()
 
                 currentRequest.clear();
 
-                QDomElement  mElement = mDocument.documentElement().firstChildElement("Coordinates");
-//                while ( !mElement.isNull() )
+                QDomElement  coordsElement = mDocument.documentElement();//.firstChildElement("Coordinates");
+//                while ( !coordsElement.isNull() )
 //                {
-//                    Granule newGranule = createGranuleFromXml(mElement);
-//                    countGranule++;
-//                    currentCountGranule++;
-//                    if (newGranule.startDate.date() == QDate(2013, 01, 4))
-//                        qDebug() << newGranule.startDate;
+                    // North
+                    float north = coordsElement.firstChildElement("maxLat").text().toFloat();
+                    // East
+                    float east = coordsElement.firstChildElement("maxLon").text().toFloat();
+                    // South
+                    float south = coordsElement.firstChildElement("minLat").text().toFloat();
+                    // West
+                    float west = coordsElement.firstChildElement("minLon").text().toFloat();
 
-//                    if (!granulesHash->contains(QString::number(newGranule.granuleId)))
-//                    {
-//                        lock.lockForWrite();
-//                        granulesHash->insert(QString::number(newGranule.granuleId), newGranule);
-//                        lock.unlock();
-//                    }
+                    emit coordsSignal(_granuleId, north, east, south, west);
 
-//                    mElement = mElement.nextSiblingElement("Granule");
+//                    coordsElement = coordsElement.nextSiblingElement("Coordinates");
 //                }
             }
         }
@@ -103,5 +102,5 @@ void GetGranuleCoords::slotReadyReadCoords()
 
 void GetGranuleCoords::getErrorCoords(QNetworkReply::NetworkError)
 {
-    qDebug() << "getErrorGranules";
+    qDebug() << "getErrorCoords";
 }

@@ -11,8 +11,8 @@ struct Granule{
     QString granuleName;
     QDateTime startDate;
     QDateTime endDate;
-    float lat;
-    float lon;
+    float centerLat;
+    float centerLon;
     float north;
     float east;
     float south;

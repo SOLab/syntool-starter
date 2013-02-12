@@ -17,7 +17,7 @@ Granule createGranuleFromXml(QDomElement domElement)
     Granule newGranule;
 
     // Get main fields
-//    newGranule.granuleName = domElement.firstChildElement("GranuleName").text();
+    newGranule.granuleName = domElement.firstChildElement("GranuleName").text();
     newGranule.granuleId = domElement.firstChildElement("Id").text().toInt();
     newGranule.productName = domElement.firstChildElement("Product").text();
     newGranule.productId = domElement.firstChildElement("ProductId").text().toInt();
@@ -140,7 +140,8 @@ void GetGranules::slotReadyReadGranules()
 
                 nextStepElement = mDocument.documentElement().firstChildElement("NextStep").text();
 
-                QDomElement  mElement = mDocument.documentElement().firstChildElement("Granule");
+                QDomElement  mElement = mDocument.documentElement().firstChildElement("Granules").
+                                                                    firstChildElement("Granule");
                 while ( !mElement.isNull() )
                 {
                     Granule newGranule = createGranuleFromXml(mElement);
@@ -160,8 +161,9 @@ void GetGranules::slotReadyReadGranules()
                 }
             }
 
-//            qDebug() << "countGranule" << countGranule;
-            if (nextStepElement != "true")
+            qDebug() << _request.url();
+            qDebug() << "countGranule" << countGranule;
+            if (nextStepElement == "true")
             {
                 currentStep += 1;
 //                currentCountGranule = 0;

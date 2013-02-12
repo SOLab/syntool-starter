@@ -157,14 +157,15 @@ void TimeLine::mousePressEvent ( QMouseEvent * pe )
         // if user hit in the granule
         if (i.value().contains(pe->pos()))
         {
+            // selected granule
+            currentGranuleId = i.key();
+
             // left or right button
             if (pe->button() == Qt::LeftButton)
                 granulePressLeft();
             else if(pe->button() == Qt::RightButton)
                 granulePressRight();
 
-            // selected granule
-            currentGranuleId = i.key();
             QWidget::mousePressEvent(pe);
             return;
         }
@@ -187,9 +188,25 @@ void TimeLine::mousePressEvent ( QMouseEvent * pe )
 
 void TimeLine::granulePressLeft()
 {
-//    GetGranuleCoords* getCoords = new GetGranuleCoords(this);
-//    getCoords->getCoords(serverName, currentGranuleId);
+    GetGranuleCoords* getCoords = new GetGranuleCoords(this);
+    connect (getCoords, SIGNAL(coordsSignal(qint32,float,float,float,float)),
+             this, SLOT(setCoordsGranule(qint32,float,float,float,float)));
+    getCoords->getCoords(serverName, currentGranuleId);
     qDebug() << "granulePressLeft";
+}
+
+void TimeLine::setCoordsGranule(qint32 granuleId, float north, float east, float south, float west)
+{
+    Granule granule= granulesHash->value(QString::number(granuleId));
+    granule.north = north;
+    granule.east = east;
+    granule.south = south;
+    granule.west = west;
+
+    granule.centerLat = (north + south) / 2.0;
+    granule.centerLon = (east + west) / 2.0;
+
+    granulesHash->insert(QString::number(granuleId), granule);
 }
 
 void TimeLine::granulePressRight()
@@ -481,9 +498,12 @@ void TimeLine::addGeoSegment(QDateTime startDateTime, QDateTime endDateTime, flo
         painter.setPen(pen);
 
         // left, right and bottom side
-        painter.drawLine(width()/2+weekPixelsToStart, height() - 15, width()/2+weekPixelsToStart, height() - 5);
-        painter.drawLine(width()/2+weekPixelsToEnd, height() - 15, width()/2+weekPixelsToEnd, height() - 5);
-        painter.drawLine(width()/2+weekPixelsToStart, height() - 5, width()/2+weekPixelsToEnd, height() - 5);
+        painter.drawLine(width()/2+weekPixelsToStart, height() - 15,
+                         width()/2+weekPixelsToStart, height() - 5);
+        painter.drawLine(width()/2+weekPixelsToEnd, height() - 15,
+                         width()/2+weekPixelsToEnd, height() - 5);
+        painter.drawLine(width()/2+weekPixelsToStart, height() - 5,
+                         width()/2+weekPixelsToEnd, height() - 5);
     }
     else
     {
