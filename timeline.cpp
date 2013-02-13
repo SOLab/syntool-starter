@@ -14,6 +14,10 @@ TimeLine::TimeLine(QString _serverName, QWidget *parent)
     control_.maxDate = control_.currentDate;
 
     control_.markerDistance = 720;
+    hourPixels = control_.markerDistance / 24;
+    minutePixels = (24 * 60) / float(control_.markerDistance);
+    secondsInPixel = 60 * minutePixels;
+
     control_.dayRect = QRect();
     control_.weekRect = QRect();
     control_.moveWeek = false;
@@ -225,20 +229,19 @@ void TimeLine::mouseMoveEvent(QMouseEvent * pe)
         // вычисляем куда его тянет, меняем значение переменной
 //        qDebug() << control_.pos_;
         int dx = control_.pos_.x() - pe->pos().x();
+
         // 2 minutes in pixel + 60 seconds in minute
-        control_.currentDate = (control_.currentDate.addSecs(2*60*dx));
-//        qDebug() << control_.currentDate.time();
+        control_.currentDate = (control_.currentDate.addSecs(secondsInPixel*dx));
         control_.pos_ = pe->pos();
         repaint();
     }
     else if (control_.moveWeek)
     {
         // вычисляем куда его тянет, меняем значение переменной
-//        qDebug() << control_.pos_;
         int dx = control_.pos_.x() - pe->pos().x();
+
         // 2 minutes in pixel + 60 seconds in minute + 7 days in week
-        control_.currentDate = (control_.currentDate.addSecs(7*2*60*dx));
-//        qDebug() << control_.currentDate.time();
+        control_.currentDate = (control_.currentDate.addSecs(7*secondsInPixel*dx));
         control_.pos_ = pe->pos();
         repaint();
     }
@@ -259,6 +262,20 @@ void TimeLine::mouseReleaseEvent ( QMouseEvent * pe )
     control_.moveDay = false;
     control_.moveWeek = false;
     QWidget::mouseReleaseEvent (pe);
+}
+
+void TimeLine::wheelEvent(QWheelEvent *pe)
+{
+    qDebug() << pe->delta();
+    if (pe->delta() < 0 && control_.markerDistance > 360)
+        control_.markerDistance -= 360;
+    else if (pe->delta() > 0 && control_.markerDistance < 1440)
+        control_.markerDistance += 360;
+
+    hourPixels = control_.markerDistance / 24;
+    minutePixels = (24 * 60) / float(control_.markerDistance);
+    secondsInPixel = 60 * minutePixels;
+    update();
 }
 
 // get current QString dayMonth (ex. 14feb.)
@@ -293,17 +310,24 @@ void TimeLine::createTopRect()
     painter.setPen(pen);
 
     // calculate count pixels for every day
-    int curDayPixel = control_.currentDate.time().hour() * 30 + control_.currentDate.time().minute() / 2;
+    int curDayPixel = control_.currentDate.time().hour() * hourPixels
+                      + control_.currentDate.time().minute() / minutePixels;
 
-    int prevDayPixel = curDayPixel + 720;
+    int prevDayPixel = curDayPixel + control_.markerDistance;
 
-    int nextDayPixel = 720 - curDayPixel;
+    int nextDayPixel = control_.markerDistance - curDayPixel;
 
-    int afterTomorrowDayPixel = nextDayPixel + 720;
+    int afterTomorrowDayPixel = nextDayPixel + control_.markerDistance;
 
     // draw center (red) line
     int halfWidth = width()/2;
 
+    qDebug() << "W@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@2";
+    qDebug() << control_.markerDistance;
+//    qDebug() << halfWidth;
+    qDebug() << hourPixels;
+    qDebug() << minutePixels;
+    qDebug() << curDayPixel;
     // draw days
     if (halfWidth > curDayPixel)
     {
@@ -359,15 +383,15 @@ void TimeLine::createBottomRect()
 //    qDebug() << "Day of week" << control_.currentDate.date().dayOfWeek();
 
     // calculate count pixels for every week
-    int curWeekPixel = (control_.currentDate.time().hour() * 30 +
-                        (control_.currentDate.date().dayOfWeek() - 1)*24*30
-                        + control_.currentDate.time().minute() / 2) /7;
+    int curWeekPixel = (control_.currentDate.time().hour() * hourPixels +
+                        (control_.currentDate.date().dayOfWeek() - 1)*24*hourPixels
+                        + control_.currentDate.time().minute() / minutePixels) /7;
 
-    int nextWeekPixel = (720 - curWeekPixel);
+    int nextWeekPixel = (control_.markerDistance - curWeekPixel);
 
-    int prevWeekPixel = (curWeekPixel + 720);
+    int prevWeekPixel = (curWeekPixel + control_.markerDistance);
 
-    int afterNextWeekPixel = (nextWeekPixel + 720);
+    int afterNextWeekPixel = (nextWeekPixel + control_.markerDistance);
 
     int halfWidth = width()/2;
 
@@ -417,28 +441,6 @@ void TimeLine::drawAllMarkers()
 
 }
 
-void TimeLine::setDate()
-{
-    calendar = new Calendar;
-    connect(calendar->okButton, SIGNAL(clicked()), this, SLOT(setCurrentDate()));
-    calendar->show();
-}
-
-void TimeLine::setCurrentDate()
-{
-    control_.currentDate.setDate(calendar->calendar->selectedDate());
-    calendar->close();
-    calendar->deleteLater();
-
-    qint64 daysDiff = notChangedDate.daysTo(control_.currentDate.date());
-    if (qAbs(daysDiff) > 3)
-    {
-        notChangedDate = control_.currentDate.date();
-        changedDay();
-    }
-//    repaint();
-}
-
 void TimeLine::addGeoPoint(QDateTime dateTime, qint32 granuleId, float lat, float lon)
 {
     geoPoint newPoint = {dateTime, lat, lon};
@@ -447,7 +449,7 @@ void TimeLine::addGeoPoint(QDateTime dateTime, qint32 granuleId, float lat, floa
 
     qint64 secsTo = control_.currentDate.secsTo(dateTime);
     // secsTo/(2 * 60.0) = pixels
-    qint64 pixels = secsTo/(120.0);
+    qint64 pixels = secsTo/secondsInPixel;
 
     // Draw in week box
     int weekPixels = pixels/7;
@@ -532,6 +534,28 @@ void TimeLine::addGeoSegment(QDateTime startDateTime, QDateTime endDateTime, flo
 
         painter.drawRect(width()/2+pixelsToStart, 30, pixelsToEnd-pixelsToStart, 8);
     }
+}
+
+void TimeLine::setDate()
+{
+    calendar = new Calendar;
+    connect(calendar->okButton, SIGNAL(clicked()), this, SLOT(setCurrentDate()));
+    calendar->show();
+}
+
+void TimeLine::setCurrentDate()
+{
+    control_.currentDate.setDate(calendar->calendar->selectedDate());
+    calendar->close();
+    calendar->deleteLater();
+
+    qint64 daysDiff = notChangedDate.daysTo(control_.currentDate.date());
+    if (qAbs(daysDiff) > 3)
+    {
+        notChangedDate = control_.currentDate.date();
+        changedDay();
+    }
+//    repaint();
 }
 
 void TimeLine::changedDay()

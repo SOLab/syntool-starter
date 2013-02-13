@@ -99,6 +99,10 @@ protected:
 
     QList<qint32> displayedGranules;
 
+    int hourPixels;
+    float minutePixels;
+    float secondsInPixel;
+
 public slots:
     void setDate();
     void setCurrentDate();
@@ -113,6 +117,7 @@ private slots:
     void mousePressEvent (QMouseEvent * pe);
     void mouseMoveEvent(QMouseEvent * pe);
     void mouseReleaseEvent (QMouseEvent * pe);
+    void wheelEvent(QWheelEvent *pe);
 
     void granulePressLeft();
     void granulePressRight();

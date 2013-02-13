@@ -56,6 +56,4 @@ void DatasetsWidget::addDatasets(QList<qint32> displayedGranules)
             currentDatasets.removeAt(i);
         }
     }
-//    DatasetBoxWidget* datasetBox = new DatasetBoxWidget(displayedGranules, this);
-//    datasetBox->setChecked(showAllCheck->isChecked());
 }
