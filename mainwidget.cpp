@@ -63,12 +63,15 @@ MainWindow::MainWindow(QWidget *parent)
 
     ProductsWgt->setSelectedProducts(selectedProducts, granulesHash);
     timeLine->setSelectedProducts(selectedProducts, granulesHash);
+    DatasetsWgt->setGranules(granulesHash);
 
     connect(timeLine, SIGNAL(getNewAllGranules()), ProductsWgt, SLOT(getNewGranules()));
 
     connect(ProductsWgt, &ProductsWidget::productAdded, LayersWgt, &LayersWidget::addProduct);
 
     connect(LayersWgt, &LayersWidget::removeLayer, ProductsWgt, &ProductsWidget::removeProduct);
+
+    connect(timeLine, &TimeLine::changedDisplayGranules, DatasetsWgt, &DatasetsWidget::addDatasets);
 
     ProductsWgt->setObjectsPointer(timeLine);
 

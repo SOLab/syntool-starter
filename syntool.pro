@@ -41,7 +41,8 @@ SOURCES = \
     additionalwidgets/layerboxwidget.cpp \
     toolboxwidgets/datasetswidget.cpp \
     additionalwidgets/granuleinfowidget.cpp \
-    network/getgranulecoords.cpp
+    network/getgranulecoords.cpp \
+    additionalwidgets/datasetboxwidget.cpp
 HEADERS = \
     mainwidget.h \
     windowwidget.h \
@@ -75,7 +76,8 @@ HEADERS = \
     additionalwidgets/layerboxwidget.h \
     toolboxwidgets/datasetswidget.h \
     additionalwidgets/granuleinfowidget.h \
-    network/getgranulecoords.h
+    network/getgranulecoords.h \
+    additionalwidgets/datasetboxwidget.h
 RESOURCES += \
     syntool.qrc
 DEPENDPATH += resources

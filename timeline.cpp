@@ -405,12 +405,14 @@ void TimeLine::createBottomRect()
 void TimeLine::drawAllMarkers()
 {
     rectsGranules->clear();
+    displayedGranules.clear();
     QHash<QString, Granule>::const_iterator k = granulesHash->constBegin();
     while ( k != granulesHash->constEnd() )
     {
         addGeoPoint(k.value().startDate, k.value().granuleId, 20,20);
         ++k;
     }
+    emit changedDisplayGranules(displayedGranules);
 //    qDebug() << "Count Granules = " << rectsGranules->count();
 
 }
@@ -471,6 +473,7 @@ void TimeLine::addGeoPoint(QDateTime dateTime, qint32 granuleId, float lat, floa
         // -5 because imege size 10x10
         painter.drawImage(width()/2+pixels - 5,20,imageGeoPoint);
         rectsGranules->insert(granuleId, QRect(width()/2+pixels - 5, 20, 10, 10));
+        displayedGranules.append(granuleId);
     }
 }
 

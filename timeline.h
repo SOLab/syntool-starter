@@ -26,6 +26,7 @@
 
 #include <QDesktopServices>
 
+
 #pragma pack(push, 1)
 struct geoPoint
 {
@@ -96,6 +97,8 @@ protected:
     void createGranulesContextMenu();
     QString serverName;
 
+    QList<qint32> displayedGranules;
+
 public slots:
     void setDate();
     void setCurrentDate();
@@ -104,6 +107,7 @@ public slots:
     void addGeoSegment(QDateTime startDateTime, QDateTime endDateTime, float lat, float lon);
 
     void changedDay();
+    void setCoordsGranule(qint32 granuleId, float north, float east, float south, float west);
 
 private slots:
     void mousePressEvent (QMouseEvent * pe);
@@ -119,10 +123,9 @@ private slots:
     void actionKmlSlot();
     void actionPropertiesSlot();
 
-    void setCoordsGranule(qint32 granuleId, float north, float east, float south, float west);
-
 signals:
   void getNewAllGranules();
+  void changedDisplayGranules(QList<qint32> displayedGranules);
 
 private:
 };
