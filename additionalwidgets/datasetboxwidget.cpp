@@ -47,7 +47,6 @@ void DatasetBoxWidget::closeGranuleId(qint32 granuleId)
 {
     if (_granuleId == granuleId)
     {
-        qDebug() << "Delete DATASETS!!!" << this;
         hide();
         deleteLater();
     }

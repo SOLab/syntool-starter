@@ -94,7 +94,7 @@ public slots:
     void slotReadyReadProductList();
     void getErrorProductList(QNetworkReply::NetworkError);
 
-    void getNewGranules();
+    void getNewGranules(int scale);
 
     void reloadProductsList();
     void addProduct();

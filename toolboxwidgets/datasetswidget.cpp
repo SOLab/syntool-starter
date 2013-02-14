@@ -44,14 +44,12 @@ void DatasetsWidget::addDatasets(QList<qint32> displayedGranules)
                     datasetBox, &DatasetBoxWidget::closeGranuleId);
 
             vLayout->addWidget(datasetBox);
-            qDebug() << displayedGranules.at(i);
         }
     }
 
     for (int i = 0; i < currentDatasets.size(); ++i) {
         if (!displayedGranules.contains(currentDatasets.at(i)))
         {
-            qDebug() << "-" << currentDatasets.at(i);
             emit closeDatasetForGranuleId(currentDatasets.at(i));
             currentDatasets.removeAt(i);
         }

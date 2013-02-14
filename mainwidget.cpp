@@ -65,7 +65,7 @@ MainWindow::MainWindow(QWidget *parent)
     timeLine->setSelectedProducts(selectedProducts, granulesHash);
     DatasetsWgt->setGranules(granulesHash);
 
-    connect(timeLine, SIGNAL(getNewAllGranules()), ProductsWgt, SLOT(getNewGranules()));
+    connect(timeLine, &TimeLine::getNewAllGranules, ProductsWgt, &ProductsWidget::getNewGranules);
 
     connect(ProductsWgt, &ProductsWidget::productAdded, LayersWgt, &LayersWidget::addProduct);
 

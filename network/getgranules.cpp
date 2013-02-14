@@ -97,9 +97,9 @@ void GetGranules::slotReadyReadGranules()
             case 200:
             {
                 QByteArray bytes = reply->readAll();
-                QString string(bytes);
-                qDebug() << "==========================";
-                qDebug() << string;
+//                QString string(bytes);
+//                qDebug() << "==========================";
+//                qDebug() << string;
 
                 QDomDocument mDocument;
 //                bool namespaceProcessing;

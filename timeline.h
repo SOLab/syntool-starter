@@ -129,7 +129,7 @@ private slots:
     void actionPropertiesSlot();
 
 signals:
-  void getNewAllGranules();
+  void getNewAllGranules(int scale);
   void changedDisplayGranules(QList<qint32> displayedGranules);
 
 private:

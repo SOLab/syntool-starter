@@ -266,11 +266,13 @@ void TimeLine::mouseReleaseEvent ( QMouseEvent * pe )
 
 void TimeLine::wheelEvent(QWheelEvent *pe)
 {
-    qDebug() << pe->delta();
     if (pe->delta() < 0 && control_.markerDistance > 360)
         control_.markerDistance -= 360;
     else if (pe->delta() > 0 && control_.markerDistance < 1440)
+    {
         control_.markerDistance += 360;
+        emit getNewAllGranules(control_.markerDistance/360);
+    }
 
     hourPixels = control_.markerDistance / 24;
     minutePixels = (24 * 60) / float(control_.markerDistance);
@@ -322,12 +324,6 @@ void TimeLine::createTopRect()
     // draw center (red) line
     int halfWidth = width()/2;
 
-    qDebug() << "W@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@2";
-    qDebug() << control_.markerDistance;
-//    qDebug() << halfWidth;
-    qDebug() << hourPixels;
-    qDebug() << minutePixels;
-    qDebug() << curDayPixel;
     // draw days
     if (halfWidth > curDayPixel)
     {
@@ -589,6 +585,6 @@ void TimeLine::changedDay()
     };
 
     // get new granules for all products
-    emit getNewAllGranules();
+    emit getNewAllGranules(control_.markerDistance/360);
 
 }

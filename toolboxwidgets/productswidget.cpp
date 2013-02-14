@@ -372,8 +372,9 @@ void ProductsWidget::addProduct()
     qDebug() << selectedProducts->keys();
 }
 
-void ProductsWidget::getNewGranules()
+void ProductsWidget::getNewGranules(int scale)
 {
+    qDebug() << "SCALE" << scale;
     QHash<QString, selectedProduct>::const_iterator k = selectedProducts->constBegin();
     while ( k != selectedProducts->constEnd())
     {
@@ -384,19 +385,17 @@ void ProductsWidget::getNewGranules()
         QString filter = "?";
 
         filter += "productId="+QString::number(productsHash[k.key()].Id);
-//        filter += " and ";
         filter += "&date=" + \
                 timeLinePointer->control_.currentDate.date().toString("yyyy-MM-dd");
-//        filter += " and ";
-        filter += "&range=10";
+        filter += "&range=" + QString::number(24/scale);
 
-//        // get coords and set area filter
-//        QString north = North->text();
-//        QString east = East->text();
-//        QString south = South->text();
-//        QString west = West->text();
+        // get coords and set area filter
+        QString north = North->text();
+        QString east = East->text();
+        QString south = South->text();
+        QString west = West->text();
 
-//        filter += "&area=POLYGON((" + QString("%1 %2, %3 %2, %3 %4, %1 %4, %1 %2").arg(west, north, east, south) + "))";
+        filter += "&area=POLYGON((" + QString("%1 %2, %3 %2, %3 %4, %1 %4, %1 %2").arg(north, east, south, west) + "))";
 
         request.setUrl(QUrl(urlGranules.scheme() + "://" + urlGranules.host() + urlGranules.path() + filter));
 
@@ -423,19 +422,17 @@ void ProductsWidget::getGranulesForNewProduct()
     QString filter = "?";
 
     filter += "productId="+QString::number(productsHash[comboProducts->currentText()].Id);
-//        filter += " and ";
     filter += "&date=" + \
             timeLinePointer->control_.currentDate.date().toString("yyyy-MM-dd");
-//        filter += " and ";
-    filter += "&range=10";
+    filter += "&range=20";
 
-//    // get coords and set area filter
-//    QString north = North->text();
-//    QString east = East->text();
-//    QString south = South->text();
-//    QString west = West->text();
+    // get coords and set area filter
+    QString north = North->text();
+    QString east = East->text();
+    QString south = South->text();
+    QString west = West->text();
 
-//    filter += "&area=POLYGON((" + QString("%1 %2, %3 %2, %3 %4, %1 %4, %1 %2").arg(north, east, south, west) + "))";
+    filter += "&area=POLYGON((" + QString("%1 %2, %3 %2, %3 %4, %1 %4, %1 %2").arg(north, east, south, west) + "))";
 
     request.setUrl(QUrl(urlGranules.scheme() + "://" + urlGranules.host() + urlGranules.path() + filter));
     request.setRawHeader("Content-Type", "text/xml");
