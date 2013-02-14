@@ -131,6 +131,7 @@ private slots:
 signals:
   void getNewAllGranules(int scale);
   void changedDisplayGranules(QList<qint32> displayedGranules);
+  void moveEarth(float lat, float lot);
 
 private:
 };

@@ -211,6 +211,8 @@ void TimeLine::setCoordsGranule(qint32 granuleId, float north, float east, float
     granule.centerLon = (east + west) / 2.0;
 
     granulesHash->insert(QString::number(granuleId), granule);
+
+    emit moveEarth(granule.centerLat, granule.centerLon);
 }
 
 void TimeLine::granulePressRight()
