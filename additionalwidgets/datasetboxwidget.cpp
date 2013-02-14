@@ -24,6 +24,8 @@ DatasetBoxWidget::DatasetBoxWidget(Granule granule, QWidget *parent):
     percentLabel = new QLabel("100%", this);
     percentLabel->setFixedWidth(percentLabel->sizeHint().width());
 
+    connect(transparencySlider, &QSlider::valueChanged, this, &DatasetBoxWidget::changedTransparencySlot);
+
     gridLayout->setColumnStretch(0, 0);
     gridLayout->setColumnStretch(1, 10);
     gridLayout->setColumnStretch(2, 0);
@@ -50,4 +52,10 @@ void DatasetBoxWidget::closeGranuleId(qint32 granuleId)
         hide();
         deleteLater();
     }
+}
+
+void DatasetBoxWidget::changedTransparencySlot(qint32 transparentValue)
+{
+    percentLabel->setText(QString::number(transparentValue)+"%");
+    emit changedTransparency(_granuleId, transparentValue);
 }

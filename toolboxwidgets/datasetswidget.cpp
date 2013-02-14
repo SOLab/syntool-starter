@@ -17,6 +17,7 @@ DatasetsWidget::DatasetsWidget(QWidget *parent) :
 
     showAllCheck = new QCheckBox(this);
     showAllCheck->setText(tr("Show all"));
+    showAllCheck->setChecked(true);
 
     vLayout->addWidget(showAllCheck);
 

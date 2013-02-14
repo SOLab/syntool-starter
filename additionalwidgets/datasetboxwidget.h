@@ -29,9 +29,11 @@ protected:
     qint32 _granuleId;
 
 signals:
-    
+    void changedTransparency(qint32 _granuleId, qint32 transparentValue);
+
 public slots:
     void closeGranuleId(qint32 granuleId);
+    void changedTransparencySlot(qint32 transparentValue);
 };
 
 #endif // DATASETBOXWIDGET_H

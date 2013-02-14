@@ -21,13 +21,18 @@ protected:
     QLabel* productLayersLbl;
     QLabel* othersLayersLbl;
 
+    QList<QString>* currentProducts;
+
 signals:
     void removeLayer(QString productId);
     void showLayer(QString productId, int showState);
     void changedTransparency(QString productId, int value);
+
+    void removeLayerBox(QString productId);
     
 public slots:
     void addProduct(QString ProductId);
+    void deleteProduct(QString ProductId);
     
 };
 

@@ -3,6 +3,8 @@
 LayersWidget::LayersWidget(QWidget *parent) :
     QWidget(parent)
 {
+    currentProducts = new QList<QString>;
+
     vLayout = new QVBoxLayout(this);
     vLayout->setContentsMargins(0,2,0,0);
     vLayout->setSpacing(3);
@@ -39,11 +41,24 @@ LayersWidget::LayersWidget(QWidget *parent) :
 
 void LayersWidget::addProduct(QString ProductId)
 {
-    LayerBoxWidget* layerBox = new LayerBoxWidget(ProductId, this);
+    if (!currentProducts->contains(ProductId))
+    {
+        LayerBoxWidget* layerBox = new LayerBoxWidget(ProductId, this);
 
-    connect(layerBox, &LayerBoxWidget::removeLayer, this, &LayersWidget::removeLayer);
-    connect(layerBox, &LayerBoxWidget::showLayer, this, &LayersWidget::showLayer);
-    connect(layerBox, &LayerBoxWidget::changedTransparency, this, &LayersWidget::changedTransparency);
+        // connect signals with signals
+        connect(layerBox, &LayerBoxWidget::removeLayer, this, &LayersWidget::removeLayer);
+        connect(layerBox, &LayerBoxWidget::showLayer, this, &LayersWidget::showLayer);
+        connect(layerBox, &LayerBoxWidget::changedTransparency, this, &LayersWidget::changedTransparency);
 
-    productsLayout->addWidget(layerBox);
+        // other connects
+        connect(this, &LayersWidget::removeLayerBox, layerBox, &LayerBoxWidget::removeLayerBox);
+
+        productsLayout->addWidget(layerBox);
+    }
+}
+
+void LayersWidget::deleteProduct(QString ProductId)
+{
+    currentProducts->removeOne(ProductId);
+    emit removeLayerBox(ProductId);
 }

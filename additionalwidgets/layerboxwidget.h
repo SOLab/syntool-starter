@@ -35,6 +35,8 @@ public slots:
     void changedTransparencySlot(int value);
     void removeLayerSlot();
     void showChangedSlot(int state);
+
+    void removeLayerBox(QString productId);
 };
 
 #endif // LAYERBOXWIDGET_H

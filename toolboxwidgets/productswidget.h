@@ -88,6 +88,7 @@ protected:
     GetGranules* getGranulesPointer;
 signals:
     void productAdded(QString productId);
+    void productDeleted(QString productId);
     
 public slots:
     void currentProductChanged(int index);

@@ -66,3 +66,9 @@ void LayerBoxWidget::showChangedSlot(int state)
     qDebug() << state;
     emit showLayer(_productName, state);
 }
+
+void LayerBoxWidget::removeLayerBox(QString productId)
+{
+    hide();
+    deleteLater();
+}

@@ -362,7 +362,10 @@ void ProductsWidget::addProduct()
     newSelectedProduct.west = West->text().toFloat();
 
     if (selectedProducts->keys().contains(newSelectedProduct.productName))
+    {
         selectedProducts->remove(newSelectedProduct.productName);
+        emit productDeleted(newSelectedProduct.productName);
+    }
 
     selectedProducts->insert(newSelectedProduct.productName, newSelectedProduct);
     getGranulesForNewProduct();

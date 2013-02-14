@@ -8,7 +8,7 @@ GetGranules::GetGranules(QObject *parent) :
     currentStep = 0;
     networkManager = new QNetworkAccessManager(this);
     connect(this, SIGNAL(selfRun()), this, SLOT(run()));
-    connect(this, &GetGranules::selfClose, this, &GetGranules::deleteLater);
+//    connect(this, &GetGranules::selfClose, this, &GetGranules::deleteLater);
 }
 
 // create Product structure from xml (from QDomElement)
@@ -184,5 +184,5 @@ void GetGranules::slotReadyReadGranules()
     }
     emit timeLineRepaint();
     reply->deleteLater();
-    emit selfClose();
+    deleteLater();
 }

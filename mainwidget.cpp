@@ -68,6 +68,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(timeLine, &TimeLine::getNewAllGranules, ProductsWgt, &ProductsWidget::getNewGranules);
 
     connect(ProductsWgt, &ProductsWidget::productAdded, LayersWgt, &LayersWidget::addProduct);
+    connect(ProductsWgt, &ProductsWidget::productDeleted, LayersWgt, &LayersWidget::deleteProduct);
 
     connect(LayersWgt, &LayersWidget::removeLayer, ProductsWgt, &ProductsWidget::removeProduct);
 

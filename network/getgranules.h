@@ -41,7 +41,7 @@ private:
 signals:
   void timeLineRepaint();
   void selfRun();
-  void selfClose();
+//  void selfClose();
     
 public slots:
     void run();
