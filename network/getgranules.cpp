@@ -136,8 +136,6 @@ void GetGranules::slotReadyReadGranules()
 
                 currentRequest.clear();
 
-                qDebug() << "START SERIALIZED!!!";
-
                 nextStepElement = mDocument.documentElement().firstChildElement("NextStep").text();
 
                 QDomElement  mElement = mDocument.documentElement().firstChildElement("Granules").
@@ -146,9 +144,6 @@ void GetGranules::slotReadyReadGranules()
                 {
                     Granule newGranule = createGranuleFromXml(mElement);
                     countGranule++;
-//                    currentCountGranule++;
-//                    if (newGranule.startDate.date() == QDate(2013, 01, 4))
-//                        qDebug() << newGranule.startDate;
 
                     if (!granulesHash->contains(QString::number(newGranule.granuleId)))
                     {
@@ -161,8 +156,8 @@ void GetGranules::slotReadyReadGranules()
                 }
             }
 
-            qDebug() << _request.url();
-            qDebug() << "countGranule" << countGranule;
+//            qDebug() << _request.url();
+//            qDebug() << "countGranule" << countGranule;
             if (nextStepElement == "true")
             {
                 currentStep += 1;

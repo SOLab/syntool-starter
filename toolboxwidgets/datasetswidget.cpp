@@ -25,6 +25,8 @@ DatasetsWidget::DatasetsWidget(QWidget *parent) :
     hLine->setFrameShape(QFrame::HLine);
     hLine->setFrameShadow(QFrame::Sunken);
     vLayout->addWidget(hLine);
+
+    setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
 }
 
 void DatasetsWidget::setGranules(QHash<QString, Granule> *granulesHash)

@@ -60,5 +60,6 @@
         <file alias="clear.png">resources/icons/Clear.png</file>
         <file alias="warning.png">resources/icons/Warning.png</file>
         <file alias="info.png">resources/icons/Info.png</file>
+        <file alias="down.png">resources/icons/Down.png</file>
     </qresource>
 </RCC>

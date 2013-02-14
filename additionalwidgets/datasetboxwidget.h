@@ -6,6 +6,7 @@
 #include <QCheckBox>
 #include <QLabel>
 #include <QSlider>
+#include <QPushButton>
 
 #include <QDebug>
 
@@ -24,6 +25,19 @@ protected:
     QLabel* granuleNameLabel;
     QSlider* transparencySlider;
     QLabel* percentLabel;
+    QFrame* hLine;
+
+    QPushButton* moreActions;
+
+    QGridLayout* buttonsHLayout;
+    QWidget* buttonsWidget;
+
+    QPushButton* imageButton;
+    QPushButton* opendapButton;
+    QPushButton* ftpButton;
+    QPushButton* kmlButton;
+    QPushButton* propertiesButton;
+    bool buttonsCreated;
 
     qint32 _granuleId;
 
@@ -33,6 +47,7 @@ signals:
 public slots:
     void closeGranuleId(qint32 granuleId);
     void changedTransparencySlot(qint32 transparentValue);
+    void showMoreButtons();
 
     void setChecked(bool checked);
 };
