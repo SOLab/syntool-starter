@@ -21,7 +21,10 @@ DatasetsWidget::DatasetsWidget(QWidget *parent) :
 
     vLayout->addWidget(showAllCheck);
 
-    setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Fixed);
+    QFrame* hLine = new QFrame(this);
+    hLine->setFrameShape(QFrame::HLine);
+    hLine->setFrameShadow(QFrame::Sunken);
+    vLayout->addWidget(hLine);
 }
 
 void DatasetsWidget::setGranules(QHash<QString, Granule> *granulesHash)
@@ -43,6 +46,7 @@ void DatasetsWidget::addDatasets(QList<qint32> displayedGranules)
 
             connect(this, &DatasetsWidget::closeDatasetForGranuleId,
                     datasetBox, &DatasetBoxWidget::closeGranuleId);
+            connect(showAllCheck, &QCheckBox::clicked, datasetBox, &DatasetBoxWidget::setChecked);
 
             vLayout->addWidget(datasetBox);
         }

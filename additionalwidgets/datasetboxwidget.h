@@ -16,8 +16,7 @@ class DatasetBoxWidget : public QWidget
     Q_OBJECT
 public:
     explicit DatasetBoxWidget(Granule granule, QWidget *parent = 0);
-    
-    void setChecked(bool checked);
+
 
 protected:
     QGridLayout* gridLayout;
@@ -34,6 +33,8 @@ signals:
 public slots:
     void closeGranuleId(qint32 granuleId);
     void changedTransparencySlot(qint32 transparentValue);
+
+    void setChecked(bool checked);
 };
 
 #endif // DATASETBOXWIDGET_H

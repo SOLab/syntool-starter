@@ -59,6 +59,9 @@ void LayersWidget::addProduct(QString ProductId)
 
 void LayersWidget::deleteProduct(QString ProductId)
 {
-    currentProducts->removeOne(ProductId);
-    emit removeLayerBox(ProductId);
+    if (currentProducts->contains(ProductId))
+    {
+        currentProducts->removeOne(ProductId);
+        emit removeLayerBox(ProductId);
+    }
 }

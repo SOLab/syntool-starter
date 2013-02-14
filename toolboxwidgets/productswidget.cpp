@@ -272,7 +272,7 @@ void ProductsWidget::reloadProductsList()
     QNetworkRequest request;
     request.setUrl(urlProducts);
     request.setRawHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
-    request.setRawHeader("Accept-Language", "ru,en-us;q=0.7,en;q=0.3");
+    request.setRawHeader("Accept-Language", "en-US");
     request.setRawHeader("Accept-Charset", "utf-8;q=0.7,*;q=0.7");
     request.setRawHeader("Content-Type", "text/xml");
 
