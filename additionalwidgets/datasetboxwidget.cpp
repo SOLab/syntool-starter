@@ -21,26 +21,11 @@ DatasetBoxWidget::DatasetBoxWidget(Granule granule, QWidget *parent):
     moreActions->setFixedSize(24, 20);
     connect(moreActions, &QPushButton::clicked, this, &DatasetBoxWidget::showMoreButtons);
 
-    transparencySlider = new QSlider(Qt::Horizontal, this);
-    transparencySlider->setMaximum(100);
-    transparencySlider->setValue(100);
-    transparencySlider->setToolTip(tr("Transparency layer"));
-
-    percentLabel = new QLabel("100%", this);
-    percentLabel->setFixedWidth(percentLabel->sizeHint().width());
-
-    connect(transparencySlider, &QSlider::valueChanged, this, &DatasetBoxWidget::changedTransparencySlot);
-
     gridLayout->setColumnStretch(0, 0);
-//    gridLayout->setColumnStretch(1, 10);
-//    gridLayout->setColumnStretch(2, 0);
     gridLayout->addWidget(showDatasetCheck, 0,0);
     gridLayout->addWidget(granuleNameLabel, 0, 1, 2, 3, Qt::AlignLeft);
 
     gridLayout->addWidget(moreActions, 0, 4, 1,1,Qt::AlignRight);
-
-    gridLayout->addWidget(transparencySlider, 3,0, 1, 4);
-    gridLayout->addWidget(percentLabel, 3,4);
 
     hLine = new QFrame(this);
     hLine->setFrameShape(QFrame::HLine);
@@ -84,23 +69,23 @@ void DatasetBoxWidget::showMoreButtons()
         buttonsHLayout->setSpacing(1);
 
         imageButton = new QPushButton(tr("Image"), this);
-//        imageButton->setMaximumSize(48, 24);
+        imageButton->setMaximumHeight(20);
         imageButton->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Fixed);
 
         opendapButton = new QPushButton(tr("OPeNDAP"), this);
-//        opendapButton->setMaximumSize(48, 24);
+        opendapButton->setMaximumHeight(20);
         opendapButton->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Fixed);
 
         ftpButton = new QPushButton(tr("FTP"), this);
-//        ftpButton->setMaximumSize(48, 24);
+        ftpButton->setMaximumHeight(20);
         ftpButton->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Fixed);
 
         kmlButton = new QPushButton(tr("KML"), this);
-//        kmlButton->setMaximumSize(48, 24);
+        kmlButton->setMaximumHeight(20);
         kmlButton->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Fixed);
 
         propertiesButton = new QPushButton(tr("Info"), this);
-//        propertiesButton->setMaximumSize(48, 24);
+        propertiesButton->setMaximumHeight(20);
         propertiesButton->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Fixed);
 
         buttonsHLayout->addWidget(imageButton, 0,0,1,6);
@@ -112,9 +97,27 @@ void DatasetBoxWidget::showMoreButtons()
         buttonsWidget->hide();
         buttonsWidget->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Fixed);
 
-        gridLayout->addWidget(buttonsWidget, 2, 0, 1, 5);
+        gridLayout->addWidget(buttonsWidget, 3, 0, 1, 5);
         buttonsCreated = true;
+
+        // add transparency Slider and label
+        transparencySlider = new QSlider(Qt::Horizontal, this);
+        transparencySlider->setMaximum(100);
+        transparencySlider->setValue(100);
+        transparencySlider->setToolTip(tr("Transparency layer"));
+
+        percentLabel = new QLabel("100%", this);
+        percentLabel->setFixedWidth(percentLabel->sizeHint().width());
+
+        connect(transparencySlider, &QSlider::valueChanged, this, &DatasetBoxWidget::changedTransparencySlot);
+        gridLayout->addWidget(transparencySlider, 2,0, 1, 4);
+        gridLayout->addWidget(percentLabel, 2,4);
+
+        transparencySlider->hide();
+        percentLabel->hide();
     }
 
     buttonsWidget->setVisible(!buttonsWidget->isVisible());
+    transparencySlider->setVisible(!transparencySlider->isVisible());
+    percentLabel->setVisible(!percentLabel->isVisible());
 }
