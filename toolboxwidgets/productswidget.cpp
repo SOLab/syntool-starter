@@ -133,6 +133,11 @@ Product createProductFromXml(QDomElement domElement)
     newProduct.ImageUrl = domElement.firstChildElement("ImageUrl").text();
     newProduct.ProcessingLevels = domElement.firstChildElement("ProcessingLevels").text();
 
+    if (domElement.firstChildElement("IsTiled").text().toLower() == "true")
+        newProduct.IsTiled = true;
+    else
+        newProduct.IsTiled = false;
+
     if (domElement.firstChildElement("TotalGranulesCount").text().isEmpty())
         newProduct.TotalGranulesCount = 0;
     else
@@ -398,7 +403,11 @@ void ProductsWidget::getNewGranules(int scale)
         QString south = South->text();
         QString west = West->text();
 
-        filter += "&area=POLYGON((" + QString("%1 %2, %3 %2, %3 %4, %1 %4, %1 %2").arg(north, east, south, west) + "))";
+        if (productsHash.value(k.key()).IsTiled)
+        {
+            filter += "&area=POLYGON((" + QString("%1 %2, %3 %2, %3 %4, %1 %4, %1 %2")
+                                          .arg(north, east, south, west) + "))";
+        }
 
         request.setUrl(QUrl(urlGranules.scheme() + "://" + urlGranules.host() + urlGranules.path() + filter));
 
@@ -435,7 +444,11 @@ void ProductsWidget::getGranulesForNewProduct()
     QString south = South->text();
     QString west = West->text();
 
-    filter += "&area=POLYGON((" + QString("%1 %2, %3 %2, %3 %4, %1 %4, %1 %2").arg(north, east, south, west) + "))";
+    if (productsHash[comboProducts->currentText()].IsTiled)
+    {
+        filter += "&area=POLYGON((" + QString("%1 %2, %3 %2, %3 %4, %1 %4, %1 %2")
+                                      .arg(north, east, south, west) + "))";
+    }
 
     request.setUrl(QUrl(urlGranules.scheme() + "://" + urlGranules.host() + urlGranules.path() + filter));
     request.setRawHeader("Content-Type", "text/xml");

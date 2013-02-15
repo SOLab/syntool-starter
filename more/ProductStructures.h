@@ -31,9 +31,9 @@ struct Product{
     QStringList Sensors;
     QString SpatialResolutions;
 
+    bool IsTiled;
     bool IsGlobalCoverage;
     bool IsMapModeSupported;
-    bool IsOnGoing;
     bool IsPresentationModeSupported;
     bool IsPrivate;
     bool NoQuiklooks;
