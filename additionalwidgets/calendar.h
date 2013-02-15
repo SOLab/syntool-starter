@@ -10,7 +10,7 @@ class Calendar : public QWidget
 {
     Q_OBJECT
 public:
-    explicit Calendar(QWidget *parent = 0);
+    explicit Calendar(QDate date, QWidget *parent = 0);
     QCalendarWidget* calendar;
     QPushButton* okButton;
 

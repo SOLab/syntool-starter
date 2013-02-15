@@ -1,6 +1,6 @@
 #include "calendar.h"
 
-Calendar::Calendar(QWidget *parent) :
+Calendar::Calendar(QDate date, QWidget *parent) :
     QWidget(parent)
 {
     gridLayout = new QGridLayout(this);
@@ -11,6 +11,7 @@ Calendar::Calendar(QWidget *parent) :
     connect(cancelButton, SIGNAL(clicked()), this, SLOT(close()));
 
     calendar = new QCalendarWidget(this);
+    calendar->setSelectedDate(date);
     calendar->setGridVisible(true);
     calendar->setStyleSheet("QSpinBox {width: 50px;}");
 

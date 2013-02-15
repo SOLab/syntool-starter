@@ -536,7 +536,7 @@ void TimeLine::addGeoSegment(QDateTime startDateTime, QDateTime endDateTime, flo
 
 void TimeLine::setDate()
 {
-    calendar = new Calendar;
+    calendar = new Calendar(control_.currentDate.date());
     connect(calendar->okButton, SIGNAL(clicked()), this, SLOT(setCurrentDate()));
     calendar->show();
 }
