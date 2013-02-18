@@ -86,11 +86,7 @@ void TimeLine::createGranulesContextMenu()
 }
 
 void TimeLine::actionImageSlot() {
-/*    QDesktopServices::openUrl(QUrl(serverName + "/Download.ashx?granule=" \
-                                   +QString::number(currentGranuleId)+"&method=image"));*/
     granuleActions(serverName, QString::number(currentGranuleId), "image");
-
-// Request URL = http://staging.satin.rshu.ru/Download.ashx?granule=<granule_id>&method=[ftp|opendap|image|kml]
 }
 
 void TimeLine::actionOpendapSlot() {
@@ -334,7 +330,8 @@ void TimeLine::createTopRect()
 
     if (halfWidth > nextDayPixel)
     {
-        painter.drawLine(halfWidth + nextDayPixel, height() - 24, halfWidth + nextDayPixel, 0);
+        // -2 for don't shift image
+        painter.drawLine(halfWidth + nextDayPixel - 2, height() - 24, halfWidth + nextDayPixel - 2, 0);
         painter.drawText(halfWidth + nextDayPixel + 2, height() - 28,
                          getDayMonth(control_.currentDate.addDays(1)));
     }
@@ -348,7 +345,9 @@ void TimeLine::createTopRect()
 
     if (halfWidth > afterTomorrowDayPixel)
     {
-        painter.drawLine(halfWidth + afterTomorrowDayPixel, height() - 24, halfWidth + afterTomorrowDayPixel, 0);
+        // -2 for don't shift image
+        painter.drawLine(halfWidth + afterTomorrowDayPixel - 2, height() - 24,
+                         halfWidth + afterTomorrowDayPixel - 2, 0);
         painter.drawText(halfWidth + afterTomorrowDayPixel + 2, height() - 28,
                          getDayMonth(control_.currentDate.addDays(2)));
     }
