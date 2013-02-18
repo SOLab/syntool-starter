@@ -13,7 +13,7 @@ class DatasetsWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit DatasetsWidget(QWidget *parent = 0);
+    explicit DatasetsWidget(QString serverName, QWidget *parent = 0);
 
     void setGranules(QHash<QString, Granule>* granulesHash);
 protected:
@@ -22,6 +22,7 @@ protected:
     QList<qint32> currentDatasets;
 
     QHash<QString, Granule>* _granulesHash;
+    QString _serverName;
 
 signals:
     void closeAllDatasetBoxWidgets();
@@ -29,6 +30,7 @@ signals:
     
 public slots:
     void addDatasets(QList<qint32> displayedGranules);
+    void actionPropertiesSlot(qint32 granuleId);
     
 };
 

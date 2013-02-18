@@ -86,24 +86,23 @@ void TimeLine::createGranulesContextMenu()
 }
 
 void TimeLine::actionImageSlot() {
-    QDesktopServices::openUrl(QUrl(serverName + "/Download.ashx?granule=" \
-                                   +QString::number(currentGranuleId)+"&method=image"));
+/*    QDesktopServices::openUrl(QUrl(serverName + "/Download.ashx?granule=" \
+                                   +QString::number(currentGranuleId)+"&method=image"));*/
+    granuleActions(serverName, QString::number(currentGranuleId), "image");
+
 // Request URL = http://staging.satin.rshu.ru/Download.ashx?granule=<granule_id>&method=[ftp|opendap|image|kml]
 }
 
 void TimeLine::actionOpendapSlot() {
-    QDesktopServices::openUrl(QUrl(serverName + "/Download.ashx?granule=" \
-                                   +QString::number(currentGranuleId)+"&method=opendap"));
+    granuleActions(serverName, QString::number(currentGranuleId), "opendap");
 }
 
 void TimeLine::actionFtpSlot() {
-    QDesktopServices::openUrl(QUrl(serverName + "/Download.ashx?granule=" \
-                                   +QString::number(currentGranuleId)+"&method=ftp"));
+    granuleActions(serverName, QString::number(currentGranuleId), "ftp");
 }
 
 void TimeLine::actionKmlSlot() {
-    QDesktopServices::openUrl(QUrl(serverName + "/Download.ashx?granule=" \
-                                   +QString::number(currentGranuleId)+"&method=kml"));
+    granuleActions(serverName, QString::number(currentGranuleId), "kml");
 }
 
 void TimeLine::actionPropertiesSlot() {

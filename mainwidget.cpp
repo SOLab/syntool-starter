@@ -29,7 +29,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     MapsWgt = new MapsWidget(centralwgt);
     ProductsWgt = new ProductsWidget(serverName, centralwgt);
-    DatasetsWgt = new DatasetsWidget(centralwgt);
+    DatasetsWgt = new DatasetsWidget(serverName, centralwgt);
     PlaceWgt = new PlaceWidget(centralwgt);
     LayersWgt = new LayersWidget(centralwgt);
 

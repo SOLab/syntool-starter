@@ -1,8 +1,10 @@
 #include "datasetswidget.h"
 
-DatasetsWidget::DatasetsWidget(QWidget *parent) :
+DatasetsWidget::DatasetsWidget(QString serverName, QWidget *parent) :
     QWidget(parent)
 {
+    _serverName = serverName;
+
     vLayout = new QVBoxLayout(this);
     vLayout->setContentsMargins(0,0,0,0);
     vLayout->setAlignment(Qt::AlignTop);
@@ -42,9 +44,11 @@ void DatasetsWidget::addDatasets(QList<qint32> displayedGranules)
         {
             currentDatasets.append(displayedGranules.at(i));
 
-            DatasetBoxWidget* datasetBox = new DatasetBoxWidget
-                          (_granulesHash->value(QString::number(displayedGranules.at(i))), this);
+            DatasetBoxWidget* datasetBox = new DatasetBoxWidget(_serverName,
+                         _granulesHash->value(QString::number(displayedGranules.at(i))), this);
             datasetBox->setChecked(showAllCheck->isChecked());
+            connect(datasetBox, &DatasetBoxWidget::granulePropertiesSignal,
+                    this, &DatasetsWidget::actionPropertiesSlot);
 
             connect(this, &DatasetsWidget::closeDatasetForGranuleId,
                     datasetBox, &DatasetBoxWidget::closeGranuleId);
@@ -61,4 +65,11 @@ void DatasetsWidget::addDatasets(QList<qint32> displayedGranules)
             currentDatasets.removeAt(i);
         }
     }
+}
+
+void DatasetsWidget::actionPropertiesSlot(qint32 granuleId)
+{
+        GranuleInfoWidget* currentGranuleWidget =
+                new GranuleInfoWidget(_granulesHash->value(QString::number(granuleId)));
+        currentGranuleWidget->show();
 }

@@ -1,8 +1,10 @@
 #include "datasetboxwidget.h"
 
-DatasetBoxWidget::DatasetBoxWidget(Granule granule, QWidget *parent):
+DatasetBoxWidget::DatasetBoxWidget(QString serverName, Granule granule, QWidget *parent):
     QWidget(parent)
 {
+    _serverName = serverName;
+
     gridLayout = new QGridLayout(this);
     gridLayout->setContentsMargins(0, 0, 0, 0);
     gridLayout->setSpacing(0);
@@ -71,22 +73,27 @@ void DatasetBoxWidget::showMoreButtons()
         imageButton = new QPushButton(tr("Image"), this);
         imageButton->setMaximumHeight(20);
         imageButton->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Fixed);
+        connect(imageButton, &QPushButton::clicked, this, &DatasetBoxWidget::actionImageSlot);
 
         opendapButton = new QPushButton(tr("OPeNDAP"), this);
         opendapButton->setMaximumHeight(20);
         opendapButton->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Fixed);
+        connect(opendapButton, &QPushButton::clicked, this, &DatasetBoxWidget::actionOpendapSlot);
 
         ftpButton = new QPushButton(tr("FTP"), this);
         ftpButton->setMaximumHeight(20);
         ftpButton->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Fixed);
+        connect(ftpButton, &QPushButton::clicked, this, &DatasetBoxWidget::actionFtpSlot);
 
         kmlButton = new QPushButton(tr("KML"), this);
         kmlButton->setMaximumHeight(20);
         kmlButton->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Fixed);
+        connect(kmlButton, &QPushButton::clicked, this, &DatasetBoxWidget::actionKmlSlot);
 
         propertiesButton = new QPushButton(tr("Info"), this);
         propertiesButton->setMaximumHeight(20);
         propertiesButton->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Fixed);
+        connect(propertiesButton, &QPushButton::clicked, this, &DatasetBoxWidget::actionPropertiesSlot);
 
         buttonsHLayout->addWidget(imageButton, 0,0,1,6);
         buttonsHLayout->addWidget(opendapButton, 0,6,1,9);
@@ -120,4 +127,32 @@ void DatasetBoxWidget::showMoreButtons()
     buttonsWidget->setVisible(!buttonsWidget->isVisible());
     transparencySlider->setVisible(!transparencySlider->isVisible());
     percentLabel->setVisible(!percentLabel->isVisible());
+}
+
+void DatasetBoxWidget::actionImageSlot()
+{
+    granuleActions(_serverName, QString::number(_granuleId), "image");
+}
+
+void DatasetBoxWidget::actionOpendapSlot()
+{
+    granuleActions(_serverName, QString::number(_granuleId), "opendap");
+}
+
+void DatasetBoxWidget::actionFtpSlot()
+{
+    granuleActions(_serverName, QString::number(_granuleId), "ftp");
+}
+
+void DatasetBoxWidget::actionKmlSlot()
+{
+    granuleActions(_serverName, QString::number(_granuleId), "kml");
+}
+
+void DatasetBoxWidget::actionPropertiesSlot()
+{
+//    GranuleInfoWidget* currentGranuleWidget =
+//            new GranuleInfoWidget(granulesHash->value(QString::number(_granuleId)));
+//    currentGranuleWidget->show();
+    emit granulePropertiesSignal(_granuleId);
 }

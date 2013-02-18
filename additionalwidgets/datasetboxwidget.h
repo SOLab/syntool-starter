@@ -11,12 +11,14 @@
 #include <QDebug>
 
 #include <more/ProductStructures.h>
+#include <more/granuleactions.h>
+#include <additionalwidgets/granuleinfowidget.h>
 
 class DatasetBoxWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit DatasetBoxWidget(Granule granule, QWidget *parent = 0);
+    explicit DatasetBoxWidget(QString serverName, Granule granule, QWidget *parent = 0);
 
 
 protected:
@@ -40,9 +42,11 @@ protected:
     bool buttonsCreated;
 
     qint32 _granuleId;
+    QString _serverName;
 
 signals:
     void changedTransparency(qint32 _granuleId, qint32 transparentValue);
+    void granulePropertiesSignal(qint32 _granuleId);
 
 public slots:
     void closeGranuleId(qint32 granuleId);
@@ -50,6 +54,12 @@ public slots:
     void showMoreButtons();
 
     void setChecked(bool checked);
+
+    void actionImageSlot();
+    void actionOpendapSlot();
+    void actionFtpSlot();
+    void actionKmlSlot();
+    void actionPropertiesSlot();
 };
 
 #endif // DATASETBOXWIDGET_H
