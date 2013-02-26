@@ -110,7 +110,7 @@ public slots:
     void setDate();
     void setCurrentDate();
 
-    void addGeoPoint(QDateTime dateTime, qint32 granuleId, float lat, float lon);
+    void addGeoPoint(QDateTime dateTime, qint32 granuleId, float lat, float lon, int productId);
     void addGeoSegment(QDateTime startDateTime, QDateTime endDateTime, float lat, float lon);
 
     void changedDay();

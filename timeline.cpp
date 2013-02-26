@@ -454,7 +454,7 @@ void TimeLine::drawAllMarkers()
     QHash<QString, Granule>::const_iterator k = granulesHash->constBegin();
     while ( k != granulesHash->constEnd() )
     {
-        addGeoPoint(k.value().startDate, k.value().granuleId, 20,20);
+        addGeoPoint(k.value().startDate, k.value().granuleId, 20,20, k.value().productId);
         ++k;
     }
     emit changedDisplayGranules(displayedGranules);
@@ -462,7 +462,7 @@ void TimeLine::drawAllMarkers()
 
 }
 
-void TimeLine::addGeoPoint(QDateTime dateTime, qint32 granuleId, float lat, float lon)
+void TimeLine::addGeoPoint(QDateTime dateTime, qint32 granuleId, float lat, float lon, int productId)
 {
     geoPoint newPoint = {dateTime, lat, lon};
     geoPointList.append(newPoint);
@@ -493,9 +493,15 @@ void TimeLine::addGeoPoint(QDateTime dateTime, qint32 granuleId, float lat, floa
     if (qAbs(pixels) <= width()/2)
     {
         QPainter painter(this);
+
+        if (productId > 50)
+        {
+            productId -= 50;
+        }
+
         // -5 because imege size 10x10
-        painter.drawImage(width()/2+pixels - 5,20,imageGeoPoint);
-        rectsGranules->insert(granuleId, QRect(width()/2+pixels - 5, 20, 10, 10));
+        painter.drawImage(width()/2+pixels - 5,10 + productId,imageGeoPoint);
+        rectsGranules->insert(granuleId, QRect(width()/2+pixels - 5, 10 + productId, 10, 10));
         displayedGranules.append(granuleId);
     }
 }
