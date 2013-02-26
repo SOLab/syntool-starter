@@ -289,11 +289,14 @@ void TimeLine::mouseReleaseEvent ( QMouseEvent * pe )
 void TimeLine::wheelEvent(QWheelEvent *pe)
 {
     if (pe->delta() < 0 && control_.markerDistance > 360)
+    {
         control_.markerDistance -= 360;
+        emit getNewAllGranules(control_.markerDistance/360);
+    }
     else if (pe->delta() > 0 && control_.markerDistance < 1440)
     {
         control_.markerDistance += 360;
-        emit getNewAllGranules(control_.markerDistance/360);
+//        emit getNewAllGranules(control_.markerDistance/360);
     }
 
     hourPixels = control_.markerDistance / 24;
@@ -341,8 +344,6 @@ void TimeLine::createTopRect()
 
     int nextDayPixel = control_.markerDistance - curDayPixel;
 
-    int afterTomorrowDayPixel = nextDayPixel + control_.markerDistance;
-
     // draw center (red) line
     int halfWidth = width()/2;
 
@@ -353,28 +354,26 @@ void TimeLine::createTopRect()
         painter.drawText(halfWidth - curDayPixel + 2, height() - 28, getDayMonth(control_.currentDate));
     }
 
-    if (halfWidth > nextDayPixel)
+    int dayForText = -1;
+    while (halfWidth > prevDayPixel)
+    {
+        painter.drawLine(halfWidth - prevDayPixel, height() - 24, halfWidth - prevDayPixel, 0);
+        painter.drawText(halfWidth - prevDayPixel + 2, height() - 28,
+                         getDayMonth(control_.currentDate.addDays(dayForText)));
+        prevDayPixel += control_.markerDistance;
+        dayForText -= 1;
+    }
+
+    dayForText = 1;
+    while (halfWidth > nextDayPixel)
     {
         // -2 for don't shift image
         painter.drawLine(halfWidth + nextDayPixel - 2, height() - 24, halfWidth + nextDayPixel - 2, 0);
         painter.drawText(halfWidth + nextDayPixel + 2, height() - 28,
-                         getDayMonth(control_.currentDate.addDays(1)));
-    }
+                         getDayMonth(control_.currentDate.addDays(dayForText)));
 
-    if (halfWidth > prevDayPixel)
-    {
-        painter.drawLine(halfWidth - prevDayPixel, height() - 24, halfWidth - prevDayPixel, 0);
-        painter.drawText(halfWidth - prevDayPixel + 2, height() - 28,
-                         getDayMonth(control_.currentDate.addDays(-1)));
-    }
-
-    if (halfWidth > afterTomorrowDayPixel)
-    {
-        // -2 for don't shift image
-        painter.drawLine(halfWidth + afterTomorrowDayPixel - 2, height() - 24,
-                         halfWidth + afterTomorrowDayPixel - 2, 0);
-        painter.drawText(halfWidth + afterTomorrowDayPixel + 2, height() - 28,
-                         getDayMonth(control_.currentDate.addDays(2)));
+        nextDayPixel += control_.markerDistance;
+        dayForText += 1;
     }
 }
 
@@ -412,7 +411,7 @@ void TimeLine::createBottomRect()
 
     int prevWeekPixel = (curWeekPixel + control_.markerDistance);
 
-    int afterNextWeekPixel = (nextWeekPixel + control_.markerDistance);
+//    int afterNextWeekPixel = (nextWeekPixel + control_.markerDistance);
 
     int halfWidth = width()/2;
 
@@ -422,25 +421,25 @@ void TimeLine::createBottomRect()
         painter.drawText(halfWidth - curWeekPixel + 2, height(), getFirstDayOfWeekMonth(control_.currentDate));
     }
 
-    if (halfWidth > nextWeekPixel)
-    {
-        painter.drawLine(halfWidth + nextWeekPixel, height() - 24, halfWidth + nextWeekPixel, height());
-        painter.drawText(halfWidth + nextWeekPixel + 2, height(),
-                         getFirstDayOfWeekMonth(control_.currentDate.addDays(7)));
-    }
-
-    if (halfWidth > prevWeekPixel)
+    int dayForText = -7;
+    while (halfWidth > prevWeekPixel)
     {
         painter.drawLine(halfWidth - prevWeekPixel, height() - 24, halfWidth - prevWeekPixel, height());
         painter.drawText(halfWidth - prevWeekPixel + 2, height(),
-                         getFirstDayOfWeekMonth(control_.currentDate.addDays(-7)));
+                         getFirstDayOfWeekMonth(control_.currentDate.addDays(dayForText)));
+        prevWeekPixel += control_.markerDistance;
+        dayForText -= 7;
     }
 
-    if (halfWidth > afterNextWeekPixel)
+    dayForText = 7;
+    while (halfWidth > nextWeekPixel)
     {
-        painter.drawLine(halfWidth + afterNextWeekPixel, height() - 24, halfWidth + afterNextWeekPixel, height());
-        painter.drawText(halfWidth + afterNextWeekPixel + 2, height(),
-                         getFirstDayOfWeekMonth(control_.currentDate.addDays(14)));
+        painter.drawLine(halfWidth + nextWeekPixel, height() - 24, halfWidth + nextWeekPixel, height());
+        painter.drawText(halfWidth + nextWeekPixel + 2, height(),
+                         getFirstDayOfWeekMonth(control_.currentDate.addDays(dayForText)));
+
+        nextWeekPixel += control_.markerDistance;
+        dayForText += 7;
     }
 
 //    addGeoSegment(QDateTime().currentDateTime().addDays(-1), QDateTime().currentDateTime().addSecs(4444), 20, 20);
