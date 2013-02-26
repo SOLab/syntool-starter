@@ -19,8 +19,9 @@ Granule createGranuleFromXml(QDomElement domElement)
     // Get main fields
     newGranule.granuleName = domElement.firstChildElement("GranuleName").text();
     newGranule.granuleId = domElement.firstChildElement("Id").text().toInt();
-    newGranule.productName = domElement.firstChildElement("Product").text();
+//    newGranule.productName = domElement.firstChildElement("Product").text();
     newGranule.productId = domElement.firstChildElement("ProductId").text().toInt();
+    newGranule.status = domElement.firstChildElement("Status").text().toInt();
 
     // get start and end date
     newGranule.startDate = QDateTime::fromString(domElement.firstChildElement("ProducedAt").text(),

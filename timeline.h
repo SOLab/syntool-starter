@@ -11,6 +11,7 @@
 #include <QCursor>
 #include <QTimer>
 
+#include <QMessageBox>
 #include <QDateTime>
 #include <QHBoxLayout>
 #include <QPushButton>
@@ -99,6 +100,7 @@ protected:
     QString serverName;
 
     QList<qint32> displayedGranules;
+    QList<QString> GranuleStatuses;
 
     int hourPixels;
     float minutePixels;

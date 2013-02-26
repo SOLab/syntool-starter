@@ -15,7 +15,7 @@ public:
     explicit GranuleInfoWidget(Granule granule, QWidget *parent = 0);
     
 protected:
-    QVBoxLayout* gridLayout;
+    QVBoxLayout* vLayout;
 
 signals:
     

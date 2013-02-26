@@ -28,6 +28,11 @@ TimeLine::TimeLine(QString _serverName, QWidget *parent)
 //    timer->setInterval(500);
 //    connect( timer, SIGNAL(timeout()), SLOT( moveEnabled()));
 //    timer->start();
+
+    // Granule statuses
+    GranuleStatuses << "New" << "Ingesting" << "Completed" << "Error" << "Ingested"
+                  << "Processing" << "WaitingForPostProcessing";
+
     setContentsMargins(0,0,0,0);
     // <granuleId, granuleRectCoords>
     rectsGranules = new QHash<qint32, QRect>;
@@ -86,6 +91,15 @@ void TimeLine::createGranulesContextMenu()
 }
 
 void TimeLine::actionImageSlot() {
+    if (granulesHash->value(QString::number(currentGranuleId)).status != 2)
+    {
+        QMessageBox* msgBox = new QMessageBox(/*this*/);
+
+        msgBox->setText("Granule status: " + QString(GranuleStatuses.at(granulesHash->value(QString::number(currentGranuleId)).status)));
+        msgBox->exec();
+        return;
+    }
+
     granuleActions(serverName, QString::number(currentGranuleId), "image");
 }
 

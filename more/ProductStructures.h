@@ -6,11 +6,12 @@
 
 struct Granule{
     qint32 granuleId;
-    QString productName;
+//    QString productName;
     int productId;
+    int status;
     QString granuleName;
     QDateTime startDate;
-    QDateTime endDate;
+//    QDateTime endDate;
     float centerLat;
     float centerLon;
     float north;
