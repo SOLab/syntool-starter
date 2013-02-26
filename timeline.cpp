@@ -91,11 +91,12 @@ void TimeLine::createGranulesContextMenu()
 }
 
 void TimeLine::actionImageSlot() {
-    if (granulesHash->value(QString::number(currentGranuleId)).status != 2)
+    qint8 status = granulesHash->value(QString::number(currentGranuleId)).status;
+    if (status != 2)
     {
         QMessageBox* msgBox = new QMessageBox(/*this*/);
 
-        msgBox->setText("Granule status: " + QString(GranuleStatuses.at(granulesHash->value(QString::number(currentGranuleId)).status)));
+        msgBox->setText("Granule status: " + QString(GranuleStatuses.at(status)));
         msgBox->exec();
         return;
     }
@@ -112,6 +113,16 @@ void TimeLine::actionFtpSlot() {
 }
 
 void TimeLine::actionKmlSlot() {
+    qint8 status = granulesHash->value(QString::number(currentGranuleId)).status;
+    if (status != 2 && status != 6)
+    {
+        QMessageBox* msgBox = new QMessageBox(/*this*/);
+
+        msgBox->setText("Granule status: " + QString(GranuleStatuses.at(status)));
+        msgBox->exec();
+        return;
+    }
+
     granuleActions(serverName, QString::number(currentGranuleId), "kml");
 }
 

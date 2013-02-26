@@ -12,7 +12,7 @@ GranuleInfoWidget::GranuleInfoWidget(Granule granule, QWidget *parent) :
     granuleId->setText(tr("Id: ")+QString::number(granule.granuleId));
 
     QLabel* granuleStatus = new QLabel(this);
-    granuleStatus->setText(tr("Status: ")+granule.status);
+    granuleStatus->setText(tr("Status: ")+QString::number(granule.status));
 
     QLabel* productId = new QLabel(this);
     productId->setText(tr("Product Id: ")+QString::number(granule.productId));
