@@ -135,6 +135,10 @@ protected slots:
     void leftSlot();
 
     void navigateButtonPress();
+
+signals:
+  void changedScale(qreal scale);
+
 };
 
 #endif

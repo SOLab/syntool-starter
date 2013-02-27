@@ -20,7 +20,6 @@ public:
     ~Earth();
 
 //    void drawImage(QGLPainter *painter);
-    void changeTexture(qreal zoom);
     QGLSceneNode *sphere;
 
     QString tileDownload(int tx, int ty, int zoom);
@@ -34,6 +33,10 @@ private:
     QGLSceneNode *sn3;
     QGLSceneNode *sn4;
     QGLSceneNode *buildEarthNode(qreal radius = 1.0, int divisions = 5, int separation = 1);
+
+public slots:
+    void changeTexture(qreal zoom);
+
 };
 
 #endif // EARTH_H

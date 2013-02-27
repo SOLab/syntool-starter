@@ -131,6 +131,8 @@ EarthView::EarthView(QWindow *parent)
     m_scene->mainNode()->addNode(navigateButton);
 
     earth = new Earth(this, m_palette);
+    connect (this, &EarthView::changedScale, earth, &Earth::changeTexture);
+
     m_scene->mainNode()->addNode(earth);
 
     QString path = ":/skybox";
@@ -285,13 +287,15 @@ void EarthView::scalePlus()
 {
     if (scale < 2000)
     {
-        for (int i = 0; i < 1; i++)
-        {
-            QTimer::singleShot(i*50, this, SLOT(scalePlus_slot()));
-        }
+//        for (int i = 0; i < 1; i++)
+//        {
+//            QTimer::singleShot(i*50, this, SLOT(scalePlus_slot()));
+//        }
+        scalePlus_slot();
     }
 //    float zoom = log10(scale)/log10(2);
-    earth->changeTexture(scale);
+    emit changedScale(scale);
+//    earth->changeTexture(scale);
     update();
 //    qDebug() << "scale: " << scale;
 }

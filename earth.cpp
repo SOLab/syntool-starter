@@ -100,7 +100,7 @@ Earth::Earth(QObject *parent, QSharedPointer<QGLMaterialCollection> materials)
     addTransform(axialTilt1);
     addNode(sphere);
 
-    zoom = 1;
+    zoom = 0;
 
 //    tileDownloader = new TileDownloader();
 }
@@ -277,7 +277,8 @@ QGLSceneNode *Earth::buildEarthNode(qreal radius, int divisions, int cur_zoom)
 //            QUrl url;
 //            QString path = "http://tile.openstreetmap.org/%1/%2/%3.png";
 //            url = QUrl(path.arg(1).arg(QString::number(stack_num)).arg(separation-slice_num-1));
-//            QString path = ":"+QString::number(separation-slice_num-1)+"-"+QString::number(qAbs(stack_num))+".png";
+//            QString path = ":"+QString::number(separation-slice_num-1)+"-"+
+//                           QString::number(qAbs(stack_num))+".png";
 //            url.setPath(path);
             url.setScheme(QLatin1String("file"));
             tex->setUrl(url);
@@ -464,10 +465,11 @@ Earth::~Earth()
 
 void Earth::changeTexture(qreal cur_zoom)
 {
-//    qDebug() << "changeTexture, zoom = " << cur_zoom;
-    if (zoom != (int) floor(cur_zoom))// + 0.5))
+//    qDebug() << "changeTexture, cur_zoom = " << cur_zoom;
+//    qDebug() << "changeTexture, zoom = " << zoom;
+    if (zoom != qFloor(cur_zoom))
     {
-        zoom = (int) floor(cur_zoom);// + 0.5);
+        zoom = qFloor(cur_zoom);
 
 //        qDebug() << "zoom changed!!! zoom = " << cur_zoom;
         QString search_path = QString("Earth");
