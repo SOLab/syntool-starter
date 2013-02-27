@@ -80,7 +80,8 @@ geoDetic convert_ecef_to_wgs84(double x, double y, double z)
 //    double p = qSqrt(qPow(x, 2) + qPow(y, 2));
 //    double th = qAtan2(a * z, b * p);
 //    pos.lon = qAtan2(y, x);
-//    pos.lat = qAtan2((z + qPow(ep, 2) * b * qPow(qSin(th), 3)), (p - qPow(e, 2) * a * qPow(qCos(th), 3)));
+//    pos.lat = qAtan2((z + qPow(ep, 2) * b * qPow(qSin(th), 3)),
+//                     (p - qPow(e, 2) * a * qPow(qCos(th), 3)));
 //    double N = a / (qSqrt(1 - qPow(e, 2) * qPow(qSin(pos.lat), 2)));
 //    pos.alt = p / qCos(pos.lat) - N;
 
@@ -137,6 +138,9 @@ EarthView::EarthView(QWindow *parent)
 
     QString path = ":/skybox";
     m_skybox = new SkyBox(this, path);
+
+    lastMouseMoveTime = QTime::currentTime();
+    delta = QPoint(0,0);
 }
 
 EarthView::~EarthView()
@@ -156,7 +160,7 @@ void EarthView::paintGL(QGLPainter *painter)
     m_skybox->draw(painter);
     earth->draw(painter);
     navigateButton->draw(painter);
-    getMemUsage();
+//    getMemUsage();
 
     if (navigateButtonPressed)
     {
@@ -231,7 +235,6 @@ void EarthView::keyPressEvent(QKeyEvent *e)
     qDebug() << "long" << pos.lon;
     qDebug() << "lat" << pos.lat;
     qDebug() << "alt" << pos.alt;
-
 }
 
 void EarthView::resizeGL(int w, int h)
@@ -252,12 +255,14 @@ void EarthView::wheelEvent(QWheelEvent *e)
     if (e->delta() > 0)
     {
         scalePlus();
-//        QKeyEvent key(QKeyEvent::KeyPress, Qt::Key_Plus, Qt::NoModifier, "Plus", false, 0 );
+//        QKeyEvent key(QKeyEvent::KeyPress, Qt::Key_Plus,
+//                      Qt::NoModifier, "Plus", false, 0 );
 //        EarthView::keyPressEvent(&key);
     }
     else {
         scaleMinus();
-//        QKeyEvent key(QKeyEvent::KeyPress, Qt::Key_Minus, Qt::NoModifier, "Minus", false, 0 );
+//        QKeyEvent key(QKeyEvent::KeyPress, Qt::Key_Minus,
+//                      Qt::NoModifier, "Minus", false, 0 );
 //        EarthView::keyPressEvent(&key);
     }
 }
@@ -295,7 +300,6 @@ void EarthView::scalePlus()
     }
 //    float zoom = log10(scale)/log10(2);
     emit changedScale(scale);
-//    earth->changeTexture(scale);
     update();
 //    qDebug() << "scale: " << scale;
 }
@@ -319,14 +323,15 @@ void EarthView::scaleMinus()
 {
     if (scale > 0.8)
     {
-        for (int i = 0; i < 1; i++)
-        {
-            QTimer::singleShot(i*50, this, SLOT(scaleMinus_slot()));
-        }
+//        for (int i = 0; i < 1; i++)
+//        {
+//            QTimer::singleShot(i*50, this, SLOT(scaleMinus_slot()));
+//        }
+        scaleMinus_slot();
     }
 
-    float zoom = log10(scale)/log10(2);
-    earth->changeTexture(zoom);
+//    float zoom = log10(scale)/log10(2);
+    emit changedScale(scale);
     update();
 //    qDebug() << "scale: " << scale;
 }
@@ -356,7 +361,7 @@ void EarthView::mouseMoveEvent(QMouseEvent *e)
 {
     if (mousePressed)
     {
-        QPoint delta = e->pos() - startPan;
+        delta = e->pos() - startPan;
         if (e->modifiers() == panModifiers) {
             camera()->setEye(startEye);
             camera()->setCenter(startCenter);
@@ -425,7 +430,8 @@ void EarthView::mouseMoveEvent(QMouseEvent *e)
 //            d->enteredObject = 0;
 //        }
 //    }
-        QWindow::mouseMoveEvent(e);
+    lastMouseMoveTime = QTime::currentTime();
+    QWindow::mouseMoveEvent(e);
 }
 
 void EarthView::mousePressEvent(QMouseEvent *e)
@@ -452,13 +458,70 @@ void EarthView::mousePressEvent(QMouseEvent *e)
     startEye = camera()->eye();
     startCenter = camera()->center();
     startUpVector = camera()->upVector();
+
+    lastMouseMoveTime = QTime::currentTime();
 }
 
 void EarthView::mouseReleaseEvent(QMouseEvent *e)
 {
     Q_UNUSED(e);
+
+    if (lastMouseMoveTime.msecsTo(QTime::currentTime()) > 50)
+        qDebug() << "> 50!";
+    if (lastMouseMoveTime.msecsTo(QTime::currentTime()) < 20)
+    {
+//        qDebug() << "MOVE!!!!!!!!!!!!";
+        mousePressed = false;
+//        timeout();
+    }
+
     mousePressed = false;
     navigateButtonPressed = false;
+}
+
+void EarthView::timeout()
+{
+    if (!mousePressed)
+    {
+
+        qDebug() << "==========+>>>>>>" << lastMouseMoveTime.msecsTo(QTime::currentTime());
+
+        int timeDelta = lastMouseMoveTime.msecsTo(QTime::currentTime());
+        if (!timeDelta)
+            timeDelta = 1;
+
+
+        for (int i = 0; i < 30; i++)
+        {
+            QTimer::singleShot(i*20, this, SLOT(rotateInertia()));
+        }
+
+        lastMouseMoveTime = QTime::currentTime();
+    }
+}
+
+void EarthView::rotateInertia()
+{
+    int timeDelta = lastMouseMoveTime.msecsTo(QTime::currentTime());
+    lastMouseMoveTime = QTime::currentTime();
+    if (!timeDelta)
+        timeDelta = 1;
+
+    if (qAbs(delta.x()) > 50)
+        delta.setX((delta.x() > 0) ? 50 : -50);
+    if (qAbs(delta.y()) > 50)
+        delta.setY((delta.y() > 0) ? 50 : -50);
+
+    qDebug() << delta;
+    qDebug() << timeDelta;
+    if (!mousePressed)
+        rotate(delta.x(), delta.y());
+
+    delta.setX(delta.x());
+    delta.setY(delta.y());
+//    delta.setX(delta.x() / (float)(1.05));
+//    delta.setY(delta.y() / (float)(1.05));
+    update();
 }
 
 void EarthView::navigateButtonPress()

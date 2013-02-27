@@ -85,6 +85,7 @@ public:
     void keyPress(QKeyEvent* e);
     EarthScene *scene() { return m_scene; }
     float getMemUsage();
+    void timeout();
 protected:
     Earth *earth;
     void initializeGL(QGLPainter *painter);
@@ -97,6 +98,9 @@ protected:
     void mouseMoveEvent(QMouseEvent *e);
     void mousePressEvent(QMouseEvent *e);
     void mouseReleaseEvent(QMouseEvent *e);
+
+    QTime lastMouseMoveTime;
+    QPoint delta;
 
 //    QGLBuilder builder;
 private:
@@ -135,6 +139,7 @@ protected slots:
     void leftSlot();
 
     void navigateButtonPress();
+    void rotateInertia();
 
 signals:
   void changedScale(qreal scale);
