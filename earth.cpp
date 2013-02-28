@@ -90,13 +90,10 @@ Earth::Earth(QObject *parent, QSharedPointer<QGLMaterialCollection> materials)
     sphere->setMaterialIndex(earthMat);
     sphere->setEffect(QGL::LitModulateTexture2D);
 
-    earthRotation = new QGraphicsRotation3D();
     QGraphicsRotation3D *axialTilt1 = new QGraphicsRotation3D();
     axialTilt1->setAngle(270.0f);
     axialTilt1->setAxis(QVector3D(1,0,0));
-    earthRotation->setAngle(0.0f);
 
-    addTransform(earthRotation);
     addTransform(axialTilt1);
     addNode(sphere);
 
@@ -117,6 +114,29 @@ QGLSceneNode *Earth::buildEarthNode(qreal radius, int divisions, int cur_zoom)
 
     QGLBuilder builder;
     // Determine the number of slices and stacks to generate.
+
+//    int lonTileNum;
+//    int latTileNum;
+
+    for (int lonTileNum = 0; lonTileNum < separation; lonTileNum++)
+    {
+        for (int latTileNum = 0; latTileNum < separation; latTileNum++)
+        {
+//            qDebug() << latTileNum << lonTileNum;
+//            if (lonTileNum == 1 && latTileNum == 1)
+//            if (latTileNum == 0)
+            addTileNode(&builder, radius, divisions, cur_zoom, lonTileNum, latTileNum);
+        }
+    }
+    return builder.finalizedSceneNode();
+}
+
+
+void Earth::addTileNode(QGLBuilder* builder, qreal radius, int divisions, int cur_zoom,
+                        qint32 lonTileNum, qint32 latTileNum)
+{
+    qreal separation = qPow(2, cur_zoom);
+
     static int const slicesAndStacks[] = {
         8, 4,
         8, 8,
@@ -127,15 +147,25 @@ QGLSceneNode *Earth::buildEarthNode(qreal radius, int divisions, int cur_zoom)
         64, 32,
         64, 64,
         128, 64,
-        128, 128
+        128, 128,
+        256, 256,
+        512, 512,
+        1024, 1024
     };
 
     if (divisions < 1)
         divisions = 1;
-    else if (divisions > 10)
-        divisions = 10;
+    else if (divisions > 13)
+        divisions = 13;
     int stacks = slicesAndStacks[divisions * 2 - 1];
     int slices = slicesAndStacks[divisions * 2 - 2];
+
+    // Calculate min and max lat and lon
+
+    int minSlice = (slices / separation) * lonTileNum;
+    int maxSlice = (slices / separation) * (lonTileNum + 1);
+    int minStack = (stacks / separation) * latTileNum;
+    int maxStack = (stacks / separation) * (latTileNum + 1) - 1;
 
     // Precompute sin/cos values for the slices and stacks.
     const int maxSlices = 128 + 1;
@@ -159,107 +189,114 @@ QGLSceneNode *Earth::buildEarthNode(qreal radius, int divisions, int cur_zoom)
     stackSin[0] = 0.0f;             // Come to a point at the poles.
     stackSin[stacks] = 0.0f;
 
-    int stacks_part = stacks / separation;
-    int cur_stacks_part = stacks_part;
+    int stack_num = latTileNum;
+    int slice_num = lonTileNum;
 
-    int stack_num, slice_num;
+    int distal = 1;
+    if (separation > 2){
+        if (stack_num + 1 > separation / 2)
+            distal = (stack_num + 1) - (separation / 2);
+        else
+            distal = (separation / 2) - stack_num;
+    }
+    qDebug() << "distal" << distal;
 
-    for (; cur_stacks_part <= stacks; cur_stacks_part += stacks_part)
-    {
-        qDebug() << "=>" << cur_stacks_part;
-        qDebug() << "stacks" << stacks;
-        qDebug() << "slices" << slices;
-        // Create the stacks.
-        int slices_part = slices / separation;
-        int cur_slices_part = slices_part;
+    QGLBuilder tempBuilder;
+    for (int stack = minStack; stack <= maxStack; ++stack) {
+//        qDebug() << "stack"<<stack;
+//        if (stack > maxStack || stack < minStack)
+//            continue;
+        QGeometryData prim;
+        qreal z = radius * stackCos[stack];
+        qreal nextz = radius * stackCos[stack + 1];
+        qreal s = stackSin[stack];
+        qreal nexts = stackSin[stack + 1];
+        qreal c = stackCos[stack];
+        qreal nextc = stackCos[stack + 1];
+        qreal r = radius * s;
+        qreal nextr = radius * nexts;
 
-        for (; cur_slices_part <= slices; cur_slices_part += slices_part)
-        {
-            QGLBuilder tempBuilder;
-            for (int stack = cur_stacks_part - stacks_part; stack < cur_stacks_part; ++stack) {
-//                qDebug() << "stack === "<<stack;
-                QGeometryData prim;
-                qreal z = radius * stackCos[stack];
-                qreal nextz = radius * stackCos[stack + 1];
-                qreal s = stackSin[stack];
-                qreal nexts = stackSin[stack + 1];
-                qreal c = stackCos[stack];
-                qreal nextc = stackCos[stack + 1];
-                qreal r = radius * s;
-                qreal nextr = radius * nexts;
+        double yTexCoord;
+        double yTexCoordNext;
+        double xTexCoord;
+        double xTexCoordNext;
 
-                double yTexCoord;
-                double yTexCoordNext;
-                double xTexCoord;
-                double xTexCoordNext;
+        int stackToCoord, sliceToCoord;
+        int stackToVertex, sliceToVertex;
 
-                prim.clear();
-                for (int slice = cur_slices_part - slices_part; slice <= cur_slices_part; ++slice) {
-//                    qDebug() << "slice"<<slice;
-                    prim.appendVertex
-                        (QVector3D(nextr * sliceSin[slice],
-                                   nextr * sliceCos[slice], nextz));
-                    prim.appendNormal
-                        (QVector3D(sliceSin[slice] * nexts,
-                                   sliceCos[slice] * nexts, nextc));
+        prim.clear();
+        for (int slice = minSlice; slice <= maxSlice; ++slice) {
+//            qDebug() << "slice"<<slice;
+//            if (slice > maxSlice || slice < minSlice)
+//                continue;
 
-                    int distal = 1;
-                    if (separation > 2){
-//                        qDebug() << "==========="<< "stack = " << cur_stacks_part / stacks_part;
-                        if (cur_stacks_part / stacks_part > separation / 2)
-                            distal = (cur_stacks_part / stacks_part) - (separation / 2);
-                        else
-                            distal = (separation / 2) + 1 - (cur_stacks_part / stacks_part);
-                    }
-//                    qDebug() << distal;
+            stackToCoord = (stack - minStack) * separation;
+            sliceToCoord = (maxSlice - slice) * separation;
 
-                    yTexCoordNext = 1.0f - qreal(stack + 1) / stacks;
-                    yTexCoordNext = Mercator2SphereAnalytic(yTexCoordNext)*separation * qreal(distal);
-                    xTexCoordNext = (1.0f - qreal(slice) / slices)*separation * qreal(distal);
+            stackToVertex = (stack - minStack);
+            sliceToVertex = (maxSlice - slice + minSlice);
 
-                    prim.appendTexCoord
-                        (QVector2D(xTexCoordNext,
-                                   yTexCoordNext));
+            prim.appendVertex
+                (QVector3D(nextr * sliceSin[slice],
+                           nextr * sliceCos[slice], nextz));
+            prim.appendNormal
+                (QVector3D(sliceSin[slice] * nexts,
+                           sliceCos[slice] * nexts, nextc));
 
-                    prim.appendVertex
-                        (QVector3D(r * sliceSin[slice],
-                                   r * sliceCos[slice], z));
-                    prim.appendNormal
-                        (QVector3D(sliceSin[slice] * s,
-                                   sliceCos[slice] * s, c));
+//            yTexCoordNext = 1.0f - qreal(stack + 1) / stacks;
+//            yTexCoordNext = Mercator2SphereAnalytic(yTexCoordNext)*(separation + 1 - distal);
+//            xTexCoordNext = (1.0f - qreal(slice) / slices)*(separation + 1 - distal);
+            yTexCoordNext = 1.0f - qreal(stack + 1) / stacks;
+            yTexCoordNext = /*Mercator2SphereAnalytic*/(yTexCoordNext)*(separation);
+            xTexCoordNext = (qreal(sliceToCoord) / slices);//*(separation);
 
-                    yTexCoord = 1.0f - qreal(stack) / stacks;
-                    yTexCoord = Mercator2SphereAnalytic(yTexCoord)*separation * qreal(distal);
-                    xTexCoord = (1.0f - qreal(slice) / slices)*separation * qreal(distal);
+//            qDebug() << "===============";
+//            qDebug() << qreal(sliceToCoord) / slices;
 
-                    prim.appendTexCoord
-                        (QVector2D(xTexCoord,
-                                   yTexCoord));
-                }
+            prim.appendTexCoord
+                (QVector2D(xTexCoordNext,
+                           yTexCoordNext));
 
-                tempBuilder.addQuadStrip(prim);
-            }
-            stack_num = cur_stacks_part / stacks_part - 1;
-            slice_num = cur_slices_part / slices_part - 1;
-            qDebug() << "y" << stack_num << "x" << slice_num;
+            prim.appendVertex
+                (QVector3D(r * sliceSin[slice],
+                           r * sliceCos[slice], z));
+            prim.appendNormal
+                (QVector3D(sliceSin[slice] * s,
+                           sliceCos[slice] * s, c));
 
-            QGLSceneNode* tempNode = tempBuilder.finalizedSceneNode();
-            if (separation > 1){
-            QGLTexture2D* tex;
-            tex = new QGLTexture2D();
-            tex->setSize(QSize(512, 256));
+//            yTexCoord = 1.0f - qreal(stack) / stacks;
+//            yTexCoord = Mercator2SphereAnalytic(yTexCoord)*(separation + 1 - distal);
+//            xTexCoord = (1.0f - qreal(slice) / slices)*(separation + 1 - distal);
+            yTexCoord = 1.0f - qreal(stack) / stacks;
+            yTexCoord = /*Mercator2SphereAnalytic*/(yTexCoord)*(separation);
+            xTexCoord = (qreal(sliceToCoord) / slices);//*(separation);
+
+
+            prim.appendTexCoord
+                (QVector2D(xTexCoord,
+                           yTexCoord));
+        }
+
+        tempBuilder.addQuadStrip(prim);
+    }
+
+    QGLSceneNode* tempNode = tempBuilder.finalizedSceneNode();
+    if (separation > 1){
+        QGLTexture2D* tex;
+        tex = new QGLTexture2D();
+        tex->setSize(QSize(512, 256));
+//        qDebug() << "+++++++++++"<< tex->textureUpdated();
 
 //            tileDownloader->setParameters(stack_num, separation-slice_num-1, 1);
 //            QTimer::singleShot(0, &tileDownloader, SLOT(execute()));
-            QString path = tileDownload(separation-slice_num-1, stack_num, cur_zoom);
 
-//            Downloader manager2;
-//            manager2.setParameters(cur_zoom, separation-slice_num-1, stack_num);
-//            QTimer::singleShot(0, &manager2, SLOT(execute()));
-//            manager2.execute();
+        QString _filepath = "/tmp/syntool/%1-%2-%3.png";
+        QString filepath(_filepath.arg(cur_zoom).arg(separation-1-lonTileNum).arg(latTileNum));
 
-//            qDebug() << manager2.imageLink;
-//            QString path = manager2.filename;
+//        if (!QFile::exists(filepath))
+//        {
+            QString path = tileDownload(separation-1-slice_num, stack_num, cur_zoom);
+
             QUrl url;
             url.setPath(path);
             QFile image;
@@ -268,35 +305,22 @@ QGLSceneNode *Earth::buildEarthNode(qreal radius, int divisions, int cur_zoom)
 //                qDebug() << 1111111;
                 Sleeper::msleep(50);
             }
-//            qDebug() << "zzzzzzzzzzzzzz";
-//            while (tileDownloader->getFileName()=="")
-//            {
-//                qDebug() << 1111111;
-//                Sleeper::msleep(500);
-//            }
-//            QUrl url;
-//            QString path = "http://tile.openstreetmap.org/%1/%2/%3.png";
-//            url = QUrl(path.arg(1).arg(QString::number(stack_num)).arg(separation-slice_num-1));
-//            QString path = ":"+QString::number(separation-slice_num-1)+"-"+
-//                           QString::number(qAbs(stack_num))+".png";
-//            url.setPath(path);
-            url.setScheme(QLatin1String("file"));
-            tex->setUrl(url);
+//        }
 
-            QGLMaterial *mat1 = new QGLMaterial;
-            mat1->setTexture(tex, 0);
+        url.setScheme(QLatin1String("file"));
+        tex->setUrl(url);
 
-            m_LoadedTextures.push_back(mat1->texture(0));
-            int earthMat = tempNode->palette()->addMaterial(mat1);
+        QGLMaterial *mat1 = new QGLMaterial;
+        mat1->setTexture(tex, 0);
 
-            tempNode->setMaterialIndex(earthMat);
-            tempNode->setEffect(QGL::LitModulateTexture2D);
-            }
+        m_LoadedTextures.push_back(mat1->texture(0));
+        int earthMat = tempNode->palette()->addMaterial(mat1);
 
-            builder.sceneNode()->addNode(tempNode);
-        }
+        tempNode->setMaterialIndex(earthMat);
+        tempNode->setEffect(QGL::LitModulateTexture2D);
     }
-    return builder.finalizedSceneNode();
+
+    builder->sceneNode()->addNode(tempNode);
 }
 
 QString Earth::tileDownload(int tx, int ty, int zoom)
@@ -503,7 +527,7 @@ void Earth::changeTexture(qreal cur_zoom)
             }
 //            QGraphicsRotation3D *circular_rotate = new QGraphicsRotation3D();
 //            circular_rotate->setAngle(180.0f);
-//            circular_rotate->setAxis(QVector3D(0,1,0));
+//            circular_rotate->setAxis(QVector3D(0,0,1));
 
 //            sphere->addTransform(circular_rotate);
 

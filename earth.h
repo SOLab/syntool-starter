@@ -36,6 +36,7 @@ private:
 
 public slots:
     void changeTexture(qreal zoom);
+    void addTileNode(QGLBuilder *builder, qreal radius, int divisions, int cur_zoom, qint32 lonTileNum, qint32 latTileNum);
 
 };
 
