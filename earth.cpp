@@ -23,6 +23,9 @@ inline double mercator(double x) {
 const double defMercAngle = 85 * M_PI / 180;
 const double defMercScale = M_PI_2 / mercator(defMercAngle);
 
+const double a = 6378.137;
+
+
 double Mercator2SphereAnalytic(double iTY, const double scale = defMercScale,
                                const double maxAng = defMercAngle)
 {
@@ -33,34 +36,52 @@ double Mercator2SphereAnalytic(double iTY, const double scale = defMercScale,
     return (1 + val / M_PI_2) * 0.5;	// angle to texture V
 }
 
-double Mercator2Sphere( double iTY, const double maxAng = 85.0 )
+struct decartCoord
 {
-    static std::vector <double> vec;
-    if (!vec.size()) {
-        vec.push_back(0.0);
-        double unit = M_PI / 180;
-        for (double i = 1; i < maxAng; ++i)
-//            vec.push_back(vec[i - 1] + unit / cos(i * unit));
-            vec.push_back(mercator(i * unit));
+    qreal x;
+    qreal y;
+    qreal z;
+};
 
-        // normalize
-        double scale = M_PI_2 / vec.back();
-        for (size_t i = 0; i < vec.size(); ++i)
-            vec[i] *= scale;
-    }
+decartCoord llh2xyz(qreal _lat, qreal _lon, qreal h)
+{
+    qreal lat = _lat*M_PI/180.0;
+    qreal lon = _lon*M_PI/180.0;
+    float e2 = 0.00669436619;
+    float a = 6378.137;
+    qreal N = a/qSqrt(1 - e2 * qPow(qSin(lat),2));
 
-    double angle = (iTY * 2 - 1) * M_PI_2;		// texture V to angle
-    double angle_degree = fabs(angle) * 180 / M_PI;
-    int beg = (int) angle_degree;
-    double val;
-    if (beg >= (int) vec.size() - 1)
-        val = M_PI_2;
-    else {
-        double w = angle_degree - beg;
-        val = vec[beg] * (1.0 - w) + vec[beg + 1] * w;
-    }
-    if (angle < 0.0) val = -val;
-    return (1 + val / M_PI_2) * 0.5;	// angle to texture V
+    decartCoord decartCoordPoint;
+
+    decartCoordPoint.x = (N + h)*qCos(lat)*qCos(lon);
+    decartCoordPoint.y = (N + h)*qCos(lat)*qSin(lon);
+    decartCoordPoint.z = (N*(1-e2)+h)*qSin(lat);
+
+    return decartCoordPoint;
+}
+
+//                                        1
+//        C =  ---------------------------------------------------
+//             sqrt( cos^2(latitude) + (1-f)^2 * sin^2(latitude) )
+
+//        (1/f) = 298.257224
+
+//        S = (1-f)^2 * C
+decartCoord llh2xyz_var2(qreal _lat, qreal _lon, qreal h)
+{
+    qreal lat = _lat*M_PI/180.0;
+    qreal lon = _lon*M_PI/180.0;
+    float a = 6378.137;
+    qreal f = 1.0/298.257224;
+    qreal C = 1/qSqrt(qPow(qCos(lat),2) + qPow(1-f,2) * qPow(qSin(lat), 2));
+    qreal S = qPow(1-f,2) * C;
+
+    decartCoord decartCoordPoint;
+    decartCoordPoint.x = (a*C+h)*qCos(lat)*qCos(lon);
+    decartCoordPoint.y = (a*C+h)*qCos(lat)*qSin(lon);
+    decartCoordPoint.z = (a*S+h)*qSin(lat);
+
+    return decartCoordPoint;
 }
 
 Earth::Earth(QObject *parent, QSharedPointer<QGLMaterialCollection> materials)
@@ -203,9 +224,6 @@ void Earth::addTileNode(QGLBuilder* builder, qreal radius, int divisions, int cu
 
     QGLBuilder tempBuilder;
     for (int stack = minStack; stack <= maxStack; ++stack) {
-//        qDebug() << "stack"<<stack;
-//        if (stack > maxStack || stack < minStack)
-//            continue;
         QGeometryData prim;
         qreal z = radius * stackCos[stack];
         qreal nextz = radius * stackCos[stack + 1];
@@ -221,52 +239,35 @@ void Earth::addTileNode(QGLBuilder* builder, qreal radius, int divisions, int cu
         double xTexCoord;
         double xTexCoordNext;
 
-        int stackToCoord, sliceToCoord;
-        int stackToVertex, sliceToVertex;
+        int sliceToCoord;
 
         prim.clear();
         for (int slice = minSlice; slice <= maxSlice; ++slice) {
-//            qDebug() << "slice"<<slice;
-//            if (slice > maxSlice || slice < minSlice)
-//                continue;
 
-            stackToCoord = (stack - minStack) * separation;
             sliceToCoord = (maxSlice - slice) * separation;
 
-            stackToVertex = (stack - minStack);
-            sliceToVertex = (maxSlice - slice + minSlice);
-
             prim.appendVertex
-                (QVector3D(nextr * sliceSin[slice],
-                           nextr * sliceCos[slice], nextz));
+                (QVector3D((nextr * sliceSin[slice]),
+                           (nextr * sliceCos[slice]), nextz));
             prim.appendNormal
                 (QVector3D(sliceSin[slice] * nexts,
                            sliceCos[slice] * nexts, nextc));
 
-//            yTexCoordNext = 1.0f - qreal(stack + 1) / stacks;
-//            yTexCoordNext = Mercator2SphereAnalytic(yTexCoordNext)*(separation + 1 - distal);
-//            xTexCoordNext = (1.0f - qreal(slice) / slices)*(separation + 1 - distal);
             yTexCoordNext = 1.0f - qreal(stack + 1) / stacks;
             yTexCoordNext = /*Mercator2SphereAnalytic*/(yTexCoordNext)*(separation);
             xTexCoordNext = (qreal(sliceToCoord) / slices);//*(separation);
-
-//            qDebug() << "===============";
-//            qDebug() << qreal(sliceToCoord) / slices;
 
             prim.appendTexCoord
                 (QVector2D(xTexCoordNext,
                            yTexCoordNext));
 
             prim.appendVertex
-                (QVector3D(r * sliceSin[slice],
-                           r * sliceCos[slice], z));
+                (QVector3D((r * sliceSin[slice]),
+                           (r * sliceCos[slice]), z));
             prim.appendNormal
                 (QVector3D(sliceSin[slice] * s,
                            sliceCos[slice] * s, c));
 
-//            yTexCoord = 1.0f - qreal(stack) / stacks;
-//            yTexCoord = Mercator2SphereAnalytic(yTexCoord)*(separation + 1 - distal);
-//            xTexCoord = (1.0f - qreal(slice) / slices)*(separation + 1 - distal);
             yTexCoord = 1.0f - qreal(stack) / stacks;
             yTexCoord = /*Mercator2SphereAnalytic*/(yTexCoord)*(separation);
             xTexCoord = (qreal(sliceToCoord) / slices);//*(separation);
@@ -293,19 +294,26 @@ void Earth::addTileNode(QGLBuilder* builder, qreal radius, int divisions, int cu
         QString _filepath = "/tmp/syntool/%1-%2-%3.png";
         QString filepath(_filepath.arg(cur_zoom).arg(separation-1-lonTileNum).arg(latTileNum));
 
-//        if (!QFile::exists(filepath))
-//        {
+        QUrl url;
+        url.setPath(filepath);
+        QFile image;
+
+        if (!QFile::exists(filepath))
+        {
             QString path = tileDownload(separation-1-slice_num, stack_num, cur_zoom);
 
-            QUrl url;
-            url.setPath(path);
-            QFile image;
+//            QUrl url;
+//            url.setPath(path);
             image.setFileName(path);
             while ( ! QFile::exists(path) || !image.size()) {
 //                qDebug() << 1111111;
                 Sleeper::msleep(50);
             }
-//        }
+        }
+        else
+        {
+            image.setFileName(filepath);
+        }
 
         url.setScheme(QLatin1String("file"));
         tex->setUrl(url);
