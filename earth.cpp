@@ -20,7 +20,7 @@ inline double mercator(double x) {
     return 0.5*log((1.0+sin(x))/(1.0-sin(x)));
 }
 
-const double defMercAngle = 85 * M_PI / 180;
+const double defMercAngle = 85.0511 * M_PI / 180.0;
 const double defMercScale = M_PI_2 / mercator(defMercAngle);
 
 const double a = 6378.137;
@@ -30,7 +30,7 @@ double Mercator2SphereAnalytic(double iTY, const double scale = defMercScale,
                                const double maxAng = defMercAngle)
 {
     double angle = (iTY * 2 - 1) * M_PI_2;		// texture V to angle
-        double angle2 = fabs(angle);
+    double angle2 = fabs(angle);
     double val = (angle2 > maxAng) ? M_PI_2 : (mercator(angle2) * scale);
     if (angle < 0.0) val = -val;
     return (1 + val / M_PI_2) * 0.5;	// angle to texture V
