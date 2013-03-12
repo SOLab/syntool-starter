@@ -164,7 +164,7 @@ QGLSceneNode *Earth::buildEarthNode(qreal radius, int divisions, int cur_zoom)
         for (int latTileNum = 0; latTileNum < separation; latTileNum++)
         {
 //            qDebug() << latTileNum << lonTileNum;
-            if (lonTileNum == 0 && latTileNum == 0)
+//            if (lonTileNum == 0 && latTileNum == 0)
 //            if (latTileNum == 0)
             addTileNode(&builder, radius, divisions, cur_zoom, lonTileNum, latTileNum);
         }
@@ -323,7 +323,7 @@ void Earth::addTileNode(QGLBuilder* builder, qreal radius, int divisions, int cu
 //            QTimer::singleShot(0, &tileDownloader, SLOT(execute()));
 
         QString _filepath = "/tmp/syntool/%1-%2-%3.png";
-        QString filepath(_filepath.arg(cur_zoom).arg(separation-1-lonTileNum).arg(latTileNum));
+        QString filepath(_filepath.arg(cur_zoom).arg(lonTileNum).arg(separation-1-latTileNum));
 
         QUrl url;
         url.setPath(filepath);
@@ -331,7 +331,7 @@ void Earth::addTileNode(QGLBuilder* builder, qreal radius, int divisions, int cu
 
         if (!QFile::exists(filepath))
         {
-            QString path = tileDownload(separation-1-lonTileNum, latTileNum, cur_zoom);
+            QString path = tileDownload(lonTileNum, separation-1-latTileNum, cur_zoom);
 
 //            QUrl url;
 //            url.setPath(path);
