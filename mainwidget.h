@@ -13,15 +13,15 @@
 #include <QSplitter>
 #include <QMenuBar>
 #include <QApplication>
-#include <toolboxwidgets/layerswidget.h>
-#include <toolboxwidgets/placewidget.h>
-#include <toolboxwidgets/mapswidget.h>
-#include <toolboxwidgets/productswidget.h>
-#include <toolboxwidgets/datasetswidget.h>
-#include <rightsidebar.h>
-#include <network/getgranules.h>
+#include "toolboxwidgets/layerswidget.h"
+#include "toolboxwidgets/placewidget.h"
+#include "toolboxwidgets/mapswidget.h"
+#include "toolboxwidgets/productswidget.h"
+#include "toolboxwidgets/datasetswidget.h"
+#include "rightsidebar.h"
+#include "network/getgranules.h"
 
-#include <topmenuwidgets/settingswidget.h>
+#include "topmenuwidgets/settingswidget.h"
 #include <QHash>
 
 class TimeLine;

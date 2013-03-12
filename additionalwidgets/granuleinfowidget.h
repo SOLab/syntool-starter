@@ -3,7 +3,7 @@
 
 #include <QWidget>
 #include <QGridLayout>
-#include <more/ProductStructures.h>
+#include "more/ProductStructures.h"
 #include <QDebug>
 #include <QLabel>
 #include <QPushButton>

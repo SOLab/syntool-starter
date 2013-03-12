@@ -19,12 +19,12 @@
 
 #include <QList>
 #include <qmath.h>
-#include <additionalwidgets/calendar.h>
-#include <additionalwidgets/granuleinfowidget.h>
-#include <more/ProductStructures.h>
-#include <more/granuleactions.h>
-#include <network/getgranules.h>
-#include <network/getgranulecoords.h>
+#include "additionalwidgets/calendar.h"
+#include "additionalwidgets/granuleinfowidget.h"
+#include "more/ProductStructures.h"
+#include "more/granuleactions.h"
+#include "network/getgranules.h"
+#include "network/getgranulecoords.h"
 
 #include <QDesktopServices>
 

@@ -9,7 +9,7 @@
 #include <QHBoxLayout>
 
 #include <QDebug>
-#include <topmenuwidgets/settingstabwidget.h>
+#include "topmenuwidgets/settingstabwidget.h"
 
 
 

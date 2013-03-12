@@ -11,8 +11,8 @@
 #include <QTime>
 #include <QDateEdit>
 #include <QTimeEdit>
-#include <additionalwidgets/inputbox.h>
-#include <additionalwidgets/productinfowidget.h>
+#include "additionalwidgets/inputbox.h"
+#include "additionalwidgets/productinfowidget.h"
 
 #include <QNetworkReply>
 #include <QXmlStreamReader>
@@ -21,13 +21,13 @@
 #include <QtXml/QDomDocument>
 
 #include <QHash>
-#include <network/downloadimage.h>
+#include "network/downloadimage.h"
 #include <QFile>
 
-#include <more/ProductStructures.h>
+#include "more/ProductStructures.h"
 
-#include <timeline.h>
-#include <network/getgranules.h>
+#include "timeline.h"
+#include "network/getgranules.h"
 
 class ProductsWidget : public QWidget
 {

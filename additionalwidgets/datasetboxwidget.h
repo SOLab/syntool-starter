@@ -10,9 +10,9 @@
 
 #include <QDebug>
 
-#include <more/ProductStructures.h>
-#include <more/granuleactions.h>
-#include <additionalwidgets/granuleinfowidget.h>
+#include "more/ProductStructures.h"
+#include "more/granuleactions.h"
+#include "additionalwidgets/granuleinfowidget.h"
 
 class DatasetBoxWidget : public QWidget
 {

@@ -6,8 +6,8 @@
 #include <QCheckBox>
 #include <QDebug>
 
-#include <additionalwidgets/datasetboxwidget.h>
-#include <more/ProductStructures.h>
+#include "additionalwidgets/datasetboxwidget.h"
+#include "more/ProductStructures.h"
 
 class DatasetsWidget : public QWidget
 {

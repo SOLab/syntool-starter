@@ -20,10 +20,13 @@ inline double mercator(double x) {
     return 0.5*log((1.0+sin(x))/(1.0-sin(x)));
 }
 
-const double defMercAngle = 85.0511 * M_PI / 180.0;
+const double maxAbsLon = 180.0;
+const double maxAbsLat = 85.0511;
+const double defMercAngle = maxAbsLat * M_PI / 180.0;
 const double defMercScale = M_PI_2 / mercator(defMercAngle);
 
-const double a = 6378.137;
+//const double a = 6378.137;
+const double a = 1;
 
 
 double Mercator2SphereAnalytic(double iTY, const double scale = defMercScale,
@@ -43,12 +46,11 @@ struct decartCoord
     qreal z;
 };
 
-decartCoord llh2xyz(qreal _lat, qreal _lon, qreal h)
+decartCoord llh2xyz(qreal _lat, qreal _lon, qreal h = 0)
 {
     qreal lat = _lat*M_PI/180.0;
     qreal lon = _lon*M_PI/180.0;
-    float e2 = 0.00669436619;
-    float a = 6378.137;
+    qreal e2 = 0.00669436619;
     qreal N = a/qSqrt(1 - e2 * qPow(qSin(lat),2));
 
     decartCoord decartCoordPoint;
@@ -71,7 +73,6 @@ decartCoord llh2xyz_var2(qreal _lat, qreal _lon, qreal h)
 {
     qreal lat = _lat*M_PI/180.0;
     qreal lon = _lon*M_PI/180.0;
-    float a = 6378.137;
     qreal f = 1.0/298.257224;
     qreal C = 1/qSqrt(qPow(qCos(lat),2) + qPow(1-f,2) * qPow(qSin(lat), 2));
     qreal S = qPow(1-f,2) * C;
@@ -144,7 +145,7 @@ QGLSceneNode *Earth::buildEarthNode(qreal radius, int divisions, int cur_zoom)
         for (int latTileNum = 0; latTileNum < separation; latTileNum++)
         {
 //            qDebug() << latTileNum << lonTileNum;
-//            if (lonTileNum == 1 && latTileNum == 1)
+            if (lonTileNum == 0 && latTileNum == 0)
 //            if (latTileNum == 0)
             addTileNode(&builder, radius, divisions, cur_zoom, lonTileNum, latTileNum);
         }

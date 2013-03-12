@@ -6,7 +6,7 @@
 #include <QLabel>
 #include <QDebug>
 
-#include <additionalwidgets/layerboxwidget.h>
+#include "additionalwidgets/layerboxwidget.h"
 
 class LayersWidget : public QWidget
 {

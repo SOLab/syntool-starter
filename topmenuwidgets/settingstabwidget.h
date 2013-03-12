@@ -2,8 +2,8 @@
 #define SETTINGSTABWIDGET_H
 
 #include <QTabWidget>
-#include <topmenuwidgets/cachetabwidget.h>
-#include <topmenuwidgets/commontabwidget.h>
+#include "topmenuwidgets/cachetabwidget.h"
+#include "topmenuwidgets/commontabwidget.h"
 
 class SettingsTabWidget : public QTabWidget
 {

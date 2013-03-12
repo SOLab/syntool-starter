@@ -1,7 +1,6 @@
 #ifndef KEYSINTERCEPTION_H
 #define KEYSINTERCEPTION_H
 
-#include <iostream>
 #include <QtGui>
 #include <QtCore>
 #include "earthview.h"

@@ -6,7 +6,7 @@
 #include <QLabel>
 #include <QComboBox>
 #include <QScrollArea>
-#include <additionalwidgets/imagebutton.h>
+#include "additionalwidgets/imagebutton.h"
 
 class MapsWidget : public QWidget
 {

@@ -9,7 +9,7 @@
 #include <QXmlStreamReader>
 #include <QtXml/QDomDocument>
 
-#include <more/ProductStructures.h>
+#include "more/ProductStructures.h"
 
 #include <QDebug>
 

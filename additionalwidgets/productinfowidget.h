@@ -3,7 +3,7 @@
 
 #include <QWidget>
 #include <QCloseEvent>
-#include <toolboxwidgets/productswidget.h>
+#include "toolboxwidgets/productswidget.h"
 //#include <QPixmap>
 
 class ProductInfoWidget : public QWidget
