@@ -37,12 +37,12 @@ double Mercator2SphereAnalytic2(double iTY, const double scale = defMercScale,
 double Mercator2SphereAnalytic(double iTY, const double scale = defMercScale,
                                const double maxAng = defMercAngle)
 {
-    iTY = iTY/90.0;
+//    iTY = iTY/90.0;
     double angle = (iTY * 2 - 1) * M_PI_2;		// texture V to angle
     double angle2 = fabs(angle);
     double val = (angle2 > maxAng) ? M_PI_2 : (mercator(angle2) * scale);
     if (angle < 0.0) val = -val;
-    return (1 + val / M_PI_2) * 0.5 * (90.0);	// angle to texture V
+    return (1 + val / M_PI_2) * 0.5;	// angle to texture V
 }
 
 double Mercator2SphereAnalyticDegrees(double iTY, const double scale = defMercScale,
@@ -135,7 +135,12 @@ Earth::Earth(QObject *parent, QSharedPointer<QGLMaterialCollection> materials)
     axialTilt1->setAngle(270.0f);
     axialTilt1->setAxis(QVector3D(1,0,0));
 
+    QGraphicsRotation3D *rotateY = new QGraphicsRotation3D();
+    rotateY->setAngle(-90.0f);
+    rotateY->setAxis(QVector3D(0,1,0));
+
     addTransform(axialTilt1);
+    addTransform(rotateY);
     addNode(sphere);
 
     zoom = 0;
@@ -226,7 +231,7 @@ void Earth::addTileNode(QGLBuilder* builder, qreal radius, int divisions, int cu
     QVector3D curDecartNext;
 
     QGLBuilder tempBuilder;
-    for (qreal curMerLat = maxLat; curMerLat >= minLat; curMerLat-=oneStackDegrees) {
+    for (qreal curMerLat = maxLat; curMerLat >= (minLat+0.2); curMerLat-=oneStackDegrees) {
         qreal curMerLatNext = curMerLat - oneStackDegrees;
         QGeometryData prim;
 
@@ -243,13 +248,13 @@ void Earth::addTileNode(QGLBuilder* builder, qreal radius, int divisions, int cu
             int signLat = (curMerLat >= 0)?1:-1;
             int signLatNext = (curMerLatNext >= 0)?1:-1;
 
-            curSphereLat = Mercator2SphereAnalytic(qAbs(curMerLat))*signLat;
-            curSphereLatNext = Mercator2SphereAnalytic(qAbs(curMerLatNext))*signLatNext;
+            curSphereLat = Mercator2SphereAnalytic(qAbs(curMerLat)/90.0)*signLat*90;
+            curSphereLatNext = Mercator2SphereAnalytic(qAbs(curMerLatNext)/90.0)*signLatNext*90;
 
             curSphereLon = curMerLon;
 
-            curDecart = llh2xyz(curSphereLat, curSphereLon);
-            curDecartNext = llh2xyz(curSphereLatNext, curSphereLon);
+            curDecart = llh2xyz((curSphereLat), curSphereLon);
+            curDecartNext = llh2xyz((curSphereLatNext), curSphereLon);
 
             qDebug() << "====================================";
             qDebug() << "curMerLat = " << curMerLat;
@@ -267,14 +272,13 @@ void Earth::addTileNode(QGLBuilder* builder, qreal radius, int divisions, int cu
             yTexCoord = ((curSphereLat/90.0) - (minSphereLat))/((maxSphereLat) - (minSphereLat));
             qDebug() << "xTexCoord = " << xTexCoord;
             qDebug() << "yTexCoord = " << yTexCoord;
-            prim.appendTexCoord(QVector2D(xTexCoord, yTexCoord));
-
+            prim.appendTexCoord(QVector2D(xTexCoord, Mercator2SphereAnalytic(yTexCoord)));
 
             prim.appendVertex(curDecartNext);
             prim.appendNormal(curDecartNext);
             xTexCoordNext = ((curSphereLon) - (minSphereLon))/((maxSphereLon) - (minSphereLon));
             yTexCoordNext = ((curSphereLatNext/90.0) - (minSphereLat))/((maxSphereLat) - (minSphereLat));
-            prim.appendTexCoord(QVector2D(xTexCoordNext, yTexCoordNext));
+            prim.appendTexCoord(QVector2D(xTexCoordNext, Mercator2SphereAnalytic(yTexCoordNext)));
 //            sliceToCoord = (maxSlice - slice) * separation;
 
 //            prim.appendVertex
