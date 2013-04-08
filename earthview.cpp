@@ -97,7 +97,7 @@ geoDetic convert_ecef_to_wgs84(double x, double y, double z)
     return pos;
 }
 
-EarthView::EarthView(QWindow *parent)
+EarthView::EarthView(ConfigData configData, QWindow *parent)
     : QGLView(parent)
     , m_scene(0)
     , m_palette(new QGLMaterialCollection())
@@ -131,7 +131,7 @@ EarthView::EarthView(QWindow *parent)
     m_scene->setPickable(true);
     m_scene->mainNode()->addNode(navigateButton);
 
-    earth = new Earth(this, m_palette);
+    earth = new Earth(this, m_palette, configData);
     connect (this, &EarthView::changedScale, earth, &Earth::changeTexture);
 
     m_scene->mainNode()->addNode(earth);

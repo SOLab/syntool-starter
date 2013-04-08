@@ -20,6 +20,7 @@
 #include "toolboxwidgets/datasetswidget.h"
 #include "rightsidebar.h"
 #include "network/getgranules.h"
+#include "more/structure.h"
 
 #include "topmenuwidgets/settingswidget.h"
 #include <QHash>
@@ -31,7 +32,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = 0);
+    MainWindow(ConfigData _configData, QWidget *parent = 0);
     ~MainWindow(){}
     void setHostedWindow(QWindow *window);
     void keyPress(QKeyEvent* e);
@@ -39,6 +40,7 @@ public:
 
     QHash<QString, selectedProduct>* selectedProducts;
     QHash<QString, Granule>* granulesHash;
+    ConfigData configData;
 
 protected:
     QSplitter *splitter;

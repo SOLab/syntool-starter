@@ -4,9 +4,11 @@
 //#include "PythonQt.h"
 //#include "gui/PythonQtScriptingConsole.h"
 
-MainWindow::MainWindow(QWidget *parent)
+MainWindow::MainWindow(ConfigData _configData, QWidget *parent)
     : QMainWindow(parent)
 {
+    configData = _configData;
+
     vlayout = new QVBoxLayout;
     vlayout->setSpacing(0);
     vlayout->setContentsMargins(5,0,5,2);
@@ -23,13 +25,12 @@ MainWindow::MainWindow(QWidget *parent)
     glwgt = new WindowWidget(this);
     glwgt->setMinimumSize(200, 200);
 
-    QString serverName = "http://staging.satin.rshu.ru";
 //    create right toolBox
     rightSidebar = new RightSidebar;
 
     MapsWgt = new MapsWidget(centralwgt);
-    ProductsWgt = new ProductsWidget(serverName, centralwgt);
-    DatasetsWgt = new DatasetsWidget(serverName, centralwgt);
+    ProductsWgt = new ProductsWidget(configData, centralwgt);
+    DatasetsWgt = new DatasetsWidget(configData, centralwgt);
     PlaceWgt = new PlaceWidget(centralwgt);
     LayersWgt = new LayersWidget(centralwgt);
 
@@ -45,8 +46,7 @@ MainWindow::MainWindow(QWidget *parent)
     splitter->setStretchFactor(0, 4);
     splitter->setStretchFactor(1, 1);
 
-
-    timeLine = new TimeLine(serverName, this);
+    timeLine = new TimeLine(configData, this);
     timeLine->setFixedHeight(100);
     timeLine->hide();
 

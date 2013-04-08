@@ -1,9 +1,9 @@
 #include "datasetswidget.h"
 
-DatasetsWidget::DatasetsWidget(QString serverName, QWidget *parent) :
+DatasetsWidget::DatasetsWidget(ConfigData configData, QWidget *parent) :
     QWidget(parent)
 {
-    _serverName = serverName;
+    serverName = configData.serverName;
 
     vLayout = new QVBoxLayout(this);
     vLayout->setContentsMargins(0,0,0,0);
@@ -44,7 +44,7 @@ void DatasetsWidget::addDatasets(QList<qint32> displayedGranules)
         {
             currentDatasets.append(displayedGranules.at(i));
 
-            DatasetBoxWidget* datasetBox = new DatasetBoxWidget(_serverName,
+            DatasetBoxWidget* datasetBox = new DatasetBoxWidget(serverName,
                          _granulesHash->value(QString::number(displayedGranules.at(i))), this);
             datasetBox->setChecked(showAllCheck->isChecked());
             connect(datasetBox, &DatasetBoxWidget::granulePropertiesSignal,

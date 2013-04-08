@@ -1,7 +1,7 @@
 #include "productswidget.h"
 #include <QSizePolicy>
 
-ProductsWidget::ProductsWidget(QString _serverName, QWidget *parent):
+ProductsWidget::ProductsWidget(ConfigData configData, QWidget *parent):
     QWidget(parent)
 {
     vLayout = new QVBoxLayout(this);
@@ -45,7 +45,9 @@ ProductsWidget::ProductsWidget(QString _serverName, QWidget *parent):
     hLine1->setFrameShadow(QFrame::Sunken);
     vLayout->addWidget(hLine1);
 // Create request Url
-    serverName = _serverName;
+    serverName = configData.serverName;
+    cacheDir = configData.cacheDir;
+
     urlProducts = QUrl(serverName + "/api/products");
     urlGranules = QUrl(serverName + "/api/granules");
 
@@ -226,7 +228,9 @@ void ProductsWidget::slotReadyReadProductList()
                 {
                     Product newProduct = createProductFromXml(mElement);
 
-                    QString imagePath = QString("/tmp/%1.jpg").arg(newProduct.NaiadProductId);
+
+                    QDir().mkdir(cacheDir);
+                    QString imagePath = QString(cacheDir+"/%1.jpg").arg(newProduct.NaiadProductId);
 
                     // download product image
                     if (!newProduct.ImageUrl.isEmpty())
@@ -322,10 +326,10 @@ void ProductsWidget::currentProductChanged(int index)
         comboParameters->model()->sort(0);
 
         // set product image to productImageLbl
-        if (QFile::exists(QString("/tmp/%1.jpg").\
+        if (QFile::exists(QString(cacheDir+"/%1.jpg").\
                           arg(productsHash[comboProducts->currentText()].NaiadProductId)))
         {
-            productImagePixmap->load(QString("/tmp/%1.jpg").\
+            productImagePixmap->load(QString(cacheDir+"/%1.jpg").\
                                  arg(productsHash[comboProducts->currentText()].NaiadProductId));
             *productImagePixmap = productImagePixmap->scaled(116,116);
 

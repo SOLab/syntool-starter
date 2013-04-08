@@ -8,6 +8,7 @@
 
 #include <QImage>
 #include "tiledownloader.h"
+#include "more/structure.h"
 
 QT_BEGIN_NAMESPACE
 class QGLTexture2D;
@@ -16,7 +17,7 @@ QT_END_NAMESPACE
 class Earth : public QGLSceneNode
 {
 public:
-    Earth(QObject *parent, QSharedPointer<QGLMaterialCollection> materials);
+    Earth(QObject *parent, QSharedPointer<QGLMaterialCollection> materials, ConfigData configData);
     ~Earth();
 
 //    void drawImage(QGLPainter *painter);
@@ -33,6 +34,8 @@ private:
     QGLSceneNode *sn3;
     QGLSceneNode *sn4;
     QGLSceneNode *buildEarthNode(qreal radius = 1.0, int divisions = 5, int separation = 1);
+    QGLSceneNode* BuildSpherePart(qreal startU, qreal stepU, int numU, qreal startV, qreal stepV, int numV);
+    QString cacheDir;
 
 public slots:
     void changeTexture(qreal zoom);

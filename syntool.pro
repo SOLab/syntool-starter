@@ -78,7 +78,8 @@ HEADERS = \
     additionalwidgets/granuleinfowidget.h \
     network/getgranulecoords.h \
     additionalwidgets/datasetboxwidget.h \
-    more/granuleactions.h
+    more/granuleactions.h \
+    more/structure.h
 RESOURCES += \
     syntool.qrc
 DEPENDPATH += resources

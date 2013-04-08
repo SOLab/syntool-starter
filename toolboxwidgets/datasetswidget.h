@@ -8,12 +8,13 @@
 
 #include "additionalwidgets/datasetboxwidget.h"
 #include "more/ProductStructures.h"
+#include "more/structure.h"
 
 class DatasetsWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit DatasetsWidget(QString serverName, QWidget *parent = 0);
+    explicit DatasetsWidget(ConfigData configData, QWidget *parent = 0);
 
     void setGranules(QHash<QString, Granule>* granulesHash);
 protected:
@@ -22,7 +23,7 @@ protected:
     QList<qint32> currentDatasets;
 
     QHash<QString, Granule>* _granulesHash;
-    QString _serverName;
+    QString serverName;
 
 signals:
     void closeAllDatasetBoxWidgets();

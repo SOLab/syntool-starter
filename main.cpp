@@ -45,17 +45,23 @@
 #include <QGuiApplication>
 #include <QDir>
 #include <QProcess>
+#include "more/structure.h"
 
 int main(int argc, char *argv[])
 {
     myApplication app(argc, argv);
 
-    EarthView view;
-    app.set_view(&view);
-    QDir cacheDir("/tmp/syntool");
+    ConfigData configData;
+    configData.serverName = "http://staging.satin.rshu.ru";
+    configData.cacheDir = "/tmp/syntool";
+
+    QDir cacheDir(configData.cacheDir);
     if (!cacheDir.exists()){
         cacheDir.mkdir(cacheDir.path());
     }
+
+    EarthView view(configData);
+    app.set_view(&view);
 
     // process id
     qDebug() << app.applicationPid();
@@ -124,7 +130,7 @@ int main(int argc, char *argv[])
 //        view.resize(800, 600);
 //    }
 
-    MainWindow wgt;
+    MainWindow wgt(configData);
     wgt.setHostedWindow(&view);
     wgt.resize(900,900);
 

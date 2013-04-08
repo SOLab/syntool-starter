@@ -23,8 +23,10 @@
 #include <QHash>
 #include "network/downloadimage.h"
 #include <QFile>
+#include <QDir>
 
 #include "more/ProductStructures.h"
+#include "more/structure.h"
 
 #include "timeline.h"
 #include "network/getgranules.h"
@@ -33,7 +35,7 @@ class ProductsWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit ProductsWidget(QString _serverName, QWidget *parent = 0);
+    explicit ProductsWidget(ConfigData configData, QWidget *parent = 0);
     void setSelectedProducts(QHash<QString, selectedProduct>* _selectedProducts,
                              QHash<QString, Granule> *_granulesHash);
     void setObjectsPointer(TimeLine* _timeLinePointer);
@@ -43,6 +45,7 @@ protected:
     QDomDocument* dom;
 
     QString serverName;
+    QString cacheDir;
     QUrl urlProducts;
     QUrl urlGranules;
     QNetworkAccessManager *networkManager;

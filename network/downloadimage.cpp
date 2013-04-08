@@ -8,13 +8,13 @@ DownloadImage::DownloadImage(QObject *parent) :
 void DownloadImage::run()
 {
     QNetworkAccessManager* m_netwManager = new QNetworkAccessManager(this);
+
     connect(m_netwManager, SIGNAL(finished(QNetworkReply*)),
             this, SLOT(slotReadyRead(QNetworkReply*)));
 
     QNetworkRequest request(_imageUrl);
     QNetworkReply* reply = m_netwManager->get(request);
 
-    connect(reply, SIGNAL(readyRead()), this, SLOT(slotReadyRead()));
     connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
             this, SLOT(getError(QNetworkReply::NetworkError)));
 }

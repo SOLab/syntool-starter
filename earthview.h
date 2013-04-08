@@ -48,6 +48,7 @@
 #include <QVBoxLayout>
 #include <QGLPickNode>
 #include <QProcess>
+#include "more/structure.h"
 
 QT_BEGIN_NAMESPACE
 class QGLSceneNode;
@@ -67,7 +68,7 @@ class EarthView : public QGLView
 //    Q_PROPERTY(float angle3 READ angle3 WRITE setAngle3)
 //    Q_PROPERTY(float glowFactor READ glowFactor WRITE setGlowFactor)
 public:
-    EarthView(QWindow *parent = 0);
+    EarthView(ConfigData configData, QWindow *parent = 0);
     ~EarthView();
 //    float angle1() const { return m_angle1; }
 //    void setAngle1(float angle) { m_angle1 = angle; update(); }

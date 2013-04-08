@@ -23,6 +23,7 @@
 #include "additionalwidgets/granuleinfowidget.h"
 #include "more/ProductStructures.h"
 #include "more/granuleactions.h"
+#include "more/structure.h"
 #include "network/getgranules.h"
 #include "network/getgranulecoords.h"
 
@@ -70,7 +71,7 @@ class TimeLine : public QWidget
     Q_OBJECT
 
 public:
-    TimeLine(QString _serverName, QWidget *parent = 0);
+    TimeLine(ConfigData configData, QWidget *parent = 0);
     ~TimeLine();
     void paintEvent(QPaintEvent * pe);
     void setSelectedProducts(QHash<QString, selectedProduct>* _selectedProducts,
