@@ -190,7 +190,7 @@ QGLSceneNode* Earth::BuildSpherePart(qreal startU, qreal stepU, int numU,   // �
                      // ... др параметры
                     )
 {
-// находим диапазон
+    // находим диапазон
     UV minUV = GetUV(startU, startV);
     UV maxUV = GetUV(startU + stepU * (numU - 1), startV + stepV * (numV - 1));
     minUV.v = Mercator2SphereAnalytic(minUV.v);
@@ -198,23 +198,21 @@ QGLSceneNode* Earth::BuildSpherePart(qreal startU, qreal stepU, int numU,   // �
 
     QGLBuilder tempBuilder;
     QGeometryData prim;
-    qDebug() << numU;
-// вычисляем UV координаты для сферы
-    for (int i =  0; i < numU; ++i)
+
+    // вычисляем UV координаты для сферы
+    for (int i = 0; i < numU; ++i)
     {
-
-        qDebug() << "i = " << i;
-        for (int j =  0; j < numV; ++j)
+        prim.clear();
+        for (int j =  0; j <= numV; ++j)
         {
-//            qDebug() << "j = " << j;
 
-            qreal angleU = startU + stepU * i;
+            qreal angleU = startU + stepU * (i);
             qreal angleV = startV + stepV * j;
 
             // добавляем вертекс
-            qreal y = sin(angleV);
-            qreal len = sqrt(1 - y * y);
-            qreal x = cos(angleU) * len;
+            qreal x = sin(angleV);
+            qreal len = sqrt(1 - qPow(x,2));
+            qreal y = cos(angleU) * len;
             qreal z = sin(angleU) * len;
             prim.appendVertex(QVector3D(x, y, z) * a);
             prim.appendNormal(QVector3D(x, y, z) * a);
@@ -223,7 +221,29 @@ QGLSceneNode* Earth::BuildSpherePart(qreal startU, qreal stepU, int numU,   // �
             UV uv = GetUV(angleU, angleV);
 
             // получаем V меркатора
-            uv.v = Mercator2SphereAnalytic(maxUV.v);
+            uv.v = Mercator2SphereAnalytic(uv.v);
+
+            // нормируем UV
+            uv.u = (uv.u - minUV.u) / (maxUV.u - minUV.u);
+            uv.v = (uv.v - minUV.v) / (maxUV.v - minUV.v);
+
+            prim.appendTexCoord(QVector2D(uv.u, uv.v));
+
+            // second vertex
+            angleU = startU + stepU * (i+1);
+            angleV = startV + stepV * (j);
+
+            // добавляем вертекс
+            y = cos(angleU) * len;
+            z = sin(angleU) * len;
+            prim.appendVertex(QVector3D(x, y, z) * a);
+            prim.appendNormal(QVector3D(x, y, z) * a);
+
+            // получаем сферические UV
+            uv = GetUV(angleU, angleV);
+
+            // получаем V меркатора
+            uv.v = Mercator2SphereAnalytic(uv.v);
 
             // нормируем UV
             uv.u = (uv.u - minUV.u) / (maxUV.u - minUV.u);
@@ -231,13 +251,8 @@ QGLSceneNode* Earth::BuildSpherePart(qreal startU, qreal stepU, int numU,   // �
 
             prim.appendTexCoord(QVector2D(uv.u, uv.v));
         }
-
-//        if (!(i%8))
-//        {
-//            prim.clear();
-//        }
+        tempBuilder.addQuadStrip(prim);
     }
-    tempBuilder.addQuadStrip(prim);
     return tempBuilder.finalizedSceneNode();
 }
 
@@ -270,8 +285,8 @@ void Earth::addTileNode(QGLBuilder* builder, qreal radius, int divisions, int cu
 
 
     // all stacks and slices
-    int stacks = 32;
-    int slices = 32;
+    int stacks = 64;
+    int slices = 64;
     if (cur_zoom > 4)
     {
         stacks *= qPow(2, cur_zoom - 4);
@@ -311,14 +326,13 @@ void Earth::addTileNode(QGLBuilder* builder, qreal radius, int divisions, int cu
     qreal maxRadianLat = 2*M_PI - latTileNum * NTLat;
     qreal oneRadStack = (maxRadianLat - minRadianLat)/(qreal)stacksForOne;
 
-
-    qreal minRadianLon = (lonTileNum+1) * NTLon - M_PI_2;
-    qreal maxRadianLon = lonTileNum * NTLon - M_PI_2;
-    qreal oneRadSice = (maxRadianLon - minRadianLon)/(qreal)slicesForOne;
+    qreal minRadianLon = (lonTileNum) * NTLon - M_PI_2;
+    qreal maxRadianLon = (lonTileNum+1) * NTLon - M_PI_2;
+    qreal oneRadSlice = (maxRadianLon - minRadianLon)/(qreal)slicesForOne;
 //    QGLBuilder Earth::BuildSpherePart(qreal startU, qreal stepU, int numU,   // широта (0..2*PI)
 //                         qreal startV, qreal stepV, int numV   // долгота (-PI/2 .. +PI/2)
 //    QGLBuilder tempBuilder = BuildSpherePart(minRadianLat, oneRadStack, stacksForOne,
-//                                             minRadianLon, oneRadSice, slicesForOne);
+//                                             minRadianLon, oneRadSlice, slicesForOne);
 
 //    for (qreal curSphereLat = minSphereLat; curSphereLat <= (maxSphereLat-0.2);
 //                                            curSphereLat+=oneSphereStackDegrees) {
@@ -384,9 +398,8 @@ void Earth::addTileNode(QGLBuilder* builder, qreal radius, int divisions, int cu
 //        tempBuilder.addQuadStrip(prim);
 //    }
 
-    qDebug() << "www";
     QGLSceneNode* tempNode = BuildSpherePart(minRadianLat, oneRadStack, stacksForOne,
-                                             minRadianLon, oneRadSice, slicesForOne);
+                                             minRadianLon, oneRadSlice, slicesForOne);
     qDebug() << "WWW";
     if (separation > 1){
         QGLTexture2D* tex;
@@ -398,7 +411,7 @@ void Earth::addTileNode(QGLBuilder* builder, qreal radius, int divisions, int cu
 //            QTimer::singleShot(0, &tileDownloader, SLOT(execute()));
 
         QString _filepath = cacheDir+"/%1-%2-%3.png";
-        QString filepath(_filepath.arg(cur_zoom).arg(separation-1-lonTileNum).arg(latTileNum));
+        QString filepath(_filepath.arg(cur_zoom).arg(lonTileNum).arg(latTileNum));
 
         QUrl url;
         url.setPath(filepath);
@@ -406,7 +419,7 @@ void Earth::addTileNode(QGLBuilder* builder, qreal radius, int divisions, int cu
 
         if (!QFile::exists(filepath))
         {
-            QString path = tileDownload(separation-1-lonTileNum, latTileNum, cur_zoom);
+            QString path = tileDownload(lonTileNum, latTileNum, cur_zoom);
 
 //            QUrl url;
 //            url.setPath(path);
