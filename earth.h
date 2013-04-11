@@ -35,11 +35,13 @@ private:
     QGLSceneNode *sn4;
     QGLSceneNode *buildEarthNode(qreal radius = 1.0, int divisions = 5, int separation = 1);
     QGLSceneNode* BuildSpherePart(qreal startU, qreal stepU, int numU, qreal startV, qreal stepV, int numV);
+    QGLSceneNode* BuildSpherePart2(qreal startU, qreal stepU, int numU, qreal startV, qreal stepV, int numV);
     QString cacheDir;
 
 public slots:
     void changeTexture(qreal zoom);
     void addTileNode(QGLBuilder *builder, qreal radius, int divisions, int cur_zoom, qint32 lonTileNum, qint32 latTileNum);
+    void addTileNode2(QGLBuilder *builder, qreal radius, int divisions, int cur_zoom, qint32 lonTileNum, qint32 latTileNum);
 
 };
 
