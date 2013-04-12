@@ -163,10 +163,9 @@ QGLSceneNode *Earth::buildEarthNode(qreal radius, int divisions, int cur_zoom)
     {
         for (int latTileNum = 0; latTileNum < separation; latTileNum++)
         {
-//            qDebug() << latTileNum << lonTileNum;
 //            if ((lonTileNum == 1 && latTileNum == 0) || (lonTileNum == 2 && latTileNum == 1))
 //            if ((lonTileNum == 1 || latTileNum == separation/2-1))
-//            if (latTileNum == 0)
+//            if (latTileNum == 1)
             addTileNode(&builder, radius, divisions, cur_zoom, lonTileNum, latTileNum);
         }
     }
@@ -197,12 +196,6 @@ void Earth::addTileNode(QGLBuilder* builder, qreal radius, int divisions, int cu
     qreal minMerLat = Lat2MercatorLatitude(minSphereLat);
     qreal maxMerLat = Lat2MercatorLatitude(maxSphereLat);
 
-    qreal minMerLat2 = ((latTileNum) * (maxAbsLatMer/180.0 *M_PI) / separation - M_PI_2);
-    qreal maxMerLat2 = ((latTileNum+1) * (maxAbsLatMer/180.0 *M_PI) / separation - M_PI_2);
-
-    qreal minMerLon = minSphereLon;
-    qreal maxMerLon = maxSphereLon;
-
     // all stacks and slices
     int stacks = 32;
     int slices = 32;
@@ -213,17 +206,18 @@ void Earth::addTileNode(QGLBuilder* builder, qreal radius, int divisions, int cu
 //    }
 
     // stacks and slices for one tile
-    int stacksForOne = stacks/separation;
-    int slicesForOne = slices/separation;
+//    qreal stacksForOne = stacks/(float)separation;
+//    qreal slicesForOne = slices/(float)separation;
 
-    qreal oneSphereStackDegrees = (maxSphereLat - minSphereLat)/(qreal)stacksForOne;
-    qreal oneSphereSliceDegrees = (maxSphereLon - minSphereLon)/(qreal)slicesForOne;
+    qreal oneSphereStackDegrees = (maxSphereLat - minSphereLat) / (stacks/(float)separation);
+    qreal oneSphereSliceDegrees = (maxSphereLon - minSphereLon) / (slices/(float)separation);
 
     QVector3D curDecart;
     QVector3D curDecartNext;
 
     qreal curMerLat;
     qreal curMerLatNext;
+    qreal curSphereLatNext;
 
     QGLBuilder tempBuilder;
     QGeometryData prim;
@@ -233,40 +227,56 @@ void Earth::addTileNode(QGLBuilder* builder, qreal radius, int divisions, int cu
     double xTexCoord;
     double xTexCoordNext;
 
-    for (qreal curSphereLat = minSphereLat; curSphereLat < (maxSphereLat-0.001);
-                                            curSphereLat+=oneSphereStackDegrees) {
+    // maxSphereLon with with an error of calculations (approximately)
+    qreal maxSphereLonApprox = maxSphereLon+0.0001;
+    bool firstFlag = true;
+    bool lastFlag = false;
+
+    for (qreal curSphereLat = minSphereLat; curSphereLat < maxSphereLat; curSphereLat+=oneSphereStackDegrees) {
         // calculate next point latitude
-        qreal curSphereLatNext = curSphereLat + oneSphereStackDegrees;
-//        curMerLat = (Mercator2SphereAnalytic(curSphereLat/M_PI+0.5)-0.5)*M_PI;
-//        curMerLatNext = (Mercator2SphereAnalytic(curSphereLatNext/M_PI+0.5)-0.5)*M_PI;
+        curSphereLatNext = curSphereLat + oneSphereStackDegrees;
+
+        if (qAbs(curSphereLatNext - maxSphereLat) < 0.001)
+        {
+            curSphereLatNext = maxSphereLat;
+            curSphereLat = maxSphereLat - oneSphereStackDegrees;
+            lastFlag = true;
+        }
+
         curMerLat = Lat2MercatorLatitude(curSphereLat);
         curMerLatNext = Lat2MercatorLatitude(curSphereLatNext);
 
         prim.clear();
-        for (qreal curSphereLon = minSphereLon-0.0001; curSphereLon < (maxSphereLon+0.0001); curSphereLon += oneSphereSliceDegrees)
+        for (qreal curSphereLon = minSphereLon; curSphereLon < maxSphereLonApprox; curSphereLon += oneSphereSliceDegrees)
         {
-//            curMerLat = Lat2MercatorLatitude(curSphereLat);
-//            curMerLatNext = Lat2MercatorLatitude(curSphereLatNext);
-
             // curMerLat
             curDecart = llh2xyz((curSphereLat), curSphereLon);
-            curDecartNext = llh2xyz((curSphereLatNext), curSphereLon);
-
             prim.appendVertex(curDecart);
             prim.appendNormal(curDecart);
 
             xTexCoord = ((curSphereLon) - (minSphereLon))/qreal((maxSphereLon) - (minSphereLon));
-            yTexCoord = (curMerLat - minMerLat) / qreal(maxMerLat - minMerLat);
+
+            if (firstFlag)
+                yTexCoord = 0;
+            else
+                yTexCoord = (curMerLat - minMerLat) / qreal(maxMerLat - minMerLat);
             prim.appendTexCoord(QVector2D(xTexCoord, (yTexCoord)));
 
+            curDecartNext = llh2xyz((curSphereLatNext), curSphereLon);
             prim.appendVertex(curDecartNext);
             prim.appendNormal(curDecartNext);
 
             xTexCoordNext = ((curSphereLon) - (minSphereLon)) / qreal((maxSphereLon) - (minSphereLon));
-            yTexCoordNext = (curMerLatNext - minMerLat) / qreal(maxMerLat - minMerLat);
+            if (lastFlag)
+                yTexCoordNext = 1;
+            else
+                yTexCoordNext = (curMerLatNext - minMerLat) / qreal(maxMerLat - minMerLat);
             prim.appendTexCoord(QVector2D(xTexCoordNext, (yTexCoordNext)));
         }
         tempBuilder.addQuadStrip(prim);
+        firstFlag = false;
+        if (lastFlag)
+            break;
     }
 
     QGLSceneNode* tempNode = tempBuilder.finalizedSceneNode();
@@ -315,7 +325,6 @@ void Earth::addTileNode(QGLBuilder* builder, qreal radius, int divisions, int cu
 
     builder->sceneNode()->addNode(tempNode);
 }
-
 
 struct UV {
  qreal u, v;
@@ -328,448 +337,6 @@ UV GetUV( qreal angleU, qreal angleV )
   uv.v = angleV / (M_PI) + 0.5;
   return uv;
 }
-
-QGLSceneNode* Earth::BuildSpherePart(qreal startU, qreal stepU, int numU,   // широта (0..2*PI)
-                     qreal startV, qreal stepV, int numV   // долгота (-PI/2 .. +PI/2)
-                     // ... др параметры
-                    )
-{
-    // находим диапазон
-    UV minUV = GetUV(startU, startV);
-    UV maxUV = GetUV(startU + stepU * (numU - 1), startV + stepV * (numV - 1));
-    minUV.v = Mercator2SphereAnalytic(minUV.v);
-    maxUV.v = Mercator2SphereAnalytic(maxUV.v);
-
-    QGLBuilder tempBuilder;
-    QGeometryData prim;
-
-    // вычисляем UV координаты для сферы
-    for (int i = 0; i < numU; ++i)
-    {
-        prim.clear();
-        for (int j =  0; j < numV; ++j)
-        {
-            qreal angleU = startU + stepU * (i);
-            qreal angleV = startV + stepV * j;
-
-            // добавляем вертекс
-            qreal x = sin(angleV);
-            qreal len = sqrt(1 - qPow(x,2));
-            qreal y = cos(angleU) * len;
-            qreal z = sin(angleU) * len;
-            prim.appendVertex(QVector3D(x, y, z) * a);
-            prim.appendNormal(QVector3D(x, y, z) * a);
-
-            // получаем сферические UV
-            UV uv = GetUV(angleU, angleV);
-
-            // получаем V меркатора
-            uv.v = Mercator2SphereAnalytic(uv.v);
-
-            // нормируем UV
-            uv.u = (uv.u - minUV.u) / (maxUV.u - minUV.u);
-            uv.v = (uv.v - minUV.v) / (maxUV.v - minUV.v);
-
-            prim.appendTexCoord(QVector2D(uv.u, uv.v));
-
-            // second vertex
-            angleU = startU + stepU * (i+1);
-
-            // добавляем вертекс
-            y = cos(angleU) * len;
-            z = sin(angleU) * len;
-            prim.appendVertex(QVector3D(x, y, z) * a);
-            prim.appendNormal(QVector3D(x, y, z) * a);
-
-            // получаем сферические UV
-            uv = GetUV(angleU, angleV);
-
-            // получаем V меркатора
-            uv.v = Mercator2SphereAnalytic(uv.v);
-
-            // нормируем UV
-            uv.u = (uv.u - minUV.u) / (maxUV.u - minUV.u);
-            uv.v = (uv.v - minUV.v) / (maxUV.v - minUV.v);
-
-            prim.appendTexCoord(QVector2D(uv.u, uv.v));
-        }
-        tempBuilder.addQuadStrip(prim);
-    }
-    return tempBuilder.finalizedSceneNode();
-}
-
-void Earth::addTileNode2(QGLBuilder* builder, qreal radius, int divisions, int cur_zoom,
-                        qint32 lonTileNum, qint32 latTileNum)
-{
-    int separation = qPow(2, cur_zoom);
-////////////////////////////////////////////
-    // degrees for one tile
-    qreal NTLat = M_PI / separation;
-    qreal NTLon = 2*M_PI / separation;
-
-    // min and max tile degrees
-    qreal minMerLat = ((latTileNum) * NTLat - M_PI_2);
-    qreal maxMerLat = ((latTileNum+1) * NTLat - M_PI_2);
-    qreal minMerLon = ((lonTileNum) * NTLon - M_PI);
-    qreal maxMerLon = ((lonTileNum+1) * NTLon - M_PI);
-
-    // calculate spherical min and max lon and lat
-    qreal minSphereLat = Mercator2SphereAnalytic(latTileNum/qreal(separation));
-    qreal maxSphereLat = Mercator2SphereAnalytic((latTileNum+1)/qreal(separation));
-
-    qreal minSphereLon = minMerLon;
-    qreal maxSphereLon = maxMerLon;
-
-    // all stacks and slices
-    int stacks = 64;
-    int slices = 64;
-    if (cur_zoom > 4)
-    {
-        stacks *= qPow(2, cur_zoom - 4);
-        slices *= qPow(2, cur_zoom - 4);
-    }
-//    int stacks = stacksForOne * separation;
-//    int slices = slicesForOne * separation;
-
-//    // stacks and slices for one tile
-    int stacksForOne = stacks/separation;
-    int slicesForOne = slices/separation;
-
-
-    qreal oneMerStackDegrees = (maxMerLat - minMerLat)/(qreal)stacksForOne;
-    qreal oneMerSliceDegrees = (maxMerLon - minMerLon)/(qreal)slicesForOne;
-
-//    qreal oneSphereStackDegrees = (maxSphereLat - minSphereLat)/(qreal)stacksForOne;
-////    qreal oneSphereSliceDegrees = (maxSphereLon - minSphereLon)/(qreal)slicesForOne;
-    qDebug() << "oneMerStackDegrees = " << oneMerStackDegrees;
-    qDebug() << "oneMerSliceDegrees = " << oneMerSliceDegrees;
-
-////    qreal curSphereLat, curSphereLatNext, curSphereLon;
-
-    QVector3D curDecart;
-    QVector3D curDecartNext;
-
-//    int count_ = 0;
-
-//    // radian for one tile
-//    qreal NTLat = 2*M_PI / separation;
-//    qreal NTLon = M_PI / separation;
-
-//    // min and max tile degrees
-//    qreal minRadianLat = 2*M_PI - (latTileNum+1) * NTLat;
-//    qreal maxRadianLat = 2*M_PI - latTileNum * NTLat;
-//    qreal oneRadStack = (maxRadianLat - minRadianLat)/(qreal)stacksForOne;
-
-//    qreal minRadianLon = (lonTileNum) * NTLon - M_PI_2;
-//    qreal maxRadianLon = (lonTileNum+1) * NTLon - M_PI_2;
-//    qreal oneRadSlice = (maxRadianLon - minRadianLon)/(qreal)slicesForOne;
-//    QGLBuilder Earth::BuildSpherePart(qreal startU, qreal stepU, int numU,   // широта (0..2*PI)
-//                         qreal startV, qreal stepV, int numV   // долгота (-PI/2 .. +PI/2)
-//    QGLBuilder tempBuilder = BuildSpherePart(minRadianLat, oneRadStack, stacksForOne,
-//                                             minRadianLon, oneRadSlice, slicesForOne);
-
-    QGLBuilder tempBuilder;
-    for (qreal curMerLat = minMerLat; curMerLat < (maxMerLat);
-                                            curMerLat+=oneMerStackDegrees) {
-        // calculate next point latitude
-        qreal curMerLatNext = curMerLat + oneMerStackDegrees;
-        QGeometryData prim;
-
-//        qDebug() << "---------" << curSphereLat;
-
-        double yTexCoord;
-        double yTexCoordNext;
-        double xTexCoord;
-        double xTexCoordNext;
-
-        qreal curSphereLat;
-        qreal curSphereLatNext;
-
-        qreal temp1;
-        qreal temp2;
-
-//        qreal curMerLatNormalize;
-//        qreal curMerLatNormalizeNext;
-
-//        int signLat = (curMerLat >= 0)?1:-1;
-//        int signLatNext = (curMerLatNext >= 0)?1:-1;
-
-//        curSphereLat = Mercator2SphereAnalytic(qAbs(curMerLat)/90.0)*signLat*90;
-//        curSphereLatNext = Mercator2SphereAnalytic(qAbs(curMerLatNext)/90.0)*signLatNext*90;
-
-        prim.clear();
-        for (qreal curMerLon = minMerLon-oneMerSliceDegrees/64.0; curMerLon <= maxMerLon; curMerLon += oneMerSliceDegrees)
-        {
-            curSphereLat = Mercator2SphereAnalytic(curMerLat/M_PI+0.5);
-            curSphereLatNext = Mercator2SphereAnalytic(curMerLatNext/M_PI+0.5);
-
-            qreal curSphereLon = curMerLon;
-
-            temp1 = Lat2MercatorLatitude(curMerLat);
-            temp2 = Lat2MercatorLatitude(curMerLatNext);
-
-            if(qAbs(temp1) > 10 || qAbs(temp2) > 10)
-                continue;
-
-            // curMerLat
-            curDecart = llh2xyz((curMerLat), curMerLon);
-            curDecartNext = llh2xyz((curMerLatNext), curMerLon);
-
-            prim.appendVertex(curDecart);
-            prim.appendNormal(curDecart);
-
-//            curMerLatNormalize = (curMerLat + M_PI_2)/(M_PI);
-//            curMerLatNormalizeNext = (curMerLatNext + M_PI_2)/(M_PI);
-
-//            xTexCoord = ((curSphereLon) - (minSphereLon))/((maxSphereLon) - (minSphereLon));
-//            yTexCoord = ((curSphereLat) - (minSphereLat))/((maxSphereLat) - (minSphereLat));
-            xTexCoord = ((curMerLon) - (minSphereLon))/qreal((maxSphereLon) - (minSphereLon));
-            yTexCoord = (curSphereLat - minSphereLat) / qreal(maxSphereLat - minSphereLat);
-//            qDebug() << "xTexCoord = " << xTexCoord;
-//            qDebug() << "yTexCoord = " << yTexCoord;
-            prim.appendTexCoord(QVector2D(xTexCoord, (yTexCoord)));
-
-            prim.appendVertex(curDecartNext);
-            prim.appendNormal(curDecartNext);
-//            xTexCoordNext = ((curSphereLon) - (minSphereLon))/((maxSphereLon) - (minSphereLon));
-//            yTexCoordNext = ((curSphereLatNext) - (minSphereLat))/((maxSphereLat) - (minSphereLat));
-            xTexCoordNext = ((curSphereLon) - (minSphereLon)) / qreal((maxSphereLon) - (minSphereLon));
-            yTexCoordNext = (curSphereLatNext - minSphereLat) / qreal(maxSphereLat - minSphereLat);
-            prim.appendTexCoord(QVector2D(xTexCoordNext, (yTexCoordNext)));
-        }
-//        curMerLat += oneMerStackDegrees;
-        tempBuilder.addQuadStrip(prim);
-    }
-
-    QGLSceneNode* tempNode = tempBuilder.finalizedSceneNode();
-
-//    QGLSceneNode* tempNode = tempB
-//    QGLSceneNode* tempNode = BuildSpherePart(minRadianLat, oneRadStack, stacksForOne,
-//                                             minRadianLon, oneRadSlice, slicesForOne);
-
-    if (separation > 1){
-        QGLTexture2D* tex;
-        tex = new QGLTexture2D();
-        tex->setSize(QSize(512, 256));
-//        qDebug() << "+++++++++++"<< tex->textureUpdated();
-
-//            tileDownloader->setParameters(stack_num, separation-slice_num-1, 1);
-//            QTimer::singleShot(0, &tileDownloader, SLOT(execute()));
-
-        QString _filepath = cacheDir+"/%1-%2-%3.png";
-        QString filepath(_filepath.arg(cur_zoom).arg(lonTileNum).arg(separation-1-latTileNum));
-
-        QUrl url;
-        url.setPath(filepath);
-        QFile image;
-
-        if (!QFile::exists(filepath))
-        {
-            QString path = tileDownload(lonTileNum, separation-1-latTileNum, cur_zoom);
-
-//            QUrl url;
-//            url.setPath(path);
-            image.setFileName(path);
-            while ( ! QFile::exists(path) || !image.size()) {
-//                qDebug() << 1111111;
-                Sleeper::msleep(50);
-            }
-        }
-        else
-        {
-            image.setFileName(filepath);
-        }
-
-        url.setScheme(QLatin1String("file"));
-        tex->setUrl(url);
-
-        QGLMaterial *mat1 = new QGLMaterial;
-        mat1->setTexture(tex, 0);
-
-        m_LoadedTextures.push_back(mat1->texture(0));
-        int earthMat = tempNode->palette()->addMaterial(mat1);
-
-        tempNode->setMaterialIndex(earthMat);
-        tempNode->setEffect(QGL::LitModulateTexture2D);
-    }
-
-    builder->sceneNode()->addNode(tempNode);
-}
-
-
-////////////////////////////////////////////
-//    static int const slicesAndStacks[] = {
-//        8, 4,
-//        8, 8,
-//        16, 8,
-//        16, 16,
-//        32, 16,
-//        32, 32,
-//        64, 32,
-//        64, 64,
-//        128, 64,
-//        128, 128,
-//        256, 256,
-//        512, 512,
-//        1024, 1024
-//    };
-
-//    if (divisions < 1)
-//        divisions = 1;
-//    else if (divisions > 13)
-//        divisions = 13;
-//    int stacks = slicesAndStacks[divisions * 2 - 1];
-//    int slices = slicesAndStacks[divisions * 2 - 2];
-
-//    // Calculate min and max lat and lon
-
-//    int minSlice = (slices / separation) * lonTileNum;
-//    int maxSlice = (slices / separation) * (lonTileNum + 1);
-//    int minStack = (stacks / separation) * latTileNum;
-//    int maxStack = (stacks / separation) * (latTileNum + 1) - 1;
-
-    // Precompute sin/cos values for the slices and stacks.
-//    const int maxSlices = 128 + 1;
-//    const int maxStacks = 128 + 1;
-//    qreal sliceSin[maxSlices];
-//    qreal sliceCos[maxSlices];
-//    qreal stackSin[maxStacks];
-//    qreal stackCos[maxStacks];
-//    for (int slice = 0; slice < slices; ++slice) {
-//        qreal angle = 2 * M_PI * slice / slices;
-//        sliceSin[slice] = qFastSin(angle);
-//        sliceCos[slice] = qFastCos(angle);
-//    }
-//    sliceSin[slices] = sliceSin[0]; // Join first and last slice.
-//    sliceCos[slices] = sliceCos[0];
-//    for (int stack = 0; stack <= stacks; ++stack) {
-//        qreal angle = M_PI * stack / stacks;
-//        stackSin[stack] = qFastSin(angle);
-//        stackCos[stack] = qFastCos(angle);
-//    }
-//    stackSin[0] = 0.0f;             // Come to a point at the poles.
-//    stackSin[stacks] = 0.0f;
-
-//    int stack_num = latTileNum;
-//    int slice_num = lonTileNum;
-
-//    int distal = 1;
-//    if (separation > 2){
-//        if (stack_num + 1 > separation / 2)
-//            distal = (stack_num + 1) - (separation / 2);
-//        else
-//            distal = (separation / 2) - stack_num;
-//    }
-//    qDebug() << "distal" << distal;
-
-//    QGLBuilder tempBuilder;
-//    for (int stack = minStack; stack <= maxStack; ++stack) {
-//        QGeometryData prim;
-//        qreal z = radius * stackCos[stack];
-//        qreal nextz = radius * stackCos[stack + 1];
-//        qreal s = stackSin[stack];
-//        qreal nexts = stackSin[stack + 1];
-//        qreal c = stackCos[stack];
-//        qreal nextc = stackCos[stack + 1];
-//        qreal r = radius * s;
-//        qreal nextr = radius * nexts;
-
-//        double yTexCoord;
-//        double yTexCoordNext;
-//        double xTexCoord;
-//        double xTexCoordNext;
-
-//        int sliceToCoord;
-
-//        prim.clear();
-//        for (int slice = minSlice; slice <= maxSlice; ++slice) {
-
-//            sliceToCoord = (maxSlice - slice) * separation;
-
-//            prim.appendVertex
-//                (QVector3D((nextr * sliceSin[slice]),
-//                           (nextr * sliceCos[slice]), nextz));
-//            prim.appendNormal
-//                (QVector3D(sliceSin[slice] * nexts,
-//                           sliceCos[slice] * nexts, nextc));
-
-//            yTexCoordNext = 1.0f - qreal(stack + 1) / stacks;
-//            yTexCoordNext = /*Mercator2SphereAnalytic*/(yTexCoordNext)*(separation);
-//            xTexCoordNext = (qreal(sliceToCoord) / slices);//*(separation);
-
-//            prim.appendTexCoord
-//                (QVector2D(xTexCoordNext,
-//                           yTexCoordNext));
-
-//            prim.appendVertex
-//                (QVector3D((r * sliceSin[slice]),
-//                           (r * sliceCos[slice]), z));
-//            prim.appendNormal
-//                (QVector3D(sliceSin[slice] * s,
-//                           sliceCos[slice] * s, c));
-
-//            yTexCoord = 1.0f - qreal(stack) / stacks;
-//            yTexCoord = /*Mercator2SphereAnalytic*/(yTexCoord)*(separation);
-//            xTexCoord = (qreal(sliceToCoord) / slices);//*(separation);
-
-
-//            prim.appendTexCoord
-//                (QVector2D(xTexCoord,
-//                           yTexCoord));
-//        }
-
-//        tempBuilder.addQuadStrip(prim);
-//    }
-
-//    QGLSceneNode* tempNode = tempBuilder.finalizedSceneNode();
-//    if (separation > 1){
-//        QGLTexture2D* tex;
-//        tex = new QGLTexture2D();
-//        tex->setSize(QSize(512, 256));
-////        qDebug() << "+++++++++++"<< tex->textureUpdated();
-
-////            tileDownloader->setParameters(stack_num, separation-slice_num-1, 1);
-////            QTimer::singleShot(0, &tileDownloader, SLOT(execute()));
-
-//        QString _filepath = cacheDir+"/%1-%2-%3.png";
-//        QString filepath(_filepath.arg(cur_zoom).arg(separation-1-lonTileNum).arg(latTileNum));
-
-//        QUrl url;
-//        url.setPath(filepath);
-//        QFile image;
-
-//        if (!QFile::exists(filepath))
-//        {
-//            QString path = tileDownload(separation-1-slice_num, stack_num, cur_zoom);
-
-////            QUrl url;
-////            url.setPath(path);
-//            image.setFileName(path);
-//            while ( ! QFile::exists(path) || !image.size()) {
-////                qDebug() << 1111111;
-//                Sleeper::msleep(50);
-//            }
-//        }
-//        else
-//        {
-//            image.setFileName(filepath);
-//        }
-
-//        url.setScheme(QLatin1String("file"));
-//        tex->setUrl(url);
-
-//        QGLMaterial *mat1 = new QGLMaterial;
-//        mat1->setTexture(tex, 0);
-
-//        m_LoadedTextures.push_back(mat1->texture(0));
-//        int earthMat = tempNode->palette()->addMaterial(mat1);
-
-//        tempNode->setMaterialIndex(earthMat);
-//        tempNode->setEffect(QGL::LitModulateTexture2D);
-//    }
-
-//    builder->sceneNode()->addNode(tempNode);
-//}
 
 QString Earth::tileDownload(int tx, int ty, int zoom)
 {
