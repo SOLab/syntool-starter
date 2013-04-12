@@ -75,6 +75,7 @@ Earth::Earth(QObject *parent, QSharedPointer<QGLMaterialCollection> materials, C
     , m_texture(0)
 {
     setPalette(materials);
+    cacheDir = configData.cacheDir;
 
     sphere = buildEarthNode(0.5, 10, 0);
     sphere->setObjectName("Earth");
@@ -110,8 +111,6 @@ Earth::Earth(QObject *parent, QSharedPointer<QGLMaterialCollection> materials, C
     addNode(sphere);
 
     zoom = 0;
-
-    cacheDir = configData.cacheDir;
 
 //    tileDownloader = new TileDownloader();
 }
@@ -157,51 +156,6 @@ void Earth::addTileNode(QGLBuilder* builder, qreal radius, int divisions, int cu
     addTextureToTile(tempNode, separation, lonTileNum, latTileNum, cur_zoom);
 
     builder->sceneNode()->addNode(tempNode);
-}
-
-void Earth::addTextureToTile(QGLSceneNode* tempNode, int separation, int lonTileNum, int latTileNum, int cur_zoom)
-{
-    if (separation > 1){
-        QGLTexture2D* tex;
-        tex = new QGLTexture2D();
-        tex->setSize(QSize(512, 256));
-
-        QString _filepath = cacheDir+"/%1-%2-%3.png";
-        QString filepath(_filepath.arg(cur_zoom).arg(lonTileNum).arg(separation-1-latTileNum));
-
-        QUrl url;
-        url.setPath(filepath);
-        QFile image;
-
-        if (!QFile::exists(filepath))
-        {
-            QString path = tileDownload(lonTileNum, separation-1-latTileNum, cur_zoom);
-
-//            QUrl url;
-//            url.setPath(path);
-            image.setFileName(path);
-            while ( ! QFile::exists(path) || !image.size()) {
-//                qDebug() << 1111111;
-                Sleeper::msleep(50);
-            }
-        }
-        else
-        {
-            image.setFileName(filepath);
-        }
-
-        url.setScheme(QLatin1String("file"));
-        tex->setUrl(url);
-
-        QGLMaterial *mat1 = new QGLMaterial;
-        mat1->setTexture(tex, 0);
-
-        m_LoadedTextures.push_back(mat1->texture(0));
-        int earthMat = tempNode->palette()->addMaterial(mat1);
-
-        tempNode->setMaterialIndex(earthMat);
-        tempNode->setEffect(QGL::LitModulateTexture2D);
-    }
 }
 
 QGLSceneNode* Earth::BuildSpherePart(int separation, qreal minSphereLat, qreal maxSphereLat, qreal minSphereLon, qreal maxSphereLon)
@@ -300,6 +254,50 @@ QGLSceneNode* Earth::BuildSpherePart(int separation, qreal minSphereLat, qreal m
     }
 
     return tempBuilder.finalizedSceneNode();
+}
+
+void Earth::addTextureToTile(QGLSceneNode* tempNode, int separation, int lonTileNum, int latTileNum, int cur_zoom)
+{
+//    if (separation > 1){
+        QGLTexture2D* tex;
+        tex = new QGLTexture2D();
+        tex->setSize(QSize(512, 256));
+
+        QString _filepath = cacheDir+"/%1-%2-%3.png";
+        QString filepath(_filepath.arg(cur_zoom).arg(lonTileNum).arg(separation-1-latTileNum));
+
+        QUrl url;
+        url.setPath(filepath);
+        QFile image;
+
+        if (!QFile::exists(filepath))
+        {
+            QString path = tileDownload(lonTileNum, separation-1-latTileNum, cur_zoom);
+
+//            QUrl url;
+//            url.setPath(path);
+            image.setFileName(path);
+            while ( ! QFile::exists(path) || !image.size()) {
+                Sleeper::msleep(50);
+            }
+        }
+        else
+        {
+            image.setFileName(filepath);
+        }
+
+        url.setScheme(QLatin1String("file"));
+        tex->setUrl(url);
+
+        QGLMaterial *mat1 = new QGLMaterial;
+        mat1->setTexture(tex, 0);
+
+        m_LoadedTextures.push_back(mat1->texture(0));
+        int earthMat = tempNode->palette()->addMaterial(mat1);
+
+        tempNode->setMaterialIndex(earthMat);
+        tempNode->setEffect(QGL::LitModulateTexture2D);
+//    }
 }
 
 QString Earth::tileDownload(int tx, int ty, int zoom)
@@ -480,26 +478,6 @@ void Earth::changeTexture(qreal cur_zoom)
             sphere = buildEarthNode(0.5, 10, cur_zoom);
             sphere->setObjectName("Earth");
 
-            if (zoom < 1)
-            {
-                QGLTexture2D * tex;
-                tex = new QGLTexture2D();
-                tex->setSize(QSize(512, 256));
-
-                QUrl url;
-                url.setPath(QLatin1String(":/zoom0.png"));
-                url.setScheme(QLatin1String("file"));
-                tex->setUrl(url);
-
-                QGLMaterial *mat1 = new QGLMaterial;
-                mat1->setTexture(tex, 0);
-
-                m_LoadedTextures.push_back(mat1->texture(0));
-                int earthMat = sphere->palette()->addMaterial(mat1);
-
-                sphere->setMaterialIndex(earthMat);
-                sphere->setEffect(QGL::LitModulateTexture2D);
-            }
 //            QGraphicsRotation3D *circular_rotate = new QGraphicsRotation3D();
 //            circular_rotate->setAngle(180.0f);
 //            circular_rotate->setAxis(QVector3D(0,0,1));

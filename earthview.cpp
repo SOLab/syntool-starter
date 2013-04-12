@@ -267,27 +267,6 @@ void EarthView::wheelEvent(QWheelEvent *e)
     }
 }
 
-void EarthView::rotate(int deltax, int deltay)
-{
-    float temp_scale = scale > 1.2 ? scale : 1.2;
-    int rotation = camera()->screenRotation();
-    if (rotation == 90 || rotation == 270) {
-        qSwap(deltax, deltay);
-    }
-    if (rotation == 90 || rotation == 180) {
-        deltax = -deltax;
-    }
-    if (rotation == 180 || rotation == 270) {
-        deltay = -deltay;
-    }
-    float anglex = 2*deltax * 90.0f / (width() * temp_scale);
-    float angley = 2*deltay * 90.0f / (height() * temp_scale);
-    QQuaternion q = camera()->pan(-anglex);
-
-    q *= camera()->tilt(-angley);
-    camera()->rotateCenter(q);
-}
-
 void EarthView::scalePlus()
 {
     if (scale < 2000)
@@ -349,6 +328,27 @@ void EarthView::scaleMinus_slot()
         camera()->setViewSize(scale2F);
 //    qDebug() << "scale: " << scale;
 //    qDebug() << log10(scale)/log10(2);
+}
+
+void EarthView::rotate(int deltax, int deltay)
+{
+    float temp_scale = scale > 1.2 ? scale : 1.2;
+    int rotation = camera()->screenRotation();
+    if (rotation == 90 || rotation == 270) {
+        qSwap(deltax, deltay);
+    }
+    if (rotation == 90 || rotation == 180) {
+        deltax = -deltax;
+    }
+    if (rotation == 180 || rotation == 270) {
+        deltay = -deltay;
+    }
+    float anglex = 2*deltax * 90.0f / (width() * temp_scale);
+    float angley = 2*deltay * 90.0f / (height() * temp_scale);
+    QQuaternion q = camera()->pan(-anglex);
+
+    q *= camera()->tilt(-angley);
+    camera()->rotateCenter(q);
 }
 
 void EarthView::leftSlot()
