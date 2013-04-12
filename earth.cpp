@@ -462,6 +462,7 @@ Earth::~Earth()
 
 void Earth::changeTexture(qreal cur_zoom)
 {
+//    cur_zoom = 0;
 //    qDebug() << "changeTexture, cur_zoom = " << cur_zoom;
 //    qDebug() << "changeTexture, zoom = " << zoom;
     if (zoom != qFloor(cur_zoom))

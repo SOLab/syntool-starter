@@ -135,8 +135,7 @@ private:
     void scaleMinus();
 protected slots:
     void rotate(int deltax, int deltay);
-    void scalePlus_slot();
-    void scaleMinus_slot();
+    void scalePlusMinusSlot(bool plus);
     void leftSlot();
 
     void navigateButtonPress();

@@ -275,7 +275,7 @@ void EarthView::scalePlus()
 //        {
 //            QTimer::singleShot(i*50, this, SLOT(scalePlus_slot()));
 //        }
-        scalePlus_slot();
+        scalePlusMinusSlot(true);
     }
 //    float zoom = log10(scale)/log10(2);
     emit changedScale(scale);
@@ -283,10 +283,18 @@ void EarthView::scalePlus()
 //    qDebug() << "scale: " << scale;
 }
 
-void EarthView::scalePlus_slot()
+int flog(int zoom){
+    return qFloor(qLn(zoom)/qLn(2))+2;
+}
+
+void EarthView::scalePlusMinusSlot(bool plus)
 {
+//    float dscale = flog(scale)/2.0;
     float dscale = scale/20.0 * 5;
-    scale += dscale;
+    if (plus)
+        scale += dscale;
+    else
+        scale -= dscale;
     scale2F = QSizeF(1/scale,1/scale);
 
     float fov = camera()->fieldOfView();
@@ -294,8 +302,8 @@ void EarthView::scalePlus_slot()
         camera()->setFieldOfView(scale);
     else
         camera()->setViewSize(scale2F);
-//    qDebug() << "scale: " << scale;
-//    qDebug() << log10(scale)/log10(2);
+    qDebug() << "scale: " << scale;
+    qDebug() << log10(scale)/log10(2);
 }
 
 void EarthView::scaleMinus()
@@ -306,28 +314,12 @@ void EarthView::scaleMinus()
 //        {
 //            QTimer::singleShot(i*50, this, SLOT(scaleMinus_slot()));
 //        }
-        scaleMinus_slot();
+        scalePlusMinusSlot(false);
     }
 
 //    float zoom = log10(scale)/log10(2);
     emit changedScale(scale);
     update();
-//    qDebug() << "scale: " << scale;
-}
-
-void EarthView::scaleMinus_slot()
-{
-    float dscale = scale/20.0 * 5;
-    scale -= dscale;
-    scale2F = QSizeF(1/scale,1/scale);
-
-    float fov = camera()->fieldOfView();
-    if (fov != 0.0f)
-        camera()->setFieldOfView(scale);
-    else
-        camera()->setViewSize(scale2F);
-//    qDebug() << "scale: " << scale;
-//    qDebug() << log10(scale)/log10(2);
 }
 
 void EarthView::rotate(int deltax, int deltay)
