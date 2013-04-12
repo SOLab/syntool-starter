@@ -54,20 +54,6 @@ double Lat2MercatorLatitude(double latitude)
     return sign * (qLn((1.0 + sin) / (1.0 - sin)) / 2.0);
 }
 
-//double Mercator2SphereAnalyticDegrees(double iTY, const double scale = defMercScale,
-//                               const double maxAng = defMercAngle)
-//{
-//    iTY = iTY/90.0;
-//    return Mercator2SphereAnalytic(iTY, scale, maxAng);
-//}
-
-//struct decartCoord
-//{
-//    qreal x;
-//    qreal y;
-//    qreal z;
-//};
-
 QVector3D llh2xyz(qreal _lat, qreal _lon, qreal h = 0)
 {
     qreal lat = _lat;//*M_PI/180.0;
@@ -83,30 +69,6 @@ QVector3D llh2xyz(qreal _lat, qreal _lon, qreal h = 0)
 
     return decartCoordPoint;
 }
-
-//                                        1
-//        C =  ---------------------------------------------------
-//             sqrt( cos^2(latitude) + (1-f)^2 * sin^2(latitude) )
-
-//        (1/f) = 298.257224
-
-//        S = (1-f)^2 * C
-
-//decartCoord llh2xyz_var2(qreal _lat, qreal _lon, qreal h)
-//{
-//    qreal lat = _lat*M_PI/180.0;
-//    qreal lon = _lon*M_PI/180.0;
-//    qreal f = 1.0/298.257224;
-//    qreal C = 1/qSqrt(qPow(qCos(lat),2) + qPow(1-f,2) * qPow(qSin(lat), 2));
-//    qreal S = qPow(1-f,2) * C;
-
-//    decartCoord decartCoordPoint;
-//    decartCoordPoint.x = (a*C+h)*qCos(lat)*qCos(lon);
-//    decartCoordPoint.y = (a*C+h)*qCos(lat)*qSin(lon);
-//    decartCoordPoint.z = (a*S+h)*qSin(lat);
-
-//    return decartCoordPoint;
-//}
 
 Earth::Earth(QObject *parent, QSharedPointer<QGLMaterialCollection> materials, ConfigData configData)
     : QGLSceneNode(parent)
@@ -182,9 +144,7 @@ void Earth::addTileNode(QGLBuilder* builder, qreal radius, int divisions, int cu
                         qint32 lonTileNum, qint32 latTileNum)
 {
     int separation = qPow(2, cur_zoom);
-
     qreal NTLon = 2*M_PI / separation;
-
 
     qreal minSphereLat = -tiley2lat(latTileNum, separation)/180.0*M_PI;
     qreal maxSphereLat = -tiley2lat(latTileNum+1, separation)/180.0*M_PI;
@@ -192,6 +152,60 @@ void Earth::addTileNode(QGLBuilder* builder, qreal radius, int divisions, int cu
     qreal minSphereLon = ((lonTileNum) * NTLon - M_PI);
     qreal maxSphereLon = ((lonTileNum+1) * NTLon - M_PI);
 
+    QGLSceneNode* tempNode = BuildSpherePart(separation, minSphereLat, maxSphereLat, minSphereLon, maxSphereLon);
+
+    addTextureToTile(tempNode, separation, lonTileNum, latTileNum, cur_zoom);
+
+    builder->sceneNode()->addNode(tempNode);
+}
+
+void Earth::addTextureToTile(QGLSceneNode* tempNode, int separation, int lonTileNum, int latTileNum, int cur_zoom)
+{
+    if (separation > 1){
+        QGLTexture2D* tex;
+        tex = new QGLTexture2D();
+        tex->setSize(QSize(512, 256));
+
+        QString _filepath = cacheDir+"/%1-%2-%3.png";
+        QString filepath(_filepath.arg(cur_zoom).arg(lonTileNum).arg(separation-1-latTileNum));
+
+        QUrl url;
+        url.setPath(filepath);
+        QFile image;
+
+        if (!QFile::exists(filepath))
+        {
+            QString path = tileDownload(lonTileNum, separation-1-latTileNum, cur_zoom);
+
+//            QUrl url;
+//            url.setPath(path);
+            image.setFileName(path);
+            while ( ! QFile::exists(path) || !image.size()) {
+//                qDebug() << 1111111;
+                Sleeper::msleep(50);
+            }
+        }
+        else
+        {
+            image.setFileName(filepath);
+        }
+
+        url.setScheme(QLatin1String("file"));
+        tex->setUrl(url);
+
+        QGLMaterial *mat1 = new QGLMaterial;
+        mat1->setTexture(tex, 0);
+
+        m_LoadedTextures.push_back(mat1->texture(0));
+        int earthMat = tempNode->palette()->addMaterial(mat1);
+
+        tempNode->setMaterialIndex(earthMat);
+        tempNode->setEffect(QGL::LitModulateTexture2D);
+    }
+}
+
+QGLSceneNode* Earth::BuildSpherePart(int separation, qreal minSphereLat, qreal maxSphereLat, qreal minSphereLon, qreal maxSphereLon)
+{
     // calculate spherical min and max lon and lat
     qreal minMerLat = Lat2MercatorLatitude(minSphereLat);
     qreal maxMerLat = Lat2MercatorLatitude(maxSphereLat);
@@ -236,6 +250,7 @@ void Earth::addTileNode(QGLBuilder* builder, qreal radius, int divisions, int cu
         // calculate next point latitude
         curSphereLatNext = curSphereLat + oneSphereStackDegrees;
 
+        // if next latitude is max latitude
         if (qAbs(curSphereLatNext - maxSphereLat) < 0.001)
         {
             curSphereLatNext = maxSphereLat;
@@ -243,99 +258,48 @@ void Earth::addTileNode(QGLBuilder* builder, qreal radius, int divisions, int cu
             lastFlag = true;
         }
 
+        // calculate mercator latitude
         curMerLat = Lat2MercatorLatitude(curSphereLat);
         curMerLatNext = Lat2MercatorLatitude(curSphereLatNext);
 
         prim.clear();
         for (qreal curSphereLon = minSphereLon; curSphereLon < maxSphereLonApprox; curSphereLon += oneSphereSliceDegrees)
         {
-            // curMerLat
+            // calculate decart coordinates (x,y,z) for Vertex and Normal
             curDecart = llh2xyz((curSphereLat), curSphereLon);
-            prim.appendVertex(curDecart);
-            prim.appendNormal(curDecart);
 
+            // calculate texture coordinates
             xTexCoord = ((curSphereLon) - (minSphereLon))/qreal((maxSphereLon) - (minSphereLon));
-
             if (firstFlag)
                 yTexCoord = 0;
             else
                 yTexCoord = (curMerLat - minMerLat) / qreal(maxMerLat - minMerLat);
+
+            prim.appendVertex(curDecart);
+            prim.appendNormal(curDecart);
             prim.appendTexCoord(QVector2D(xTexCoord, (yTexCoord)));
 
+            // all for next point
             curDecartNext = llh2xyz((curSphereLatNext), curSphereLon);
-            prim.appendVertex(curDecartNext);
-            prim.appendNormal(curDecartNext);
-
             xTexCoordNext = ((curSphereLon) - (minSphereLon)) / qreal((maxSphereLon) - (minSphereLon));
             if (lastFlag)
                 yTexCoordNext = 1;
             else
                 yTexCoordNext = (curMerLatNext - minMerLat) / qreal(maxMerLat - minMerLat);
+
+            prim.appendVertex(curDecartNext);
+            prim.appendNormal(curDecartNext);
             prim.appendTexCoord(QVector2D(xTexCoordNext, (yTexCoordNext)));
         }
+
+        // add QGeometryData to our builder
         tempBuilder.addQuadStrip(prim);
         firstFlag = false;
         if (lastFlag)
             break;
     }
 
-    QGLSceneNode* tempNode = tempBuilder.finalizedSceneNode();
-
-    if (separation > 1){
-        QGLTexture2D* tex;
-        tex = new QGLTexture2D();
-        tex->setSize(QSize(512, 256));
-
-        QString _filepath = cacheDir+"/%1-%2-%3.png";
-        QString filepath(_filepath.arg(cur_zoom).arg(lonTileNum).arg(separation-1-latTileNum));
-
-        QUrl url;
-        url.setPath(filepath);
-        QFile image;
-
-        if (!QFile::exists(filepath))
-        {
-            QString path = tileDownload(lonTileNum, separation-1-latTileNum, cur_zoom);
-
-//            QUrl url;
-//            url.setPath(path);
-            image.setFileName(path);
-            while ( ! QFile::exists(path) || !image.size()) {
-//                qDebug() << 1111111;
-                Sleeper::msleep(50);
-            }
-        }
-        else
-        {
-            image.setFileName(filepath);
-        }
-
-        url.setScheme(QLatin1String("file"));
-        tex->setUrl(url);
-
-        QGLMaterial *mat1 = new QGLMaterial;
-        mat1->setTexture(tex, 0);
-
-        m_LoadedTextures.push_back(mat1->texture(0));
-        int earthMat = tempNode->palette()->addMaterial(mat1);
-
-        tempNode->setMaterialIndex(earthMat);
-        tempNode->setEffect(QGL::LitModulateTexture2D);
-    }
-
-    builder->sceneNode()->addNode(tempNode);
-}
-
-struct UV {
- qreal u, v;
-};
-
-UV GetUV( qreal angleU, qreal angleV )
-{
-  UV uv;
-  uv.u = angleU / (M_PI * 2);
-  uv.v = angleV / (M_PI) + 0.5;
-  return uv;
+    return tempBuilder.finalizedSceneNode();
 }
 
 QString Earth::tileDownload(int tx, int ty, int zoom)

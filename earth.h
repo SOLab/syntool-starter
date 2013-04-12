@@ -34,7 +34,8 @@ private:
     QGLSceneNode *sn3;
     QGLSceneNode *sn4;
     QGLSceneNode *buildEarthNode(qreal radius = 1.0, int divisions = 5, int separation = 1);
-//    QGLSceneNode* BuildSpherePart(qreal startU, qreal stepU, int numU, qreal startV, qreal stepV, int numV);
+    QGLSceneNode* BuildSpherePart(int separation, qreal minSphereLat, qreal maxSphereLat, qreal minSphereLon, qreal maxSphereLon);
+    void addTextureToTile(QGLSceneNode *tempNode, int separation, int lonTileNum, int latTileNum, int cur_zoom);
     QString cacheDir;
 
 public slots:
