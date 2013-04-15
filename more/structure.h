@@ -7,4 +7,11 @@ struct ConfigData{
     QString cacheDir;
 };
 
+struct BoundingBox {
+    double north;
+    double south;
+    double east;
+    double west;
+  };
+
 #endif // STRUCTURE_H

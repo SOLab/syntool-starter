@@ -49,6 +49,7 @@
 #include <QGLPickNode>
 #include <QProcess>
 #include "more/structure.h"
+#include "more/geofunctions.h"
 
 QT_BEGIN_NAMESPACE
 class QGLSceneNode;

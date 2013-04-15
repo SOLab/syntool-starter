@@ -52,50 +52,8 @@
 //Средний радиус 6371,0 км
 
 const double a = 6378137.0;
-const double e = 8.1819190842622e-2;
-const double pi = 3.1415926535897932384626433832795;
-
-struct geoDetic
-{
-  double alt, lat, lon;
-};
-
-geoDetic convert_ecef_to_wgs84(double x, double y, double z)
-{
-    geoDetic pos;
-    pos.lon = 0;
-    pos.lat = 0;
-    pos.alt = 0;
-
-    double deg = 0.01745329252;
-    double r = qSqrt(x * x + y * y);
-    pos.lon = qAsin(y / r) / deg;
-    if (pos.lon > 180)
-        pos.lon = 180 - pos.lon;
-    pos.lat = qAtan(z / r) / deg;
-    pos.lon = 90 - pos.lon;
-    //определять долготу по координате х камеры
-//    double b = qSqrt(qPow(a, 2) * (1 - qPow(e, 2)));
-//    double ep = qSqrt((qPow(a, 2) - qPow(b, 2)) / qPow(b, 2));
-//    double p = qSqrt(qPow(x, 2) + qPow(y, 2));
-//    double th = qAtan2(a * z, b * p);
-//    pos.lon = qAtan2(y, x);
-//    pos.lat = qAtan2((z + qPow(ep, 2) * b * qPow(qSin(th), 3)),
-//                     (p - qPow(e, 2) * a * qPow(qCos(th), 3)));
-//    double N = a / (qSqrt(1 - qPow(e, 2) * qPow(qSin(pos.lat), 2)));
-//    pos.alt = p / qCos(pos.lat) - N;
-
-//    pos.lon = pos.lon / (2 * pi);
-
-//    bool k = qAbs(x) < 1.0 && qAbs(y) < 1.0;
-//    if (k)
-//        pos.alt = qAbs(z) - b;
-
-//    pos.lon = pos.lon * 180 / pi;
-//    pos.lat = pos.lat * 180 / pi;
-
-    return pos;
-}
+//const double e = 8.1819190842622e-2;
+//const double pi = 3.1415926535897932384626433832795;
 
 EarthView::EarthView(ConfigData configData, QWindow *parent)
     : QGLView(parent)
@@ -226,15 +184,6 @@ void EarthView::keyPressEvent(QKeyEvent *e)
         break;
 
     }
-
-    qDebug() << "camera: " << camera()->eye();
-    geoDetic pos = convert_ecef_to_wgs84(camera()->eye().x()*a/10.0,
-                                         camera()->eye().z()*a/10.0,
-                                         camera()->eye().y()*a/10.0);
-
-    qDebug() << "long" << pos.lon;
-    qDebug() << "lat" << pos.lat;
-    qDebug() << "alt" << pos.alt;
 }
 
 void EarthView::resizeGL(int w, int h)
@@ -252,37 +201,36 @@ void EarthView::resizeEvent(QResizeEvent *e)
 
 void EarthView::wheelEvent(QWheelEvent *e)
 {
-    if (e->delta() > 0)
-    {
+    if (e->delta() > 0){
         scalePlus();
-//        QKeyEvent key(QKeyEvent::KeyPress, Qt::Key_Plus,
-//                      Qt::NoModifier, "Plus", false, 0 );
-//        EarthView::keyPressEvent(&key);
     }
     else {
         scaleMinus();
-//        QKeyEvent key(QKeyEvent::KeyPress, Qt::Key_Minus,
-//                      Qt::NoModifier, "Minus", false, 0 );
-//        EarthView::keyPressEvent(&key);
     }
 }
 
+// for calling from wheelEvent on press button
 void EarthView::scalePlus()
 {
     if (scale < 2000)
     {
-//        for (int i = 0; i < 1; i++)
-//        {
-//            QTimer::singleShot(i*50, this, SLOT(scalePlus_slot()));
-//        }
         scalePlusMinusSlot(true);
     }
-//    float zoom = log10(scale)/log10(2);
     emit changedScale(scale);
     update();
-//    qDebug() << "scale: " << scale;
 }
 
+void EarthView::scaleMinus()
+{
+    if (scale > 0.8)
+    {
+        scalePlusMinusSlot(false);
+    }
+    emit changedScale(scale);
+    update();
+}
+
+// for changed scale
 float flog(float zoom, bool plus){
     if(!plus && (zoom - qFloor(zoom) < 0.001))
         zoom -= 1;
@@ -307,22 +255,6 @@ void EarthView::scalePlusMinusSlot(bool plus)
         camera()->setViewSize(scale2F);
     qDebug() << "scale: " << scale;
     qDebug() << log10(scale)/log10(2);
-}
-
-void EarthView::scaleMinus()
-{
-    if (scale > 0.8)
-    {
-//        for (int i = 0; i < 1; i++)
-//        {
-//            QTimer::singleShot(i*50, this, SLOT(scaleMinus_slot()));
-//        }
-        scalePlusMinusSlot(false);
-    }
-
-//    float zoom = log10(scale)/log10(2);
-    emit changedScale(scale);
-    update();
 }
 
 void EarthView::rotate(int deltax, int deltay)
@@ -425,6 +357,14 @@ void EarthView::mouseMoveEvent(QMouseEvent *e)
 //            d->enteredObject = 0;
 //        }
 //    }
+
+    geoDetic pos = ecef2wgs84(camera()->eye().z(),
+                              camera()->eye().x(),
+                              camera()->eye().y());
+
+    qDebug() << "long" << pos.lon/M_PI*180;
+    qDebug() << "lat" << pos.lat/M_PI*180;
+
     lastMouseMoveTime = QTime::currentTime();
     QWindow::mouseMoveEvent(e);
 }

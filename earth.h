@@ -9,6 +9,7 @@
 #include <QImage>
 #include "tiledownloader.h"
 #include "more/structure.h"
+#include "more/geofunctions.h"
 
 QT_BEGIN_NAMESPACE
 class QGLTexture2D;
