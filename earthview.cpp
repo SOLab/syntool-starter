@@ -283,14 +283,17 @@ void EarthView::scalePlus()
 //    qDebug() << "scale: " << scale;
 }
 
-int flog(int zoom){
-    return qFloor(qLn(zoom)/qLn(2))+2;
+float flog(float zoom, bool plus){
+    if(!plus && (zoom - qFloor(zoom) < 0.001))
+        zoom -= 1;
+    zoom = qPow(2,qFloor(qLn(zoom)/qLn(2)));
+
+    return qFloor(zoom)/4.0;
 }
 
 void EarthView::scalePlusMinusSlot(bool plus)
 {
-//    float dscale = flog(scale)/2.0;
-    float dscale = scale/20.0 * 5;
+    float dscale = flog(scale, plus);
     if (plus)
         scale += dscale;
     else
