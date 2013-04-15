@@ -56,6 +56,7 @@ Earth::Earth(QObject *parent, QSharedPointer<QGLMaterialCollection> materials, C
     addNode(sphere);
 
     zoom = 0;
+    zoom_old = 0;
 
 //    tileDownloader = new TileDownloader();
 }
@@ -407,11 +408,12 @@ Earth::~Earth()
 
 void Earth::changeTexture(qreal cur_zoom)
 {
-    cur_zoom = 0;
+//    cur_zoom = 0;
 //    qDebug() << "changeTexture, cur_zoom = " << cur_zoom;
 //    qDebug() << "changeTexture, zoom = " << zoom;
     if (zoom != qFloor(cur_zoom))
     {
+        zoom_old = zoom;
         zoom = qFloor(cur_zoom);
 
 //        qDebug() << "zoom changed!!! zoom = " << cur_zoom;
@@ -419,7 +421,7 @@ void Earth::changeTexture(qreal cur_zoom)
         if (this->findSceneNode(search_path))
         {
             removeNode(sphere);
-//            delete sphere;
+            delete sphere;
 
             sphere = buildEarthNode(0.5, 10, cur_zoom);
             sphere->setObjectName("Earth");
@@ -434,33 +436,5 @@ void Earth::changeTexture(qreal cur_zoom)
             emit updated();
         }
 
-//    if (zoom > 1)
-//    {
-//    QGLMaterial *mat1 = new QGLMaterial;
-//    QUrl url;
-//    url.setPath(QLatin1String(":/earth.jpg"));
-//    url.setScheme(QLatin1String("file"));
-//    mat1->setTextureUrl(url,0);
-
-//    m_LoadedTextures.push_back(mat1->texture(0));
-//    int earthMat = sphere->palette()->addMaterial(mat1);
-
-//    sphere->setMaterialIndex(earthMat);
-//    sphere->setEffect(QGL::LitModulateTexture2D);
-//    }
-//    else
-//    {
-//        QGLMaterial *mat1 = new QGLMaterial;
-//        QUrl url;
-//        url.setPath(QLatin1String(":/earth_6_3.jpg"));
-//        url.setScheme(QLatin1String("file"));
-//        mat1->setTextureUrl(url,0);
-
-//        m_LoadedTextures.push_back(mat1->texture(0));
-//        int earthMat = sphere->palette()->addMaterial(mat1);
-
-//        sphere->setMaterialIndex(earthMat);
-//        sphere->setEffect(QGL::LitModulateTexture2D);
-//    }
     }
 }

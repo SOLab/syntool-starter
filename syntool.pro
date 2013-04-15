@@ -42,7 +42,8 @@ SOURCES = \
     toolboxwidgets/datasetswidget.cpp \
     additionalwidgets/granuleinfowidget.cpp \
     network/getgranulecoords.cpp \
-    additionalwidgets/datasetboxwidget.cpp
+    additionalwidgets/datasetboxwidget.cpp \
+    createspherenode.cpp
 HEADERS = \
     mainwidget.h \
     windowwidget.h \
@@ -80,7 +81,8 @@ HEADERS = \
     additionalwidgets/datasetboxwidget.h \
     more/granuleactions.h \
     more/structure.h \
-    more/geofunctions.h
+    more/geofunctions.h \
+    createspherenode.h
 RESOURCES += \
     syntool.qrc
 DEPENDPATH += resources

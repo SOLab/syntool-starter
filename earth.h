@@ -27,6 +27,7 @@ public:
     QString tileDownload(int tx, int ty, int zoom);
 private:
     int zoom;
+    int zoom_old;
     QList<QGLTexture2D*> m_LoadedTextures;
     QGLTexture2D *m_texture;
     QGraphicsRotation3D *earthRotation;
