@@ -1,41 +1,46 @@
-#ifndef DOWNLOADER_H
-#define DOWNLOADER_H
+#ifndef TILEDOWNLOADER_H
+#define TILEDOWNLOADER_H
 
-#include <QFile>
-#include <QFileInfo>
-#include <QList>
+#include <QObject>
+#include <QByteArray>
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
 #include <QNetworkReply>
-#include <QSslError>
+#include <QThread>
+#include <QFileInfo>
 #include <QStringList>
-#include <QTimer>
-#include <QUrl>
 #include <QDebug>
-#include <QCoreApplication>
-#include <QObject>
 
-QT_BEGIN_NAMESPACE
-class QSslError;
-QT_END_NAMESPACE
-
-QT_USE_NAMESPACE
-
-class Downloader: public QObject
+struct Sleeper : private QThread
 {
-    Q_OBJECT
-    QNetworkAccessManager manager;
-    QList<QNetworkReply *> currentDownloads;
-
-public:
-    Downloader();
-    void download();
-    QUrl m_url;
-    QString m_filename;
-    void setUrl(QUrl url){m_url = url;}
-    void setFilename(QString filename){m_filename = filename;}
-
-public slots:
+    static void msleep(unsigned long msecs) { QThread::msleep(msecs); }
 };
 
-#endif // DOWNLOADER_H
+class TileDownloader : public QObject
+{
+    Q_OBJECT
+public:
+    explicit TileDownloader(QUrl imageUrl, QString imagePath, QObject *parent = 0);
+
+    virtual ~TileDownloader();
+
+    QByteArray downloadedData() const;
+
+signals:
+        void resultReady(QString textureStorePath);
+
+private slots:
+
+    void fileDownloaded(QNetworkReply* pReply);
+
+private:
+    QString textureStorePath;
+    QUrl textureDownloadUrl;
+
+    QNetworkAccessManager m_WebCtrl;
+
+    QByteArray m_DownloadedData;
+
+};
+
+#endif // TILEDOWNLOADER_H

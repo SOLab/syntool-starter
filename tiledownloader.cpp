@@ -1,29 +1,45 @@
 #include "tiledownloader.h"
 
-Downloader::Downloader()
+TileDownloader::TileDownloader(QUrl imageUrl, QString imagePath, QObject *parent):
+    QObject(parent)
 {
+    textureStorePath = imagePath;
+    connect(&m_WebCtrl, SIGNAL(finished(QNetworkReply*)),
+                SLOT(fileDownloaded(QNetworkReply*)));
+
+    QNetworkRequest request(imageUrl);
+    m_WebCtrl.get(request);
 }
 
-void Downloader::download()
+TileDownloader::~TileDownloader()
 {
-    QNetworkAccessManager m;
-    QNetworkReply * reply = m.get( QNetworkRequest( m_url ) );
-    QEventLoop loop;
-    connect( reply, SIGNAL(finished()), &loop, SLOT(quit()) );
-    loop.exec();
 
-    if (QFile::exists(m_filename))
+}
+
+void TileDownloader::fileDownloaded(QNetworkReply* pReply)
+{
+    qDebug() << "===============++>>>";
+    m_DownloadedData = pReply->readAll();
+    //emit a signal
+    pReply->deleteLater();
+
+    if (QFile::exists(textureStorePath))
     {
         return;
     }
 
 //    qDebug() << "filepath" << m_filename;
-    if ( reply->error() == QNetworkReply::NoError )
+    if ( pReply->error() == QNetworkReply::NoError )
     {
-      QFile image( m_filename );
+      QFile image( textureStorePath );
       image.open(QIODevice::WriteOnly);
-      image.write( reply->readAll() );
+      image.write(m_DownloadedData);
       image.close();
     }
+    emit resultReady(textureStorePath);
 }
 
+QByteArray TileDownloader::downloadedData() const
+{
+    return m_DownloadedData;
+}

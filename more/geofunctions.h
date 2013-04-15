@@ -68,4 +68,10 @@ inline geoDetic ecef2wgs84(double x, double y, double z)
     return pos;
 }
 
+inline qreal tiley2lat(int y, int separation)
+{
+    double n = M_PI - 2.0 * M_PI * y / qreal(separation);
+    return 180.0 / M_PI * qAtan(0.5 * (qExp(n) - qExp(-n)));
+}
+
 #endif // GEOFUNCTIONS_H

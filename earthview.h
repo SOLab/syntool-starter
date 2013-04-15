@@ -48,6 +48,7 @@
 #include <QVBoxLayout>
 #include <QGLPickNode>
 #include <QProcess>
+#include <QTime>
 #include "more/structure.h"
 #include "more/geofunctions.h"
 

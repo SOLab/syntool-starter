@@ -308,6 +308,14 @@ void EarthView::mouseMoveEvent(QMouseEvent *e)
 //            pan(delta.x(), delta.y());
 //        else
         rotate(delta.x(), delta.y());
+
+
+        geoDetic pos = ecef2wgs84(camera()->eye().z(),
+                                  camera()->eye().x(),
+                                  camera()->eye().y());
+
+        qDebug() << "long" << pos.lon/M_PI*180;
+        qDebug() << "lat" << pos.lat/M_PI*180;
     }
 //    if (d->panning) {
 //        QPoint delta = e->pos() - d->startPan;
@@ -358,12 +366,6 @@ void EarthView::mouseMoveEvent(QMouseEvent *e)
 //        }
 //    }
 
-    geoDetic pos = ecef2wgs84(camera()->eye().z(),
-                              camera()->eye().x(),
-                              camera()->eye().y());
-
-    qDebug() << "long" << pos.lon/M_PI*180;
-    qDebug() << "lat" << pos.lat/M_PI*180;
 
     lastMouseMoveTime = QTime::currentTime();
     QWindow::mouseMoveEvent(e);
