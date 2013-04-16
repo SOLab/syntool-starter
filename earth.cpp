@@ -56,13 +56,15 @@ Earth::Earth(QObject *parent, QSharedPointer<QGLMaterialCollection> materials, C
 //    tileDownloader = new TileDownloader();
 }
 
+/*!
+    Add all tiles node for current zoom (considering bbox).
+*/
 void Earth::buildEarthNode(qreal radius, int divisions, int cur_zoom)
 {
     Q_UNUSED(radius);
     Q_UNUSED(divisions);
     qreal separation = qPow(2, cur_zoom);
 
-//    QGLBuilder builder;
     for (int lonTileNum = 0; lonTileNum < separation; lonTileNum++)
     {
         for (int latTileNum = 0; latTileNum < separation; latTileNum++)
@@ -73,9 +75,12 @@ void Earth::buildEarthNode(qreal radius, int divisions, int cur_zoom)
             addTileNode(cur_zoom, lonTileNum, latTileNum);
         }
     }
-//    return builder.finalizedSceneNode();
 }
 
+/*!
+    Wrapper to add a one tile to the sphere.
+    If texture file not exist then run new thread (from method tileDownload).
+*/
 void Earth::addTileNode(int cur_zoom, qint32 lonTileNum, qint32 latTileNum)
 {
     int separation = qPow(2, cur_zoom);
@@ -89,6 +94,11 @@ void Earth::addTileNode(int cur_zoom, qint32 lonTileNum, qint32 latTileNum)
     textureDownloaded(cur_zoom, lonTileNum, latTileNum);
 }
 
+/*!
+    Create QGLSceneNode for one tile.
+    stacks - number pieces of tatitude for one tile,
+    slices - number pieces of longitude for one tile,
+*/
 QGLSceneNode* Earth::BuildSpherePart(int separation, qreal minSphereLat, qreal maxSphereLat,
                                      qreal minSphereLon, qreal maxSphereLon)
 {
@@ -188,12 +198,19 @@ QGLSceneNode* Earth::BuildSpherePart(int separation, qreal minSphereLat, qreal m
     return tempBuilder.finalizedSceneNode();
 }
 
+/*!
+    verification of the existence texture file in cache directory.
+    return true if file exist.
+*/
 bool Earth::checkTextureFile(int separation, int lonTileNum, int latTileNum, int cur_zoom)
 {
     QString texFilePath = QString(cacheDir+"/%1-%2-%3.png").arg(cur_zoom).arg(lonTileNum).arg(separation-1-latTileNum);
     return QFile::exists(texFilePath);
 }
 
+/*!
+    add texture to current QGLSceneNode object.
+*/
 bool Earth::addTextureToTile(QGLSceneNode* tempNode, int separation, int lonTileNum, int latTileNum, int cur_zoom)
 {
 //    if (separation > 1){
@@ -227,6 +244,9 @@ bool Earth::addTextureToTile(QGLSceneNode* tempNode, int separation, int lonTile
     return true;
 }
 
+/*!
+    starts a thread for downloading tile texture.
+*/
 void Earth::tileDownload(qint32 cur_zoom, qint32 separation, qint32 lonTileNum, qint32 latTileNum)
 {
     QString _filepath = cacheDir+"/%1-%2-%3.png";
@@ -248,6 +268,10 @@ void Earth::tileDownload(qint32 cur_zoom, qint32 separation, qint32 lonTileNum, 
     }
 }
 
+/*!
+    starts then texture exists or after download texture.
+    This method calling all methods for create tile, overlay texture and add QGLSceneNode to scene (BuildSpherePart, addTextureToTile, addNode)
+*/
 void Earth::textureDownloaded(qint32 cur_zoom, qint32 lonTileNum, qint32 latTileNum)
 {
     int separation = qPow(2, cur_zoom);
@@ -280,6 +304,7 @@ void Earth::textureDownloaded(qint32 cur_zoom, qint32 lonTileNum, qint32 latTile
 
 Earth::~Earth()
 {
+    // clean textures
     for (int i=0; i<m_LoadedTextures.count(); ++i) {
         m_LoadedTextures.at(i)->cleanupResources();
     }
@@ -385,17 +410,17 @@ Earth::~Earth()
 //    addNode(n);
 //}
 
+/*!
+    removal of old tiles and create new when changed zoom
+*/
 void Earth::changeTexture(qreal cur_zoom)
 {
 //    cur_zoom = 0;
-//    qDebug() << "changeTexture, cur_zoom = " << cur_zoom;
-//    qDebug() << "changeTexture, zoom = " << zoom;
     if (zoom != qFloor(cur_zoom))
     {
         zoom_old = zoom;
         zoom = qFloor(cur_zoom);
 
-//        qDebug() << "zoom changed!!! zoom = " << cur_zoom;
         int separation_old = qPow(2, zoom_old);
         for (int y = 0; y < separation_old; y++)
         {
@@ -411,9 +436,7 @@ void Earth::changeTexture(qreal cur_zoom)
                 delete tempNode;
             }
         }
-
         buildEarthNode(0.5, 10, cur_zoom);
-        emit updated();
-
+//        emit displayed();
     }
 }

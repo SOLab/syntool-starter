@@ -105,7 +105,6 @@ EarthView::EarthView(ConfigData configData, QWindow *parent)
 EarthView::~EarthView()
 {
     delete earth;
-//    delete sunEffect;
 }
 
 void EarthView::initializeGL(QGLPainter *painter)
