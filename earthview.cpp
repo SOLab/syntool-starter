@@ -91,6 +91,7 @@ EarthView::EarthView(ConfigData configData, QWindow *parent)
 
     earth = new Earth(this, m_palette, configData);
     connect (this, &EarthView::changedScale, earth, &Earth::changeTexture);
+    connect (earth, &Earth::displayed, this, &EarthView::update);
 
     m_scene->mainNode()->addNode(earth);
 

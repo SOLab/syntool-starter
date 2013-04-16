@@ -10,7 +10,6 @@
 #include "tiledownloader.h"
 #include "more/structure.h"
 #include "more/geofunctions.h"
-#include "createspherenode.h"
 
 QT_BEGIN_NAMESPACE
 class QGLTexture2D;
@@ -25,7 +24,7 @@ public:
 //    void drawImage(QGLPainter *painter);
     QGLSceneNode *sphere;
 
-    void tileDownload(int tx, int ty, int zoom);
+    void tileDownload(qint32 cur_zoom, qint32 separation, qint32 lonTileNum, qint32 latTileNum);
 private:
     int zoom;
     int zoom_old;
@@ -39,12 +38,13 @@ private:
     void buildEarthNode(qreal radius = 1.0, int divisions = 5, int separation = 1);
     QGLSceneNode* BuildSpherePart(int separation, qreal minSphereLat, qreal maxSphereLat, qreal minSphereLon, qreal maxSphereLon);
     bool addTextureToTile(QGLSceneNode *tempNode, int separation, int lonTileNum, int latTileNum, int cur_zoom);
+    bool checkTextureFile(int separation, int lonTileNum, int latTileNum, int cur_zoom);
     QString cacheDir;
 
 public slots:
     void changeTexture(qreal zoom);
     void addTileNode(int cur_zoom, qint32 lonTileNum, qint32 latTileNum);
-    void textureDownloaded(QString texStorePath);
+    void textureDownloaded(qint32 cur_zoom, qint32 lonTileNum, qint32 latTileNum);
 
 };
 

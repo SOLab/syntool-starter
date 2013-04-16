@@ -20,14 +20,15 @@ class TileDownloader : public QObject
 {
     Q_OBJECT
 public:
-    explicit TileDownloader(QUrl imageUrl, QString imagePath, QObject *parent = 0);
+    explicit TileDownloader(qint32 _separation, qint32 _lonTileNum, qint32 _latTileNum,
+                            qint32 _cur_zoom, QString texStorePath, QObject *parent = 0);
 
     virtual ~TileDownloader();
 
     QByteArray downloadedData() const;
 
 signals:
-        void resultReady(QString textureStorePath);
+        void resultReady(qint32 cur_zoom, qint32 lonTileNum, qint32 latTileNum);
 
 private slots:
 
@@ -35,12 +36,12 @@ private slots:
 
 private:
     QString textureStorePath;
-    QUrl textureDownloadUrl;
-
     QNetworkAccessManager m_WebCtrl;
-
     QByteArray m_DownloadedData;
-
+    qint32 cur_zoom;
+    qint32 separation;
+    qint32 latTileNum;
+    qint32 lonTileNum;
 };
 
 #endif // TILEDOWNLOADER_H
