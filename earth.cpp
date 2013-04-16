@@ -10,6 +10,8 @@
 #include <QThread>
 #include <QTimer>
 
+const double a = 6378137.0;
+
 Earth::Earth(QObject *parent, QSharedPointer<QGLMaterialCollection> materials, ConfigData configData)
     : QGLSceneNode(parent)
     , m_texture(0)
@@ -17,7 +19,7 @@ Earth::Earth(QObject *parent, QSharedPointer<QGLMaterialCollection> materials, C
     setPalette(materials);
     cacheDir = configData.cacheDir;
 
-    buildEarthNode(0.5, 10, 0);
+    buildEarthNode(a, 10, 0);
 //    sphere->setObjectName("Earth");
 
 //    QGLTexture2D * tex;
@@ -270,14 +272,15 @@ void Earth::tileDownload(qint32 cur_zoom, qint32 separation, qint32 lonTileNum, 
 
 /*!
     starts then texture exists or after download texture.
-    This method calling all methods for create tile, overlay texture and add QGLSceneNode to scene (BuildSpherePart, addTextureToTile, addNode)
+    This method calling all methods for create tile, overlay texture and
+         add QGLSceneNode to scene (BuildSpherePart, addTextureToTile, addNode)
 */
 void Earth::textureDownloaded(qint32 cur_zoom, qint32 lonTileNum, qint32 latTileNum)
 {
     int separation = qPow(2, cur_zoom);
 
-    QString _filepath = cacheDir+"/%1-%2-%3.png";
-    QString texStorePath = _filepath.arg(cur_zoom).arg(lonTileNum).arg(separation-1-latTileNum);
+//    QString _filepath = cacheDir+"/%1-%2-%3.png";
+//    QString texStorePath = _filepath.arg(cur_zoom).arg(lonTileNum).arg(separation-1-latTileNum);
 
     qreal NTLon = 2*M_PI / separation;
 
@@ -415,7 +418,7 @@ Earth::~Earth()
 */
 void Earth::changeTexture(qreal cur_zoom)
 {
-//    cur_zoom = 0;
+    cur_zoom = 0;
     if (zoom != qFloor(cur_zoom))
     {
         zoom_old = zoom;
@@ -436,7 +439,7 @@ void Earth::changeTexture(qreal cur_zoom)
                 delete tempNode;
             }
         }
-        buildEarthNode(0.5, 10, cur_zoom);
+        buildEarthNode(a, 10, cur_zoom);
 //        emit displayed();
     }
 }

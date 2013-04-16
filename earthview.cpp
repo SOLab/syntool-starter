@@ -37,21 +37,12 @@
 ** $QT_END_LICENSE$
 **
 ****************************************************************************/
-
 #include "earthview.h"
-#include "qglscenenode.h"
-
-#include <qmath.h>
-#include <QTimer>
-#include <QApplication>
-#include "earthscene.h"
-#include "skybox.h"
-#include "navigatebutton.h"
 
 /* Constants (WGS ellipsoid) */
 //Средний радиус 6371,0 км
 
-const double a = 6378137.0;
+//const double a = 6378137.0;
 //const double e = 8.1819190842622e-2;
 //const double pi = 3.1415926535897932384626433832795;
 
@@ -301,7 +292,7 @@ void EarthView::mouseMoveEvent(QMouseEvent *e)
 //            d->startUpVector = d->camera->upVector();
 //            d->panModifiers = e->modifiers();
         }
-        lastPan = e->pos();
+        lastPan = e->pos();// not using
 //        if ((e->modifiers() & Qt::ControlModifier) != 0)
 //            wheel(delta.y() * -60);
 //        else if ((e->modifiers() & Qt::ShiftModifier) != 0)

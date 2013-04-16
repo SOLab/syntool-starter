@@ -41,16 +41,22 @@
 #ifndef BUILDER_H
 #define BUILDER_H
 
-#include "qglview.h"
-#include "earth.h"
 #include <QKeyEvent>
-#include <QDialog>
-#include <QVBoxLayout>
-#include <QGLPickNode>
 #include <QProcess>
 #include <QTime>
+#include <qmath.h>
+#include <QTimer>
+#include <QApplication>
+
+#include "qglview.h"
+#include "earth.h"
 #include "more/structure.h"
 #include "more/geofunctions.h"
+#include "qglscenenode.h"
+#include "earthscene.h"
+#include "skybox.h"
+#include "navigatebutton.h"
+
 
 QT_BEGIN_NAMESPACE
 class QGLSceneNode;
