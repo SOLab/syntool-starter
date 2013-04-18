@@ -42,6 +42,8 @@
 /* Constants (WGS ellipsoid) */
 //Средний радиус 6371,0 км
 
+// длина окружности Земли (экватор) 40 075,017
+//const qint32 l = 40 075;
 //const double a = 6378137.0;
 //const double e = 8.1819190842622e-2;
 //const double pi = 3.1415926535897932384626433832795;
@@ -59,10 +61,10 @@ EarthView::EarthView(ConfigData configData, QWindow *parent)
     camera()->setEye(QVector3D(0, 0, 10));
 
     scale = 1;
-    scale2F = QSizeF(1/scale,1/scale);
+    scale2F = QSizeF(2/scale,2/scale);
     float fov = camera()->fieldOfView();
     if (fov != 0.0f)
-        camera()->setFieldOfView(scale);
+        camera()->setFieldOfView(scale*2);
     else
         camera()->setViewSize(scale2F);
 //    camera()->setFarPlane(1000);
@@ -237,11 +239,11 @@ void EarthView::scalePlusMinusSlot(bool plus)
         scale += dscale;
     else
         scale -= dscale;
-    scale2F = QSizeF(1/scale,1/scale);
+    scale2F = QSizeF(2/scale,2/scale);
 
     float fov = camera()->fieldOfView();
     if (fov != 0.0f)
-        camera()->setFieldOfView(scale);
+        camera()->setFieldOfView(2*scale);
     else
         camera()->setViewSize(scale2F);
     qDebug() << "scale: " << scale;

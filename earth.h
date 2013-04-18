@@ -42,7 +42,7 @@ private:
     QString cacheDir;
 
 public slots:
-    void changeTexture(qreal zoom);
+    void changeTexture(qreal scale);
     void addTileNode(int cur_zoom, qint32 lonTileNum, qint32 latTileNum);
     void textureDownloaded(qint32 cur_zoom, qint32 lonTileNum, qint32 latTileNum);
 

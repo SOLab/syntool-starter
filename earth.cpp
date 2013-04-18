@@ -416,9 +416,12 @@ Earth::~Earth()
 /*!
     removal of old tiles and create new when changed zoom
 */
-void Earth::changeTexture(qreal cur_zoom)
+void Earth::changeTexture(qreal scale)
 {
-    cur_zoom = 0;
+    qreal cur_zoom = log10(scale)/log10(2);
+//    qDebug() << "cur_zoom" << cur_zoom;
+//    qDebug() << 40000/scale;
+//    cur_zoom = 0;
     if (zoom != qFloor(cur_zoom))
     {
         zoom_old = zoom;
