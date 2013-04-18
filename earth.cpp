@@ -1,14 +1,4 @@
 #include "earth.h"
-#include "qgltexture2d.h"
-#include "qglmaterialcollection.h"
-#include <QGLDome>
-
-#include <QImage>
-#include <QPainter>
-#include <qgl.h>
-#include "lightmaps.h"
-#include <QThread>
-#include <QTimer>
 
 const double a = 6378137.0;
 
@@ -67,13 +57,22 @@ void Earth::buildEarthNode(qreal radius, int divisions, int cur_zoom)
     Q_UNUSED(divisions);
     qreal separation = qPow(2, cur_zoom);
 
+    qDebug() << "km in each tile = " << 40075.017/qPow(2, cur_zoom);
+    qDebug() << "km = " << 2*40000/curScale;
+    int numberTiles = qCeil(getNumberTiles(cur_zoom, 2*40000/curScale));
+    qDebug() << "number of tiles = " << numberTiles;
+
+    TileNumber tileNumber = deg2TileNum(curGeoCoords, cur_zoom);
+    qDebug() << "tileNumber = " << tileNumber.x << ", " << tileNumber.y;
+
+    TileRange* aaa = getTileRange(tileNumber, numberTiles, cur_zoom);
+    TileRange a0 = aaa[0];
+    TileRange a1 = aaa[1];
+
     for (int lonTileNum = 0; lonTileNum < separation; lonTileNum++)
     {
         for (int latTileNum = 0; latTileNum < separation; latTileNum++)
         {
-//            if ((lonTileNum == 1 && latTileNum == 0) || (lonTileNum == 2 && latTileNum == 1))
-//            if ((lonTileNum == 1 || latTileNum == separation/2-1))
-//            if (latTileNum == 1)
             addTileNode(cur_zoom, lonTileNum, latTileNum);
         }
     }
@@ -305,6 +304,40 @@ void Earth::textureDownloaded(qint32 cur_zoom, qint32 lonTileNum, qint32 latTile
     emit displayed();
 }
 
+/*!
+    removal of old tiles and create new when changed zoom
+*/
+void Earth::updateTilesSlot(qreal scale, GeoCoords geoCoords)
+{
+    qreal cur_zoom = log10(scale)/log10(2);
+    qDebug() << "cur_zoom = " << qFloor(cur_zoom);
+//    qDebug() << "scale" << scale;
+    curScale = scale;
+    // save current coordinates
+    curGeoCoords = geoCoords;
+//    cur_zoom = 0;
+    if (zoom != qFloor(cur_zoom))
+    {
+        zoom_old = zoom;
+        zoom = qFloor(cur_zoom);
+
+        int separation_old = qPow(2, zoom_old);
+        for (int y = 0; y < separation_old; y++)
+        {
+            for (int x = 0; x < separation_old; x++)
+            {
+                QString search_path = QString("tile-%1-%2-%3").arg(zoom_old).arg(x).arg(y);
+                QGLSceneNode* tempNode = this->findSceneNode(search_path);
+                if (tempNode){
+                    removeNode(this->findSceneNode(search_path));
+                }
+                delete tempNode;
+            }
+        }
+        buildEarthNode(a, 10, cur_zoom);
+    }
+}
+
 Earth::~Earth()
 {
     // clean textures
@@ -412,37 +445,3 @@ Earth::~Earth()
 //    QGLSceneNode *n = builder.finalizedSceneNode();
 //    addNode(n);
 //}
-
-/*!
-    removal of old tiles and create new when changed zoom
-*/
-void Earth::changeTexture(qreal scale)
-{
-    qreal cur_zoom = log10(scale)/log10(2);
-//    qDebug() << "cur_zoom" << cur_zoom;
-//    qDebug() << 40000/scale;
-//    cur_zoom = 0;
-    if (zoom != qFloor(cur_zoom))
-    {
-        zoom_old = zoom;
-        zoom = qFloor(cur_zoom);
-
-        int separation_old = qPow(2, zoom_old);
-        for (int y = 0; y < separation_old; y++)
-        {
-            for (int x = 0; x < separation_old; x++)
-            {
-                QString search_path = QString("tile-%1-%2-%3").arg(zoom_old).arg(x).arg(y);
-                QGLSceneNode* tempNode = this->findSceneNode(search_path);
-                if (tempNode){
-                    removeNode(this->findSceneNode(search_path));
-//                    qDebug() << "removed!!!!" << search_path;
-                }
-//                qDebug() << "remove " << search_path;
-                delete tempNode;
-            }
-        }
-        buildEarthNode(a, 10, cur_zoom);
-//        emit displayed();
-    }
-}

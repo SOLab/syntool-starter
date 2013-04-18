@@ -50,7 +50,7 @@
 
 #include "qglview.h"
 #include "earth.h"
-#include "more/structure.h"
+//#include "more/structure.h"
 #include "more/geofunctions.h"
 #include "qglscenenode.h"
 #include "earthscene.h"
@@ -150,7 +150,7 @@ protected slots:
     void rotateInertia();
 
 signals:
-  void changedScale(qreal scale);
+  void updatedTilesSignal(qreal scale, GeoCoords geoCoords);
 
 };
 

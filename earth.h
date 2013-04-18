@@ -6,7 +6,11 @@
 #include <QGLSphere>
 #include <QGLPainter>
 
+#include "qgltexture2d.h"
 #include <QImage>
+#include <QThread>
+#include <QTimer>
+
 #include "tiledownloader.h"
 #include "more/structure.h"
 #include "more/geofunctions.h"
@@ -28,6 +32,9 @@ public:
 private:
     int zoom;
     int zoom_old;
+    qreal curScale;
+    GeoCoords curGeoCoords;
+
     QList<QGLTexture2D*> m_LoadedTextures;
     QGLTexture2D *m_texture;
     QGraphicsRotation3D *earthRotation;
@@ -42,7 +49,7 @@ private:
     QString cacheDir;
 
 public slots:
-    void changeTexture(qreal scale);
+    void updateTilesSlot(qreal scale, GeoCoords geoCoords);
     void addTileNode(int cur_zoom, qint32 lonTileNum, qint32 latTileNum);
     void textureDownloaded(qint32 cur_zoom, qint32 lonTileNum, qint32 latTileNum);
 

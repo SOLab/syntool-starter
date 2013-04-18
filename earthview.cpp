@@ -83,7 +83,7 @@ EarthView::EarthView(ConfigData configData, QWindow *parent)
     m_scene->mainNode()->addNode(navigateButton);
 
     earth = new Earth(this, m_palette, configData);
-    connect (this, &EarthView::changedScale, earth, &Earth::changeTexture);
+    connect (this, &EarthView::updatedTilesSignal, earth, &Earth::updateTilesSlot);
     connect (earth, &Earth::displayed, this, &EarthView::update);
 
     m_scene->mainNode()->addNode(earth);
@@ -209,7 +209,10 @@ void EarthView::scalePlus()
     {
         scalePlusMinusSlot(true);
     }
-    emit changedScale(scale);
+    GeoCoords pos = ecef2wgs84(camera()->eye().z(),
+                              camera()->eye().x(),
+                              camera()->eye().y());
+    emit updatedTilesSignal(scale, pos);
     update();
 }
 
@@ -219,7 +222,10 @@ void EarthView::scaleMinus()
     {
         scalePlusMinusSlot(false);
     }
-    emit changedScale(scale);
+    GeoCoords pos = ecef2wgs84(camera()->eye().z(),
+                              camera()->eye().x(),
+                              camera()->eye().y());
+    emit updatedTilesSignal(scale, pos);
     update();
 }
 
@@ -303,7 +309,7 @@ void EarthView::mouseMoveEvent(QMouseEvent *e)
         rotate(delta.x(), delta.y());
 
 
-        geoDetic pos = ecef2wgs84(camera()->eye().z(),
+        GeoCoords pos = ecef2wgs84(camera()->eye().z(),
                                   camera()->eye().x(),
                                   camera()->eye().y());
 

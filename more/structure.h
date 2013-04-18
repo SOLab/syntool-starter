@@ -14,4 +14,20 @@ struct BoundingBox {
     double west;
   };
 
+struct GeoCoords{
+    qreal lat;
+    qreal lon;
+};
+
+struct TileNumber{
+    qint32 x;
+    qint32 y;
+};
+
+struct TileRange{
+    qint32 startX;
+    qint32 startY;
+    qint32 endX;
+    qint32 endY;
+};
 #endif // STRUCTURE_H
