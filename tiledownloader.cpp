@@ -30,7 +30,6 @@ TileDownloader::~TileDownloader()
 
 void TileDownloader::fileDownloaded(QNetworkReply* pReply)
 {
-    qDebug() << "===============++>>>";
     m_DownloadedData = pReply->readAll();
     //emit a signal
     pReply->deleteLater();

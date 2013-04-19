@@ -212,6 +212,8 @@ void EarthView::scalePlus()
     GeoCoords pos = ecef2wgs84(camera()->eye().z(),
                               camera()->eye().x(),
                               camera()->eye().y());
+    pos.lat = pos.lat/M_PI*180;
+    pos.lon = pos.lon/M_PI*180;
     emit updatedTilesSignal(scale, pos);
     update();
 }
@@ -225,6 +227,8 @@ void EarthView::scaleMinus()
     GeoCoords pos = ecef2wgs84(camera()->eye().z(),
                               camera()->eye().x(),
                               camera()->eye().y());
+    pos.lat = pos.lat/M_PI*180;
+    pos.lon = pos.lon/M_PI*180;
     emit updatedTilesSignal(scale, pos);
     update();
 }
@@ -313,8 +317,8 @@ void EarthView::mouseMoveEvent(QMouseEvent *e)
                                   camera()->eye().x(),
                                   camera()->eye().y());
 
-        qDebug() << "long" << pos.lon/M_PI*180;
-        qDebug() << "lat" << pos.lat/M_PI*180;
+//        qDebug() << "long" << pos.lon/M_PI*180;
+//        qDebug() << "lat" << pos.lat/M_PI*180;
     }
 //    if (d->panning) {
 //        QPoint delta = e->pos() - d->startPan;

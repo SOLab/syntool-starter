@@ -63,19 +63,35 @@ void Earth::buildEarthNode(qreal radius, int divisions, int cur_zoom)
     qDebug() << "number of tiles = " << numberTiles;
 
     TileNumber tileNumber = deg2TileNum(curGeoCoords, cur_zoom);
+    qDebug() << "curGeoCoords = " << curGeoCoords.lat << curGeoCoords.lon;
     qDebug() << "tileNumber = " << tileNumber.x << ", " << tileNumber.y;
 
     TileRange* aaa = getTileRange(tileNumber, numberTiles, cur_zoom);
-    TileRange a0 = aaa[0];
-    TileRange a1 = aaa[1];
 
-    for (int lonTileNum = 0; lonTileNum < separation; lonTileNum++)
-    {
-        for (int latTileNum = 0; latTileNum < separation; latTileNum++)
+    if (cur_zoom > 2){
+        for (int tileRangeNumber = 0; tileRangeNumber <= 1; tileRangeNumber++)
         {
-            addTileNode(cur_zoom, lonTileNum, latTileNum);
+            for (int lonTileNum = aaa[tileRangeNumber].startX; lonTileNum <= aaa[tileRangeNumber].endX; lonTileNum++)
+            {
+                for (int latTileNum = aaa[tileRangeNumber].startY; latTileNum <= aaa[tileRangeNumber].endY; latTileNum++)
+                {
+                    qDebug() << "lon" << lonTileNum<< "lat" << latTileNum;
+                    addTileNode(cur_zoom, lonTileNum, separation-1-latTileNum);
+                }
+            }
         }
     }
+    else
+    {
+        for (int lonTileNum = 0; lonTileNum < separation; lonTileNum++)
+        {
+            for (int latTileNum = 0; latTileNum < separation; latTileNum++)
+            {
+                addTileNode(cur_zoom, lonTileNum, latTileNum);
+            }
+        }
+    }
+
 }
 
 /*!
@@ -292,7 +308,7 @@ void Earth::textureDownloaded(qint32 cur_zoom, qint32 lonTileNum, qint32 latTile
     QGLSceneNode* tempNode = BuildSpherePart(separation, minSphereLat, maxSphereLat, minSphereLon, maxSphereLon);
 
     QString nodeObjectName = QString("tile-%1-%2-%3").arg(cur_zoom).arg(lonTileNum).arg(separation-1-latTileNum);
-    qDebug() << "nodeObjectName = " << nodeObjectName;
+//    qDebug() << "nodeObjectName = " << nodeObjectName;
     tempNode->setObjectName(nodeObjectName);
 
     if (addTextureToTile(tempNode, separation, lonTileNum, latTileNum, cur_zoom))
@@ -300,6 +316,11 @@ void Earth::textureDownloaded(qint32 cur_zoom, qint32 lonTileNum, qint32 latTile
         QGLBuilder builder;
         builder.sceneNode()->addNode(tempNode);
         addNode(builder.finalizedSceneNode());
+        qDebug() << "TEXTURE ADDED!!!";
+    }
+    else
+    {
+        qDebug() << "TEXTURE NOT ADDED!!!";
     }
     emit displayed();
 }
@@ -330,8 +351,10 @@ void Earth::updateTilesSlot(qreal scale, GeoCoords geoCoords)
                 QGLSceneNode* tempNode = this->findSceneNode(search_path);
                 if (tempNode){
                     removeNode(this->findSceneNode(search_path));
+                    qDebug() << "removeNode " << search_path;
                 }
                 delete tempNode;
+                qDebug() << "delete Node " << search_path;
             }
         }
         buildEarthNode(a, 10, cur_zoom);
