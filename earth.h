@@ -15,6 +15,7 @@
 #include "more/structure.h"
 #include "more/geofunctions.h"
 #include <QObject>
+#include <typeinfo>
 
 QT_BEGIN_NAMESPACE
 class QGLTexture2D;
@@ -36,7 +37,7 @@ private:
     int zoom_old;
     qreal curScale;
     GeoCoords curGeoCoords;
-    QHash<TileNumber, QGLSceneNode*> tileNodeCache;
+    QHash<TileCacheNumber, QGLSceneNode*> tileNodeCache;
 
     QList<QGLTexture2D*> m_LoadedTextures;
     QGLTexture2D *m_texture;

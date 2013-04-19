@@ -238,7 +238,7 @@ bool Earth::addTextureToTile(QGLSceneNode* tempNode, int separation, int lonTile
 //    if (separation > 1){
     QGLTexture2D* tex;
     tex = new QGLTexture2D();
-    tex->setSize(QSize(512, 256));
+//    tex->setSize(QSize(512, 256));
 
     QString _filepath = cacheDir+"/%1-%2-%3.png";
     QString filepath(_filepath.arg(cur_zoom).arg(lonTileNum).arg(separation-1-latTileNum));
@@ -297,6 +297,9 @@ void Earth::tileDownload(qint32 cur_zoom, qint32 separation, qint32 lonTileNum, 
 */
 void Earth::textureDownloaded(qint32 cur_zoom, qint32 lonTileNum, qint32 latTileNum)
 {
+    if(cur_zoom != zoom)
+        return;
+
     int separation = qPow(2, cur_zoom);
 
 //    QString _filepath = cacheDir+"/%1-%2-%3.png";
@@ -320,6 +323,10 @@ void Earth::textureDownloaded(qint32 cur_zoom, qint32 lonTileNum, qint32 latTile
     {
         QGLBuilder builder;
         builder.sceneNode()->addNode(tempNode);
+
+        // add SceneNode to cache
+        tileNodeCache.insert(TileCacheNumber(cur_zoom, lonTileNum,separation-1-latTileNum), tempNode);
+
         addNode(builder.finalizedSceneNode());
         qDebug() << "TEXTURE ADDED!!!";
     }
