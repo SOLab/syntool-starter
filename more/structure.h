@@ -22,6 +22,7 @@ struct GeoCoords{
 struct TileNumber{
     qint32 x;
     qint32 y;
+    qint32 zoom;
 };
 
 struct TileRange{

@@ -14,6 +14,7 @@
 #include "tiledownloader.h"
 #include "more/structure.h"
 #include "more/geofunctions.h"
+#include <QObject>
 
 QT_BEGIN_NAMESPACE
 class QGLTexture2D;
@@ -21,6 +22,7 @@ QT_END_NAMESPACE
 
 class Earth : public QGLSceneNode
 {
+    Q_OBJECT
 public:
     Earth(QObject *parent, QSharedPointer<QGLMaterialCollection> materials, ConfigData configData);
     ~Earth();
@@ -34,6 +36,7 @@ private:
     int zoom_old;
     qreal curScale;
     GeoCoords curGeoCoords;
+    QHash<TileNumber, QGLSceneNode*> tileNodeCache;
 
     QList<QGLTexture2D*> m_LoadedTextures;
     QGLTexture2D *m_texture;
@@ -47,6 +50,9 @@ private:
     bool addTextureToTile(QGLSceneNode *tempNode, int separation, int lonTileNum, int latTileNum, int cur_zoom);
     bool checkTextureFile(int separation, int lonTileNum, int latTileNum, int cur_zoom);
     QString cacheDir;
+
+signals:
+    void textureDownloadedSignal(qint32 cur_zoom, qint32 lonTileNum, qint32 latTileNum);
 
 public slots:
     void updateTilesSlot(qreal scale, GeoCoords geoCoords);

@@ -45,6 +45,8 @@ Earth::Earth(QObject *parent, QSharedPointer<QGLMaterialCollection> materials, C
     zoom = 0;
     zoom_old = 0;
 
+    connect(this, SIGNAL(textureDownloadedSignal(qint32,qint32,qint32)), this, SLOT(textureDownloaded(qint32,qint32,qint32)));
+
 //    tileDownloader = new TileDownloader();
 }
 
@@ -57,18 +59,20 @@ void Earth::buildEarthNode(qreal radius, int divisions, int cur_zoom)
     Q_UNUSED(divisions);
     qreal separation = qPow(2, cur_zoom);
 
-    qDebug() << "km in each tile = " << 40075.017/qPow(2, cur_zoom);
-    qDebug() << "km = " << 2*40000/curScale;
-    int numberTiles = qCeil(getNumberTiles(cur_zoom, 2*40000/curScale));
-    qDebug() << "number of tiles = " << numberTiles;
-
-    TileNumber tileNumber = deg2TileNum(curGeoCoords, cur_zoom);
-    qDebug() << "curGeoCoords = " << curGeoCoords.lat << curGeoCoords.lon;
-    qDebug() << "tileNumber = " << tileNumber.x << ", " << tileNumber.y;
-
-    TileRange* aaa = getTileRange(tileNumber, numberTiles, cur_zoom);
 
     if (cur_zoom > 2){
+
+        qDebug() << "km in each tile = " << 40075.017/qPow(2, cur_zoom);
+        qDebug() << "km = " << 2*40000/curScale;
+        int numberTiles = qCeil(getNumberTiles(cur_zoom, 2*40000/curScale));
+        qDebug() << "number of tiles = " << numberTiles;
+
+        TileNumber tileNumber = deg2TileNum(curGeoCoords, cur_zoom);
+        qDebug() << "curGeoCoords = " << curGeoCoords.lat << curGeoCoords.lon;
+        qDebug() << "tileNumber = " << tileNumber.x << ", " << tileNumber.y;
+
+        TileRange* aaa = getTileRange(tileNumber, numberTiles, cur_zoom);
+
         for (int tileRangeNumber = 0; tileRangeNumber <= 1; tileRangeNumber++)
         {
             for (int lonTileNum = aaa[tileRangeNumber].startX; lonTileNum <= aaa[tileRangeNumber].endX; lonTileNum++)
@@ -108,6 +112,7 @@ void Earth::addTileNode(int cur_zoom, qint32 lonTileNum, qint32 latTileNum)
         return;
     }
 
+//    emit textureDownloadedSignal(cur_zoom, lonTileNum, latTileNum);
     textureDownloaded(cur_zoom, lonTileNum, latTileNum);
 }
 

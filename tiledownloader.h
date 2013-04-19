@@ -28,7 +28,7 @@ public:
     QByteArray downloadedData() const;
 
 signals:
-        void resultReady(qint32 cur_zoom, qint32 lonTileNum, qint32 latTileNum);
+    void resultReady(qint32 cur_zoom, qint32 lonTileNum, qint32 latTileNum);
 
 private slots:
 

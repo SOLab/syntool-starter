@@ -209,11 +209,9 @@ void EarthView::scalePlus()
     {
         scalePlusMinusSlot(true);
     }
-    GeoCoords pos = ecef2wgs84(camera()->eye().z(),
+    GeoCoords pos = ecef2wgs84Deg(camera()->eye().z(),
                               camera()->eye().x(),
                               camera()->eye().y());
-    pos.lat = pos.lat/M_PI*180;
-    pos.lon = pos.lon/M_PI*180;
     emit updatedTilesSignal(scale, pos);
     update();
 }
@@ -224,11 +222,9 @@ void EarthView::scaleMinus()
     {
         scalePlusMinusSlot(false);
     }
-    GeoCoords pos = ecef2wgs84(camera()->eye().z(),
+    GeoCoords pos = ecef2wgs84Deg(camera()->eye().z(),
                               camera()->eye().x(),
                               camera()->eye().y());
-    pos.lat = pos.lat/M_PI*180;
-    pos.lon = pos.lon/M_PI*180;
     emit updatedTilesSignal(scale, pos);
     update();
 }
@@ -313,7 +309,7 @@ void EarthView::mouseMoveEvent(QMouseEvent *e)
         rotate(delta.x(), delta.y());
 
 
-        GeoCoords pos = ecef2wgs84(camera()->eye().z(),
+        GeoCoords pos = ecef2wgs84Deg(camera()->eye().z(),
                                   camera()->eye().x(),
                                   camera()->eye().y());
 

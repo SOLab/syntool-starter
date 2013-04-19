@@ -55,7 +55,7 @@ inline QVector3D llh2xyz(qreal _lat, qreal _lon, qreal h = 0)
     return decartCoordPoint;
 }
 
-inline GeoCoords ecef2wgs84(double x, double y, double z)
+inline GeoCoords ecef2wgs84Rad(double x, double y, double z)
 {
     GeoCoords pos;
 
@@ -64,6 +64,14 @@ inline GeoCoords ecef2wgs84(double x, double y, double z)
     return pos;
 }
 
+inline GeoCoords ecef2wgs84Deg(double x, double y, double z)
+{
+    GeoCoords pos;
+
+    pos.lat=atan2(z,qSqrt(x*x+y*y))/M_PI*180;
+    pos.lon=atan2(y,x)/M_PI*180;
+    return pos;
+}
 inline qreal tiley2lat(int y, int separation)
 {
     double n = M_PI - 2.0 * M_PI * y / qreal(separation);
