@@ -10,12 +10,12 @@
 #include <QImage>
 #include <QThread>
 #include <QTimer>
+#include <QObject>
+#include <typeinfo>
 
 #include "tiledownloader.h"
 #include "more/structure.h"
 #include "more/geofunctions.h"
-#include <QObject>
-#include <typeinfo>
 
 QT_BEGIN_NAMESPACE
 class QGLTexture2D;
@@ -35,9 +35,11 @@ public:
 private:
     int zoom;
     int zoom_old;
+    int zoom_clean;
+
     qreal curScale;
     GeoCoords curGeoCoords;
-    QHash<TileCacheNumber, QGLSceneNode*> tileNodeCache;
+    QCache<TileCacheNumber, QGLSceneNode> tileNodeCache;
 
     QList<QGLTexture2D*> m_LoadedTextures;
     QGLTexture2D *m_texture;

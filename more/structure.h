@@ -1,6 +1,7 @@
 #ifndef STRUCTURE_H
 #define STRUCTURE_H
 #include <QString>
+#include <QCache>
 
 struct ConfigData{
     QString serverName;
