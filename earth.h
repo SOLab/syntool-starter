@@ -54,6 +54,8 @@ private:
     bool checkTextureFile(int separation, int lonTileNum, int latTileNum, int cur_zoom);
     QString cacheDir;
 
+    bool checkNodeInCache(int zoom, int x, int y);
+
 signals:
     void textureDownloadedSignal(qint32 cur_zoom, qint32 lonTileNum, qint32 latTileNum);
 
