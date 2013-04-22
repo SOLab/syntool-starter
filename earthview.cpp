@@ -48,6 +48,11 @@
 //const double e = 8.1819190842622e-2;
 //const double pi = 3.1415926535897932384626433832795;
 
+GeoCoords getGeoCoordsPos(QVector3D eye)
+{
+    return ecef2wgs84Deg(eye.z(), eye.x(), eye.y());
+}
+
 EarthView::EarthView(ConfigData configData, QWindow *parent)
     : QGLView(parent)
     , m_scene(0)
@@ -93,6 +98,9 @@ EarthView::EarthView(ConfigData configData, QWindow *parent)
 
     lastMouseMoveTime = QTime::currentTime();
     delta = QPoint(0,0);
+    GeoCoords pos = getGeoCoordsPos(camera()->eye());
+    emit updatedTilesSignal(scale, pos);
+    update();
 }
 
 EarthView::~EarthView()
@@ -209,9 +217,7 @@ void EarthView::scalePlus()
     {
         scalePlusMinusSlot(true);
     }
-    GeoCoords pos = ecef2wgs84Deg(camera()->eye().z(),
-                              camera()->eye().x(),
-                              camera()->eye().y());
+    GeoCoords pos = getGeoCoordsPos(camera()->eye());
     emit updatedTilesSignal(scale, pos);
     update();
 }
@@ -222,9 +228,7 @@ void EarthView::scaleMinus()
     {
         scalePlusMinusSlot(false);
     }
-    GeoCoords pos = ecef2wgs84Deg(camera()->eye().z(),
-                              camera()->eye().x(),
-                              camera()->eye().y());
+    GeoCoords pos = getGeoCoordsPos(camera()->eye());
     emit updatedTilesSignal(scale, pos);
     update();
 }
@@ -309,9 +313,7 @@ void EarthView::mouseMoveEvent(QMouseEvent *e)
         rotate(delta.x(), delta.y());
 
 
-        GeoCoords pos = ecef2wgs84Deg(camera()->eye().z(),
-                                  camera()->eye().x(),
-                                  camera()->eye().y());
+        GeoCoords pos = getGeoCoordsPos(camera()->eye());
 
 //        qDebug() << "long" << pos.lon/M_PI*180;
 //        qDebug() << "lat" << pos.lat/M_PI*180;

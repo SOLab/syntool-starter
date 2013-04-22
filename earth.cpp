@@ -42,7 +42,7 @@ Earth::Earth(QObject *parent, QSharedPointer<QGLMaterialCollection> materials, C
     addTransform(rotateY);
 //    addNode(sphere);
 
-    zoom = 0;
+    zoom = -1;
     zoom_old = 0;
 
     connect(this, SIGNAL(textureDownloadedSignal(qint32,qint32,qint32)), this, SLOT(textureDownloaded(qint32,qint32,qint32)));
