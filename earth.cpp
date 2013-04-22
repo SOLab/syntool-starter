@@ -348,6 +348,7 @@ void Earth::updateTilesSlot(qreal scale, GeoCoords geoCoords)
     curScale = scale;
     // save current coordinates
     curGeoCoords = geoCoords;
+
 //    cur_zoom = 0;
     if (zoom != qFloor(cur_zoom))
     {
@@ -370,6 +371,10 @@ void Earth::updateTilesSlot(qreal scale, GeoCoords geoCoords)
             }
         }
         buildEarthNode(a, 10, cur_zoom);
+    }
+    else
+    {
+        // only move camera
     }
 }
 

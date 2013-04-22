@@ -98,9 +98,9 @@ EarthView::EarthView(ConfigData configData, QWindow *parent)
 
     lastMouseMoveTime = QTime::currentTime();
     delta = QPoint(0,0);
+
     GeoCoords pos = getGeoCoordsPos(camera()->eye());
     emit updatedTilesSignal(scale, pos);
-    update();
 }
 
 EarthView::~EarthView()
@@ -163,6 +163,8 @@ void EarthView::keyPressEvent(QKeyEvent *e)
         {
 //            camera()->setCenter(QVector3D(1,0,0));
             QGLView::keyPressEvent(e);
+            GeoCoords pos = getGeoCoordsPos(camera()->eye());
+            emit updatedTilesSignal(scale, pos);
         }
         break;
 
@@ -219,7 +221,6 @@ void EarthView::scalePlus()
     }
     GeoCoords pos = getGeoCoordsPos(camera()->eye());
     emit updatedTilesSignal(scale, pos);
-    update();
 }
 
 void EarthView::scaleMinus()
@@ -230,7 +231,6 @@ void EarthView::scaleMinus()
     }
     GeoCoords pos = getGeoCoordsPos(camera()->eye());
     emit updatedTilesSignal(scale, pos);
-    update();
 }
 
 // for changed scale
@@ -279,6 +279,11 @@ void EarthView::rotate(int deltax, int deltay)
 
     q *= camera()->tilt(-angley);
     camera()->rotateCenter(q);
+
+    // emit signal about changed center
+    GeoCoords pos = getGeoCoordsPos(camera()->eye());
+    emit updatedTilesSignal(scale, pos);
+
 }
 
 void EarthView::leftSlot()
