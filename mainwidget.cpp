@@ -1,5 +1,14 @@
 #include "mainwidget.h"
 
+static QtMessageHandler oldMsgHandler = 0;
+
+MainWindow *MainWindow::self = 0;
+
+static void logMessageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)
+{
+    MainWindow::self->log(type, context, msg);
+//    oldMsgHandler(type, context, msg);
+}
 
 //#include "PythonQt.h"
 //#include "gui/PythonQtScriptingConsole.h"
@@ -8,6 +17,20 @@ MainWindow::MainWindow(ConfigData _configData, QWidget *parent)
     : QMainWindow(parent)
 {
     configData = _configData;
+
+    self = this;
+
+    //set logger
+    oldMsgHandler = qInstallMessageHandler(logMessageHandler);
+
+    // add translator (in future)
+//    QTranslator *translator = new QTranslator(this);
+//    if (translator->load(QString(":/translations/test_%2.qm").arg(QLocale::system().name())))
+//        qApp->installTranslator(translator);
+//    else delete translator;
+
+    QString text = tr("Test from qDebug");
+    //////
 
     vlayout = new QVBoxLayout;
     vlayout->setSpacing(0);
@@ -221,8 +244,37 @@ void MainWindow::createPythonConsole()
 //    mainContext.addObject("button2", button2);
 }
 
-
 void MainWindow::keyPress(QKeyEvent *e)
 {
     keyPressEvent(e);
+}
+
+void MainWindow::log(QtMsgType type, const QMessageLogContext &context, const QString &msg)
+{
+    QByteArray localMsg = msg.toLocal8Bit();
+    switch (type) {
+    case QtDebugMsg:
+    {
+        if (configData.logLevel & DebugOnly)
+            fprintf(stderr, "Debug: %s (%s:%u, %s)\n", localMsg.constData(), context.file, context.line, context.function);
+    }
+        break;
+    case QtWarningMsg:
+        if (configData.logLevel & WarningOnly)
+            fprintf(stderr, "Warning: %s (%s:%u, %s)\n", localMsg.constData(), context.file, context.line, context.function);
+        break;
+    case QtCriticalMsg:
+        if (configData.logLevel & ErrorOnly)
+            fprintf(stderr, "Critical: %s (%s:%u, %s)\n", localMsg.constData(), context.file, context.line, context.function);
+        break;
+    case QtFatalMsg:
+        if (configData.logLevel & ErrorOnly)
+            fprintf(stderr, "Fatal: %s (%s:%u, %s)\n", localMsg.constData(), context.file, context.line, context.function);
+        abort();
+    }
+}
+
+MainWindow::~MainWindow()
+{
+//    qInstallMessageHandler(oldMsgHandler);
 }

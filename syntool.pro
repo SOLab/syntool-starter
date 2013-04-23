@@ -1,11 +1,10 @@
 TEMPLATE = app
 TARGET = syntool
-CONFIG += qt warn_on
+CONFIG += qt warn_on console
+DEFINES -= QT_NO_WARNING_OUTPUT QT_NO_DEBUG_OUTPUT
 
-QT += core gui opengl
-
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
-QT += 3d network xml
+#greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+QT += 3d network xml core gui opengl widgets
 
 include(./pkg.pri)
 

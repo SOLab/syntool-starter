@@ -177,7 +177,6 @@ void ProductsWidget::slotReadyReadProductList()
 
     int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
 
-    qDebug() << "=================================";
     if (reply->error() == QNetworkReply::NoError)
     {
         qDebug() << "status code: " << statusCode;

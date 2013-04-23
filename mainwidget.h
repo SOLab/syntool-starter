@@ -2,28 +2,28 @@
 #define MAINWIDGET_H
 
 #include <QMainWindow>
-#include "windowwidget.h"
-#include "topmenu.h"
-#include "aboutwidget.h"
-#include "timeline.h"
-
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QHBoxLayout>
 #include <QToolBox>
 #include <QSplitter>
 #include <QMenuBar>
+#include <QHash>
 #include <QApplication>
+
+#include "windowwidget.h"
+#include "topmenu.h"
+#include "aboutwidget.h"
+#include "timeline.h"
+#include "rightsidebar.h"
+#include "network/getgranules.h"
+#include "more/structure.h"
+
 #include "toolboxwidgets/layerswidget.h"
 #include "toolboxwidgets/placewidget.h"
 #include "toolboxwidgets/mapswidget.h"
 #include "toolboxwidgets/productswidget.h"
 #include "toolboxwidgets/datasetswidget.h"
-#include "rightsidebar.h"
-#include "network/getgranules.h"
-#include "more/structure.h"
-
 #include "topmenuwidgets/settingswidget.h"
-#include <QHash>
 
 class TimeLine;
 
@@ -33,7 +33,7 @@ class MainWindow : public QMainWindow
 
 public:
     MainWindow(ConfigData _configData, QWidget *parent = 0);
-    ~MainWindow(){}
+    ~MainWindow();
     void setHostedWindow(QWindow *window);
     void keyPress(QKeyEvent* e);
 //    void resizeEvent(QResizeEvent *e);
@@ -42,6 +42,8 @@ public:
     QHash<QString, Granule>* granulesHash;
     ConfigData configData;
 
+    void log(QtMsgType type, const QMessageLogContext &context, const QString &msg);
+    static MainWindow *self;
 protected:
     QSplitter *splitter;
     WindowWidget* glwgt;
@@ -65,6 +67,8 @@ protected:
     void createMenuBar();
     void createPythonConsole();
 //    void keyPressEvent(QKeyEvent *e);
+
+private:
 
 public slots:
     void aboutProgram();
