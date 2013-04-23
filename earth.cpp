@@ -60,11 +60,13 @@ bool Earth::checkNodeInCache(int zoom, int x, int y)
     {
         QGLSceneNode* tempNode = tileNodeCache.object(currentCacheNumber);
         if (tempNode->options().testFlag(QGLSceneNode::HideNode))
+        {
             tempNode->setOptions(QGLSceneNode::NoOptions);
 
-        QGLBuilder builder;
-        builder.sceneNode()->addNode(tempNode);
-        addNode(builder.finalizedSceneNode());
+            QGLBuilder builder;
+            builder.sceneNode()->addNode(tempNode);
+            addNode(builder.finalizedSceneNode());
+        }
 
         emit displayed();
         return true;
@@ -347,6 +349,7 @@ void Earth::textureDownloaded(qint32 cur_zoom, qint32 lonTileNum, qint32 latTile
 
     if (addTextureToTile(tempNode, separation, lonTileNum, latTileNum, cur_zoom))
     {
+        tempNode->setOptions(QGLSceneNode::NoOptions);
         QGLBuilder builder;
         builder.sceneNode()->addNode(tempNode);
 
@@ -355,6 +358,7 @@ void Earth::textureDownloaded(qint32 cur_zoom, qint32 lonTileNum, qint32 latTile
         tileNodeCache.insert(tileNumber, tempNode);
 
         addNode(builder.finalizedSceneNode());
+        qDebug() << "ADD NODE" << nodeObjectName;
     }
     else
     {
@@ -418,10 +422,11 @@ void Earth::updateTilesSlot(qreal scale, GeoCoords geoCoords)
 
         qDebug() << "cur_zoom = " << qFloor(cur_zoom);
     }
-//    else
-//    {
-//        // only move camera
-//    }
+    else
+    {
+        // only move camera
+        buildEarthNode(a, 10, cur_zoom);
+    }
 }
 
 Earth::~Earth()
