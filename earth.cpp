@@ -43,7 +43,7 @@ Earth::Earth(QObject *parent, QSharedPointer<QGLMaterialCollection> materials, C
 //    addNode(sphere);
 
     // set maximum cost for cache
-    tileNodeCache.setMaxCost(50);
+    tileNodeCache.setMaxCost(100);
 
     zoom = -1;
     zoom_old = 0;
@@ -58,10 +58,15 @@ bool Earth::checkNodeInCache(int zoom, int x, int y)
     TileCacheNumber currentCacheNumber = TileCacheNumber(zoom, x, y);
     if (tileNodeCache.contains(currentCacheNumber))
     {
-        QGLSceneNode* tempNode = tileNodeCache.take(currentCacheNumber);
-//        if (tempNode->options().testFlag(QGLSceneNode::HideNode))
-//            tempNode->setOption(QGLSceneNode::HideNode, false);
-        addNode(tempNode);
+        QGLSceneNode* tempNode = tileNodeCache.object(currentCacheNumber);
+        if (tempNode->options().testFlag(QGLSceneNode::HideNode))
+            tempNode->setOptions(QGLSceneNode::NoOptions);
+
+        QGLBuilder builder;
+        builder.sceneNode()->addNode(tempNode);
+        addNode(builder.finalizedSceneNode());
+
+        emit displayed();
         return true;
     }
     return false;
@@ -76,17 +81,10 @@ void Earth::buildEarthNode(qreal radius, int divisions, int cur_zoom)
     Q_UNUSED(divisions);
     qreal separation = qPow(2, cur_zoom);
 
-
     if (cur_zoom > 2){
-
-        qDebug() << "km in each tile = " << 40075.017/qPow(2, cur_zoom);
-        qDebug() << "km = " << 2*40000/curScale;
         int numberTiles = qCeil(getNumberTiles(cur_zoom, 2*40000/curScale));
-        qDebug() << "number of tiles = " << numberTiles;
 
         TileNumber tileNumber = deg2TileNum(curGeoCoords, cur_zoom);
-        qDebug() << "curGeoCoords = " << curGeoCoords.lat << curGeoCoords.lon;
-        qDebug() << "tileNumber = " << tileNumber.x << ", " << tileNumber.y;
 
         TileRange* aaa = getTileRange(tileNumber, numberTiles, cur_zoom);
 
@@ -96,11 +94,10 @@ void Earth::buildEarthNode(qreal radius, int divisions, int cur_zoom)
             {
                 for (int latTileNum = aaa[tileRangeNumber].startY; latTileNum <= aaa[tileRangeNumber].endY; latTileNum++)
                 {
-                    qDebug() << "lon" << lonTileNum<< "lat" << latTileNum;
-//                    if (!checkNodeInCache(cur_zoom, lonTileNum, separation-1-latTileNum))
-//                    {
+                    if (!checkNodeInCache(cur_zoom, lonTileNum, latTileNum))
+                    {
                         addTileNode(cur_zoom, lonTileNum, separation-1-latTileNum);
-//                    }
+                    }
                 }
             }
         }
@@ -111,14 +108,13 @@ void Earth::buildEarthNode(qreal radius, int divisions, int cur_zoom)
         {
             for (int latTileNum = 0; latTileNum < separation; latTileNum++)
             {
-//                if (!checkNodeInCache(cur_zoom, lonTileNum, separation-1-latTileNum))
-//                {
+                if (!checkNodeInCache(cur_zoom, lonTileNum, separation-1-latTileNum))
+                {
                     addTileNode(cur_zoom, lonTileNum, latTileNum);
-//                }
+                }
             }
         }
     }
-
 }
 
 /*!
@@ -354,12 +350,11 @@ void Earth::textureDownloaded(qint32 cur_zoom, qint32 lonTileNum, qint32 latTile
         QGLBuilder builder;
         builder.sceneNode()->addNode(tempNode);
 
-        tempNode = builder.finalizedSceneNode();
         // add SceneNode to cache
-        tileNodeCache.insert(TileCacheNumber(cur_zoom, lonTileNum,separation-1-latTileNum), tempNode);
+        TileCacheNumber tileNumber = TileCacheNumber(cur_zoom, lonTileNum,separation-1-latTileNum);
+        tileNodeCache.insert(tileNumber, tempNode);
 
-        addNode(tempNode);
-        qDebug() << "TEXTURE ADDED!!!"<< tileNodeCache.count();
+        addNode(builder.finalizedSceneNode());
     }
     else
     {
@@ -381,6 +376,7 @@ void Earth::updateTilesSlot(qreal scale, GeoCoords geoCoords)
     curGeoCoords = geoCoords;
 
 //    cur_zoom = 0;
+
     if (zoom != qFloor(cur_zoom))
     {
 //        if (zoom_old_2 != qFloor(cur_zoom))
@@ -396,24 +392,26 @@ void Earth::updateTilesSlot(qreal scale, GeoCoords geoCoords)
         {
             for (int x = 0; x < separation_old; x++)
             {
-                QString search_path = QString("tile-%1-%2-%3").arg(zoom_old).arg(x).arg(y);
-                QGLSceneNode* tempNode = this->findSceneNode(search_path);
-                if (tempNode){
-                    // Hide Node NB!!!!!!!!!
-//                    if (!tempNode->options().testFlag(QGLSceneNode::HideNode))
-//                    {
-                        tempNode->setOption(QGLSceneNode::HideNode, true);
-//                        qDebug() << "HIDE ==================" << search_path;
-//                    }
+                TileCacheNumber currentCacheNumber = TileCacheNumber(zoom_old, x, y);
 
-                    removeNode(tempNode);
-                    qDebug() << "removeNode " << search_path;
+                if (tileNodeCache.contains(currentCacheNumber))
+                {
+                    QGLSceneNode* tempNode = tileNodeCache.object(currentCacheNumber);
 
+                    if (!tempNode->options().testFlag(QGLSceneNode::HideNode))
+                    {
+                        tempNode->setOptions(QGLSceneNode::HideNode);
+                    }
                 }
 
-//                qDebug() << "======>>" << tempNode->options().testFlag(QGLSceneNode::HideNode);
-//                delete tempNode;
-                qDebug() << "delete Node " << search_path;
+                QString search_path = QString("tile-%1-%2-%3").arg(zoom_old).arg(x).arg(y);
+                QGLSceneNode* tempNode = this->findSceneNode(search_path);
+
+                if (tempNode)
+                {
+                    removeNode(tempNode);
+                    qDebug() << "REMOVE NODE!!!"<< tileNodeCache.count();
+                }
             }
         }
         buildEarthNode(a, 10, cur_zoom);
