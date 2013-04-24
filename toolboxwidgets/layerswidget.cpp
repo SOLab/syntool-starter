@@ -10,11 +10,11 @@ LayersWidget::LayersWidget(QWidget *parent) :
     vLayout->setSpacing(3);
     vLayout->setAlignment(Qt::AlignTop);
 
-    productsLayout = new QVBoxLayout(this);
+    productsLayout = new QVBoxLayout;
     productsLayout->setContentsMargins(0,0,0,0);
     productsLayout->setAlignment(Qt::AlignTop);
 
-    otherLayout = new QVBoxLayout(this);
+    otherLayout = new QVBoxLayout;
     otherLayout->setContentsMargins(0,0,0,0);
     otherLayout->setAlignment(Qt::AlignTop);
 

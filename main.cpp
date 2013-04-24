@@ -54,7 +54,7 @@ int main(int argc, char *argv[])
     ConfigData configData;
     configData.serverName = "http://satin.rshu.ru";
     configData.cacheDir = "/tmp/syntool";
-    configData.logLevel = WarningAndError;
+    configData.logLevel = DebugOnly;
 
     QDir cacheDir(configData.cacheDir);
     if (!cacheDir.exists()){
@@ -64,45 +64,23 @@ int main(int argc, char *argv[])
     EarthView view(configData);
     app.set_view(&view);
 
-    // process id
-    qDebug() << app.applicationPid();
+//    // process id
+//    qDebug() << app.applicationPid();
 
 //    QProcess *Process1 = new QProcess();
 //    QProcess *Process2 = new QProcess();
 //    Process1->setStandardOutputProcess(Process2);
 
-////    p.start("ps u -p 9948 | awk '!/MEM/ {print($4)}'");
-
-//    Process1->start(QString("ps u -p %1").arg(app.applicationPid()));
-//    Process2->start("awk \"!/MEM/ {print($4)}\"");
+//    Process1->start(QString("cat /proc/%1/status").arg(app.applicationPid()));
+//    Process2->start("awk \"/VmRSS:/ {print($2)}\"");
 
 //    Process2->waitForFinished();
-////    qDebug() << Process2->readAllStandardError();
 //    QString mem_percent = Process2->readAll();
 //    qDebug() << mem_percent.toFloat();
+//    delete Process1;
+//    delete Process2;
 
 
-
-//    QProcess p;
-//    p.start("awk", QStringList() << "/MemTotal/ { print $2 }" << "/proc/meminfo");
-//    p.waitForFinished();
-//    QString memory = p.readAllStandardOutput();
-//    qDebug() << memory.toFloat();
-
-//    qDebug() << Process2->errorString();
-
-    QProcess *Process1 = new QProcess();
-    QProcess *Process2 = new QProcess();
-    Process1->setStandardOutputProcess(Process2);
-
-    Process1->start(QString("cat /proc/%1/status").arg(app.applicationPid()));
-    Process2->start("awk \"/VmRSS:/ {print($2)}\"");
-
-    Process2->waitForFinished();
-    QString mem_percent = Process2->readAll();
-    qDebug() << mem_percent.toFloat();
-    delete Process1;
-    delete Process2;
 
 //    view->resize(800, 600);
 
