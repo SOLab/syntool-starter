@@ -48,7 +48,7 @@ Earth::Earth(QObject *parent, QSharedPointer<QGLMaterialCollection> materials, C
     zoom = -1;
     zoom_old = 0;
 
-    connect(this, SIGNAL(textureDownloadedSignal(qint32,qint32,qint32)), this, SLOT(textureDownloaded(qint32,qint32,qint32)));
+    connect(this, &Earth::textureDownloadedSignal, this, &Earth::textureDownloaded);
 
 //    tileDownloader = new TileDownloader();
 }
@@ -344,7 +344,6 @@ void Earth::textureDownloaded(qint32 cur_zoom, qint32 lonTileNum, qint32 latTile
 
     QString nodeObjectName = QString("tile-%1-%2-%3").arg(cur_zoom).arg(lonTileNum)
                                                      .arg(separation-1-latTileNum);
-//    qDebug() << "nodeObjectName = " << nodeObjectName;
     tempNode->setObjectName(nodeObjectName);
 
     if (addTextureToTile(tempNode, separation, lonTileNum, latTileNum, cur_zoom))
@@ -362,7 +361,7 @@ void Earth::textureDownloaded(qint32 cur_zoom, qint32 lonTileNum, qint32 latTile
     }
     else
     {
-        qDebug() << "TEXTURE NOT ADDED!!!";
+        qWarning() << "Texture not added";
     }
     emit displayed();
 }
@@ -373,8 +372,6 @@ void Earth::textureDownloaded(qint32 cur_zoom, qint32 lonTileNum, qint32 latTile
 void Earth::updateTilesSlot(qreal scale, GeoCoords geoCoords)
 {
     qreal cur_zoom = log10(scale)/log10(2);
-//    qDebug() << "cur_zoom = " << qFloor(cur_zoom);
-//    qDebug() << "scale" << scale;
     curScale = scale;
     // save current coordinates
     curGeoCoords = geoCoords;
@@ -383,11 +380,6 @@ void Earth::updateTilesSlot(qreal scale, GeoCoords geoCoords)
 
     if (zoom != qFloor(cur_zoom))
     {
-//        if (zoom_old_2 != qFloor(cur_zoom))
-//        {
-//            // clean zoom_old_2 tiles from cache
-//        }
-
         zoom_old = zoom;
         zoom = qFloor(cur_zoom);
 
@@ -414,7 +406,6 @@ void Earth::updateTilesSlot(qreal scale, GeoCoords geoCoords)
                 if (tempNode)
                 {
                     removeNode(tempNode);
-                    qDebug() << "REMOVE NODE!!!"<< tileNodeCache.count();
                 }
             }
         }

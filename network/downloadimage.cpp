@@ -9,8 +9,7 @@ void DownloadImage::run()
 {
     QNetworkAccessManager* m_netwManager = new QNetworkAccessManager(this);
 
-    connect(m_netwManager, SIGNAL(finished(QNetworkReply*)),
-            this, SLOT(slotReadyRead(QNetworkReply*)));
+    connect(m_netwManager, &QNetworkAccessManager::finished, this, &DownloadImage::slotReadyRead);
 
     QNetworkRequest request(_imageUrl);
     QNetworkReply* reply = m_netwManager->get(request);
@@ -27,9 +26,8 @@ void DownloadImage::setImageUrl(QString imageUrl, QString imagePath)
 
 void DownloadImage::slotReadyRead(QNetworkReply *reply)
 {
-    qDebug() << "DownloadImage::slotReadyRead";
     if (reply->error() != QNetworkReply::NoError) {
-        qDebug() << "Error in" << reply->url() << ":" << reply->errorString();
+        qWarning() << "Error in" << reply->url() << ":" << reply->errorString();
         return;
     }
 
@@ -37,12 +35,11 @@ void DownloadImage::slotReadyRead(QNetworkReply *reply)
     QPixmap pixmap;
     pixmap.loadFromData(jpegData);
     pixmap.save(_imagePath);
-    qDebug() << _imagePath;
 //    label->setPixmap(pixmap); // or whatever your labels name is
     deleteLater();
 }
 
 void DownloadImage::getError(QNetworkReply::NetworkError)
 {
-    qDebug() << "DownloadImage::getError";
+    qWarning() << "Unable to download the image";
 }

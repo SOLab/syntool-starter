@@ -6,9 +6,10 @@ Calendar::Calendar(QDate date, QWidget *parent) :
     gridLayout = new QGridLayout(this);
 
     okButton = new QPushButton("Set date", this);
+    connect(okButton, &QPushButton::clicked, this, &Calendar::okClicked);
 
     cancelButton = new QPushButton("Cancel", this);
-    connect(cancelButton, SIGNAL(clicked()), this, SLOT(close()));
+    connect(cancelButton, &QPushButton::clicked, this, &Calendar::close);
 
     calendar = new QCalendarWidget(this);
     calendar->setSelectedDate(date);

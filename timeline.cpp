@@ -23,11 +23,6 @@ TimeLine::TimeLine(ConfigData configData, QWidget *parent)
     control_.moveWeek = false;
     control_.moveDay = false;
     control_.flagMovedIntervalos_ = true;
-    // создаём таймер, раз в полсекунды он разрешает сдвигать диапазон. (чтоб полоса не ускакала на горку)
-//    QTimer * timer = new QTimer;
-//    timer->setInterval(500);
-//    connect( timer, SIGNAL(timeout()), SLOT( moveEnabled()));
-//    timer->start();
 
     // Granule statuses
     GranuleStatuses << "New" << "Ingesting" << "Completed" << "Error" << "Ingested"
@@ -51,7 +46,7 @@ TimeLine::TimeLine(ConfigData configData, QWidget *parent)
                                         background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,\
                                                                           stop: 0 #dadbde, stop: 1 #f6f7fa);}");
 
-    connect(calendarButton, SIGNAL(clicked()), this, SLOT(setDate()));
+    connect(calendarButton, &QPushButton::clicked, this, &TimeLine::setDate);
 
     imageGeoPoint = QImage(":/orange-circle.png");
 
@@ -565,13 +560,15 @@ void TimeLine::addGeoSegment(QDateTime startDateTime, QDateTime endDateTime, flo
 void TimeLine::setDate()
 {
     calendar = new Calendar(control_.currentDate.date());
-    connect(calendar->okButton, SIGNAL(clicked()), this, SLOT(setCurrentDate()));
+    connect(calendar, &Calendar::okClicked, this, &TimeLine::setCurrentDate);
     calendar->show();
 }
 
 void TimeLine::setCurrentDate()
 {
+    qWarning() << calendar->calendar->selectedDate().toString();
     control_.currentDate.setDate(calendar->calendar->selectedDate());
+    qWarning() << control_.currentDate.toString();
     calendar->close();
     calendar->deleteLater();
 

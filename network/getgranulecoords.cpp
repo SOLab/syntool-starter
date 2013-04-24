@@ -15,11 +15,9 @@ void GetGranuleCoords::getCoords(QString serverName, qint32 granuleId)
     request.setRawHeader("Content-Type", "text/xml");
 
     request.setUrl(request.url());
-    qDebug() << "Request: " << request.url();
-
 
     QNetworkReply* reply = networkManager->get(request);
-    connect(reply, SIGNAL(readyRead()), this, SLOT(slotReadyReadCoords()));
+    connect(reply, &QNetworkReply::readyRead, this, &GetGranuleCoords::slotReadyReadCoords);
     connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
             this, SLOT(getErrorCoords(QNetworkReply::NetworkError)));
 }
@@ -30,7 +28,6 @@ void GetGranuleCoords::slotReadyReadCoords()
 
     int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
 
-    qDebug() << "=================================";
     if (reply->error() == QNetworkReply::NoError)
     {
         qDebug() << "status code: " << statusCode;
@@ -40,22 +37,20 @@ void GetGranuleCoords::slotReadyReadCoords()
             case 200:
             {
                 QByteArray bytes = reply->readAll();
-                QString string(bytes);
-                qDebug() << "==========================";
-                qDebug() << string;
+//                QString string(bytes);
+//                qDebug() << string;
 
                 QDomDocument mDocument;
-//                bool namespaceProcessing;
                 QString errorMsg;
                 int errorLine;
                 int errorColumn;
                 if (!mDocument.setContent(bytes, false, &errorMsg,
                                           &errorLine, &errorColumn))
                 {
-                    qDebug() << "Error XML";
-                    qDebug() << errorMsg;
-                    qDebug() << errorLine;
-                    qDebug() << errorColumn;
+                    qWarning() << "Error parse XML";
+//                    qDebug() << errorMsg;
+//                    qDebug() << errorLine;
+//                    qDebug() << errorColumn;
                     if (errorLine > 1)
                     {
                         currentRequest = bytes;
@@ -68,10 +63,10 @@ void GetGranuleCoords::slotReadyReadCoords()
                         if (!mDocument.setContent(bytes, false, &errorMsg,
                                                   &errorLine, &errorColumn))
                         {
-                                qDebug() << "Error XML";
-                                qDebug() << errorMsg;
-                                qDebug() << errorLine;
-                                qDebug() << errorColumn;
+                                qCritical() << "Error parse XML";
+                                qCritical() << errorMsg;
+                                qCritical() << errorLine;
+                                qCritical() << errorColumn;
                                 return;
                         }
                     }
@@ -102,5 +97,5 @@ void GetGranuleCoords::slotReadyReadCoords()
 
 void GetGranuleCoords::getErrorCoords(QNetworkReply::NetworkError)
 {
-    qDebug() << "getErrorCoords";
+    qWarning() << "Error getting the coordinates";
 }

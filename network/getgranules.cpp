@@ -7,7 +7,7 @@ GetGranules::GetGranules(QObject *parent) :
     currentCountGranule = 0;
     currentStep = 0;
     networkManager = new QNetworkAccessManager(this);
-    connect(this, SIGNAL(selfRun()), this, SLOT(run()));
+    connect(this, &GetGranules::selfRun, this, &GetGranules::run);
 //    connect(this, &GetGranules::selfClose, this, &GetGranules::deleteLater);
 }
 
@@ -57,27 +57,27 @@ void GetGranules::run()
 void GetGranules::getGranulesForNewProduct()
 {
     QNetworkReply* reply = networkManager->get(_request);
-    connect(reply, SIGNAL(readyRead()), this, SLOT(slotReadyReadGranules()));
+    connect(reply, &QNetworkReply::readyRead, this, &GetGranules::slotReadyReadGranules);
     connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
             this, SLOT(getErrorGranules(QNetworkReply::NetworkError)));
 }
 
 void GetGranules::getErrorGranules(QNetworkReply::NetworkError)
 {
-    qDebug() << "getErrorGranules";
+    qWarning() << "Error getting the granules";
 }
 
 void GetGranules::getNewGranules()
 {
     QNetworkReply* reply = networkManager->get(_request);
-    connect(reply, SIGNAL(readyRead()), this, SLOT(slotReadyReadGranules()));
+    connect(reply, &QNetworkReply::readyRead, this, &GetGranules::slotReadyReadGranules);
     connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
             this, SLOT(getErrorGranules(QNetworkReply::NetworkError)));
 }
 
 void GetGranules::getErrorNewGranules(QNetworkReply::NetworkError)
 {
-    qDebug() << "getErrorNewGranules";
+    qWarning() << "Error getting the new granules";
 }
 
 void GetGranules::slotReadyReadGranules()
@@ -88,7 +88,6 @@ void GetGranules::slotReadyReadGranules()
 
     QString nextStepElement = "false";
 
-    qDebug() << "=================================";
     if (reply->error() == QNetworkReply::NoError)
     {
         qDebug() << "status code: " << statusCode;
@@ -98,22 +97,18 @@ void GetGranules::slotReadyReadGranules()
             case 200:
             {
                 QByteArray bytes = reply->readAll();
-//                QString string(bytes);
-//                qDebug() << "==========================";
-//                qDebug() << string;
 
                 QDomDocument mDocument;
-//                bool namespaceProcessing;
                 QString errorMsg;
                 int errorLine;
                 int errorColumn;
                 if (!mDocument.setContent(bytes, false, &errorMsg,
                                           &errorLine, &errorColumn))
                 {
-                    qDebug() << "Error XML";
-                    qDebug() << errorMsg;
-                    qDebug() << errorLine;
-                    qDebug() << errorColumn;
+                    qWarning() << "Error parse XML";
+//                    qDebug() << errorMsg;
+//                    qDebug() << errorLine;
+//                    qDebug() << errorColumn;
                     if (errorLine > 1)
                     {
                         currentRequest = bytes;
@@ -126,10 +121,10 @@ void GetGranules::slotReadyReadGranules()
                         if (!mDocument.setContent(bytes, false, &errorMsg,
                                                   &errorLine, &errorColumn))
                         {
-                                qDebug() << "Error XML";
-                                qDebug() << errorMsg;
-                                qDebug() << errorLine;
-                                qDebug() << errorColumn;
+                                qCritical() << "Error parse XML";
+                                qCritical() << errorMsg;
+                                qCritical() << errorLine;
+                                qCritical() << errorColumn;
                                 return;
                         }
                     }
@@ -157,8 +152,6 @@ void GetGranules::slotReadyReadGranules()
                 }
             }
 
-//            qDebug() << _request.url();
-//            qDebug() << "countGranule" << countGranule;
             if (nextStepElement == "true")
             {
                 currentStep += 1;

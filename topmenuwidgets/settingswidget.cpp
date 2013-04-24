@@ -33,7 +33,7 @@ void SettingsWidget::createForm()
     clearConfigButton = new QPushButton(QIcon(":/icons/clear.png"),
                                         tr("Clear the configuration file"), this);
     clearConfigButton->setMaximumWidth(220);
-    connect(clearConfigButton, SIGNAL(clicked()), this, SLOT(clearConfig()));
+    connect(clearConfigButton, &QPushButton::clicked, this, &SettingsWidget::clearConfig);
 
     vLayout->addWidget(clearConfigButton);
 
@@ -50,19 +50,19 @@ void SettingsWidget::createForm()
     okButton = new QPushButton(tr("Ok"), this);
     okButton->setFixedWidth(50);
     okButton->setShortcut(QKeySequence(Qt::Key_Return));
-    connect(okButton, SIGNAL(clicked()), this, SLOT(saveChanges()));
-    connect(okButton, SIGNAL(clicked()), this, SLOT(close()));
+    connect(okButton, &QPushButton::clicked, this, &SettingsWidget::saveChanges);
+    connect(okButton, &QPushButton::clicked, this, &SettingsWidget::close);
     buttonsLayout->addWidget(okButton);
 
     applyButton = new QPushButton(tr("Apply"), this);
     applyButton->setFixedWidth(100);
-    connect(applyButton, SIGNAL(clicked()), this, SLOT(saveChanges()));
+    connect(applyButton, &QPushButton::clicked, this, &SettingsWidget::saveChanges);
     buttonsLayout->addWidget(applyButton);
 
     cancelButton = new QPushButton(tr("Cancel"), this);
     cancelButton->setFixedWidth(100);
     cancelButton->setShortcut(QKeySequence(Qt::Key_Escape));
-    connect(cancelButton, SIGNAL(clicked()), this, SLOT(close()));
+    connect(cancelButton, &QPushButton::clicked, this, &SettingsWidget::close);
     buttonsLayout->addWidget(cancelButton);
 
     buttonsWidget->setLayout(buttonsLayout);
@@ -75,12 +75,10 @@ void SettingsWidget::createForm()
 
 void SettingsWidget::saveChanges()
 {
-    qDebug() << "qqq";
 }
 
 void SettingsWidget::clearConfig()
 {
-    qDebug() << "www";
 }
 
 

@@ -56,19 +56,18 @@ void LayerBoxWidget::changedTransparencySlot(int value)
 
 void LayerBoxWidget::removeLayerSlot()
 {
-    qDebug() << _productName;
     emit removeLayer(_productName);
     close();
 }
 
 void LayerBoxWidget::showChangedSlot(int state)
 {
-    qDebug() << state;
     emit showLayer(_productName, state);
 }
 
 void LayerBoxWidget::removeLayerBox(QString productId)
 {
+    Q_UNUSED(productId);
     hide();
     deleteLater();
 }

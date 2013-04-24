@@ -288,7 +288,6 @@ void EarthView::rotate(int deltax, int deltay)
 
 void EarthView::leftSlot()
 {
-    qDebug() << "left";
 }
 
 
@@ -318,10 +317,7 @@ void EarthView::mouseMoveEvent(QMouseEvent *e)
         rotate(delta.x(), delta.y());
 
 
-        GeoCoords pos = getGeoCoordsPos(camera()->eye());
-
-//        qDebug() << "long" << pos.lon/M_PI*180;
-//        qDebug() << "lat" << pos.lat/M_PI*180;
+//        GeoCoords pos = getGeoCoordsPos(camera()->eye());
     }
 //    if (d->panning) {
 //        QPoint delta = e->pos() - d->startPan;
@@ -413,7 +409,6 @@ void EarthView::mouseReleaseEvent(QMouseEvent *e)
         qDebug() << "> 50!";
     if (lastMouseMoveTime.msecsTo(QTime::currentTime()) < 20)
     {
-//        qDebug() << "MOVE!!!!!!!!!!!!";
         mousePressed = false;
 //        timeout();
     }
@@ -426,9 +421,6 @@ void EarthView::timeout()
 {
     if (!mousePressed)
     {
-
-        qDebug() << "==========+>>>>>>" << lastMouseMoveTime.msecsTo(QTime::currentTime());
-
         int timeDelta = lastMouseMoveTime.msecsTo(QTime::currentTime());
         if (!timeDelta)
             timeDelta = 1;
@@ -455,8 +447,6 @@ void EarthView::rotateInertia()
     if (qAbs(delta.y()) > 50)
         delta.setY((delta.y() > 0) ? 50 : -50);
 
-    qDebug() << delta;
-    qDebug() << timeDelta;
     if (!mousePressed)
         rotate(delta.x(), delta.y());
 

@@ -16,8 +16,8 @@ TileDownloader::TileDownloader(qint32 _separation, qint32 _lonTileNum, qint32 _l
 
     textureStorePath = texStorePath;
 
-    connect(&m_WebCtrl, SIGNAL(finished(QNetworkReply*)),
-                SLOT(fileDownloaded(QNetworkReply*)));
+    connect(&m_WebCtrl, &QNetworkAccessManager::finished,
+            this, &TileDownloader::fileDownloaded);
 
     QNetworkRequest request(texUrl);
     m_WebCtrl.get(request);
@@ -39,7 +39,6 @@ void TileDownloader::fileDownloaded(QNetworkReply* pReply)
         return;
     }
 
-//    qDebug() << "filepath" << m_filename;
     if ( pReply->error() == QNetworkReply::NoError )
     {
       QFile image( textureStorePath );

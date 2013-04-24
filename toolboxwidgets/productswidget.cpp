@@ -17,7 +17,7 @@ ProductsWidget::ProductsWidget(ConfigData configData, QWidget *parent):
     viewProductInfo->setFixedSize(24,24);
     viewProductInfo->setToolTip(tr("View information about selected product"));
     viewProductInfo->setDisabled(true);
-    connect(viewProductInfo, SIGNAL(clicked()), this, SLOT(slotProductInfo()));
+    connect(viewProductInfo, &QPushButton::clicked, this, &ProductsWidget::slotProductInfo);
 
     infoLayout->addWidget(productsLbl);
     infoLayout->addWidget(viewProductInfo);
@@ -31,7 +31,7 @@ ProductsWidget::ProductsWidget(ConfigData configData, QWidget *parent):
     productImagePixmap = new QPixmap;
 
     reloadProductsButton = new QPushButton("Reload list", this);
-    connect(reloadProductsButton, SIGNAL(clicked()), this, SLOT(reloadProductsList()));
+    connect(reloadProductsButton, &QPushButton::clicked, this, &ProductsWidget::reloadProductsList);
     reloadProductsButton->hide();
 
     vLayout->addLayout(infoLayout);
@@ -107,7 +107,7 @@ ProductsWidget::ProductsWidget(ConfigData configData, QWidget *parent):
 
     addProductLabel = new QPushButton(tr("Add product"), this);
     addProductLabel->setDisabled(true);
-    connect(addProductLabel, SIGNAL(clicked()), this, SLOT(addProduct()));
+    connect(addProductLabel, &QPushButton::clicked, this, &ProductsWidget::addProduct);
 
     vLayout->addWidget(addProductLabel);
 
@@ -186,8 +186,6 @@ void ProductsWidget::slotReadyReadProductList()
             case 200:
             {
                 QByteArray bytes = reply->readAll();
-//                QString string(bytes);
-//                qDebug() << string;
 
                 QDomDocument mDocument;
                 QString errorMsg;
@@ -196,10 +194,7 @@ void ProductsWidget::slotReadyReadProductList()
                 if (!mDocument.setContent(bytes, false, &errorMsg,
                                           &errorLine, &errorColumn))
                 {
-                    qDebug() << "Error XML";
-                    qDebug() << errorMsg;
-                    qDebug() << errorLine;
-                    qDebug() << errorColumn;
+                    qWarning() << "Error parse XML";
                     if (errorLine > 1)
                     {
                         currentRequest = bytes;
@@ -212,10 +207,10 @@ void ProductsWidget::slotReadyReadProductList()
                         if (!mDocument.setContent(bytes, false,
                                                   &errorMsg, &errorLine, &errorColumn))
                         {
-                                qDebug() << "Error XML";
-                                qDebug() << errorMsg;
-                                qDebug() << errorLine;
-                                qDebug() << errorColumn;
+                                qCritical() << "Error parse XML";
+                                qCritical() << errorMsg;
+                                qCritical() << errorLine;
+                                qCritical() << errorColumn;
                                 return;
                         }
                     }
@@ -275,8 +270,6 @@ void ProductsWidget::getErrorProductList(QNetworkReply::NetworkError)
 
 void ProductsWidget::reloadProductsList()
 {
-//    qDebug() << url;
-
     QNetworkRequest request;
     request.setUrl(urlProducts);
     request.setRawHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
@@ -286,7 +279,7 @@ void ProductsWidget::reloadProductsList()
 
     networkManager = new QNetworkAccessManager (this);
     QNetworkReply* reply = networkManager->get(request);
-    connect(reply, SIGNAL(readyRead()), this, SLOT(slotReadyReadProductList()));
+    connect(reply, &QNetworkReply::readyRead, this, &ProductsWidget::slotReadyReadProductList);
     connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
             this, SLOT(getErrorProductList(QNetworkReply::NetworkError)));
 }
@@ -385,12 +378,9 @@ void ProductsWidget::addProduct()
 
 void ProductsWidget::getNewGranules(int scale)
 {
-    qDebug() << "SCALE" << scale;
     QHash<QString, selectedProduct>::const_iterator k = selectedProducts->constBegin();
     while ( k != selectedProducts->constEnd())
     {
-        qDebug() << k.key();
-
         // create request
         QNetworkRequest request;
         QString filter = "?";
@@ -414,10 +404,10 @@ void ProductsWidget::getNewGranules(int scale)
 
         request.setUrl(QUrl(urlGranules.scheme() + "://" + urlGranules.host() + urlGranules.path() + filter));
 
-        qDebug() << request.url();
         request.setRawHeader("Content-Type", "text/xml");
 
         GetGranules* getGranules = new GetGranules();
+
         connect(getGranules, SIGNAL(timeLineRepaint()), timeLinePointer, SLOT(update()));
 //        connect (getGranules, SIGNAL(finished()), getGranules, SLOT(deleteLater()));
         getGranules->setSelectedProducts(selectedProducts, granulesHash);
@@ -472,7 +462,6 @@ void ProductsWidget::slotProductInfo()
     ProductInfoWidget* productInfo = new ProductInfoWidget;
     productInfo->setProduct(productsHash[comboProducts->currentText()], productImagePixmap);
     productInfo->show();
-    qDebug() << "Product information";
 }
 
 void ProductsWidget::removeProduct(QString productId)

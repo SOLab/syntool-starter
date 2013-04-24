@@ -144,7 +144,7 @@ void MainWindow::createMenuBar()
 
 //    connect(openAction, SIGNAL(triggered()), this, SLOT(open()));
 //    connect(saveAction, SIGNAL(triggered()), this, SLOT(save()));
-    connect(exitAction, SIGNAL(triggered()), this, SLOT(close()));
+    connect(exitAction, &QAction::triggered, this, &MainWindow::close);
 
     fileMenu->addAction(openAction);
     fileMenu->addAction(saveAction);
@@ -168,12 +168,12 @@ void MainWindow::createMenuBar()
     QAction* showToolbarAction = new QAction(tr("Toolbar"), this);
     showToolbarAction->setCheckable(true);
     showToolbarAction->setChecked(true);
-    connect(showToolbarAction, SIGNAL(triggered(bool)), topMenu, SLOT(setVisible(bool)));
+    connect(showToolbarAction, &QAction::triggered, topMenu, &TopMenu::setVisible);
 
     QAction* showSidebarAction = new QAction(tr("Sidebar"), this);
     showSidebarAction->setCheckable(true);
     showSidebarAction->setChecked(true);
-    connect(showSidebarAction, SIGNAL(triggered(bool)), rightSidebar, SLOT(setVisible(bool)));
+    connect(showSidebarAction, &QAction::triggered, rightSidebar, &RightSidebar::setVisible);
 
     viewMenu->addAction(showToolbarAction);
     viewMenu->addAction(showSidebarAction);
@@ -182,7 +182,7 @@ void MainWindow::createMenuBar()
     QMenu* toolsMenu = menuBar()->addMenu(tr("&Tools"));
 
     QAction* settingAction = new QAction(QIcon(":/icons/settings.png"), tr("Settings"), this);
-    connect (settingAction, SIGNAL(triggered()), this, SLOT(showSettings()));
+    connect (settingAction, &QAction::triggered, this, &MainWindow::showSettings);
 
     QAction* rulerAction = new QAction(QIcon(":/icons/ruler.png"), tr("Ruler"), this);
 
@@ -193,9 +193,7 @@ void MainWindow::createMenuBar()
     QMenu* helpMenu = menuBar()->addMenu(tr("&Help"));
 
     QAction* aboutAction = new QAction(QIcon(":/icons/help.png"), tr("&About"), this);
-//    aboutAction->setShortcut(QKeySequence::HelpContents);
-//    aboutAction->setShortcutContext(Qt::ApplicationShortcut);
-    connect(aboutAction, SIGNAL(triggered()), this, SLOT(aboutProgram()));
+    connect(aboutAction, &QAction::triggered, this, &MainWindow::aboutProgram);
 
     QAction* bugsAction = new QAction(QIcon(":/icons/e-mail.png"), tr("Send &bugs"), this);
     bugsAction->setShortcut(Qt::Key_B);

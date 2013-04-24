@@ -18,6 +18,7 @@ protected:
     QGridLayout* gridLayout;
     QPushButton* cancelButton;
 signals:
+    void okClicked();
     
 public slots:
     
