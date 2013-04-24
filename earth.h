@@ -35,7 +35,6 @@ public:
 private:
     int zoom;
     int zoom_old;
-    int zoom_clean;
 
     qreal curScale;
     GeoCoords curGeoCoords;
@@ -55,6 +54,7 @@ private:
     QString cacheDir;
 
     bool checkNodeInCache(int zoom, int x, int y);
+    void cleanupResources();
 
 signals:
     void textureDownloadedSignal(qint32 cur_zoom, qint32 lonTileNum, qint32 latTileNum);

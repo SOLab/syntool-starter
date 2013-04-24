@@ -127,12 +127,12 @@ void Earth::addTileNode(int cur_zoom, qint32 lonTileNum, qint32 latTileNum)
 {
     int separation = qPow(2, cur_zoom);
 
+    qWarning() << cur_zoom;
     if (!checkTextureFile(separation, lonTileNum, latTileNum, cur_zoom))
     {
         tileDownload(cur_zoom, separation, lonTileNum, latTileNum);
         return;
     }
-
 //    emit textureDownloadedSignal(cur_zoom, lonTileNum, latTileNum);
     textureDownloaded(cur_zoom, lonTileNum, latTileNum);
 }
@@ -275,8 +275,6 @@ bool Earth::addTextureToTile(QGLSceneNode* tempNode, int separation, int lonTile
 
     QUrl url;
     url.setPath(filepath);
-    QFile image;
-    image.setFileName(filepath);
     url.setScheme(QLatin1String("file"));
     tex->setUrl(url);
 
@@ -304,11 +302,11 @@ void Earth::tileDownload(qint32 cur_zoom, qint32 separation, qint32 lonTileNum, 
 
     QObject::connect(tileDownloader, &TileDownloader::resultReady,
                      this, &Earth::textureDownloaded);
-//    QObject::connect(tileDownloader, &TileDownloader::finished,
-//                     tileDownloader, &TileDownloader::deleteLater);
+    QObject::connect(tileDownloader, &TileDownloader::resultReady,
+                     tileDownloader, &TileDownloader::deleteLater);
 
     // Starts an event loop, and emits workerThread->started()
-    tileDownloader->downloadedData();
+//    tileDownloader->downloadedData();
     if (zoom == 0)
     {
         if (!QFile::exists(textureStorePath))
@@ -406,6 +404,7 @@ void Earth::updateTilesSlot(qreal scale, GeoCoords geoCoords)
                 if (tempNode)
                 {
                     removeNode(tempNode);
+//                    delete tempNode;
                 }
             }
         }
@@ -427,6 +426,11 @@ Earth::~Earth()
         m_LoadedTextures.at(i)->cleanupResources();
     }
         m_texture->cleanupResources();
+}
+
+void Earth::cleanupResources()
+{
+
 }
 
 //void Earth::drawImage(QGLPainter *glpainter)

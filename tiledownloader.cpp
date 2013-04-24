@@ -21,6 +21,7 @@ TileDownloader::TileDownloader(qint32 _separation, qint32 _lonTileNum, qint32 _l
 
     QNetworkRequest request(texUrl);
     m_WebCtrl.get(request);
+    deleteLater();
 }
 
 TileDownloader::~TileDownloader()
@@ -30,6 +31,7 @@ TileDownloader::~TileDownloader()
 
 void TileDownloader::fileDownloaded(QNetworkReply* pReply)
 {
+    m_WebCtrl.clearAccessCache();
     m_DownloadedData = pReply->readAll();
     //emit a signal
     pReply->deleteLater();
