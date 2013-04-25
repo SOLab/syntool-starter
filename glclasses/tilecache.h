@@ -29,6 +29,8 @@ class TileCache
         total -= n.c;
         T *obj = n.t;
         hash.remove(*n.keyPtr);
+        obj->palette()->material(obj->materialIndex())->texture()->cleanupResources();
+        delete obj->palette()->material(obj->materialIndex())->texture();
         delete obj;
     }
     inline T *relink(const Key &key) {
@@ -160,91 +162,4 @@ void TileCache<Key,T>::trim(int m)
 QT_END_NAMESPACE
 
 QT_END_HEADER
-
-//#include <QCache>
-
-//template <class Key, class T>
-//class TileCache : public QCache<Key, T>
-//{
-//    struct Node {
-//        inline Node() : keyPtr(0) {}
-//        inline Node(T *data, int cost)
-//            : keyPtr(0), t(data), c(cost), p(0), n(0) {}
-//        const Key *keyPtr; T *t; int c; Node *p,*n;
-//    };
-//    Node *f, *l;
-//    QHash<Key, Node> hash;
-//    int mx, total;
-
-//    inline void unlink(Node &n) {
-//        if (n.p) n.p->n = n.n;
-//        if (n.n) n.n->p = n.p;
-//        if (l == &n) l = n.p;
-//        if (f == &n) f = n.n;
-//        total -= n.c;
-//        T *obj = n.t;
-//        hash.remove(*n.keyPtr);
-//        delete obj;
-//    }
-
-//public:
-//    bool insert(const Key &key, T *object, int cost = 1);
-//    inline explicit TileCache(int maxCost = 100);
-//    bool remove(const Key &key);
-//    inline bool contains(const Key &key) const { return hash.contains(key); }
-
-//private:
-//    void trim(int m);
-//};
-
-//template <class Key, class T>
-//inline TileCache<Key, T>::TileCache(int amaxCost)
-//    : f(0), l(0), mx(amaxCost), total(0)
-//{
-//}
-
-//template <class Key, class T>
-//inline bool TileCache<Key,T>::insert(const Key &akey, T *aobject, int acost)
-//{
-//    remove(akey);
-//    if (acost > mx) {
-//        delete aobject;
-//        return false;
-//    }
-//    trim(mx - acost);
-//    Node sn(aobject, acost);
-//    typename QHash<Key, Node>::iterator i = hash.insert(akey, sn);
-//    total += acost;
-//    Node *n = &i.value();
-//    n->keyPtr = &i.key();
-//    if (f) f->p = n;
-//    n->n = f;
-//    f = n;
-//    if (!l) l = f;
-//    return true;
-//}
-
-//template <class Key, class T>
-//inline bool TileCache<Key,T>::remove(const Key &key)
-//{
-//    typename QHash<Key, Node>::iterator i = hash.find(key);
-//    if (typename QHash<Key, Node>::const_iterator(i) == hash.constEnd()) {
-//        return false;
-//    } else {
-//        unlink(*i);
-//        return true;
-//    }
-//}
-
-//template <class Key, class T>
-//inline void TileCache<Key,T>::trim(int m)
-//{
-//    Node *n = l;
-//    while (n && total > m) {
-//        Node *u = n;
-//        n = n->p;
-//        unlink(*u);
-//    }
-//}
-
 #endif // TILECACHE_H

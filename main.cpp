@@ -67,21 +67,6 @@ int main(int argc, char *argv[])
 //    // process id
     qDebug() << "Process id:" << app.applicationPid();
 
-//    QProcess *Process1 = new QProcess();
-//    QProcess *Process2 = new QProcess();
-//    Process1->setStandardOutputProcess(Process2);
-
-//    Process1->start(QString("cat /proc/%1/status").arg(app.applicationPid()));
-//    Process2->start("awk \"/VmRSS:/ {print($2)}\"");
-
-//    Process2->waitForFinished();
-//    QString mem_percent = Process2->readAll();
-//    qDebug() << mem_percent.toFloat();
-//    delete Process1;
-//    delete Process2;
-
-
-
 //    view->resize(800, 600);
 
 //    QStringList args = QCoreApplication::arguments();

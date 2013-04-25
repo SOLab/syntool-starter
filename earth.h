@@ -43,7 +43,7 @@ private:
     qreal curScale;
     GeoCoords curGeoCoords;
 
-    QCache<QString, QGLTexture2D> m_LoadedTextures;
+//    QCache<QString, QGLTexture2D> m_LoadedTextures;
 //    QGLTexture2D *m_texture;
     QGraphicsRotation3D *earthRotation;
     QGLSceneNode *sn1;

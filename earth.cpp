@@ -14,20 +14,21 @@ Earth::Earth(QObject *parent, QSharedPointer<QGLMaterialCollection> materials, C
 
     // set maximum cost for cache
     tileNodeCache.setMaxCost(50);
-    m_LoadedTextures.setMaxCost(50);
+//    m_LoadedTextures.setMaxCost(50);
 
     buildEarthNode(a, 10, 0);
 
-    QGraphicsRotation3D *axialTilt1 = new QGraphicsRotation3D();
+    QGraphicsRotation3D *axialTilt1 = new QGraphicsRotation3D(this);
     axialTilt1->setAngle(270.0f);
     axialTilt1->setAxis(QVector3D(1,0,0));
 
-    QGraphicsRotation3D *rotateY = new QGraphicsRotation3D();
+    QGraphicsRotation3D *rotateY = new QGraphicsRotation3D(this);
     rotateY->setAngle(-90.0f);
     rotateY->setAxis(QVector3D(0,1,0));
 
     addTransform(axialTilt1);
     addTransform(rotateY);
+
 //    addNode(sphere);
 
     zoom = -1;
@@ -392,7 +393,6 @@ void Earth::updateTilesSlot(qreal scale, GeoCoords geoCoords)
                 if (tempNode)
                 {
                     removeNode(tempNode);
-//                    tempNode->palette()->material(tempNode->materialIndex())->texture()->cleanupResources();
 //                    delete tempNode;
                 }
             }
