@@ -12,7 +12,7 @@ TileDownloader::TileDownloader(qint32 _separation, qint32 _lonTileNum, qint32 _l
     QString path = "http://tile.openstreetmap.org/%1/%2/%3.png";
     QString arg(path.arg(cur_zoom).arg(lonTileNum).arg(separation-1-latTileNum));
 
-    QUrl texUrl = QUrl::fromEncoded(arg.toLocal8Bit());
+    texUrl = QUrl::fromEncoded(arg.toLocal8Bit());
 
     textureStorePath = texStorePath;
 
@@ -21,7 +21,6 @@ TileDownloader::TileDownloader(qint32 _separation, qint32 _lonTileNum, qint32 _l
 
     QNetworkRequest request(texUrl);
     m_WebCtrl.get(request);
-    deleteLater();
 }
 
 TileDownloader::~TileDownloader()
@@ -31,7 +30,6 @@ TileDownloader::~TileDownloader()
 
 void TileDownloader::fileDownloaded(QNetworkReply* pReply)
 {
-    m_WebCtrl.clearAccessCache();
     m_DownloadedData = pReply->readAll();
     //emit a signal
     pReply->deleteLater();

@@ -24,7 +24,6 @@ public:
                             qint32 _cur_zoom, QString texStorePath, QObject *parent = 0);
 
     virtual ~TileDownloader();
-
     QByteArray downloadedData() const;
 
 signals:
@@ -42,6 +41,7 @@ private:
     qint32 separation;
     qint32 latTileNum;
     qint32 lonTileNum;
+    QUrl texUrl;
 };
 
 #endif // TILEDOWNLOADER_H

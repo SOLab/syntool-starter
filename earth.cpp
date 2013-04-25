@@ -9,6 +9,12 @@ Earth::Earth(QObject *parent, QSharedPointer<QGLMaterialCollection> materials, C
     setPalette(materials);
     cacheDir = configData.cacheDir;
 
+    // set the maximum number of threads to download images tiles
+    downloadQueue.setMaxCost(25);
+
+    // set maximum cost for cache
+    tileNodeCache.setMaxCost(100);
+
     buildEarthNode(a, 10, 0);
 //    sphere->setObjectName("Earth");
 
@@ -41,9 +47,6 @@ Earth::Earth(QObject *parent, QSharedPointer<QGLMaterialCollection> materials, C
     addTransform(axialTilt1);
     addTransform(rotateY);
 //    addNode(sphere);
-
-    // set maximum cost for cache
-    tileNodeCache.setMaxCost(100);
 
     zoom = -1;
     zoom_old = 0;
@@ -300,10 +303,12 @@ void Earth::tileDownload(qint32 cur_zoom, qint32 separation, qint32 lonTileNum, 
     TileDownloader *tileDownloader = new TileDownloader(separation, lonTileNum, latTileNum,
                                                         cur_zoom, textureStorePath);
 
+    downloadQueue.insert(textureStorePath, tileDownloader);
+
     QObject::connect(tileDownloader, &TileDownloader::resultReady,
                      this, &Earth::textureDownloaded);
-    QObject::connect(tileDownloader, &TileDownloader::resultReady,
-                     tileDownloader, &TileDownloader::deleteLater);
+//    QObject::connect(tileDownloader, &TileDownloader::resultReady,
+//                     tileDownloader, &TileDownloader::deleteLater);
 
     // Starts an event loop, and emits workerThread->started()
 //    tileDownloader->downloadedData();
