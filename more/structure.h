@@ -27,7 +27,7 @@ struct BoundingBox {
     double south;
     double east;
     double west;
-  };
+};
 
 struct GeoCoords{
     qreal lat;

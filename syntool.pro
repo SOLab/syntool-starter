@@ -79,7 +79,8 @@ HEADERS = \
     additionalwidgets/datasetboxwidget.h \
     more/granuleactions.h \
     more/structure.h \
-    more/geofunctions.h
+    more/geofunctions.h \
+    glclasses/tilecache.h
 RESOURCES += \
     syntool.qrc
 DEPENDPATH += resources

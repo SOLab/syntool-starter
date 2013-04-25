@@ -4,7 +4,7 @@ const double a = 6378137.0;
 
 Earth::Earth(QObject *parent, QSharedPointer<QGLMaterialCollection> materials, ConfigData configData)
     : QGLSceneNode(parent)
-    , m_texture(0)
+//    , m_texture(0)
 {
     setPalette(materials);
     cacheDir = configData.cacheDir;
@@ -13,28 +13,10 @@ Earth::Earth(QObject *parent, QSharedPointer<QGLMaterialCollection> materials, C
     downloadQueue.setMaxCost(25);
 
     // set maximum cost for cache
-    tileNodeCache.setMaxCost(100);
+    tileNodeCache.setMaxCost(50);
+    m_LoadedTextures.setMaxCost(50);
 
     buildEarthNode(a, 10, 0);
-//    sphere->setObjectName("Earth");
-
-//    QGLTexture2D * tex;
-//    tex = new QGLTexture2D();
-//    tex->setSize(QSize(512, 256));
-
-//    QUrl url;
-//    url.setPath(QLatin1String(":/zoom0.png"));
-//    url.setScheme(QLatin1String("file"));
-//    tex->setUrl(url);
-
-//    QGLMaterial *mat1 = new QGLMaterial;
-//    mat1->setTexture(tex, 0);
-
-//    m_LoadedTextures.push_back(mat1->texture(0));
-//    int earthMat = sphere->palette()->addMaterial(mat1);
-
-//    sphere->setMaterialIndex(earthMat);
-//    sphere->setEffect(QGL::LitModulateTexture2D);
 
     QGraphicsRotation3D *axialTilt1 = new QGraphicsRotation3D();
     axialTilt1->setAngle(270.0f);
@@ -138,6 +120,56 @@ void Earth::addTileNode(int cur_zoom, qint32 lonTileNum, qint32 latTileNum)
     }
 //    emit textureDownloadedSignal(cur_zoom, lonTileNum, latTileNum);
     textureDownloaded(cur_zoom, lonTileNum, latTileNum);
+}
+
+/*!
+    starts then texture exists or after download texture.
+    This method calling all methods for create tile, overlay texture and
+         add QGLSceneNode to scene (BuildSpherePart, addTextureToTile, addNode)
+*/
+void Earth::textureDownloaded(qint32 cur_zoom, qint32 lonTileNum, qint32 latTileNum)
+{
+    if(cur_zoom != zoom)
+        return;
+
+    int separation = qPow(2, cur_zoom);
+
+//    QString _filepath = cacheDir+"/%1-%2-%3.png";
+//    QString texStorePath = _filepath.arg(cur_zoom).arg(lonTileNum).arg(separation-1-latTileNum);
+
+    qreal NTLon = 2*M_PI / separation;
+
+    qreal minSphereLat = -tiley2lat(latTileNum, separation)/180.0*M_PI;
+    qreal maxSphereLat = -tiley2lat(latTileNum+1, separation)/180.0*M_PI;
+
+    qreal minSphereLon = ((lonTileNum) * NTLon - M_PI);
+    qreal maxSphereLon = ((lonTileNum+1) * NTLon - M_PI);
+
+    QGLSceneNode* tempNode = BuildSpherePart(separation, minSphereLat, maxSphereLat,
+                                             minSphereLon, maxSphereLon);
+
+    QString nodeObjectName = QString("tile-%1-%2-%3").arg(cur_zoom).arg(lonTileNum)
+                                                     .arg(separation-1-latTileNum);
+    tempNode->setObjectName(nodeObjectName);
+
+    if (addTextureToTile(tempNode, separation, lonTileNum, latTileNum, cur_zoom))
+    {
+        tempNode->setOptions(QGLSceneNode::NoOptions);
+        QGLBuilder builder;
+        builder.sceneNode()->addNode(tempNode);
+
+        // add SceneNode to cache
+        TileCacheNumber tileNumber = TileCacheNumber(cur_zoom, lonTileNum,separation-1-latTileNum);
+        tileNodeCache.insert(tileNumber, tempNode);
+
+        addNode(builder.finalizedSceneNode());
+        qDebug() << "ADD NODE" << nodeObjectName;
+    }
+    else
+    {
+        qWarning() << "Texture not added";
+    }
+    emit displayed();
 }
 
 /*!
@@ -284,7 +316,8 @@ bool Earth::addTextureToTile(QGLSceneNode* tempNode, int separation, int lonTile
     QGLMaterial *mat1 = new QGLMaterial;
     mat1->setTexture(tex, 0);
 
-    m_LoadedTextures.push_back(mat1->texture(0));
+//    m_LoadedTextures.insert(filepath, mat1->texture(0));
+//    m_LoadedTextures.push_back(mat1->texture(0));
     int earthMat = tempNode->palette()->addMaterial(mat1);
 
     tempNode->setMaterialIndex(earthMat);
@@ -317,56 +350,6 @@ void Earth::tileDownload(qint32 cur_zoom, qint32 separation, qint32 lonTileNum, 
         if (!QFile::exists(textureStorePath))
             Sleeper::msleep(50);
     }
-}
-
-/*!
-    starts then texture exists or after download texture.
-    This method calling all methods for create tile, overlay texture and
-         add QGLSceneNode to scene (BuildSpherePart, addTextureToTile, addNode)
-*/
-void Earth::textureDownloaded(qint32 cur_zoom, qint32 lonTileNum, qint32 latTileNum)
-{
-    if(cur_zoom != zoom)
-        return;
-
-    int separation = qPow(2, cur_zoom);
-
-//    QString _filepath = cacheDir+"/%1-%2-%3.png";
-//    QString texStorePath = _filepath.arg(cur_zoom).arg(lonTileNum).arg(separation-1-latTileNum);
-
-    qreal NTLon = 2*M_PI / separation;
-
-    qreal minSphereLat = -tiley2lat(latTileNum, separation)/180.0*M_PI;
-    qreal maxSphereLat = -tiley2lat(latTileNum+1, separation)/180.0*M_PI;
-
-    qreal minSphereLon = ((lonTileNum) * NTLon - M_PI);
-    qreal maxSphereLon = ((lonTileNum+1) * NTLon - M_PI);
-
-    QGLSceneNode* tempNode = BuildSpherePart(separation, minSphereLat, maxSphereLat,
-                                             minSphereLon, maxSphereLon);
-
-    QString nodeObjectName = QString("tile-%1-%2-%3").arg(cur_zoom).arg(lonTileNum)
-                                                     .arg(separation-1-latTileNum);
-    tempNode->setObjectName(nodeObjectName);
-
-    if (addTextureToTile(tempNode, separation, lonTileNum, latTileNum, cur_zoom))
-    {
-        tempNode->setOptions(QGLSceneNode::NoOptions);
-        QGLBuilder builder;
-        builder.sceneNode()->addNode(tempNode);
-
-        // add SceneNode to cache
-        TileCacheNumber tileNumber = TileCacheNumber(cur_zoom, lonTileNum,separation-1-latTileNum);
-        tileNodeCache.insert(tileNumber, tempNode);
-
-        addNode(builder.finalizedSceneNode());
-        qDebug() << "ADD NODE" << nodeObjectName;
-    }
-    else
-    {
-        qWarning() << "Texture not added";
-    }
-    emit displayed();
 }
 
 /*!
@@ -409,6 +392,7 @@ void Earth::updateTilesSlot(qreal scale, GeoCoords geoCoords)
                 if (tempNode)
                 {
                     removeNode(tempNode);
+//                    tempNode->palette()->material(tempNode->materialIndex())->texture()->cleanupResources();
 //                    delete tempNode;
                 }
             }
@@ -426,11 +410,11 @@ void Earth::updateTilesSlot(qreal scale, GeoCoords geoCoords)
 
 Earth::~Earth()
 {
-    // clean textures
-    for (int i=0; i<m_LoadedTextures.count(); ++i) {
-        m_LoadedTextures.at(i)->cleanupResources();
-    }
-        m_texture->cleanupResources();
+//    // clean textures
+//    for (int i=0; i<m_LoadedTextures.count(); ++i) {
+//        m_LoadedTextures.at(i)->cleanupResources();
+//    }
+//        m_texture->cleanupResources();
 }
 
 void Earth::cleanupResources()

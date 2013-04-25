@@ -16,6 +16,7 @@
 #include "tiledownloader.h"
 #include "more/structure.h"
 #include "more/geofunctions.h"
+#include "glclasses/tilecache.h"
 
 QT_BEGIN_NAMESPACE
 class QGLTexture2D;
@@ -34,16 +35,16 @@ public:
     void tileDownload(qint32 cur_zoom, qint32 separation, qint32 lonTileNum, qint32 latTileNum);
 private:
     QCache<QString, TileDownloader> downloadQueue;
+    TileCache<TileCacheNumber, QGLSceneNode> tileNodeCache;
 
     int zoom;
     int zoom_old;
 
     qreal curScale;
     GeoCoords curGeoCoords;
-    QCache<TileCacheNumber, QGLSceneNode> tileNodeCache;
 
-    QList<QGLTexture2D*> m_LoadedTextures;
-    QGLTexture2D *m_texture;
+    QCache<QString, QGLTexture2D> m_LoadedTextures;
+//    QGLTexture2D *m_texture;
     QGraphicsRotation3D *earthRotation;
     QGLSceneNode *sn1;
     QGLSceneNode *sn2;

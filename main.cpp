@@ -65,7 +65,7 @@ int main(int argc, char *argv[])
     app.set_view(&view);
 
 //    // process id
-//    qDebug() << app.applicationPid();
+    qDebug() << "Process id:" << app.applicationPid();
 
 //    QProcess *Process1 = new QProcess();
 //    QProcess *Process2 = new QProcess();
