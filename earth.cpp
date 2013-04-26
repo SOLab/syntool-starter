@@ -4,7 +4,7 @@ const double a = 6378137.0;
 
 Earth::Earth(QObject *parent, QSharedPointer<QGLMaterialCollection> materials, ConfigData configData)
     : QGLSceneNode(parent)
-//    , m_texture(0)
+    , m_texture(0)
 {
     setPalette(materials);
     cacheDir = configData.cacheDir;
@@ -410,11 +410,11 @@ void Earth::updateTilesSlot(qreal scale, GeoCoords geoCoords)
 
 Earth::~Earth()
 {
-//    // clean textures
+    // clean textures
 //    for (int i=0; i<m_LoadedTextures.count(); ++i) {
 //        m_LoadedTextures.at(i)->cleanupResources();
 //    }
-//        m_texture->cleanupResources();
+        m_texture->cleanupResources();
 }
 
 void Earth::cleanupResources()

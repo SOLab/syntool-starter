@@ -8,7 +8,6 @@
 
 #include "qgltexture2d.h"
 #include <QImage>
-#include <QThread>
 #include <QTimer>
 #include <QObject>
 #include <typeinfo>
@@ -43,8 +42,8 @@ private:
     qreal curScale;
     GeoCoords curGeoCoords;
 
-//    QCache<QString, QGLTexture2D> m_LoadedTextures;
-//    QGLTexture2D *m_texture;
+//    QList<QGLTexture2D*> m_LoadedTextures;
+    QGLTexture2D *m_texture;
     QGraphicsRotation3D *earthRotation;
     QGLSceneNode *sn1;
     QGLSceneNode *sn2;
