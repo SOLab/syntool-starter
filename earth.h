@@ -32,6 +32,7 @@ public:
     QGLSceneNode *sphere;
 
     void tileDownload(qint32 cur_zoom, qint32 separation, qint32 lonTileNum, qint32 latTileNum);
+
 private:
     QCache<QString, TileDownloader> downloadQueue;
     TileCache<TileCacheNumber, QGLSceneNode> tileNodeCache;
@@ -50,13 +51,18 @@ private:
     QGLSceneNode *sn3;
     QGLSceneNode *sn4;
     void buildEarthNode(qreal radius = 1.0, int divisions = 5, int separation = 1);
-    QGLSceneNode* BuildSpherePart(int separation, qreal minSphereLat, qreal maxSphereLat, qreal minSphereLon, qreal maxSphereLon);
+    QGLSceneNode* BuildSpherePart(int separation, qreal minSphereLat, qreal maxSphereLat,
+                                  qreal minSphereLon, qreal maxSphereLon);
     bool addTextureToTile(QGLSceneNode *tempNode, int separation, int lonTileNum, int latTileNum, int cur_zoom);
     bool checkTextureFile(int separation, int lonTileNum, int latTileNum, int cur_zoom);
     QString cacheDir;
 
     bool checkNodeInCache(int zoom, int x, int y);
     void cleanupResources();
+
+    QGLSceneNode *BuildGranuleMerNode(int separation, qreal minSphereLat,
+                                      qreal maxSphereLat, qreal minSphereLon, qreal maxSphereLon);
+    bool addTextureToGranuleNode(QGLSceneNode *tempNode, QString filepath);
 
 signals:
     void textureDownloadedSignal(qint32 cur_zoom, qint32 lonTileNum, qint32 latTileNum);

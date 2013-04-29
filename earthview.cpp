@@ -218,7 +218,7 @@ void EarthView::wheelEvent(QWheelEvent *e)
 // for calling from wheelEvent on press button
 void EarthView::scalePlus()
 {
-    if (scale < 2000)
+    if (scale < 56)
     {
         scalePlusMinusSlot(true);
     }
