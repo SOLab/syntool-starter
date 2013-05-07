@@ -41,7 +41,9 @@ private:
     int zoom_old;
 
     qreal curScale;
+    qreal curZoom;
     GeoCoords curGeoCoords;
+    bool newZoomFlag;
 
 //    QList<QGLTexture2D*> m_LoadedTextures;
     QGLTexture2D *m_texture;
@@ -70,6 +72,7 @@ signals:
 public slots:
     void updateTilesSlot(qreal scale, GeoCoords geoCoords);
     void addTileNode(int cur_zoom, qint32 lonTileNum, qint32 latTileNum);
+    void addGranuleNodes();
     void textureDownloaded(qint32 cur_zoom, qint32 lonTileNum, qint32 latTileNum);
 
 };

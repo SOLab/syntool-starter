@@ -113,8 +113,21 @@ inline TileRange *getTileRange(TileNumber NCenterTile, qint32 rangeTiles, qint32
 {
     // get maximum
     TileRange *tileRanges=new TileRange[2];
-//    TileRange tileRanges[2];
+
     qint32 maxTileNumber = qPow(2,zoom) - 1;
+
+    if (zoom < 3)
+    {
+        tileRanges[0].startX = 0;
+        tileRanges[0].endX = maxTileNumber;
+
+        tileRanges[0].startY = 0;
+        tileRanges[0].endY = maxTileNumber;
+        tileRanges[0].end = true;
+
+        return tileRanges;
+    }
+
 
     /*
      * ..xxx
@@ -132,11 +145,12 @@ inline TileRange *getTileRange(TileNumber NCenterTile, qint32 rangeTiles, qint32
 
             tileRanges[0].startY = NCenterTile.y - rangeTiles;
             tileRanges[0].endY = maxTileNumber;
+            tileRanges[0].end = true;
 
-            tileRanges[1].startX = 0;
-            tileRanges[1].startY = 0;
-            tileRanges[1].endX = 0;
-            tileRanges[1].endY = 0;
+//            tileRanges[1].startX = 0;
+//            tileRanges[1].startY = 0;
+//            tileRanges[1].endX = 0;
+//            tileRanges[1].endY = 0;
         }
 
         // right-top
@@ -148,10 +162,12 @@ inline TileRange *getTileRange(TileNumber NCenterTile, qint32 rangeTiles, qint32
             tileRanges[0].startY = 0;
             tileRanges[0].endY = NCenterTile.y + rangeTiles;
 
-            tileRanges[1].startX = 0;
-            tileRanges[1].startY = 0;
-            tileRanges[1].endX = 0;
-            tileRanges[1].endY = 0;
+            tileRanges[0].end = true;
+
+//            tileRanges[1].startX = 0;
+//            tileRanges[1].startY = 0;
+//            tileRanges[1].endX = 0;
+//            tileRanges[1].endY = 0;
         }
 
         // right-center
@@ -186,10 +202,11 @@ inline TileRange *getTileRange(TileNumber NCenterTile, qint32 rangeTiles, qint32
             tileRanges[0].startY = NCenterTile.y - rangeTiles;
             tileRanges[0].endY = maxTileNumber;
 
-            tileRanges[1].startX = 0;
-            tileRanges[1].startY = 0;
-            tileRanges[1].endX = 0;
-            tileRanges[1].endY = 0;
+            tileRanges[0].end = true;
+//            tileRanges[1].startX = 0;
+//            tileRanges[1].startY = 0;
+//            tileRanges[1].endX = 0;
+//            tileRanges[1].endY = 0;
         }
 
         // left-top
@@ -201,10 +218,11 @@ inline TileRange *getTileRange(TileNumber NCenterTile, qint32 rangeTiles, qint32
             tileRanges[0].startY = 0;
             tileRanges[0].endY = NCenterTile.y + rangeTiles;
 
-            tileRanges[1].startX = 0;
-            tileRanges[1].startY = 0;
-            tileRanges[1].endX = 0;
-            tileRanges[1].endY = 0;
+            tileRanges[0].end = true;
+//            tileRanges[1].startX = 0;
+//            tileRanges[1].startY = 0;
+//            tileRanges[1].endX = 0;
+//            tileRanges[1].endY = 0;
         }
 
         // left-center
@@ -262,10 +280,11 @@ inline TileRange *getTileRange(TileNumber NCenterTile, qint32 rangeTiles, qint32
             tileRanges[0].startY = NCenterTile.y - rangeTiles;
             tileRanges[0].endY = NCenterTile.y + rangeTiles;
 
-            tileRanges[1].startX = 0;
-            tileRanges[1].startY = 0;
-            tileRanges[1].endX = 0;
-            tileRanges[1].endY = 0;
+            tileRanges[0].end = true;
+//            tileRanges[1].startX = 0;
+//            tileRanges[1].startY = 0;
+//            tileRanges[1].endX = 0;
+//            tileRanges[1].endY = 0;
         }
     }
 

@@ -39,6 +39,10 @@ Earth::Earth(QObject *parent, QSharedPointer<QGLMaterialCollection> materials, C
 //    tileDownloader = new TileDownloader();
 }
 
+/*!
+ * Check availability QGLSceneNode* in tileNodeCache
+ * and the addition of node if contains
+ */
 bool Earth::checkNodeInCache(int zoom, int x, int y)
 {
     TileCacheNumber currentCacheNumber = TileCacheNumber(zoom, x, y);
@@ -74,13 +78,13 @@ void Earth::buildEarthNode(qreal radius, int divisions, int cur_zoom)
 
         TileNumber tileNumber = deg2TileNum(curGeoCoords, cur_zoom);
 
-        TileRange* aaa = getTileRange(tileNumber, numberTiles, cur_zoom);
+        TileRange* tileRange = getTileRange(tileNumber, numberTiles, cur_zoom);
 
         for (int tileRangeNumber = 0; tileRangeNumber <= 1; tileRangeNumber++)
         {
-            for (int lonTileNum = aaa[tileRangeNumber].startX; lonTileNum <= aaa[tileRangeNumber].endX; lonTileNum++)
+            for (int lonTileNum = tileRange[tileRangeNumber].startX; lonTileNum <= tileRange[tileRangeNumber].endX; lonTileNum++)
             {
-                for (int latTileNum = aaa[tileRangeNumber].startY; latTileNum <= aaa[tileRangeNumber].endY; latTileNum++)
+                for (int latTileNum = tileRange[tileRangeNumber].startY; latTileNum <= tileRange[tileRangeNumber].endY; latTileNum++)
                 {
                     if (!checkNodeInCache(cur_zoom, lonTileNum, latTileNum))
                     {
@@ -88,6 +92,8 @@ void Earth::buildEarthNode(qreal radius, int divisions, int cur_zoom)
                     }
                 }
             }
+            if (tileRange[tileRangeNumber].end)
+                break;
         }
     }
     else
@@ -146,7 +152,6 @@ void Earth::textureDownloaded(qint32 cur_zoom, qint32 lonTileNum, qint32 latTile
     qreal minSphereLon = ((lonTileNum) * NTLon - M_PI);
     qreal maxSphereLon = ((lonTileNum+1) * NTLon - M_PI);
 
-    qCritical() << separation << minSphereLat << maxSphereLat << minSphereLon << maxSphereLon;
     QGLSceneNode* tempNode = BuildSpherePart(separation, minSphereLat, maxSphereLat,
                                              minSphereLon, maxSphereLon);
 
@@ -364,19 +369,19 @@ void Earth::tileDownload(qint32 cur_zoom, qint32 separation, qint32 lonTileNum, 
 */
 void Earth::updateTilesSlot(qreal scale, GeoCoords geoCoords)
 {
-    qreal cur_zoom = log10(scale)/log10(2);
+    curZoom = log10(scale)/log10(2);
     curScale = scale;
     // save current coordinates
     curGeoCoords = geoCoords;
 
-//    cur_zoom = 0;
-    bool flagNewZoom = false;
+//    curZoom+=1;
+    newZoomFlag = false;
 
-    if (zoom != qFloor(cur_zoom))
+    if (zoom != qFloor(curZoom))
     {
-        flagNewZoom = true;
+        newZoomFlag = true;
         zoom_old = zoom;
-        zoom = qFloor(cur_zoom);
+        zoom = qFloor(curZoom);
 
         int separation_old = qPow(2, zoom_old);
         for (int y = 0; y < separation_old; y++)
@@ -405,27 +410,32 @@ void Earth::updateTilesSlot(qreal scale, GeoCoords geoCoords)
                 }
             }
         }
-        buildEarthNode(a, 10, cur_zoom);
+        buildEarthNode(a, 10, curZoom);
 
-        qDebug() << "cur_zoom = " << qFloor(cur_zoom);
+        qDebug() << "curZoom = " << qFloor(curZoom);
     }
     else
     {
         // only move camera
-        buildEarthNode(a, 10, cur_zoom);
+        buildEarthNode(a, 10, curZoom);
     }
 
+//    addGranuleNodes();
+}
 
+
+void Earth::addGranuleNodes()
+{
     QString filename = "/mnt/d/OISST-AVHRR-AMSR-V2.png";
-    qCritical() << "1111111111111111111111111";
+    qCritical() << 11111111111111111;
     QGLSceneNode* testNode = findSceneNode(filename);
-    if (!testNode || flagNewZoom)
+    if (!testNode)// || newZoomFlag)
     {
         qCritical() << 2222222222222;
         delete testNode;
-        qreal minSphereLat = -tiley2lat(0, 1)/180.0*M_PI;
-        qreal maxSphereLat = -tiley2lat(1, 1)/180.0*M_PI;
-        QGLSceneNode* testNode = BuildGranuleMerNode(1, -M_PI_2, M_PI_2, -M_PI, M_PI);
+        qreal minSphereLat = -M_PI_2;
+        qreal maxSphereLat = M_PI_2;
+        QGLSceneNode* testNode = BuildGranuleMerNode(1, minSphereLat, maxSphereLat, -M_PI, M_PI);
         qCritical() << "11111" << addTextureToGranuleNode(testNode, "/mnt/d/OISST-AVHRR-AMSR-V2.png");
 
     //    testNone->setOptions(QGLSceneNode::NoOptions);

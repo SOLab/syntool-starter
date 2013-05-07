@@ -70,5 +70,6 @@ struct TileRange{
     qint32 startY;
     qint32 endX;
     qint32 endY;
+    bool end;
 };
 #endif // STRUCTURE_H

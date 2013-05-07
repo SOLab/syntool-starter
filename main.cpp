@@ -54,7 +54,7 @@ int main(int argc, char *argv[])
     ConfigData configData;
     configData.serverName = "http://satin.rshu.ru";
     configData.cacheDir = "/tmp/syntool";
-    configData.logLevel = ErrorOnly;
+    configData.logLevel = WarningAndError;
 
     QDir cacheDir(configData.cacheDir);
     if (!cacheDir.exists()){
