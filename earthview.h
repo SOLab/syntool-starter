@@ -50,7 +50,7 @@
 
 #include "qglview.h"
 #include "earth.h"
-#include "granulesnode.h"
+#include "simplegranulesnode.h"
 #include "more/geofunctions.h"
 #include "qglscenenode.h"
 #include "earthscene.h"
@@ -97,7 +97,7 @@ public:
     void timeout();
 protected:
     Earth *earth;
-    GranulesNode *granulesNode;
+    SimpleGranulesNode *granulesNode;
     void initializeGL(QGLPainter *painter);
     void paintGL(QGLPainter *painter);
     void keyPressEvent(QKeyEvent *e);

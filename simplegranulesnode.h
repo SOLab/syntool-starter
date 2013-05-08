@@ -16,11 +16,11 @@
 #include "more/structure.h"
 #include "more/geofunctions.h"
 
-class GranulesNode : public QGLSceneNode
+class SimpleGranulesNode : public QGLSceneNode
 {
     Q_OBJECT
 public:
-    explicit GranulesNode(QObject *parent, QSharedPointer<QGLMaterialCollection> materials, ConfigData configData);
+    explicit SimpleGranulesNode(QObject *parent, QSharedPointer<QGLMaterialCollection> materials, ConfigData configData);
 
 private:
     QGLSceneNode *BuildGranuleMerNode(int separation, qreal minSphereLat,

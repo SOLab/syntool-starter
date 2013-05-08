@@ -1,6 +1,7 @@
-#include "granulesnode.h"
+#include "simplegranulesnode.h"
 
-GranulesNode::GranulesNode(QObject *parent, QSharedPointer<QGLMaterialCollection> materials, ConfigData configData) :
+SimpleGranulesNode::SimpleGranulesNode(QObject *parent, QSharedPointer<QGLMaterialCollection> materials,
+                                       ConfigData configData) :
     QGLSceneNode(parent)
 {
     QGraphicsRotation3D *axialTilt1 = new QGraphicsRotation3D(this);
@@ -16,7 +17,7 @@ GranulesNode::GranulesNode(QObject *parent, QSharedPointer<QGLMaterialCollection
     addGranuleNodes();
 }
 
-void GranulesNode::addGranuleNodes()
+void SimpleGranulesNode::addGranuleNodes()
 {
     QString filename = "/mnt/d/OISST-AVHRR-AMSR-V2.png";
     qCritical() << 11111111111111111;
@@ -49,7 +50,7 @@ void GranulesNode::addGranuleNodes()
 }
 
 
-QGLSceneNode* GranulesNode::BuildGranuleMerNode(int separation, qreal minSphereLat, qreal maxSphereLat,
+QGLSceneNode* SimpleGranulesNode::BuildGranuleMerNode(int separation, qreal minSphereLat, qreal maxSphereLat,
                                          qreal minSphereLon, qreal maxSphereLon)
 {
     // calculate spherical min and max lon and lat
@@ -154,7 +155,7 @@ QGLSceneNode* GranulesNode::BuildGranuleMerNode(int separation, qreal minSphereL
     return tempBuilder.finalizedSceneNode();
 }
 
-bool GranulesNode::addTextureToGranuleNode(QGLSceneNode* tempNode, QString filepath)
+bool SimpleGranulesNode::addTextureToGranuleNode(QGLSceneNode* tempNode, QString filepath)
 {
 //    if (separation > 1){
     QGLTexture2D* tex;

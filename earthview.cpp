@@ -93,9 +93,9 @@ EarthView::EarthView(ConfigData configData, QWindow *parent)
 
     m_scene->mainNode()->addNode(earth);
 
-    granulesNode = new GranulesNode(this, m_palette, configData);
+    granulesNode = new SimpleGranulesNode(this, m_palette, configData);
 //    connect (this, &EarthView::updatedTilesSignal, earth, &Earth::updateTilesSlot);
-    connect (granulesNode, &Earth::displayed, this, &EarthView::update);
+    connect (granulesNode, &SimpleGranulesNode::displayed, this, &EarthView::update);
 
     m_scene->mainNode()->addNode(granulesNode);
 
