@@ -62,17 +62,12 @@ private:
     bool checkNodeInCache(int zoom, int x, int y);
     void cleanupResources();
 
-    QGLSceneNode *BuildGranuleMerNode(int separation, qreal minSphereLat,
-                                      qreal maxSphereLat, qreal minSphereLon, qreal maxSphereLon);
-    bool addTextureToGranuleNode(QGLSceneNode *tempNode, QString filepath);
-
 signals:
     void textureDownloadedSignal(qint32 cur_zoom, qint32 lonTileNum, qint32 latTileNum);
 
 public slots:
     void updateTilesSlot(qreal scale, GeoCoords geoCoords);
     void addTileNode(int cur_zoom, qint32 lonTileNum, qint32 latTileNum);
-    void addGranuleNodes();
     void textureDownloaded(qint32 cur_zoom, qint32 lonTileNum, qint32 latTileNum);
 
 };
