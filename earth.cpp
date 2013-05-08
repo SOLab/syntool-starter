@@ -413,6 +413,7 @@ void Earth::updateTilesSlot(qreal scale, GeoCoords geoCoords)
         buildEarthNode(a, 10, curZoom);
 
         qDebug() << "curZoom = " << qFloor(curZoom);
+        emit displayed();
     }
     else
     {

@@ -93,6 +93,13 @@ EarthView::EarthView(ConfigData configData, QWindow *parent)
 
     m_scene->mainNode()->addNode(earth);
 
+    granulesNode = new GranulesNode(this, m_palette, configData);
+//    connect (this, &EarthView::updatedTilesSignal, earth, &Earth::updateTilesSlot);
+    connect (granulesNode, &Earth::displayed, this, &EarthView::update);
+
+    m_scene->mainNode()->addNode(granulesNode);
+
+
     QString path = ":/skybox";
     m_skybox = new SkyBox(this, path);
 
@@ -121,6 +128,7 @@ void EarthView::paintGL(QGLPainter *painter)
     glEnable(GL_BLEND);
     m_skybox->draw(painter);
     earth->draw(painter);
+    granulesNode->draw(painter);
     navigateButton->draw(painter);
 //    getMemUsage();
 

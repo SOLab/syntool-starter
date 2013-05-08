@@ -41,7 +41,8 @@ SOURCES = \
     toolboxwidgets/datasetswidget.cpp \
     additionalwidgets/granuleinfowidget.cpp \
     network/getgranulecoords.cpp \
-    additionalwidgets/datasetboxwidget.cpp
+    additionalwidgets/datasetboxwidget.cpp \
+    granulesnode.cpp
 HEADERS = \
     mainwidget.h \
     windowwidget.h \
@@ -80,7 +81,8 @@ HEADERS = \
     more/granuleactions.h \
     more/structure.h \
     more/geofunctions.h \
-    glclasses/tilecache.h
+    glclasses/tilecache.h \
+    granulesnode.h
 RESOURCES += \
     syntool.qrc
 DEPENDPATH += resources
