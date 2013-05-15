@@ -99,7 +99,6 @@ EarthView::EarthView(ConfigData configData, QWindow *parent)
 
     m_scene->mainNode()->addNode(granulesNode);
 
-
     QString path = ":/skybox";
     m_skybox = new SkyBox(this, path);
 
@@ -126,6 +125,7 @@ void EarthView::initializeGL(QGLPainter *painter)
 void EarthView::paintGL(QGLPainter *painter)
 {
     glEnable(GL_BLEND);
+//    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     m_skybox->draw(painter);
     earth->draw(painter);
     granulesNode->draw(painter);

@@ -19,7 +19,8 @@ SimpleGranulesNode::SimpleGranulesNode(QObject *parent, QSharedPointer<QGLMateri
 
 void SimpleGranulesNode::addGranuleNodes()
 {
-    QString filename = "/mnt/d/OISST-AVHRR-AMSR-V2.png";
+//    QString filename = "/mnt/d/OISST-AVHRR-AMSR-V2.png";
+    QString filename = "/mnt/d/ascat_20120704_003001.png";
     qCritical() << 11111111111111111;
     QGLSceneNode* testNode = findSceneNode(filename);
     if (!testNode)// || newZoomFlag)
@@ -29,7 +30,7 @@ void SimpleGranulesNode::addGranuleNodes()
         qreal minSphereLat = -M_PI_2;
         qreal maxSphereLat = M_PI_2;
         QGLSceneNode* testNode = BuildGranuleMerNode(1, minSphereLat, maxSphereLat, -M_PI, M_PI);
-        qCritical() << "11111" << addTextureToGranuleNode(testNode, "/mnt/d/OISST-AVHRR-AMSR-V2.png");
+        qCritical() << "11111" << addTextureToGranuleNode(testNode, filename);
 
     //    testNone->setOptions(QGLSceneNode::NoOptions);
         QGLBuilder builder;
@@ -48,7 +49,6 @@ void SimpleGranulesNode::addGranuleNodes()
         emit updated();
     }
 }
-
 
 QGLSceneNode* SimpleGranulesNode::BuildGranuleMerNode(int separation, qreal minSphereLat, qreal maxSphereLat,
                                          qreal minSphereLon, qreal maxSphereLon)
@@ -158,8 +158,7 @@ QGLSceneNode* SimpleGranulesNode::BuildGranuleMerNode(int separation, qreal minS
 bool SimpleGranulesNode::addTextureToGranuleNode(QGLSceneNode* tempNode, QString filepath)
 {
 //    if (separation > 1){
-    QGLTexture2D* tex;
-    tex = new QGLTexture2D();
+    QGLTexture2D* tex = new QGLTexture2D();
 //    tex->setSize(QSize(512, 256));
 
     if (!QFile::exists(filepath))

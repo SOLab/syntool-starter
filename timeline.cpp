@@ -87,14 +87,14 @@ void TimeLine::createGranulesContextMenu()
 
 void TimeLine::actionImageSlot() {
     qint8 status = granulesHash->value(QString::number(currentGranuleId)).status;
-    if (status != 2)
-    {
-        QMessageBox* msgBox = new QMessageBox(/*this*/);
+//    if (status != 2)
+//    {
+//        QMessageBox* msgBox = new QMessageBox(/*this*/);
 
-        msgBox->setText("Granule status: " + QString(GranuleStatuses.at(status)));
-        msgBox->exec();
-        return;
-    }
+//        msgBox->setText("Granule status: " + QString(GranuleStatuses.at(status)));
+//        msgBox->exec();
+//        return;
+//    }
 
     granuleActions(serverName, QString::number(currentGranuleId), "image");
 }
@@ -109,14 +109,14 @@ void TimeLine::actionFtpSlot() {
 
 void TimeLine::actionKmlSlot() {
     qint8 status = granulesHash->value(QString::number(currentGranuleId)).status;
-    if (status != 2 && status != 6)
-    {
-        QMessageBox* msgBox = new QMessageBox(/*this*/);
+//    if (status != 2 && status != 6)
+//    {
+//        QMessageBox* msgBox = new QMessageBox(/*this*/);
 
-        msgBox->setText("Granule status: " + QString(GranuleStatuses.at(status)));
-        msgBox->exec();
-        return;
-    }
+//        msgBox->setText("Granule status: " + QString(GranuleStatuses.at(status)));
+//        msgBox->exec();
+//        return;
+//    }
 
     granuleActions(serverName, QString::number(currentGranuleId), "kml");
 }

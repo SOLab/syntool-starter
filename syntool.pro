@@ -14,11 +14,10 @@ SOURCES = \
     windowwidget.cpp \
     topmenu.cpp \
     aboutwidget.cpp \
-    earthview.cpp \
-    earth.cpp \
-    buttons.cpp \
-    earthscene.cpp \
-    skybox.cpp \
+    3d/earthview.cpp \
+    3d/earth.cpp \
+    3d/buttons.cpp \
+    3d/earthscene.cpp \
     navigatebutton.cpp \
     timeline.cpp \
     toolboxwidgets/layerswidget.cpp \
@@ -26,7 +25,7 @@ SOURCES = \
     toolboxwidgets/placewidget.cpp \
     toolboxwidgets/productswidget.cpp \
     tiledownloader.cpp \
-    rightsidebar.cpp \
+    toolboxwidgets/rightsidebar.cpp \
     additionalwidgets/calendar.cpp \
     additionalwidgets/inputbox.cpp \
     additionalwidgets/imagebutton.cpp \
@@ -42,26 +41,27 @@ SOURCES = \
     additionalwidgets/granuleinfowidget.cpp \
     network/getgranulecoords.cpp \
     additionalwidgets/datasetboxwidget.cpp \
-    simplegranulesnode.cpp
+    3d/simplegranulesnode.cpp \
+    3d/skybox.cpp \
+    3d/metagranules.cpp
 HEADERS = \
     mainwidget.h \
     windowwidget.h \
     topmenu.h \
     aboutwidget.h \
-    earthview.h \
+    3d/earthview.h \
     timeline.h \
     myapplication.h \
-    earth.h \
-    buttons.h \
-    earthscene.h \
-    skybox.h \
+    3d/earth.h \
+    3d/buttons.h \
+    3d/earthscene.h \
     navigatebutton.h \
     toolboxwidgets/layerswidget.h \
     toolboxwidgets/mapswidget.h \
     toolboxwidgets/placewidget.h \
     toolboxwidgets/productswidget.h \
     tiledownloader.h \
-    rightsidebar.h \
+    toolboxwidgets/rightsidebar.h \
     additionalwidgets/calendar.h \
     additionalwidgets/inputbox.h \
     additionalwidgets/imagebutton.h \
@@ -82,7 +82,9 @@ HEADERS = \
     more/structure.h \
     more/geofunctions.h \
     glclasses/tilecache.h \
-    simplegranulesnode.h
+    3d/simplegranulesnode.h \
+    3d/skybox.h \
+    3d/metagranules.h
 RESOURCES += \
     syntool.qrc
 DEPENDPATH += resources

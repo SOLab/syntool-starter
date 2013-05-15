@@ -14,7 +14,7 @@
 #include "topmenu.h"
 #include "aboutwidget.h"
 #include "timeline.h"
-#include "rightsidebar.h"
+#include "toolboxwidgets/rightsidebar.h"
 #include "network/getgranules.h"
 #include "more/structure.h"
 

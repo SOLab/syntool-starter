@@ -38,7 +38,7 @@
 **
 ****************************************************************************/
 
-#include "earthview.h"
+#include "3d/earthview.h"
 #include "mainwidget.h"
 #include "myapplication.h"
 
@@ -50,6 +50,11 @@
 int main(int argc, char *argv[])
 {
     myApplication app(argc, argv);
+
+    // new app font
+    QFont newFont("Times New Roman", 11, QFont::Normal, false);
+    // apply to all
+    QApplication::setFont(newFont);
 
     ConfigData configData;
     configData.serverName = "http://satin.rshu.ru";

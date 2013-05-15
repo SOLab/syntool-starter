@@ -3,7 +3,7 @@
 
 #include <QtGui>
 #include <QtCore>
-#include "earthview.h"
+#include "3d/earthview.h"
 #include "mainwidget.h"
 #include <QKeyEvent>
 #include <QApplication>
