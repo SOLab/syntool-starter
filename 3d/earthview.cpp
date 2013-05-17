@@ -125,6 +125,10 @@ void EarthView::initializeGL(QGLPainter *painter)
 void EarthView::paintGL(QGLPainter *painter)
 {
     glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    GLfloat color[4] = { 1, 1, 1, 0.2};
+    glColor4fv(color);
+    glDisable(GL_CULL_FACE);
     m_skybox->draw(painter);
     earth->draw(painter);
     granulesNode->draw(painter);
