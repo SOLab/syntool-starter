@@ -50,11 +50,11 @@
 
 #include "qglview.h"
 #include "earth.h"
-#include "3d/simplegranulesnode.h"
+#include "simplegranulesnode.h"
 #include "more/geofunctions.h"
 #include "qglscenenode.h"
 #include "earthscene.h"
-#include "3d/skybox.h"
+#include "skybox.h"
 #include "navigatebutton.h"
 
 

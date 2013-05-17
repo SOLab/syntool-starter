@@ -14,13 +14,14 @@ SimpleGranulesNode::SimpleGranulesNode(QObject *parent, QSharedPointer<QGLMateri
 
     addTransform(axialTilt1);
     addTransform(rotateY);
+
     addGranuleNodes();
 }
 
 void SimpleGranulesNode::addGranuleNodes()
 {
-//    QString filename = "/mnt/d/OISST-AVHRR-AMSR-V2.png";
-    QString filename = "/mnt/d/ascat_20120704_003001.png";
+    QString filename = "/mnt/d/OISST-AVHRR-AMSR-V2.png";
+//    QString filename = "/mnt/d/ascat_20120704_003001.png";
     qCritical() << 11111111111111111;
     QGLSceneNode* testNode = findSceneNode(filename);
     if (!testNode)// || newZoomFlag)

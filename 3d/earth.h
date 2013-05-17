@@ -16,6 +16,7 @@
 #include "more/structure.h"
 #include "more/geofunctions.h"
 #include "glclasses/tilecache.h"
+#include "tilecacheclass.h"
 
 QT_BEGIN_NAMESPACE
 class QGLTexture2D;

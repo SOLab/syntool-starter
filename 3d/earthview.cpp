@@ -125,11 +125,12 @@ void EarthView::initializeGL(QGLPainter *painter)
 void EarthView::paintGL(QGLPainter *painter)
 {
     glEnable(GL_BLEND);
-//    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     m_skybox->draw(painter);
     earth->draw(painter);
     granulesNode->draw(painter);
     navigateButton->draw(painter);
+
+    glDisable(GL_BLEND);
 //    getMemUsage();
 
     if (navigateButtonPressed)

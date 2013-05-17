@@ -43,7 +43,8 @@ SOURCES = \
     additionalwidgets/datasetboxwidget.cpp \
     3d/simplegranulesnode.cpp \
     3d/skybox.cpp \
-    3d/metagranules.cpp
+    3d/metagranules.cpp \
+    3d/tilecacheclass.cpp
 HEADERS = \
     mainwidget.h \
     windowwidget.h \
@@ -84,7 +85,8 @@ HEADERS = \
     glclasses/tilecache.h \
     3d/simplegranulesnode.h \
     3d/skybox.h \
-    3d/metagranules.h
+    3d/metagranules.h \
+    3d/tilecacheclass.h
 RESOURCES += \
     syntool.qrc
 DEPENDPATH += resources

@@ -2,6 +2,9 @@
 #define METAGRANULES_H
 
 #include <QObject>
+#include <QGLSceneNode>
+#include "more/structure.h"
+#include "tilecacheclass.h"
 
 class MetaGranules : public QObject
 {
@@ -9,6 +12,11 @@ class MetaGranules : public QObject
 public:
     explicit MetaGranules(QObject *parent = 0);
     
+private:
+    // int idGranule
+    QCache<int, QGLSceneNode> simpleGranuleCache;
+    QCache<TileCacheNumber, QGLSceneNode> tiledGranuleCache;
+
 signals:
     
 public slots:

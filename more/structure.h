@@ -40,29 +40,9 @@ struct TileNumber{
     qint32 zoom;
 };
 
-class TileCacheNumber
+inline bool operator==(const TileNumber &tn1, const TileNumber &tn2)
 {
-public:
-    TileCacheNumber(const qint32 zoom,const qint32 x,const qint32 y):
-      zoom(zoom),
-      x(x),
-      y(y)
-    {}
-
-//private:
-    int zoom;
-    int x;
-    int y;
-};
-
-inline bool operator==(const TileCacheNumber &tcn1, const TileCacheNumber &tcn2)
-{
-    return (tcn1.zoom == tcn2.zoom && tcn1.x == tcn2.x && tcn1.y == tcn2.y);
-}
-
-inline uint qHash(const TileCacheNumber &key)
-{
-    return qHash(key.zoom) ^ qHash( key.x ) ^ qHash( key.y );
+    return (tn1.zoom == tn2.zoom && tn1.x == tn2.x && tn1.y == tn2.y);
 }
 
 struct TileRange{
