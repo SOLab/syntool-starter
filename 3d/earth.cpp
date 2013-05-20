@@ -369,7 +369,7 @@ void Earth::tileDownload(qint32 cur_zoom, qint32 separation, qint32 lonTileNum, 
 */
 void Earth::updateTilesSlot(qreal scale, GeoCoords geoCoords)
 {
-    curZoom = log10(scale)/log10(2);
+    curZoom = log10(scale)/log10(2.0);
     curScale = scale;
     // save current coordinates
     curGeoCoords = geoCoords;

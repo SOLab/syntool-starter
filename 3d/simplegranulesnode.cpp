@@ -6,6 +6,10 @@ SimpleGranulesNode::SimpleGranulesNode(QObject *parent, QSharedPointer<QGLMateri
 {
     Q_UNUSED(materials);
     Q_UNUSED(configData);
+
+    _height = 0;
+    _transparency = 0;
+
     QGraphicsRotation3D *axialTilt1 = new QGraphicsRotation3D(this);
     axialTilt1->setAngle(270.0f);
     axialTilt1->setAxis(QVector3D(1,0,0));
@@ -18,6 +22,12 @@ SimpleGranulesNode::SimpleGranulesNode(QObject *parent, QSharedPointer<QGLMateri
     addTransform(rotateY);
 
     addGranuleNodes();
+}
+
+void SimpleGranulesNode::setTransparency(qint32 granuleId, qint32 transparency)
+{
+    if (granuleId == _granuleId)
+        _transparency = transparency;
 }
 
 void SimpleGranulesNode::addGranuleNodes()

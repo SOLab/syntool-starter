@@ -19,7 +19,9 @@ public:
 
 private:
     // int idGranule
-    QCache<int, QGLSceneNode> simpleGranuleCache;
+    QCache<int, SimpleGranulesNode> simpleGranuleCache;
+    QCache<int, SimpleGranuleCacheNumber> simpleGranuleNumberCache;
+
     QCache<TileCacheNumber, QGLSceneNode> tiledGranuleCache;
     SimpleGranulesNode *granulesNode;
 

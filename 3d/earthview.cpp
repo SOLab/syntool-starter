@@ -126,9 +126,9 @@ void EarthView::paintGL(QGLPainter *painter)
 {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    GLfloat color[4] = { 1, 1, 1, 0.2};
-    glColor4fv(color);
-    glDisable(GL_CULL_FACE);
+//    GLfloat color[4] = { 1, 1, 1, 0.2};
+//    glColor4fv(color);
+//    glDisable(GL_CULL_FACE);
     m_skybox->draw(painter);
     earth->draw(painter);
     metaGranulesNode->draw(painter);
@@ -273,7 +273,7 @@ void EarthView::scalePlusMinusSlot(bool plus)
     else
         camera()->setViewSize(scale2F);
     qDebug() << "scale: " << scale;
-    qDebug() << log10(scale)/log10(2);
+    qDebug() << log10(scale)/log10(2.0);
 }
 
 void EarthView::rotate(int deltax, int deltay)

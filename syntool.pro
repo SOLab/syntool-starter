@@ -8,6 +8,9 @@ QT += 3d network xml core gui opengl widgets
 
 include(./pkg.pri)
 
+INCLUDEPATH += $$_PRO_FILE_PWD_
+message($$INCLUDEPATH)
+
 SOURCES = \
     main.cpp \
     mainwidget.cpp \

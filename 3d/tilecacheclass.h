@@ -45,20 +45,14 @@ public:
     void setGranuleId(qint32 granuleId){_granuleId = granuleId;}
     qint32 productId(){return _productId;}
     void setProductId(qint32 productId){_productId = productId;}
-    qint32 height(){return _height;}
-    void setHeight(qint32 height){_height = height;}
-    qint32 transparency(){return _transparency;}
 
 private:
     qint32 _granuleId;
     qint32 _productId;
-    qint32 _height;
-    qreal _transparency;
 
 signals:
     
 public slots:
-    void setTransparency(qint32 granuleId, qint32 transparency);
 };
 
 inline bool operator==(SimpleGranuleCacheNumber &sgcn1, SimpleGranuleCacheNumber &sgcn2)

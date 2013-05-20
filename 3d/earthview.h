@@ -47,6 +47,7 @@
 #include <qmath.h>
 #include <QTimer>
 #include <QApplication>
+#include <GL/gl.h>
 
 #include "qglview.h"
 #include "earth.h"

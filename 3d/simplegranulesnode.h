@@ -28,9 +28,19 @@ private:
     bool addTextureToGranuleNode(QGLSceneNode *tempNode, QString filepath);
     void addGranuleNodes();
 
+    qint32 height(){return _height;}
+    void setHeight(qint32 height){_height = height;}
+    qint32 transparency(){return _transparency;}
+
+    qint32 _height;
+    qreal _transparency;
+    qint32 _granuleId;
+    qint32 _productId;
+
 signals:
     
 public slots:
+    void setTransparency(qint32 granuleId, qint32 transparency);
     
 };
 
