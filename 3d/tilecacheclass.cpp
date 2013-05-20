@@ -25,10 +25,6 @@ TiledGranuleCacheNumber::TiledGranuleCacheNumber(const qint32 granuleId, const q
     _transparency = 0;
 }
 
-//bool TiledGranuleCacheNumber::operator ==(TiledGranuleCacheNumber &tgcn)
-//{
-//}
-
 void TiledGranuleCacheNumber::setTransparency(qint32 granuleId, qint32 transparency)
 {
     if (granuleId == _granuleId)

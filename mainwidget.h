@@ -2,8 +2,8 @@
 #define MAINWIDGET_H
 
 #include <QMainWindow>
-#include <QtWidgets/QVBoxLayout>
-#include <QtWidgets/QHBoxLayout>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
 #include <QToolBox>
 #include <QSplitter>
 #include <QMenuBar>

@@ -4,6 +4,8 @@ SimpleGranulesNode::SimpleGranulesNode(QObject *parent, QSharedPointer<QGLMateri
                                        ConfigData configData) :
     QGLSceneNode(parent)
 {
+    Q_UNUSED(materials);
+    Q_UNUSED(configData);
     QGraphicsRotation3D *axialTilt1 = new QGraphicsRotation3D(this);
     axialTilt1->setAngle(270.0f);
     axialTilt1->setAxis(QVector3D(1,0,0));

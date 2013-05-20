@@ -86,7 +86,7 @@ void TimeLine::createGranulesContextMenu()
 }
 
 void TimeLine::actionImageSlot() {
-    qint8 status = granulesHash->value(QString::number(currentGranuleId)).status;
+//    qint8 status = granulesHash->value(QString::number(currentGranuleId)).status;
 //    if (status != 2)
 //    {
 //        QMessageBox* msgBox = new QMessageBox(/*this*/);
@@ -108,7 +108,7 @@ void TimeLine::actionFtpSlot() {
 }
 
 void TimeLine::actionKmlSlot() {
-    qint8 status = granulesHash->value(QString::number(currentGranuleId)).status;
+//    qint8 status = granulesHash->value(QString::number(currentGranuleId)).status;
 //    if (status != 2 && status != 6)
 //    {
 //        QMessageBox* msgBox = new QMessageBox(/*this*/);

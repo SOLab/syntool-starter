@@ -54,7 +54,6 @@ private:
     qint32 _productId;
     qint32 _height;
     qreal _transparency;
-    TileNumber qq;
 
 signals:
     
