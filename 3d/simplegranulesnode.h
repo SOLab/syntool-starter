@@ -53,7 +53,7 @@ private:
     void addGranuleNode(QString _image_path);
 
     qint32 _height;
-    qreal _transparency;
+    qint32 _transparency;
     qint32 _granuleId;
     qint32 _productId;
     QString cacheDir;

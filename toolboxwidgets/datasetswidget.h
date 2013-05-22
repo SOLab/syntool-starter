@@ -30,6 +30,9 @@ protected:
 signals:
     void closeAllDatasetBoxWidgets();
     void closeDatasetForGranuleId(qint32 granuleId);
+    void displayGranule(qint32 granuleId, qint32 productId);
+    void hideGranule(qint32 granuleId, qint32 productId);
+    void changedGranuleTransparency(qint32 granuleId, qint32 productId, qint32 transparency);
     
 public slots:
     void addDatasets(QHash<qint32, qint32>* displayedGranules);

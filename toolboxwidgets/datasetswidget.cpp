@@ -43,14 +43,15 @@ void DatasetsWidget::addDatasets(QHash<qint32, qint32> *displayedGranules)
 {
     emit closeAllDatasetBoxWidgets();
 
-    QHash<qint32, qint32>::const_iterator i = displayedGranules->constBegin();
-    while (i != displayedGranules->constEnd()) {
-        if (!currentDatasets->contains(i.key()))
+    QHash<qint32, qint32>::const_iterator dgi = displayedGranules->constBegin();
+    while (dgi != displayedGranules->constEnd()) {
+        if (!currentDatasets->contains(dgi.key()))
         {
-            currentDatasets->insert(i.key(), i.value());
+            currentDatasets->insert(dgi.key(), dgi.value());
+            emit displayGranule(dgi.key(), dgi.value());
 
             DatasetBoxWidget* datasetBox = new DatasetBoxWidget(serverName,
-                                           _granulesHash->value(QString::number(i.key())), this);
+                                           _granulesHash->value(QString::number(dgi.key())), this);
             datasetBox->setChecked(showAllCheck->isChecked());
             connect(datasetBox, &DatasetBoxWidget::granulePropertiesSignal,
                     this, &DatasetsWidget::actionPropertiesSlot);
@@ -61,7 +62,7 @@ void DatasetsWidget::addDatasets(QHash<qint32, qint32> *displayedGranules)
 
             vLayout->addWidget(datasetBox);
         }
-        ++i;
+        ++dgi;
     }
 
     currentRemoveNumbers->clear();
@@ -72,6 +73,7 @@ void DatasetsWidget::addDatasets(QHash<qint32, qint32> *displayedGranules)
         {
             emit closeDatasetForGranuleId(cdi.key());
             currentRemoveNumbers->append(cdi.key());
+            emit displayGranule(cdi.key(), cdi.value());
         }
         ++cdi;
     }
