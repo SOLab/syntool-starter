@@ -25,6 +25,7 @@ TimeLine::TimeLine(ConfigData configData, QWidget *parent)
     control_.flagMovedIntervalos_ = true;
 
     geoPointList = new QList<geoPoint>;
+    displayedGranules = new QHash<qint32, qint32>;
 
     // Granule statuses
     GranuleStatuses << "New" << "Ingesting" << "Completed" << "Error" << "Ingested"
@@ -446,7 +447,7 @@ void TimeLine::createBottomRect()
 void TimeLine::drawAllMarkers()
 {
     rectsGranules->clear();
-    displayedGranules.clear();
+    displayedGranules->clear();
     QHash<QString, Granule>::const_iterator k = granulesHash->constBegin();
     while ( k != granulesHash->constEnd() )
     {
@@ -500,7 +501,7 @@ void TimeLine::addGeoPoint(QDateTime dateTime, qint32 granuleId, float lat, floa
         // -5 because imege size 10x10
         painter.drawImage(width()/2+pixels - 5,10 + productId,imageGeoPoint);
         rectsGranules->insert(granuleId, QRect(width()/2+pixels - 5, 10 + productId, 10, 10));
-        displayedGranules.append(granuleId);
+        displayedGranules->insert(granuleId, productId);
     }
 }
 

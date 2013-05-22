@@ -5,6 +5,9 @@ DatasetsWidget::DatasetsWidget(ConfigData configData, QWidget *parent) :
 {
     serverName = configData.serverName;
 
+    currentDatasets = new QHash<qint32, qint32>;
+    currentRemoveNumbers = new QList<qint32>;
+
     vLayout = new QVBoxLayout(this);
     vLayout->setContentsMargins(0,0,0,0);
     vLayout->setAlignment(Qt::AlignTop);
@@ -36,16 +39,18 @@ void DatasetsWidget::setGranules(QHash<QString, Granule> *granulesHash)
     _granulesHash = granulesHash;
 }
 
-void DatasetsWidget::addDatasets(QList<qint32> displayedGranules)
+void DatasetsWidget::addDatasets(QHash<qint32, qint32> *displayedGranules)
 {
     emit closeAllDatasetBoxWidgets();
-    for (int i = 0; i < displayedGranules.size(); ++i) {
-        if (!currentDatasets.contains(displayedGranules.at(i)))
+
+    QHash<qint32, qint32>::const_iterator i = displayedGranules->constBegin();
+    while (i != displayedGranules->constEnd()) {
+        if (!currentDatasets->contains(i.key()))
         {
-            currentDatasets.append(displayedGranules.at(i));
+            currentDatasets->insert(i.key(), i.value());
 
             DatasetBoxWidget* datasetBox = new DatasetBoxWidget(serverName,
-                         _granulesHash->value(QString::number(displayedGranules.at(i))), this);
+                                           _granulesHash->value(QString::number(i.key())), this);
             datasetBox->setChecked(showAllCheck->isChecked());
             connect(datasetBox, &DatasetBoxWidget::granulePropertiesSignal,
                     this, &DatasetsWidget::actionPropertiesSlot);
@@ -56,14 +61,24 @@ void DatasetsWidget::addDatasets(QList<qint32> displayedGranules)
 
             vLayout->addWidget(datasetBox);
         }
+        ++i;
     }
 
-    for (int i = 0; i < currentDatasets.size(); ++i) {
-        if (!displayedGranules.contains(currentDatasets.at(i)))
+    currentRemoveNumbers->clear();
+
+    QHash<qint32, qint32>::const_iterator cdi = currentDatasets->constBegin();
+    while (cdi != currentDatasets->constEnd()) {
+        if (!displayedGranules->contains(cdi.key()))
         {
-            emit closeDatasetForGranuleId(currentDatasets.at(i));
-            currentDatasets.removeAt(i);
+            emit closeDatasetForGranuleId(cdi.key());
+            currentRemoveNumbers->append(cdi.key());
         }
+        ++cdi;
+    }
+
+    for (int removeNumber = 0; removeNumber < currentRemoveNumbers->size(); ++removeNumber)
+    {
+        currentDatasets->remove(currentRemoveNumbers->at(removeNumber));
     }
 }
 

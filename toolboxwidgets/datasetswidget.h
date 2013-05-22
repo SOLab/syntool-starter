@@ -20,7 +20,9 @@ public:
 protected:
     QVBoxLayout* vLayout;
     QCheckBox* showAllCheck;
-    QList<qint32> currentDatasets;
+    // <granuleId, productId>
+    QHash<qint32, qint32>* currentDatasets;
+    QList<qint32>* currentRemoveNumbers;
 
     QHash<QString, Granule>* _granulesHash;
     QString serverName;
@@ -30,7 +32,7 @@ signals:
     void closeDatasetForGranuleId(qint32 granuleId);
     
 public slots:
-    void addDatasets(QList<qint32> displayedGranules);
+    void addDatasets(QHash<qint32, qint32>* displayedGranules);
     void actionPropertiesSlot(qint32 granuleId);
     
 };

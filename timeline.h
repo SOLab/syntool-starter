@@ -105,7 +105,8 @@ protected:
     void createGranulesContextMenu();
     QString serverName;
 
-    QList<qint32> displayedGranules;
+    // <granuleId, productId>
+    QHash<qint32, qint32>* displayedGranules;
     QList<QString> GranuleStatuses;
 
     int hourPixels;
@@ -139,7 +140,7 @@ private slots:
 
 signals:
   void getNewAllGranules(int scale);
-  void changedDisplayGranules(QList<qint32> displayedGranules);
+  void changedDisplayGranules(QHash<qint32, qint32>* displayedGranules);
   void moveEarth(float lat, float lot);
 
 private:
