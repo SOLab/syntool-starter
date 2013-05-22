@@ -1,11 +1,22 @@
 #include "simplegranulesnode.h"
 
 SimpleGranulesNode::SimpleGranulesNode(QObject *parent, QSharedPointer<QGLMaterialCollection> materials,
-                                       ConfigData configData) :
+                                       ConfigData configData, qint32 granuleId, qint32 productId) :
     QGLSceneNode(parent)
 {
     Q_UNUSED(materials);
     Q_UNUSED(configData);
+
+    setGranuleId(granuleId);
+    setProductId(productId);
+
+    serverName = configData.serverName;
+    cacheDir = configData.cacheDir;
+
+//    urlProducts = QUrl(serverName + "/api/products");
+    urlGranules = QUrl(serverName + "/api/granules");
+
+    networkManager = new QNetworkAccessManager(this);
 
     _height = 0;
     _transparency = 0;
@@ -21,7 +32,96 @@ SimpleGranulesNode::SimpleGranulesNode(QObject *parent, QSharedPointer<QGLMateri
     addTransform(axialTilt1);
     addTransform(rotateY);
 
-    addGranuleNodes();
+    connect(this, &SimpleGranulesNode::granuleImageUrlReceived, this, &SimpleGranulesNode::downloadGranuleImage);
+
+    addGranuleNodeStart();
+}
+
+void SimpleGranulesNode::getGranuleImageUrl()
+{
+    QNetworkRequest request;
+
+    //create filter
+    QString filter = "/";
+
+    filter += QString::number(granuleId()) + "/quicklooks";
+
+    request.setUrl(QUrl(urlGranules.scheme() + "://" + urlGranules.host() + urlGranules.path() + filter));
+    request.setRawHeader("Content-Type", "text/xml");
+
+//    qCritical() << request.url();
+
+    QNetworkReply* reply = networkManager->get(request);
+    connect(reply, &QNetworkReply::readyRead, this, &SimpleGranulesNode::slotReadyReadImageUrl);
+    connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
+            this, SLOT(getErrorImageUrl(QNetworkReply::NetworkError)));
+}
+
+void SimpleGranulesNode::slotReadyReadImageUrl()
+{
+    QNetworkReply *reply=qobject_cast<QNetworkReply*>(sender());
+
+    int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+
+    qDebug() << statusCode;
+    if (reply->error() == QNetworkReply::NoError)
+    {
+        qDebug() << "status code: " << statusCode;
+
+        switch (statusCode)
+        {
+            case 200:
+            {
+                QByteArray bytes = reply->readAll();
+//                QString string(bytes);
+//                qDebug() << string;
+
+                QDomDocument mDocument;
+                QString errorMsg;
+                int errorLine;
+                int errorColumn;
+                if (!mDocument.setContent(bytes, false, &errorMsg,
+                                          &errorLine, &errorColumn))
+                {
+                    qWarning() << "Error parse XML";
+//                    qDebug() << errorMsg;
+//                    qDebug() << errorLine;
+//                    qDebug() << errorColumn;
+                    if (errorLine > 1)
+                    {
+                        currentRequest = bytes;
+                        return;
+                    }
+                    else
+                    {
+                        currentRequest = currentRequest + bytes;
+                        bytes = currentRequest;
+                        if (!mDocument.setContent(bytes, false, &errorMsg,
+                                                  &errorLine, &errorColumn))
+                        {
+                                qCritical() << "Error parse XML";
+                                qCritical() << errorMsg;
+                                qCritical() << errorLine;
+                                qCritical() << errorColumn;
+                                return;
+                        }
+                    }
+                }
+
+                currentRequest.clear();
+
+                QDomElement  coordsElement = mDocument.documentElement();//.firstChildElement("Coordinates");
+
+
+                currentGranulesUrl = QUrl(coordsElement.text());
+            }
+        }
+    }
+    emit granuleImageUrlReceived();
+}
+
+void SimpleGranulesNode::getErrorImageUrl(QNetworkReply::NetworkError)
+{
 }
 
 void SimpleGranulesNode::setTransparency(qint32 granuleId, qint32 transparency)
@@ -30,20 +130,49 @@ void SimpleGranulesNode::setTransparency(qint32 granuleId, qint32 transparency)
         _transparency = transparency;
 }
 
-void SimpleGranulesNode::addGranuleNodes()
+void SimpleGranulesNode::addGranuleNodeStart()
 {
-    QString filename = "/mnt/d/OISST-AVHRR-AMSR-V2.png";
+    getGranuleImageUrl();
+}
+
+void SimpleGranulesNode::downloadGranuleImage()
+{
+    imagePath = QString(cacheDir+"/granule_%1.png").arg(granuleId());
+
+    // download product image
+    if (!currentGranulesUrl.isEmpty())
+    {
+        if (!QFile::exists(imagePath) ) {
+            DownloadImage* downloadImage = new DownloadImage;
+
+            qDebug() << "urlGranules = " << currentGranulesUrl.url();
+            downloadImage->setImageUrl(currentGranulesUrl.url(), imagePath);
+
+            connect(downloadImage, &DownloadImage::downloaded, this, &SimpleGranulesNode::addGranuleNode);
+
+            downloadImage->run();
+        }
+        else
+        {
+            addGranuleNode(imagePath);
+        }
+    }
+}
+
+void SimpleGranulesNode::addGranuleNode(QString _image_path)
+{
+    Q_UNUSED(_image_path);
+
+//    QString imagePath = "/mnt/d/OISST-AVHRR-AMSR-V2.png";
 //    QString filename = "/mnt/d/ascat_20120704_003001.png";
-    qCritical() << 11111111111111111;
-    QGLSceneNode* testNode = findSceneNode(filename);
+    QGLSceneNode* testNode = findSceneNode(imagePath);
     if (!testNode)// || newZoomFlag)
     {
-        qCritical() << 2222222222222;
         delete testNode;
         qreal minSphereLat = -M_PI_2;
         qreal maxSphereLat = M_PI_2;
         QGLSceneNode* testNode = BuildGranuleMerNode(1, minSphereLat, maxSphereLat, -M_PI, M_PI);
-        qCritical() << "11111" << addTextureToGranuleNode(testNode, filename);
+        qDebug() << "addTextureToGranuleNode:" << addTextureToGranuleNode(testNode, imagePath);
 
     //    testNone->setOptions(QGLSceneNode::NoOptions);
         QGLBuilder builder;
@@ -54,7 +183,7 @@ void SimpleGranulesNode::addGranuleNodes()
     //    tileNodeCache.insert(tileNumber, tempNode);
 
         QGLSceneNode* temp2 = builder.finalizedSceneNode();
-        temp2->setObjectName(filename);
+        temp2->setObjectName(imagePath);
         addNode(temp2);
     }
     else

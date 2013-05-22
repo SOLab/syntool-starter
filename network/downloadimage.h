@@ -23,6 +23,7 @@ protected:
     QString _imagePath;
 
 signals:
+    void downloaded(QString);
     
 public slots:
     void slotReadyRead(QNetworkReply *reply);

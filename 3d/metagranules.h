@@ -17,9 +17,10 @@ public:
     void draw(QGLPainter *painter);
     void setParent(EarthView *parentView){_parentView = parentView;}
 
+    void addGranuleNode(qint32 granuleId, qint32 productId);
 private:
     // int idGranule
-    QCache<int, SimpleGranulesNode> simpleGranuleCache;
+    QCache<int, SimpleGranulesNode>* simpleGranuleCache;
     QCache<int, SimpleGranuleCacheNumber> simpleGranuleNumberCache;
 
     QCache<TileCacheNumber, QGLSceneNode> tiledGranuleCache;
@@ -33,7 +34,7 @@ signals:
     void displayed();
     
 public slots:
-    void addSimpleGranuleNode();
+    void addSimpleGranuleNode(qint32 granuleId, qint32 productId);
     
 };
 

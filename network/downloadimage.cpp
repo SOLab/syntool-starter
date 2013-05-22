@@ -32,10 +32,11 @@ void DownloadImage::slotReadyRead(QNetworkReply *reply)
     }
 
     QByteArray jpegData = reply->readAll();
-    QPixmap pixmap;
-    pixmap.loadFromData(jpegData);
-    pixmap.save(_imagePath);
-//    label->setPixmap(pixmap); // or whatever your labels name is
+    QPixmap* pixmap = new QPixmap();
+    pixmap->loadFromData(jpegData);
+    pixmap->save(_imagePath);
+    delete pixmap;
+    emit downloaded(_imagePath);
     deleteLater();
 }
 

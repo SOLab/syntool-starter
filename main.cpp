@@ -57,9 +57,9 @@ int main(int argc, char *argv[])
     QApplication::setFont(newFont);
 
     ConfigData configData;
-    configData.serverName = "http://satin.rshu.ru";
+    configData.serverName = "http://staging.satin.rshu.ru";
     configData.cacheDir = "/tmp/syntool";
-    configData.logLevel = WarningAndError;
+    configData.logLevel = ErrorOnly;
 
     QDir cacheDir(configData.cacheDir);
     if (!cacheDir.exists()){

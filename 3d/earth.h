@@ -35,7 +35,7 @@ public:
     void tileDownload(qint32 cur_zoom, qint32 separation, qint32 lonTileNum, qint32 latTileNum);
 
 private:
-    QCache<QString, TileDownloader> downloadQueue;
+    QCache<QString, TileDownloader>* downloadQueue;
     TileCache<TileCacheNumber, QGLSceneNode> tileNodeCache;
 
     int zoom;

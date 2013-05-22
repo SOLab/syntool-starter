@@ -94,6 +94,7 @@ EarthView::EarthView(ConfigData configData, QWindow *parent)
     m_scene->mainNode()->addNode(earth);
 
     metaGranulesNode = new MetaGranules(this, m_palette, configData);
+    metaGranulesNode->addGranuleNode(10, 1);
 //    connect (this, &EarthView::updatedTilesSignal, earth, &Earth::updateTilesSlot);
     connect (metaGranulesNode, &MetaGranules::displayed, this, &EarthView::update);
 
