@@ -398,8 +398,8 @@ void ProductsWidget::getNewGranules(int scale)
 
         if (productsHash.value(k.key()).IsTiled)
         {
-            filter += "&area=POLYGON((" + QString("%1 %2, %3 %2, %3 %4, %1 %4, %1 %2")
-                                          .arg(north, east, south, west) + "))";
+//            filter += "&area=POLYGON((" + QString("%1 %2, %3 %2, %3 %4, %1 %4, %1 %2")
+//                                          .arg(north, east, south, west) + "))";
         }
 
         request.setUrl(QUrl(urlGranules.scheme() + "://" + urlGranules.host() + urlGranules.path() + filter));
@@ -439,8 +439,8 @@ void ProductsWidget::getGranulesForNewProduct()
 
     if (productsHash[comboProducts->currentText()].IsTiled)
     {
-        filter += "&area=POLYGON((" + QString("%1 %2, %3 %2, %3 %4, %1 %4, %1 %2")
-                                      .arg(north, east, south, west) + "))";
+//        filter += "&area=POLYGON((" + QString("%1 %2, %3 %2, %3 %4, %1 %4, %1 %2")
+//                                      .arg(north, east, south, west) + "))";
     }
 
     request.setUrl(QUrl(urlGranules.scheme() + "://" + urlGranules.host() + urlGranules.path() + filter));

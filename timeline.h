@@ -39,6 +39,11 @@ struct geoPoint
     float lon;
 };
 
+inline bool operator==(const geoPoint &gp1, const geoPoint &gp2)
+{
+    return (gp1.lat == gp2.lat && gp1.lon == gp2.lon && gp1.timeSnapshot == gp2.timeSnapshot);
+}
+
 struct geoSegment
 {
     QDateTime startTime;
@@ -83,7 +88,7 @@ protected:
     void createTopRect();
     Calendar* calendar;
 
-    QList<geoPoint> geoPointList;
+    QList<geoPoint>* geoPointList;
     QList<geoSegment> geoSegmentList;
     QHash<QString, selectedProduct>* selectedProducts;
     QHash<QString, Granule>* granulesHash;

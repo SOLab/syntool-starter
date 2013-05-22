@@ -24,6 +24,8 @@ TimeLine::TimeLine(ConfigData configData, QWidget *parent)
     control_.moveDay = false;
     control_.flagMovedIntervalos_ = true;
 
+    geoPointList = new QList<geoPoint>;
+
     // Granule statuses
     GranuleStatuses << "New" << "Ingesting" << "Completed" << "Error" << "Ingested"
                   << "Processing" << "WaitingForPostProcessing";
@@ -459,7 +461,9 @@ void TimeLine::drawAllMarkers()
 void TimeLine::addGeoPoint(QDateTime dateTime, qint32 granuleId, float lat, float lon, int productId)
 {
     geoPoint newPoint = {dateTime, lat, lon};
-    geoPointList.append(newPoint);
+    if (!geoPointList->contains(newPoint))
+        geoPointList->append(newPoint);
+
 //    qDebug() << dateTime;
 
     qint64 secsTo = control_.currentDate.secsTo(dateTime);
