@@ -51,17 +51,17 @@ MainWindow::MainWindow(ConfigData _configData, QWidget *parent)
 //    create right toolBox
     rightSidebar = new RightSidebar;
 
-    MapsWgt = new MapsWidget(centralwgt);
-    ProductsWgt = new ProductsWidget(configData, centralwgt);
-    DatasetsWgt = new DatasetsWidget(configData, centralwgt);
-    PlaceWgt = new PlaceWidget(centralwgt);
-    LayersWgt = new LayersWidget(centralwgt);
+    mapsWgt = new MapsWidget(centralwgt);
+    productsWgt = new ProductsWidget(configData, centralwgt);
+    datasetsWgt = new DatasetsWidget(configData, centralwgt);
+    placeWgt = new PlaceWidget(centralwgt);
+    layersWgt = new LayersWidget(centralwgt);
 
-    rightSidebar->addItem(MapsWgt, "Maps");
-    rightSidebar->addItem(ProductsWgt, "Products");
-    rightSidebar->addItem(LayersWgt, "Layers");
-    rightSidebar->addItem(DatasetsWgt, "Datasets");
-    rightSidebar->addItem(PlaceWgt, "Places");
+    rightSidebar->addItem(mapsWgt, "Maps");
+    rightSidebar->addItem(productsWgt, "Products");
+    rightSidebar->addItem(layersWgt, "Layers");
+    rightSidebar->addItem(datasetsWgt, "Datasets");
+    rightSidebar->addItem(placeWgt, "Places");
 
 //    add all main widget
     splitter->addWidget(glwgt);
@@ -84,29 +84,34 @@ MainWindow::MainWindow(ConfigData _configData, QWidget *parent)
     selectedProducts = new QHash<QString, selectedProduct>;
     granulesHash = new QHash<QString, Granule>;
 
-    ProductsWgt->setSelectedProducts(selectedProducts, granulesHash);
+    productsWgt->setSelectedProducts(selectedProducts, granulesHash);
     timeLine->setSelectedProducts(selectedProducts, granulesHash);
-    DatasetsWgt->setGranules(granulesHash);
+    datasetsWgt->setGranules(granulesHash);
 
-    connect(timeLine, &TimeLine::getNewAllGranules, ProductsWgt, &ProductsWidget::getNewGranules);
+    connect(timeLine, &TimeLine::getNewAllGranules, productsWgt, &ProductsWidget::getNewGranules);
 
-    connect(ProductsWgt, &ProductsWidget::productAdded, LayersWgt, &LayersWidget::addProduct);
-    connect(ProductsWgt, &ProductsWidget::productDeleted, LayersWgt, &LayersWidget::deleteProduct);
+    connect(productsWgt, &ProductsWidget::productAdded, layersWgt, &LayersWidget::addProduct);
+    connect(productsWgt, &ProductsWidget::productDeleted, layersWgt, &LayersWidget::deleteProduct);
 
-    connect(LayersWgt, &LayersWidget::removeLayer, ProductsWgt, &ProductsWidget::removeProduct);
+    connect(layersWgt, &LayersWidget::removeLayer, productsWgt, &ProductsWidget::removeProduct);
 
-    connect(timeLine, &TimeLine::changedDisplayGranules, DatasetsWgt, &DatasetsWidget::addDatasets);
+    connect(timeLine, &TimeLine::changedDisplayGranules, datasetsWgt, &DatasetsWidget::addDatasets);
 
-    ProductsWgt->setObjectsPointer(timeLine);
+    productsWgt->setObjectsPointer(timeLine);
 
     rightSidebar->setMinimumWidth(120);
 
     setWindowTitle("Syntool");
 }
 
-void MainWindow::setHostedWindow(QWindow *window)
+void MainWindow::setHostedWindow(EarthView *window)
 {
     glwgt->setHostedWindow(window);
+    earthViewPointer = window;
+    metaGranulesPointer = earthViewPointer->metaGranulesNode;
+
+    connect(datasetsWgt, &DatasetsWidget::displayGranule, metaGranulesPointer, &MetaGranules::addGranuleNode);
+    connect(datasetsWgt, &DatasetsWidget::hideGranule, metaGranulesPointer, &MetaGranules::removeSimpleGranuleNode);
 }
 
 void MainWindow::aboutProgram()

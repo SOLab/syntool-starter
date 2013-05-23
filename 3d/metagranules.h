@@ -24,7 +24,7 @@ private:
     QCache<int, SimpleGranuleCacheNumber> simpleGranuleNumberCache;
 
     QCache<TileCacheNumber, QGLSceneNode> tiledGranuleCache;
-    SimpleGranulesNode *granulesNode;
+//    SimpleGranulesNode *granulesNode;
 
     EarthView *_parentView;
     QSharedPointer<QGLMaterialCollection> m_palette;
@@ -35,6 +35,7 @@ signals:
     
 public slots:
     void addSimpleGranuleNode(qint32 granuleId, qint32 productId);
+    void removeSimpleGranuleNode(qint32 granuleId, qint32 productId);
     
 };
 

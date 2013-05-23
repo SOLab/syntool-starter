@@ -24,6 +24,8 @@
 #include "toolboxwidgets/productswidget.h"
 #include "toolboxwidgets/datasetswidget.h"
 #include "topmenuwidgets/settingswidget.h"
+#include "3d/earthview.h"
+#include "3d/metagranules.h"
 
 class TimeLine;
 
@@ -34,7 +36,7 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(ConfigData _configData, QWidget *parent = 0);
     ~MainWindow();
-    void setHostedWindow(QWindow *window);
+    void setHostedWindow(EarthView *window);
     void keyPress(QKeyEvent* e);
 //    void resizeEvent(QResizeEvent *e);
 
@@ -51,11 +53,11 @@ protected:
     TimeLine* timeLine;
     RightSidebar* rightSidebar;
 
-    PlaceWidget* PlaceWgt;
-    MapsWidget* MapsWgt;
-    DatasetsWidget* DatasetsWgt;
-    ProductsWidget* ProductsWgt;
-    LayersWidget* LayersWgt;
+    PlaceWidget* placeWgt;
+    MapsWidget* mapsWgt;
+    DatasetsWidget* datasetsWgt;
+    ProductsWidget* productsWgt;
+    LayersWidget* layersWgt;
 
     QVBoxLayout* vlayout;
     QHBoxLayout* hlayout;
@@ -63,6 +65,9 @@ protected:
 
     AboutWidget* aboutWgt;
     SettingsWidget* settingsWidget;
+
+    EarthView* earthViewPointer;
+    MetaGranules* metaGranulesPointer;
 
     void createMenuBar();
     void createPythonConsole();

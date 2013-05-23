@@ -73,7 +73,7 @@ void DatasetsWidget::addDatasets(QHash<qint32, qint32> *displayedGranules)
         {
             emit closeDatasetForGranuleId(cdi.key());
             currentRemoveNumbers->append(cdi.key());
-            emit displayGranule(cdi.key(), cdi.value());
+            emit hideGranule(cdi.key(), cdi.value());
         }
         ++cdi;
     }

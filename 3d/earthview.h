@@ -53,6 +53,7 @@
 #include "earth.h"
 #include "metagranules.h"
 #include "more/geofunctions.h"
+#include "more/structure.h"
 #include "qglscenenode.h"
 #include "earthscene.h"
 #include "skybox.h"
@@ -96,9 +97,11 @@ public:
     EarthScene *scene() { return m_scene; }
     float getMemUsage();
     void timeout();
+
+    MetaGranules* metaGranulesNode;
+
 protected:
     Earth *earth;
-    MetaGranules* metaGranulesNode;
 
     void initializeGL(QGLPainter *painter);
     void paintGL(QGLPainter *painter);
@@ -151,6 +154,7 @@ protected slots:
 
     void navigateButtonPress();
     void rotateInertia();
+    void selectivePaintGl(SelectivePaintGl type);
 
 signals:
   void updatedTilesSignal(qreal scale, GeoCoords geoCoords);
