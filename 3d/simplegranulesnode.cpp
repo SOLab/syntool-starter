@@ -261,7 +261,7 @@ QGLSceneNode* SimpleGranulesNode::BuildGranuleMerNode(int separation, qreal minS
                                                 curSphereLon += oneSphereSliceDegrees)
         {
             // calculate decart coordinates (x,y,z) for Vertex and Normal
-            curDecart = llh2xyz(curSphereLat, curSphereLon, 0.001);
+            curDecart = llh2xyz(curSphereLat, curSphereLon, 0.001 + height()/10000.0);
 
             // calculate texture coordinates
             xTexCoord = ((curSphereLon) - (minSphereLon))/qreal((maxSphereLon) - (minSphereLon));
@@ -275,7 +275,7 @@ QGLSceneNode* SimpleGranulesNode::BuildGranuleMerNode(int separation, qreal minS
             prim.appendTexCoord(QVector2D(xTexCoord, (yTexCoord)));
 
             // all for next point
-            curDecartNext = llh2xyz(curSphereLatNext, curSphereLon, 0.001);
+            curDecartNext = llh2xyz(curSphereLatNext, curSphereLon, 0.001 + height()/10000.0);
             xTexCoordNext = ((curSphereLon) - (minSphereLon)) / qreal((maxSphereLon) - (minSphereLon));
             if (lastFlag)
                 yTexCoordNext = 1;

@@ -123,11 +123,6 @@ void EarthView::initializeGL(QGLPainter *painter)
     Q_UNUSED(painter);
 }
 
-void EarthView::selectivePaintGl(SelectivePaintGl type)
-{
-
-}
-
 void EarthView::paintGL(QGLPainter *painter)
 {
     glEnable(GL_BLEND);
@@ -137,7 +132,8 @@ void EarthView::paintGL(QGLPainter *painter)
 //    glDisable(GL_CULL_FACE);
     m_skybox->draw(painter);
     earth->draw(painter);
-    metaGranulesNode->draw(painter);
+    metaGranulesNode->drawSimpleGranules(painter);
+    metaGranulesNode->drawTiledGranules(painter);
     navigateButton->draw(painter);
 
     glDisable(GL_BLEND);

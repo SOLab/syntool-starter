@@ -17,16 +17,6 @@ enum LogLevel
     AllMessage = 15
 };
 
-enum SelectivePaintGl
-{   NoPaint = 0,
-    PaintSimpleGranules = 1,
-    PaintTiledGranules = 2,
-    PaintAllGranules = 3,
-    PaintEarth = 4,
-    PaintAll = 7
-};
-
-
 struct ConfigData{
     QString serverName;
     QString cacheDir;

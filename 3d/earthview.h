@@ -53,7 +53,6 @@
 #include "earth.h"
 #include "metagranules.h"
 #include "more/geofunctions.h"
-#include "more/structure.h"
 #include "qglscenenode.h"
 #include "earthscene.h"
 #include "skybox.h"
@@ -139,7 +138,7 @@ private:
     SkyBox *m_skybox;
     QSharedPointer<QGLMaterialCollection> m_palette;
 
-    QGLPickNode* pick_left;
+//    QGLPickNode* pick_left;
 //    float m_angle1;
 //    float m_angle2;
 //    float m_angle3;
@@ -154,7 +153,6 @@ protected slots:
 
     void navigateButtonPress();
     void rotateInertia();
-    void selectivePaintGl(SelectivePaintGl type);
 
 signals:
   void updatedTilesSignal(qreal scale, GeoCoords geoCoords);
