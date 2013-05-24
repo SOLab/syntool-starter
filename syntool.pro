@@ -47,7 +47,8 @@ SOURCES = \
     3d/simplegranulesnode.cpp \
     3d/skybox.cpp \
     3d/metagranules.cpp \
-    3d/tilecacheclass.cpp
+    3d/tilecacheclass.cpp \
+    3d/glscenenodewrapper.cpp
 HEADERS = \
     mainwidget.h \
     windowwidget.h \
@@ -89,7 +90,8 @@ HEADERS = \
     3d/simplegranulesnode.h \
     3d/skybox.h \
     3d/metagranules.h \
-    3d/tilecacheclass.h
+    3d/tilecacheclass.h \
+    3d/glscenenodewrapper.h
 RESOURCES += \
     syntool.qrc
 DEPENDPATH += resources
