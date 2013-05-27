@@ -334,3 +334,20 @@ bool SimpleGranulesNode::addTextureToGranuleNode(QGLSceneNode* tempNode, QString
     tempNode->setEffect(QGL::LitModulateTexture2D);
     return true;
 }
+
+void SimpleGranulesNode::show()
+{
+    visible = true;
+    setOptions(QGLSceneNode::CullBoundingBox);
+}
+
+void SimpleGranulesNode::hide()
+{
+    visible = false;
+    setOptions(QGLSceneNode::HideNode);
+}
+
+bool SimpleGranulesNode::isVisible()
+{
+    return visible;
+}

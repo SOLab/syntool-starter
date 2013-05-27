@@ -39,6 +39,9 @@ public:
     qint32 transparency(){return _transparency;}
 
     void getGranuleImageUrl();
+    void show();
+    void hide();
+    bool isVisible();
 
 protected:
     QByteArray currentRequest;
@@ -61,6 +64,7 @@ private:
     QString serverName;
     QUrl urlGranules;
     QUrl currentGranulesUrl;
+    bool visible;
 
     QNetworkAccessManager* networkManager;
 

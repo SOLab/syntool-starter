@@ -55,17 +55,9 @@ void MetaGranules::addSimpleGranuleNode(qint32 granuleId, qint32 productId)
     }
     else
     {
-        // if granule already displayed
-        if (simpleGranuleCache->object(granuleId)->options() == QGLSceneNode::CullBoundingBox)
-        {
-            return;
-        }
-
         // displayed granule
-        simpleGranuleCache->object(granuleId)->setOptions(QGLSceneNode::CullBoundingBox);
-//        simpleGranuleCache->object(granuleId)->setHeight(currentHeight);
-        heightGranuleMap.insert(simpleGranuleCache->object(granuleId)->height(), granuleId);
-        heightGranuleMap.insert(simpleGranuleCache->object(granuleId)->height(), granuleId);
+        if (!heightGranuleMap.contains(simpleGranuleCache->object(granuleId)->height()))
+            heightGranuleMap.insert(simpleGranuleCache->object(granuleId)->height(), granuleId);
         emit displayed();
     }
 
@@ -78,11 +70,7 @@ void MetaGranules::addSimpleGranuleNode(qint32 granuleId, qint32 productId)
 void MetaGranules::removeSimpleGranuleNode(qint32 granuleId, qint32 productId)
 {
     Q_UNUSED(productId);
-
-    // hide granule
-    simpleGranuleCache->object(granuleId)->options().testFlag(QGLSceneNode::HideNode);
     heightGranuleMap.remove(simpleGranuleCache->object(granuleId)->height());
-//    simpleGranuleCache->object(granuleId)->deleteLater();
 //    simpleGranuleCache->remove(granuleId);
 
     emit displayed();
