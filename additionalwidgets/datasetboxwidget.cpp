@@ -10,6 +10,7 @@ DatasetBoxWidget::DatasetBoxWidget(QString serverName, Granule granule, QWidget 
     gridLayout->setSpacing(0);
 
     showDatasetCheck = new QCheckBox(this);
+    connect(showDatasetCheck, &QCheckBox::clicked, this, &DatasetBoxWidget::checkedSlot);
 
     granuleNameLabel = new QLabel(granule.granuleName, this);
     granuleNameLabel->setWordWrap(true);
@@ -17,6 +18,7 @@ DatasetBoxWidget::DatasetBoxWidget(QString serverName, Granule granule, QWidget 
     granuleNameLabel->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Fixed);
 
     _granuleId = granule.granuleId;
+    _productId = granule.productId;
 
     moreActions = new QPushButton(QIcon(":/icons/down.png"), "", this);
     moreActions->setIconSize(QSize(16, 16));
@@ -44,6 +46,11 @@ DatasetBoxWidget::DatasetBoxWidget(QString serverName, Granule granule, QWidget 
 void DatasetBoxWidget::setChecked(bool checked)
 {
     showDatasetCheck->setChecked(checked);
+}
+
+void DatasetBoxWidget::checkedSlot(bool checked)
+{
+    emit changedDisplayGranule(checked, _granuleId, _productId);
 }
 
 void DatasetBoxWidget::closeGranuleId(qint32 granuleId)

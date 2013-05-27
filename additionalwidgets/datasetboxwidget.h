@@ -19,11 +19,10 @@ class DatasetBoxWidget : public QWidget
     Q_OBJECT
 public:
     explicit DatasetBoxWidget(QString serverName, Granule granule, QWidget *parent = 0);
-
+    QCheckBox* showDatasetCheck;
 
 protected:
     QGridLayout* gridLayout;
-    QCheckBox* showDatasetCheck;
     QLabel* granuleNameLabel;
     QSlider* transparencySlider;
     QLabel* percentLabel;
@@ -42,11 +41,13 @@ protected:
     bool buttonsCreated;
 
     qint32 _granuleId;
+    qint32 _productId;
     QString _serverName;
 
 signals:
-    void changedTransparency(qint32 _granuleId, qint32 transparentValue);
-    void granulePropertiesSignal(qint32 _granuleId);
+    void changedTransparency(qint32 granuleId, qint32 transparentValue);
+    void granulePropertiesSignal(qint32 granuleId);
+    void changedDisplayGranule(bool checked, qint32 granuleId, qint32 productId);
 
 public slots:
     void closeGranuleId(qint32 granuleId);
@@ -54,6 +55,7 @@ public slots:
     void showMoreButtons();
 
     void setChecked(bool checked);
+    void checkedSlot(bool checked);
 
     void actionImageSlot();
     void actionOpendapSlot();

@@ -37,6 +37,16 @@ SimpleGranulesNode::SimpleGranulesNode(QObject *parent, QSharedPointer<QGLMateri
     addGranuleNodeStart();
 }
 
+SimpleGranulesNode::~SimpleGranulesNode()
+{
+    QGLSceneNode* nodeObject = findSceneNode(imagePath);
+    if (nodeObject)
+    {
+        removeNode(nodeObject);
+        nodeObject->deleteLater();
+    }
+}
+
 void SimpleGranulesNode::getGranuleImageUrl()
 {
     QNetworkRequest request;

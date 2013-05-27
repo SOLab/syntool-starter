@@ -37,6 +37,7 @@ signals:
 public slots:
     void addDatasets(QHash<qint32, qint32>* displayedGranules);
     void actionPropertiesSlot(qint32 granuleId);
+    void changedDisplayGranule(bool checked, qint32 granuleId, qint32 productId);
     
 };
 

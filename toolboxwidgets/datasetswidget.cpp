@@ -41,8 +41,6 @@ void DatasetsWidget::setGranules(QHash<QString, Granule> *granulesHash)
 
 void DatasetsWidget::addDatasets(QHash<qint32, qint32> *displayedGranules)
 {
-    emit closeAllDatasetBoxWidgets();
-
     QHash<qint32, qint32>::const_iterator dgi = displayedGranules->constBegin();
     while (dgi != displayedGranules->constEnd()) {
         if (!currentDatasets->contains(dgi.key()))
@@ -59,6 +57,9 @@ void DatasetsWidget::addDatasets(QHash<qint32, qint32> *displayedGranules)
             connect(this, &DatasetsWidget::closeDatasetForGranuleId,
                     datasetBox, &DatasetBoxWidget::closeGranuleId);
             connect(showAllCheck, &QCheckBox::clicked, datasetBox, &DatasetBoxWidget::setChecked);
+
+            // showDatasetCheck clicked
+            connect(datasetBox, &DatasetBoxWidget::changedDisplayGranule, this, &DatasetsWidget::changedDisplayGranule);
 
             vLayout->addWidget(datasetBox);
         }
@@ -89,4 +90,12 @@ void DatasetsWidget::actionPropertiesSlot(qint32 granuleId)
         GranuleInfoWidget* currentGranuleWidget =
                 new GranuleInfoWidget(_granulesHash->value(QString::number(granuleId)));
         currentGranuleWidget->show();
+}
+
+void DatasetsWidget::changedDisplayGranule(bool checked, qint32 granuleId, qint32 productId)
+{
+    if (checked)
+        emit displayGranule(granuleId, productId);
+    else
+        emit hideGranule(granuleId, productId);
 }

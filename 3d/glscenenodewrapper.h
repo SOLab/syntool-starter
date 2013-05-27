@@ -3,17 +3,19 @@
 
 #include <QObject>
 #include <QGLSceneNode>
+#include "simplegranulesnode.h"
 
 class GLSceneNodeWrapper : public QObject
 {
     Q_OBJECT
 public:
     explicit GLSceneNodeWrapper(QObject *parent = 0);
-    void setGLSceneNodeObject(QGLSceneNode* glSceneNodeObject){_glSceneNodeObject = glSceneNodeObject;}
-    QGLSceneNode* getGLSceneNodeObject(){return _glSceneNodeObject;}
+    ~GLSceneNodeWrapper();
+    void setGLSceneNodeObject(QGLSceneNode *glSceneNode);
+    QGLSceneNode* glSceneNodeObject(){return _glSceneNode;}
     
 private:
-    QGLSceneNode* _glSceneNodeObject;
+    QGLSceneNode* _glSceneNode;
 
 signals:
     
