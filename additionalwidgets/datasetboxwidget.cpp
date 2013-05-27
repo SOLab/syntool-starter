@@ -10,7 +10,7 @@ DatasetBoxWidget::DatasetBoxWidget(QString serverName, Granule granule, QWidget 
     gridLayout->setSpacing(0);
 
     showDatasetCheck = new QCheckBox(this);
-    connect(showDatasetCheck, &QCheckBox::clicked, this, &DatasetBoxWidget::checkedSlot);
+    connect(showDatasetCheck, &QCheckBox::stateChanged, this, &DatasetBoxWidget::checkedSlot);
 
     granuleNameLabel = new QLabel(granule.granuleName, this);
     granuleNameLabel->setWordWrap(true);
@@ -48,8 +48,9 @@ void DatasetBoxWidget::setChecked(bool checked)
     showDatasetCheck->setChecked(checked);
 }
 
-void DatasetBoxWidget::checkedSlot(bool checked)
+void DatasetBoxWidget::checkedSlot(int state)
 {
+    bool checked = (state == Qt::Unchecked) ? false : true;
     emit changedDisplayGranule(checked, _granuleId, _productId);
 }
 

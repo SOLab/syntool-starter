@@ -55,7 +55,7 @@ public slots:
     void showMoreButtons();
 
     void setChecked(bool checked);
-    void checkedSlot(bool checked);
+    void checkedSlot(int state);
 
     void actionImageSlot();
     void actionOpendapSlot();

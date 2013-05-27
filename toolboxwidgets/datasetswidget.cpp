@@ -95,7 +95,11 @@ void DatasetsWidget::actionPropertiesSlot(qint32 granuleId)
 void DatasetsWidget::changedDisplayGranule(bool checked, qint32 granuleId, qint32 productId)
 {
     if (checked)
+    {
         emit displayGranule(granuleId, productId);
+    }
     else
+    {
         emit hideGranule(granuleId, productId);
+    }
 }

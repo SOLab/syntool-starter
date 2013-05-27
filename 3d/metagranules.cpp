@@ -49,18 +49,25 @@ void MetaGranules::addSimpleGranuleNode(qint32 granuleId, qint32 productId)
         SimpleGranulesNode* granulesNode = new SimpleGranulesNode(this, m_palette, m_configData, granuleId, productId);
         granulesNode->setHeight(currentHeight);
         simpleGranuleCache->insert(granuleId, granulesNode);
+        heightGranuleMap.insert(currentHeight, granuleId);
+        currentHeight++;
+        connect(granulesNode, &SimpleGranulesNode::updated, this, &MetaGranules::displayed);
     }
     else
     {
+        // if granule already displayed
+        if (simpleGranuleCache->object(granuleId)->options() == QGLSceneNode::CullBoundingBox)
+        {
+            return;
+        }
+
         // displayed granule
         simpleGranuleCache->object(granuleId)->setOptions(QGLSceneNode::CullBoundingBox);
-        simpleGranuleCache->object(granuleId)->setHeight(currentHeight);
+//        simpleGranuleCache->object(granuleId)->setHeight(currentHeight);
+        heightGranuleMap.insert(simpleGranuleCache->object(granuleId)->height(), granuleId);
+        heightGranuleMap.insert(simpleGranuleCache->object(granuleId)->height(), granuleId);
+        emit displayed();
     }
-
-    heightGranuleMap.insert(currentHeight, granuleId);
-    currentHeight++;
-
-    emit displayed();
 
 //    connect (this, &EarthView::updatedTilesSignal, earth, &Earth::updateTilesSlot);
 //        connect (granulesNode, &SimpleGranulesNode::displayed, parent, &EarthView::update);
