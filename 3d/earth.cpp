@@ -53,10 +53,7 @@ bool Earth::checkNodeInCache(int zoom, int x, int y)
         if (tempNode->options().testFlag(QGLSceneNode::HideNode))
         {
             tempNode->setOptions(QGLSceneNode::CullBoundingBox);
-
-            QGLBuilder builder;
-            builder.sceneNode()->addNode(tempNode);
-            addNode(builder.finalizedSceneNode());
+            addNode(tempNode);
         }
 
         emit displayed();
@@ -158,7 +155,6 @@ void Earth::textureDownloaded(qint32 cur_zoom, qint32 lonTileNum, qint32 latTile
 
     QString nodeObjectName = QString("tile-%1-%2-%3").arg(cur_zoom).arg(lonTileNum)
                                                      .arg(separation-1-latTileNum);
-    tempNode->setObjectName(nodeObjectName);
 
     if (addTextureToTile(tempNode, separation, lonTileNum, latTileNum, cur_zoom))
     {
@@ -168,14 +164,13 @@ void Earth::textureDownloaded(qint32 cur_zoom, qint32 lonTileNum, qint32 latTile
             return;
         }
         tempNode->setOptions(QGLSceneNode::CullBoundingBox);
-        QGLBuilder builder;
-        builder.sceneNode()->addNode(tempNode);
 
         // add SceneNode to cache
         TileCacheNumber tileNumber = TileCacheNumber(cur_zoom, lonTileNum,separation-1-latTileNum);
         tileNodeCache.insert(tileNumber, tempNode);
+        tempNode->setObjectName(nodeObjectName);
 
-        addNode(builder.finalizedSceneNode());
+        addNode(tempNode);
         qDebug() << "ADD NODE" << nodeObjectName;
     }
     else

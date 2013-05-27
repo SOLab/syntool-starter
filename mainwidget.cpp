@@ -57,8 +57,8 @@ MainWindow::MainWindow(ConfigData _configData, QWidget *parent)
     placeWgt = new PlaceWidget(centralwgt);
     layersWgt = new LayersWidget(centralwgt);
 
-    rightSidebar->addItem(mapsWgt, "Maps");
     rightSidebar->addItem(productsWgt, "Products");
+    rightSidebar->addItem(mapsWgt, "Maps");
     rightSidebar->addItem(layersWgt, "Layers");
     rightSidebar->addItem(datasetsWgt, "Datasets");
     rightSidebar->addItem(placeWgt, "Places");
