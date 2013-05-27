@@ -13,6 +13,9 @@ MetaGranules::MetaGranules(EarthView *parentView, QSharedPointer<QGLMaterialColl
 
 void MetaGranules::drawSimpleGranules(QGLPainter *painter)
 {
+    if (heightGranuleMap.keys().isEmpty())
+        return;
+
     qCritical() << heightGranuleMap.keys();
 
     QList<qint32>::iterator i;

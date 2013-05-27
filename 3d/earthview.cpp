@@ -233,7 +233,8 @@ void EarthView::wheelEvent(QWheelEvent *e)
 // for calling from wheelEvent on press button
 void EarthView::scalePlus()
 {
-    if (scale < 56)
+    // 224 - zoom 7 maximum
+    if (scale < 224)
     {
         scalePlusMinusSlot(true);
     }
@@ -275,7 +276,7 @@ void EarthView::scalePlusMinusSlot(bool plus)
     else
         camera()->setViewSize(scale2F);
     qDebug() << "scale: " << scale;
-    qDebug() << log10(scale)/log10(2.0);
+    qDebug() << "zoom =" << log10(scale)/log10(2.0);
 }
 
 void EarthView::rotate(int deltax, int deltay)
@@ -307,7 +308,6 @@ void EarthView::rotate(int deltax, int deltay)
 void EarthView::leftSlot()
 {
 }
-
 
 void EarthView::mouseMoveEvent(QMouseEvent *e)
 {

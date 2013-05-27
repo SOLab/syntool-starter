@@ -90,6 +90,7 @@ inline TileNumber deg2TileNum(GeoCoords geoCoords, int zoom)
     TileNumber tileNumber;
     tileNumber.x = int((geoCoords.lon + 180.0) / 360.0 * n);
     tileNumber.y = int((1.0 - qLn(qTan(lat_rad) + (1 / qCos(lat_rad))) / M_PI) / 2.0 * n);
+    tileNumber.zoom = zoom;
     return tileNumber;
 }
 
@@ -111,6 +112,8 @@ inline qint32 getNumberTiles(int zoom, qreal visibleDistance)
  */
 inline TileRange *getTileRange(TileNumber NCenterTile, qint32 rangeTiles, qint32 zoom)
 {
+    if (NCenterTile.x < 0) NCenterTile.x = 0;
+    if (NCenterTile.y < 0) NCenterTile.y = 0;
     // get maximum
     TileRange *tileRanges=new TileRange[2];
 
@@ -143,7 +146,7 @@ inline TileRange *getTileRange(TileNumber NCenterTile, qint32 rangeTiles, qint32
             tileRanges[0].startX = 0;
             tileRanges[0].endX = maxTileNumber;
 
-            tileRanges[0].startY = NCenterTile.y - rangeTiles;
+            tileRanges[0].startY = NCenterTile.y - rangeTiles - 1;
             tileRanges[0].endY = maxTileNumber;
             tileRanges[0].end = true;
 
@@ -160,8 +163,7 @@ inline TileRange *getTileRange(TileNumber NCenterTile, qint32 rangeTiles, qint32
             tileRanges[0].endX = maxTileNumber;
 
             tileRanges[0].startY = 0;
-            tileRanges[0].endY = NCenterTile.y + rangeTiles;
-
+            tileRanges[0].endY = NCenterTile.y + rangeTiles + 1;
             tileRanges[0].end = true;
 
 //            tileRanges[1].startX = 0;
@@ -177,6 +179,7 @@ inline TileRange *getTileRange(TileNumber NCenterTile, qint32 rangeTiles, qint32
             tileRanges[0].endX = NCenterTile.x + rangeTiles - maxTileNumber;
             tileRanges[0].startY = NCenterTile.y - rangeTiles;
             tileRanges[0].endY = NCenterTile.y + rangeTiles;
+            tileRanges[0].end = false;
 
             tileRanges[1].startX = NCenterTile.x - rangeTiles;
             tileRanges[1].endX = maxTileNumber;
@@ -199,9 +202,8 @@ inline TileRange *getTileRange(TileNumber NCenterTile, qint32 rangeTiles, qint32
             tileRanges[0].startX = 0;
             tileRanges[0].endX = maxTileNumber;
 
-            tileRanges[0].startY = NCenterTile.y - rangeTiles;
+            tileRanges[0].startY = NCenterTile.y - rangeTiles - 1;
             tileRanges[0].endY = maxTileNumber;
-
             tileRanges[0].end = true;
 //            tileRanges[1].startX = 0;
 //            tileRanges[1].startY = 0;
@@ -216,8 +218,7 @@ inline TileRange *getTileRange(TileNumber NCenterTile, qint32 rangeTiles, qint32
             tileRanges[0].endX = maxTileNumber;
 
             tileRanges[0].startY = 0;
-            tileRanges[0].endY = NCenterTile.y + rangeTiles;
-
+            tileRanges[0].endY = NCenterTile.y + rangeTiles + 1;
             tileRanges[0].end = true;
 //            tileRanges[1].startX = 0;
 //            tileRanges[1].startY = 0;
@@ -232,6 +233,7 @@ inline TileRange *getTileRange(TileNumber NCenterTile, qint32 rangeTiles, qint32
             tileRanges[0].endX = NCenterTile.x + rangeTiles;
             tileRanges[0].startY = NCenterTile.y - rangeTiles;
             tileRanges[0].endY = NCenterTile.y + rangeTiles;
+            tileRanges[0].end = false;
 
             tileRanges[1].startX = maxTileNumber + NCenterTile.x - rangeTiles;
             tileRanges[1].endX = maxTileNumber;
@@ -247,36 +249,35 @@ inline TileRange *getTileRange(TileNumber NCenterTile, qint32 rangeTiles, qint32
      */
     else
     {
-        tileRanges[0].startX = NCenterTile.x - rangeTiles;
-        tileRanges[0].endX = NCenterTile.x + rangeTiles;
-
         // center-bottom
         if(NCenterTile.y + rangeTiles > maxTileNumber)
         {
-            tileRanges[0].startY = NCenterTile.y - rangeTiles;
-            tileRanges[0].endY = maxTileNumber;
+            qCritical () << "center-bottom";
+            tileRanges[0].startX = 0;
+            tileRanges[0].endX = maxTileNumber;
 
-            tileRanges[1].startX = 0;
-            tileRanges[1].endX = maxTileNumber;
-            tileRanges[1].startY = 2*maxTileNumber - NCenterTile.y - rangeTiles;
-            tileRanges[1].endY = maxTileNumber;
+            tileRanges[0].startY = NCenterTile.y - rangeTiles - 1;
+            tileRanges[0].endY = maxTileNumber;
+            tileRanges[0].end = true;
         }
 
         // center-top
         else if(NCenterTile.y - rangeTiles < 0)
         {
-            tileRanges[0].startY = 0;
-            tileRanges[0].endY = NCenterTile.y + rangeTiles;
+            qCritical () << "center-top" << NCenterTile.y << rangeTiles << NCenterTile.zoom;
+            tileRanges[0].startX = 0;
+            tileRanges[0].endX = maxTileNumber;
 
-            tileRanges[1].startX = 0;
-            tileRanges[1].endX = maxTileNumber;
-            tileRanges[1].startY = 0;
-            tileRanges[1].endY = rangeTiles - NCenterTile.y - 1;
+            tileRanges[0].startY = 0;
+            tileRanges[0].endY = NCenterTile.y + rangeTiles + 1;
+            tileRanges[0].end = true;
         }
 
         // center-center
         else
         {
+            tileRanges[0].startX = NCenterTile.x - rangeTiles;
+            tileRanges[0].endX = NCenterTile.x + rangeTiles;
             tileRanges[0].startY = NCenterTile.y - rangeTiles;
             tileRanges[0].endY = NCenterTile.y + rangeTiles;
 

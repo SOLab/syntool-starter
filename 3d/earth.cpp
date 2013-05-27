@@ -14,7 +14,7 @@ Earth::Earth(QObject *parent, QSharedPointer<QGLMaterialCollection> materials, C
     downloadQueue->setMaxCost(25);
 
     // set maximum cost for cache
-    tileNodeCache.setMaxCost(50);
+    tileNodeCache.setMaxCost(200);
 //    m_LoadedTextures.setMaxCost(50);
 
     buildEarthNode(a, 10, 0);
@@ -77,6 +77,9 @@ void Earth::buildEarthNode(qreal radius, int divisions, int cur_zoom)
         TileNumber tileNumber = deg2TileNum(curGeoCoords, cur_zoom);
 
         TileRange* tileRange = getTileRange(tileNumber, numberTiles, cur_zoom);
+//        qCritical() << "=========>";
+//        qCritical() << tileRange[0].startX << tileRange[0].endX << tileRange[0].startY << tileRange[0].endY << tileRange[0].end;
+//        qCritical() << tileRange[1].startX << tileRange[1].endX << tileRange[1].startY << tileRange[1].endY;
 
         for (int tileRangeNumber = 0; tileRangeNumber <= 1; tileRangeNumber++)
         {
@@ -93,6 +96,7 @@ void Earth::buildEarthNode(qreal radius, int divisions, int cur_zoom)
             if (tileRange[tileRangeNumber].end)
                 break;
         }
+        delete tileRange;
     }
     else
     {
@@ -195,11 +199,11 @@ QGLSceneNode* Earth::BuildSpherePart(int separation, qreal minSphereLat, qreal m
     // all stacks and slices
     int stacks = 32;
     int slices = 32;
-//    if (cur_zoom > 4)
-//    {
-//        stacks *= qPow(2, cur_zoom);
-//        slices *= qPow(2, cur_zoom);
-//    }
+    if (curZoom > 5)
+    {
+        stacks = qPow(2, curZoom);
+        slices = qPow(2, curZoom);
+    }
 
     // stacks and slices for one tile
 //    qreal stacksForOne = stacks/(float)separation;
