@@ -10,6 +10,7 @@ GLSceneNodeWrapper::~GLSceneNodeWrapper()
 {
     if(_glSceneNode)
     {
+        _glSceneNode->palette()->material(_glSceneNode->materialIndex())->texture()->cleanupResources();
         delete _glSceneNode->palette()->material(_glSceneNode->materialIndex())->texture();
         _glSceneNode->deleteLater();
     }

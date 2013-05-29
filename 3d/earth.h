@@ -17,6 +17,7 @@
 #include "more/geofunctions.h"
 #include "glclasses/glnodecache.h"
 #include "tilecachenumbersclass.h"
+#include "glscenenodewrapper.h"
 
 QT_BEGIN_NAMESPACE
 class QGLTexture2D;
@@ -36,7 +37,7 @@ public:
 
 private:
     QCache<QString, TileDownloader>* downloadQueue;
-    GLNodeCache<TileCacheNumber, QGLSceneNode> tileNodeCache;
+    QCache<TileCacheNumber, GLSceneNodeWrapper> tileNodeCache;
 
     int zoom;
     int zoom_old;

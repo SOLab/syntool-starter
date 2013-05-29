@@ -89,8 +89,8 @@ bool GLNodeCache<Key,T>::remove(const Key &key)
     {
         T *obj = hash.take(key);
         qCritical() << "remove ===========" << granuleNumberList.size();
-        obj->palette()->material(obj->materialIndex())->texture()->cleanupResources();
-        delete obj->palette()->material(obj->materialIndex())->texture();
+//        obj->palette()->material(obj->materialIndex())->texture()->cleanupResources();
+//        delete obj->palette()->material(obj->materialIndex())->texture();
         delete obj;
         return true;
     }
