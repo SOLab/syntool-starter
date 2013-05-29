@@ -6,7 +6,7 @@
 #include <QMap>
 
 #include "more/structure.h"
-#include "tilecacheclass.h"
+#include "tilecachenumbersclass.h"
 #include "simplegranulesnode.h"
 
 class EarthView;

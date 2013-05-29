@@ -1,4 +1,4 @@
-#include "tilecacheclass.h"
+#include "tilecachenumbersclass.h"
 
 SimpleGranuleCacheNumber::SimpleGranuleCacheNumber(const qint32 granuleId, const qint32 productId, QObject *parent) :
     QObject(parent)
