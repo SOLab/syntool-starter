@@ -48,7 +48,8 @@ SOURCES = \
     3d/skybox.cpp \
     3d/metagranules.cpp \
     3d/glscenenodewrapper.cpp \
-    3d/tilecachenumbersclass.cpp
+    3d/tilecachenumbersclass.cpp \
+    topmenuwidgets/fileopenwidget.cpp
 HEADERS = \
     mainwidget.h \
     windowwidget.h \
@@ -91,7 +92,9 @@ HEADERS = \
     3d/metagranules.h \
     3d/glscenenodewrapper.h \
     3d/tilecachenumbersclass.h \
-    glclasses/glnodecache.h
+    glclasses/glnodecache.h \
+    topmenuwidgets/fileopenwidget.h \
+    more/configfunctions.h
 RESOURCES += \
     syntool.qrc
 DEPENDPATH += resources

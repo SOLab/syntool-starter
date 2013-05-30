@@ -2,18 +2,37 @@
 #define SETTINGSTABWIDGET_H
 
 #include <QTabWidget>
+#include <QGridLayout>
+#include <QLabel>
+#include <QLineEdit>
+#include <QComboBox>
+#include <QSpinBox>
+#include <QDebug>
+#include <QSettings>
+
 #include "topmenuwidgets/cachetabwidget.h"
+#include "more/structure.h"
 #include "topmenuwidgets/commontabwidget.h"
+#include "fileopenwidget.h"
 
 class SettingsTabWidget : public QTabWidget
 {
     Q_OBJECT
 public:
-    explicit SettingsTabWidget(QWidget *parent = 0);
+    explicit SettingsTabWidget(ConfigData *_configData, QWidget *parent = 0);
+    QLineEdit* serverNameEdit;
+    QComboBox* logLevelCombo;
+    FileOpenWidget* cacheDirEdit;
+    QSpinBox* numberCachedTilesEdit;
+    QSpinBox* numberCachedSimpleGranulesEdit;
+    QSpinBox* numberCachedTiledGranulesEdit;
 
 protected:
+    ConfigData *configData;
     QWidget* cacheWidget;
     QWidget* commonWidget;
+    void createCacheWidget();
+    void createCommonWidget();
 
 signals:
 

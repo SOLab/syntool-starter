@@ -1,12 +1,13 @@
 #include "settingswidget.h"
 
-SettingsWidget::SettingsWidget(QWidget *parent) :
+SettingsWidget::SettingsWidget(ConfigData *_configData, QWidget *parent) :
     QWidget(parent)
 {
+    configData = _configData;
     vLayout = new QVBoxLayout(this);
     vLayout->setAlignment(Qt::AlignTop | Qt::AlignRight);
 
-    setFixedSize(450, 220);
+    setFixedSize(450, 260);
     setWindowTitle("Tools");
 
     setWindowIcon(QIcon(":/icon/settings.png"));
@@ -31,14 +32,13 @@ void SettingsWidget::createForm()
 
     // Add clear config button
     clearConfigButton = new QPushButton(QIcon(":/icons/clear.png"),
-                                        tr("Clear the configuration file"), this);
-    clearConfigButton->setMaximumWidth(220);
+                                        tr("Clear the configuration file") + ": " + configData->configFile, this);
+    clearConfigButton->setMaximumWidth(360);
     connect(clearConfigButton, &QPushButton::clicked, this, &SettingsWidget::clearConfig);
 
     vLayout->addWidget(clearConfigButton);
 
-    mainTabWidget = new SettingsTabWidget(this);
-    mainTabWidget->resize(mainTabWidget->sizeHint());
+    mainTabWidget = new SettingsTabWidget(configData, this);
     vLayout->addWidget(mainTabWidget);
 
     // add ok, apply and cancel button
@@ -50,12 +50,14 @@ void SettingsWidget::createForm()
     okButton = new QPushButton(tr("Ok"), this);
     okButton->setFixedWidth(50);
     okButton->setShortcut(QKeySequence(Qt::Key_Return));
+    okButton->setToolTip("Save changes to the current tab and exit");
     connect(okButton, &QPushButton::clicked, this, &SettingsWidget::saveChanges);
     connect(okButton, &QPushButton::clicked, this, &SettingsWidget::close);
     buttonsLayout->addWidget(okButton);
 
     applyButton = new QPushButton(tr("Apply"), this);
     applyButton->setFixedWidth(100);
+    applyButton->setToolTip("Save changes to the current tab");
     connect(applyButton, &QPushButton::clicked, this, &SettingsWidget::saveChanges);
     buttonsLayout->addWidget(applyButton);
 
@@ -75,10 +77,44 @@ void SettingsWidget::createForm()
 
 void SettingsWidget::saveChanges()
 {
+    QSettings *settings = new QSettings(configData->configFile, QSettings::IniFormat);
+    // if common
+    if (mainTabWidget->currentIndex() == 0)
+    {
+        settings->setValue("common/server_name",mainTabWidget->serverNameEdit->text());
+        settings->setValue("common/logging_level",
+                           mainTabWidget->logLevelCombo->itemData(mainTabWidget->logLevelCombo->currentIndex()).toInt());
+    }
+    // if cache
+    else if (mainTabWidget->currentIndex() == 1)
+    {
+        settings->setValue("cache/dir",mainTabWidget->cacheDirEdit->value());
+        settings->setValue("cache/number_tiles",mainTabWidget->numberCachedTilesEdit->value());
+        settings->setValue("cache/number_simple_granules",mainTabWidget->numberCachedSimpleGranulesEdit->value());
+        settings->setValue("cache/number_tiled_granules",mainTabWidget->numberCachedTiledGranulesEdit->value());
+    }
+    settings->sync();
+    delete settings;
+
+    configData = readConfigFile(configData);
 }
 
 void SettingsWidget::clearConfig()
 {
+    QSettings *settings = new QSettings(configData->configFile, QSettings::IniFormat);
+    settings->clear();
+    settings->sync();
+    delete settings;
+    configData = readConfigFile(configData);
+
+    vLayout->removeWidget(clearConfigButton);
+    clearConfigButton->close();
+    vLayout->removeWidget(mainTabWidget);
+    mainTabWidget->close();
+    vLayout->addWidget(buttonsWidget);
+    buttonsWidget->close();
+
+    createForm();
 }
 
 

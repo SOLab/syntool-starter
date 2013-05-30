@@ -53,7 +53,7 @@ GeoCoords getGeoCoordsPos(QVector3D eye)
     return ecef2wgs84Deg(eye.z(), eye.x(), eye.y());
 }
 
-EarthView::EarthView(ConfigData configData, QWindow *parent)
+EarthView::EarthView(ConfigData *configData, QWindow *parent)
     : QGLView(parent)
     , m_scene(0)
     , m_palette(new QGLMaterialCollection())

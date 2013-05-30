@@ -27,7 +27,7 @@ class Earth : public QGLSceneNode
 {
     Q_OBJECT
 public:
-    Earth(QObject *parent, QSharedPointer<QGLMaterialCollection> materials, ConfigData configData);
+    Earth(QObject *parent, QSharedPointer<QGLMaterialCollection> materials, ConfigData *configData);
     ~Earth();
 
 //    void drawImage(QGLPainter *painter);

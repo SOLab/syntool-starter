@@ -2,19 +2,19 @@
 
 const double a = 6378137.0;
 
-Earth::Earth(QObject *parent, QSharedPointer<QGLMaterialCollection> materials, ConfigData configData)
+Earth::Earth(QObject *parent, QSharedPointer<QGLMaterialCollection> materials, ConfigData *configData)
     : QGLSceneNode(parent)
     , m_texture(0)
 {
     setPalette(materials);
-    cacheDir = configData.cacheDir;
+    cacheDir = configData->cacheDir;
 
     // set the maximum number of threads to download images tiles
     downloadQueue = new QCache<QString, TileDownloader>;
     downloadQueue->setMaxCost(25);
 
     // set maximum cost for cache
-    tileNodeCache.setMaxCost(configData.numberCachedTiles);
+    tileNodeCache.setMaxCost(configData->numberCachedTiles);
 //    m_LoadedTextures.setMaxCost(50);
 
     buildEarthNode(a, 10, 0);

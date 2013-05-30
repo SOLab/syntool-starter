@@ -10,16 +10,17 @@
 
 #include <QDebug>
 #include "topmenuwidgets/settingstabwidget.h"
-
-
+#include "more/structure.h"
+#include "more/configfunctions.h"
 
 class SettingsWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit SettingsWidget(QWidget *parent = 0);
+    explicit SettingsWidget(ConfigData *_configData, QWidget *parent = 0);
 
 protected:
+    ConfigData *configData;
     QVBoxLayout* vLayout;
     SettingsTabWidget* mainTabWidget;
 

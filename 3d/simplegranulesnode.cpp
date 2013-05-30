@@ -1,7 +1,7 @@
 #include "simplegranulesnode.h"
 
 SimpleGranulesNode::SimpleGranulesNode(QObject *parent, QSharedPointer<QGLMaterialCollection> materials,
-                                       ConfigData configData, qint32 granuleId, qint32 productId) :
+                                       ConfigData *configData, qint32 granuleId, qint32 productId) :
     QGLSceneNode(parent)
 {
     Q_UNUSED(materials);
@@ -10,8 +10,8 @@ SimpleGranulesNode::SimpleGranulesNode(QObject *parent, QSharedPointer<QGLMateri
     setGranuleId(granuleId);
     setProductId(productId);
 
-    serverName = configData.serverName;
-    cacheDir = configData.cacheDir;
+    serverName = configData->serverName;
+    cacheDir = configData->cacheDir;
 
 //    urlProducts = QUrl(serverName + "/api/products");
     urlGranules = QUrl(serverName + "/api/granules");

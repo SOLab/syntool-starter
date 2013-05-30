@@ -1,7 +1,7 @@
 #include "productswidget.h"
 #include <QSizePolicy>
 
-ProductsWidget::ProductsWidget(ConfigData configData, QWidget *parent):
+ProductsWidget::ProductsWidget(ConfigData *configData, QWidget *parent):
     QWidget(parent)
 {
     vLayout = new QVBoxLayout(this);
@@ -45,8 +45,8 @@ ProductsWidget::ProductsWidget(ConfigData configData, QWidget *parent):
     hLine1->setFrameShadow(QFrame::Sunken);
     vLayout->addWidget(hLine1);
 // Create request Url
-    serverName = configData.serverName;
-    cacheDir = configData.cacheDir;
+    serverName = configData->serverName;
+    cacheDir = configData->cacheDir;
 
     urlProducts = QUrl(serverName + "/api/products");
     urlGranules = QUrl(serverName + "/api/granules");

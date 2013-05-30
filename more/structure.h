@@ -3,24 +3,27 @@
 #include <QString>
 #include <QCache>
 
-enum LogLevel
-{
-    NoLogMessage = 0,
-    DebugOnly = 1,
-    WarningOnly = 2,
-    DebugAndWarning = 3,
-    ErrorOnly = 4,
-    DebugAndError = 5,
-    WarningAndError = 6,
-    DebugWarningAndError = 7,
-    Info = 8,
-    AllMessage = 15
-};
+namespace LogLevel {
+    enum LogLevelValue{
+        NoLogMessage = 0,
+        DebugOnly = 1,
+        WarningOnly = 2,
+        DebugAndWarning = 3,
+        ErrorOnly = 4,
+        DebugAndError = 5,
+        WarningAndError = 6,
+        DebugWarningAndError = 7,
+        Info = 8,
+        AllMessage = 15
+    };
+}
 
 struct ConfigData{
     QString serverName;
     QString cacheDir;
-    LogLevel logLevel;
+    QString configDir;
+    QString configFile;
+    LogLevel::LogLevelValue logLevel;
     qint32 numberCachedTiles;
     qint32 numberCachedSimpleGranules;
     qint32 numberCachedTiledGranules;

@@ -4,7 +4,7 @@ int partCount = 50;
 int helper_cursop_position = 31;
 #include <qdebug.h>
 
-TimeLine::TimeLine(ConfigData configData, QWidget *parent)
+TimeLine::TimeLine(ConfigData *configData, QWidget *parent)
 : QWidget(parent)
 
 {
@@ -35,7 +35,7 @@ TimeLine::TimeLine(ConfigData configData, QWidget *parent)
     // <granuleId, granuleRectCoords>
     rectsGranules = new QHash<qint32, QRect>;
     currentGranuleId = 0;
-    serverName = configData.serverName;
+    serverName = configData->serverName;
 
     QHBoxLayout* hLayout = new QHBoxLayout(this);
     QPushButton* calendarButton = new QPushButton("Set date", this);

@@ -13,7 +13,7 @@ static void logMessageHandler(QtMsgType type, const QMessageLogContext &context,
 //#include "PythonQt.h"
 //#include "gui/PythonQtScriptingConsole.h"
 
-MainWindow::MainWindow(ConfigData _configData, QWidget *parent)
+MainWindow::MainWindow(ConfigData *_configData, QWidget *parent)
     : QMainWindow(parent)
 {
     configData = _configData;
@@ -217,7 +217,7 @@ void MainWindow::createMenuBar()
 
 void MainWindow::showSettings()
 {
-    settingsWidget = new SettingsWidget();
+    settingsWidget = new SettingsWidget(configData);
     settingsWidget->show();
 }
 
@@ -258,20 +258,20 @@ void MainWindow::log(QtMsgType type, const QMessageLogContext &context, const QS
     switch (type) {
     case QtDebugMsg:
     {
-        if (configData.logLevel & DebugOnly)
+        if (configData->logLevel & LogLevel::DebugOnly)
             fprintf(stderr, "Debug: %s (%s:%u, %s)\n", localMsg.constData(), context.file, context.line, context.function);
     }
         break;
     case QtWarningMsg:
-        if (configData.logLevel & WarningOnly)
+        if (configData->logLevel & LogLevel::WarningOnly)
             fprintf(stderr, "Warning: %s (%s:%u, %s)\n", localMsg.constData(), context.file, context.line, context.function);
         break;
     case QtCriticalMsg:
-        if (configData.logLevel & ErrorOnly)
+        if (configData->logLevel & LogLevel::ErrorOnly)
             fprintf(stderr, "Critical: %s (%s:%u, %s)\n", localMsg.constData(), context.file, context.line, context.function);
         break;
     case QtFatalMsg:
-        if (configData.logLevel & ErrorOnly)
+        if (configData->logLevel & LogLevel::ErrorOnly)
             fprintf(stderr, "Fatal: %s (%s:%u, %s)\n", localMsg.constData(), context.file, context.line, context.function);
         abort();
     }

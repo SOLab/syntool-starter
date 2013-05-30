@@ -15,7 +15,7 @@ class MetaGranules : public QGLSceneNode
 {
     Q_OBJECT
 public:
-    MetaGranules(EarthView *parentView, QSharedPointer<QGLMaterialCollection> palette, ConfigData configData);
+    MetaGranules(EarthView *parentView, QSharedPointer<QGLMaterialCollection> palette, ConfigData *configData);
     void drawSimpleGranules(QGLPainter *painter);
     void drawTiledGranules(QGLPainter *painter);
     void setParent(EarthView *parentView){_parentView = parentView;}
@@ -33,7 +33,7 @@ private:
 
     EarthView *_parentView;
     QSharedPointer<QGLMaterialCollection> m_palette;
-    ConfigData m_configData;
+    ConfigData *m_configData;
     qint32 currentHeight;
     qint32 maxHeight;
 

@@ -35,7 +35,7 @@ class ProductsWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit ProductsWidget(ConfigData configData, QWidget *parent = 0);
+    explicit ProductsWidget(ConfigData *configData, QWidget *parent = 0);
     void setSelectedProducts(QHash<QString, selectedProduct>* _selectedProducts,
                              QHash<QString, Granule> *_granulesHash);
     void setObjectsPointer(TimeLine* _timeLinePointer);

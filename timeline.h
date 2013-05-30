@@ -76,7 +76,7 @@ class TimeLine : public QWidget
     Q_OBJECT
 
 public:
-    TimeLine(ConfigData configData, QWidget *parent = 0);
+    TimeLine(ConfigData *configData, QWidget *parent = 0);
     ~TimeLine();
     void paintEvent(QPaintEvent * pe);
     void setSelectedProducts(QHash<QString, selectedProduct>* _selectedProducts,

@@ -27,7 +27,7 @@ class SimpleGranulesNode : public QGLSceneNode
     Q_OBJECT
 public:
     explicit SimpleGranulesNode(QObject *parent, QSharedPointer<QGLMaterialCollection> materials,
-                                ConfigData configData, qint32 granuleId, qint32 productId);
+                                ConfigData *configData, qint32 granuleId, qint32 productId);
     ~SimpleGranulesNode();
 
     qint32 height(){return _height;}

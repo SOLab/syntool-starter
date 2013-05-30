@@ -1,9 +1,9 @@
 #include "datasetswidget.h"
 
-DatasetsWidget::DatasetsWidget(ConfigData configData, QWidget *parent) :
+DatasetsWidget::DatasetsWidget(ConfigData *configData, QWidget *parent) :
     QWidget(parent)
 {
-    serverName = configData.serverName;
+    serverName = configData->serverName;
 
     currentDatasets = new QHash<qint32, qint32>;
     currentRemoveNumbers = new QList<qint32>;

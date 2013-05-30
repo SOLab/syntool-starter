@@ -1,6 +1,6 @@
 #include "metagranules.h"
 
-MetaGranules::MetaGranules(EarthView *parentView, QSharedPointer<QGLMaterialCollection> palette, ConfigData configData)
+MetaGranules::MetaGranules(EarthView *parentView, QSharedPointer<QGLMaterialCollection> palette, ConfigData *configData)
 {
     m_palette = palette;
     m_configData = configData;
@@ -8,8 +8,8 @@ MetaGranules::MetaGranules(EarthView *parentView, QSharedPointer<QGLMaterialColl
     currentHeight = 1;
 
     simpleGranuleCache = new QCache<int, SimpleGranulesNode>;
-    simpleGranuleCache->setMaxCost(configData.numberCachedSimpleGranules);
-    maxHeight = configData.numberCachedSimpleGranules *2;
+    simpleGranuleCache->setMaxCost(configData->numberCachedSimpleGranules);
+    maxHeight = configData->numberCachedSimpleGranules + configData->numberCachedTiledGranules + 50;
 }
 
 void MetaGranules::drawSimpleGranules(QGLPainter *painter)

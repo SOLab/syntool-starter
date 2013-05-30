@@ -34,7 +34,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    MainWindow(ConfigData _configData, QWidget *parent = 0);
+    MainWindow(ConfigData *_configData, QWidget *parent = 0);
     ~MainWindow();
     void setHostedWindow(EarthView *window);
     void keyPress(QKeyEvent* e);
@@ -42,7 +42,7 @@ public:
 
     QHash<QString, selectedProduct>* selectedProducts;
     QHash<QString, Granule>* granulesHash;
-    ConfigData configData;
+    ConfigData *configData;
 
     void log(QtMsgType type, const QMessageLogContext &context, const QString &msg);
     static MainWindow *self;

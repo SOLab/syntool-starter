@@ -14,7 +14,7 @@ class DatasetsWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit DatasetsWidget(ConfigData configData, QWidget *parent = 0);
+    explicit DatasetsWidget(ConfigData *configData, QWidget *parent = 0);
 
     void setGranules(QHash<QString, Granule>* granulesHash);
 protected:

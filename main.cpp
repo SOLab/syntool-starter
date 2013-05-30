@@ -41,11 +41,14 @@
 #include "3d/earthview.h"
 #include "mainwidget.h"
 #include "myapplication.h"
+#include "more/structure.h"
+#include "more/configfunctions.h"
 
 #include <QGuiApplication>
 #include <QDir>
 #include <QProcess>
-#include "more/structure.h"
+#include <QObject>
+#include <QSettings>
 
 int main(int argc, char *argv[])
 {
@@ -56,15 +59,20 @@ int main(int argc, char *argv[])
     // apply to all
     QApplication::setFont(newFont);
 
-    ConfigData configData;
-    configData.serverName = "http://staging.satin.rshu.ru";
-    configData.cacheDir = "/tmp/syntool";
-    configData.logLevel = ErrorOnly;
-    configData.numberCachedTiles = 200;
-    configData.numberCachedSimpleGranules = 50;
-    configData.numberCachedTiledGranules = 50;
+    ConfigData *configData = new ConfigData;
 
-    QDir cacheDir(configData.cacheDir);
+    configData->configDir = QDir::homePath();
+    configData->configFile = configData->configDir + "/syntool.cfg";
+
+    if (!createConfigFile(configData))
+    {
+        app.exit(1);
+        return 1;
+    }
+    configData = readConfigFile(configData);
+//    configData.logLevel = LogLevel::ErrorOnly;
+
+    QDir cacheDir(configData->cacheDir);
     if (!cacheDir.exists()){
         cacheDir.mkdir(cacheDir.path());
     }
