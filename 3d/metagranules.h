@@ -35,6 +35,7 @@ private:
     QSharedPointer<QGLMaterialCollection> m_palette;
     ConfigData m_configData;
     qint32 currentHeight;
+    qint32 maxHeight;
 
 signals:
     void displayed();

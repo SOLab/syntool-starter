@@ -9,6 +9,7 @@ MetaGranules::MetaGranules(EarthView *parentView, QSharedPointer<QGLMaterialColl
 
     simpleGranuleCache = new QCache<int, SimpleGranulesNode>;
     simpleGranuleCache->setMaxCost(configData.numberCachedSimpleGranules);
+    maxHeight = configData.numberCachedSimpleGranules *2;
 }
 
 void MetaGranules::drawSimpleGranules(QGLPainter *painter)
@@ -49,6 +50,17 @@ void MetaGranules::addSimpleGranuleNode(qint32 granuleId, qint32 productId)
 {
     if (!simpleGranuleCache->contains(granuleId))
     {
+        if (currentHeight >= maxHeight)
+            currentHeight = 1;
+
+        while (heightGranuleMap.contains(currentHeight))
+        {
+            if (currentHeight < maxHeight)
+                currentHeight++;
+            else
+                currentHeight = 1;
+        }
+
         SimpleGranulesNode* granulesNode = new SimpleGranulesNode(this, m_palette, m_configData, granuleId, productId);
         granulesNode->setHeight(currentHeight);
         simpleGranuleCache->insert(granuleId, granulesNode);
