@@ -214,11 +214,11 @@ QGLSceneNode* SimpleGranulesNode::BuildGranuleMerNode(int separation, qreal minS
     // all stacks and slices
     int stacks = 64;
     int slices = 64;
-    if (curZoom > 7)
-    {
-        stacks = qPow(2, curZoom-1);
-        slices = qPow(2, curZoom-1);
-    }
+//    if (curZoom > 4)
+//    {
+//        stacks = qPow(2, curZoom);
+//        slices = qPow(2, curZoom);
+//    }
 
     // stacks and slices for one tile
 //    qreal stacksForOne = stacks/(float)separation;

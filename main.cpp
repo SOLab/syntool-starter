@@ -60,6 +60,9 @@ int main(int argc, char *argv[])
     configData.serverName = "http://staging.satin.rshu.ru";
     configData.cacheDir = "/tmp/syntool";
     configData.logLevel = ErrorOnly;
+    configData.numberCachedTiles = 200;
+    configData.numberCachedSimpleGranules = 50;
+    configData.numberCachedTiledGranules = 50;
 
     QDir cacheDir(configData.cacheDir);
     if (!cacheDir.exists()){

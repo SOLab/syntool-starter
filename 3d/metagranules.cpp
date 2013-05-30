@@ -8,7 +8,7 @@ MetaGranules::MetaGranules(EarthView *parentView, QSharedPointer<QGLMaterialColl
     currentHeight = 1;
 
     simpleGranuleCache = new QCache<int, SimpleGranulesNode>;
-    simpleGranuleCache->setMaxCost(50);
+    simpleGranuleCache->setMaxCost(configData.numberCachedSimpleGranules);
 }
 
 void MetaGranules::drawSimpleGranules(QGLPainter *painter)

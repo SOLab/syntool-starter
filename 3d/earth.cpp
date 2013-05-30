@@ -14,7 +14,7 @@ Earth::Earth(QObject *parent, QSharedPointer<QGLMaterialCollection> materials, C
     downloadQueue->setMaxCost(25);
 
     // set maximum cost for cache
-    tileNodeCache.setMaxCost(200);
+    tileNodeCache.setMaxCost(configData.numberCachedTiles);
 //    m_LoadedTextures.setMaxCost(50);
 
     buildEarthNode(a, 10, 0);

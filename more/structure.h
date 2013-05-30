@@ -21,6 +21,9 @@ struct ConfigData{
     QString serverName;
     QString cacheDir;
     LogLevel logLevel;
+    qint32 numberCachedTiles;
+    qint32 numberCachedSimpleGranules;
+    qint32 numberCachedTiledGranules;
 };
 
 struct BoundingBox {
