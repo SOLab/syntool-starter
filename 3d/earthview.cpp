@@ -292,8 +292,8 @@ void EarthView::rotate(int deltax, int deltay)
     if (rotation == 180 || rotation == 270) {
         deltay = -deltay;
     }
-    float anglex = 2*deltax * 90.0f / (width() * temp_scale);
-    float angley = 2*deltay * 90.0f / (height() * temp_scale);
+    float anglex = 4*deltax * 90.0f / (width() * temp_scale);
+    float angley = 4*deltay * 90.0f / (height() * temp_scale);
     QQuaternion q = camera()->pan(-anglex);
 
     q *= camera()->tilt(-angley);
