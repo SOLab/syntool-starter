@@ -47,7 +47,7 @@ void GetGranuleCoords::slotReadyReadCoords()
                 if (!mDocument.setContent(bytes, false, &errorMsg,
                                           &errorLine, &errorColumn))
                 {
-                    qWarning() << "Error parse XML";
+                    qWarning() << tr("Error parse XML");
 //                    qDebug() << errorMsg;
 //                    qDebug() << errorLine;
 //                    qDebug() << errorColumn;
@@ -63,7 +63,7 @@ void GetGranuleCoords::slotReadyReadCoords()
                         if (!mDocument.setContent(bytes, false, &errorMsg,
                                                   &errorLine, &errorColumn))
                         {
-                                qCritical() << "Error parse XML";
+                                qCritical() << tr("Error parse XML");
                                 qCritical() << errorMsg;
                                 qCritical() << errorLine;
                                 qCritical() << errorColumn;
@@ -97,5 +97,5 @@ void GetGranuleCoords::slotReadyReadCoords()
 
 void GetGranuleCoords::getErrorCoords(QNetworkReply::NetworkError)
 {
-    qWarning() << "Error getting the coordinates";
+    qWarning() << tr("Error getting the coordinates");
 }

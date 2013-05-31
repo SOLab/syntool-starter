@@ -64,7 +64,7 @@ void GetGranules::getGranulesForNewProduct()
 
 void GetGranules::getErrorGranules(QNetworkReply::NetworkError)
 {
-    qWarning() << "Error getting the granules";
+    qWarning() << tr("Error getting the granules");
 }
 
 void GetGranules::getNewGranules()
@@ -77,7 +77,7 @@ void GetGranules::getNewGranules()
 
 void GetGranules::getErrorNewGranules(QNetworkReply::NetworkError)
 {
-    qWarning() << "Error getting the new granules";
+    qWarning() << tr("Error getting the new granules");
 }
 
 void GetGranules::slotReadyReadGranules()
@@ -105,7 +105,7 @@ void GetGranules::slotReadyReadGranules()
                 if (!mDocument.setContent(bytes, false, &errorMsg,
                                           &errorLine, &errorColumn))
                 {
-                    qWarning() << "Error parse XML";
+                    qWarning() << tr("Error parse XML");
 //                    qDebug() << errorMsg;
 //                    qDebug() << errorLine;
 //                    qDebug() << errorColumn;
@@ -121,7 +121,7 @@ void GetGranules::slotReadyReadGranules()
                         if (!mDocument.setContent(bytes, false, &errorMsg,
                                                   &errorLine, &errorColumn))
                         {
-                                qCritical() << "Error parse XML";
+                                qCritical() << tr("Error parse XML");
                                 qCritical() << errorMsg;
                                 qCritical() << errorLine;
                                 qCritical() << errorColumn;

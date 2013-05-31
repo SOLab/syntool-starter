@@ -16,53 +16,53 @@ TopMenu::TopMenu(QWidget *parent) :
     moveButton = new TopMenuButton;
     moveButton->setIcon(QIcon(":/icons/move.png"));
     moveButton->setIconSize(QSize(16,16));
-    moveButton->setToolTip("Move");
+    moveButton->setToolTip(tr("Move"));
 
     addLineButton = new TopMenuButton;
     addLineButton->setIcon(QIcon(":/icons/line.png"));
     addLineButton->setIconSize(QSize(16,16));
-    addLineButton->setToolTip("Add line");
+    addLineButton->setToolTip(tr("Add line"));
 
     addRectButton = new TopMenuButton;
     addRectButton->setIcon(QIcon(":/icons/rectangle.png"));
     addRectButton->setIconSize(QSize(16,16));
-    addRectButton->setToolTip("Add rectangle");
+    addRectButton->setToolTip(tr("Add rectangle"));
 
     addTagButton = new TopMenuButton;
     addTagButton->setIcon(QIcon(":/icons/tag.png"));
     addTagButton->setIconSize(QSize(16,16));
-    addTagButton->setToolTip("Add tag");
+    addTagButton->setToolTip(tr("Add tag"));
 
     addPinButton = new TopMenuButton;
     addPinButton->setIcon(QIcon(":/icons/pin.png"));
     addPinButton->setIconSize(QSize(16,16));
-    addPinButton->setToolTip("Add pin");
+    addPinButton->setToolTip(tr("Add pin"));
 
     addLayerButton = new TopMenuButton;
     addLayerButton->setIcon(QIcon(":/icons/layers.png"));
-    addLayerButton->setToolTip("Add layer");
+    addLayerButton->setToolTip(tr("Add layer"));
 
     addGridButton = new TopMenuButton;
     addGridButton->setIcon(QIcon(":/icons/grid.png"));
-    addGridButton->setToolTip("Show grid");
+    addGridButton->setToolTip(tr("Show grid"));
 
     addPictureButton = new TopMenuButton;
     addPictureButton->setIcon(QIcon(":/icons/picture.png"));
-    addPictureButton->setToolTip("Overlay an image");
+    addPictureButton->setToolTip(tr("Overlay an image"));
 
     addShowButton = new TopMenuButton;
     addShowButton->setIcon(QIcon(":/icons/show.png"));
-    addShowButton->setToolTip("Show/Hide all layers");
+    addShowButton->setToolTip(tr("Show/Hide all layers"));
 
     TimeLineButton = new TopMenuButton;
     TimeLineButton->setIcon(QIcon(":/icons/time_line.png"));
     TimeLineButton->setIconSize(QSize(16,16));
-    TimeLineButton->setToolTip("TimeLine");
+    TimeLineButton->setToolTip(tr("TimeLine"));
     connect(TimeLineButton, SIGNAL(clicked()), parent, SLOT(showTimeLine()));
 
     PythonScriptButton = new TopMenuButton;
     PythonScriptButton->setIcon(QIcon(":/icons/script.png"));
-    PythonScriptButton->setToolTip("PythonQt Script");
+    PythonScriptButton->setToolTip(tr("PythonQt Script"));
 
     leftLayout = new QHBoxLayout;
     rightLayout = new QHBoxLayout;

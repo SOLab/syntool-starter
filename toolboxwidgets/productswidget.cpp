@@ -10,7 +10,7 @@ ProductsWidget::ProductsWidget(ConfigData *configData, QWidget *parent):
     vLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
 
     QHBoxLayout* infoLayout = new QHBoxLayout;
-    productsLbl = new QLabel("Products list:", this);
+    productsLbl = new QLabel(tr("Products list:"), this);
     viewProductInfo = new QPushButton(this);
     viewProductInfo->setIcon(QIcon(":/icons/info.png"));
     viewProductInfo->setIconSize(QSize(16,16));
@@ -30,7 +30,7 @@ ProductsWidget::ProductsWidget(ConfigData *configData, QWidget *parent):
     productImageLbl->hide();
     productImagePixmap = new QPixmap;
 
-    reloadProductsButton = new QPushButton("Reload list", this);
+    reloadProductsButton = new QPushButton(tr("Reload list"), this);
     connect(reloadProductsButton, &QPushButton::clicked, this, &ProductsWidget::reloadProductsList);
     reloadProductsButton->hide();
 
@@ -55,26 +55,26 @@ ProductsWidget::ProductsWidget(ConfigData *configData, QWidget *parent):
 
 // Add widgets for select Area
 
-    QLabel* AreaLbl = new QLabel("Select Area:", this);
+    QLabel* AreaLbl = new QLabel(tr("Select Area:"), this);
     AreaLbl->setContentsMargins(0,2,0,0);
     vLayout->addWidget(AreaLbl);
 
-    North = new InputBox("North: ", this);
+    North = new InputBox(tr("North: "), this);
     North->setValidator("double");
     North->setText("90.00");
     North->setDisabled(true);
 
-    South = new InputBox("South: ", this);
+    South = new InputBox(tr("South: "), this);
     South->setValidator("double");
     South->setText("-90.00");
     South->setDisabled(true);
 
-    West = new InputBox("West: ", this);
+    West = new InputBox(tr("West: "), this);
     West->setValidator("double");
     West->setText("-180.00");
     West->setDisabled(true);
 
-    East = new InputBox("East: ", this);
+    East = new InputBox(tr("East: "), this);
     East->setValidator("double");
     East->setText("180.00");
     East->setDisabled(true);
@@ -91,7 +91,7 @@ ProductsWidget::ProductsWidget(ConfigData *configData, QWidget *parent):
 
 // select parameters
 
-    parametersLbl = new QLabel("Select parameter: ", this);
+    parametersLbl = new QLabel(tr("Select parameter: "), this);
     comboParameters = new QComboBox(this);
     comboParameters->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Fixed);
     comboParameters->setDisabled(true);
@@ -172,7 +172,7 @@ void ProductsWidget::slotReadyReadProductList()
     reloadProductsButton->hide();
 
     QStringList productsList;
-    productsList << "--not selected--";
+    productsList << "--"+tr("not selected")+"--";
     QNetworkReply *reply=qobject_cast<QNetworkReply*>(sender());
 
     int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
@@ -194,7 +194,7 @@ void ProductsWidget::slotReadyReadProductList()
                 if (!mDocument.setContent(bytes, false, &errorMsg,
                                           &errorLine, &errorColumn))
                 {
-                    qWarning() << "Error parse XML";
+                    qWarning() << tr("Error parse XML");
                     if (errorLine > 1)
                     {
                         currentRequest = bytes;
@@ -207,7 +207,7 @@ void ProductsWidget::slotReadyReadProductList()
                         if (!mDocument.setContent(bytes, false,
                                                   &errorMsg, &errorLine, &errorColumn))
                         {
-                                qCritical() << "Error parse XML";
+                                qCritical() << tr("Error parse XML");
                                 qCritical() << errorMsg;
                                 qCritical() << errorLine;
                                 qCritical() << errorColumn;
@@ -265,7 +265,7 @@ void ProductsWidget::getErrorProductList(QNetworkReply::NetworkError)
 {
     reloadProductsButton->show();
     comboProducts->clear();
-    comboProducts->addItem("Connection Error");
+    comboProducts->addItem(tr("Connection Error"));
 }
 
 void ProductsWidget::reloadProductsList()
@@ -470,7 +470,7 @@ void ProductsWidget::removeProduct(QString productId)
     qDebug() << "removeProduct";
     if (selectedProducts->keys().contains(productId))
     {
-        qDebug() << "Remove product" << productId;
+        qDebug() << tr("Removal product") << productId;
         selectedProducts->remove(productId);
     }
 

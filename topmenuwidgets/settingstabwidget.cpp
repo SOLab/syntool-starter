@@ -6,8 +6,6 @@ SettingsTabWidget::SettingsTabWidget(ConfigData *_configData, QWidget *parent) :
     configData = _configData;
     createCommonWidget();
     createCacheWidget();
-
-//    connect(this, SIGNAL(currentChanged(int)), this, SLOT(tabChanged()));
 }
 
 void SettingsTabWidget::createCommonWidget()
@@ -16,27 +14,25 @@ void SettingsTabWidget::createCommonWidget()
 
     QGridLayout* commonGridLayout = new QGridLayout(commonWidget);
 
-    QLabel* serverNameLabel = new QLabel("Server name", commonWidget);
+    QLabel* serverNameLabel = new QLabel(tr("Server name"), commonWidget);
     serverNameEdit = new QLineEdit("", commonWidget);
     serverNameEdit->setText(configData->serverName);
 
     commonGridLayout->addWidget(serverNameLabel, 0,0);
     commonGridLayout->addWidget(serverNameEdit, 0,1);
 
-    qCritical() << "LOG_LEVEL" << configData->logLevel;
-
     QLabel* logLevelLabel = new QLabel("Logging level", commonWidget);
     logLevelCombo = new QComboBox(commonWidget);
-    logLevelCombo->addItem("no message", 0);
-    logLevelCombo->addItem("debug only", 1);
-    logLevelCombo->addItem("warning only", 2);
-    logLevelCombo->addItem("debug and warning", 3);
-    logLevelCombo->addItem("error only", 4);
-    logLevelCombo->addItem("debug and error", 5);
-    logLevelCombo->addItem("warning and error", 6);
-    logLevelCombo->addItem("debug, warning and error", 7);
-    logLevelCombo->addItem("info only", 8);
-    logLevelCombo->addItem("all message", 15);
+    logLevelCombo->addItem(tr("no message"), 0);
+    logLevelCombo->addItem(tr("debug only"), 1);
+    logLevelCombo->addItem(tr("warning only"), 2);
+    logLevelCombo->addItem(tr("debug and warning"), 3);
+    logLevelCombo->addItem(tr("error only"), 4);
+    logLevelCombo->addItem(tr("debug and error"), 5);
+    logLevelCombo->addItem(tr("warning and error"), 6);
+    logLevelCombo->addItem(tr("debug, warning and error"), 7);
+    logLevelCombo->addItem(tr("info only"), 8);
+    logLevelCombo->addItem(tr("all message"), 15);
 
     if (configData->logLevel == LogLevel::AllMessage)
         logLevelCombo->setCurrentIndex(logLevelCombo->count() - 1);
@@ -48,7 +44,7 @@ void SettingsTabWidget::createCommonWidget()
 
     commonGridLayout->setAlignment(Qt::AlignTop);
 
-    addTab(commonWidget, "Common");
+    addTab(commonWidget, tr("Common"));
 }
 
 void SettingsTabWidget::createCacheWidget()
@@ -57,14 +53,14 @@ void SettingsTabWidget::createCacheWidget()
 
     QGridLayout* cacheGridLayout = new QGridLayout(cacheWidget);
 
-    QLabel* cacheDirLabel = new QLabel("Cache directory", cacheWidget);
-    cacheDirEdit = new FileOpenWidget("dir", "Cache directory", configData->cacheDir, cacheWidget);
+    QLabel* cacheDirLabel = new QLabel(tr("Cache directory"), cacheWidget);
+    cacheDirEdit = new FileOpenWidget("dir", tr("Cache directory"), configData->cacheDir, cacheWidget);
     cacheDirEdit->setText(configData->cacheDir);
 
     cacheGridLayout->addWidget(cacheDirLabel, 0,0);
     cacheGridLayout->addWidget(cacheDirEdit, 0,1);
 
-    QLabel* numberCachedTilesLabel = new QLabel("Number of cache tiles", cacheWidget);
+    QLabel* numberCachedTilesLabel = new QLabel(tr("Number of cache tiles"), cacheWidget);
     numberCachedTilesEdit = new QSpinBox(cacheWidget);
     numberCachedTilesEdit->setMaximum(1000);
     numberCachedTilesEdit->setMinimum(10);
@@ -73,7 +69,7 @@ void SettingsTabWidget::createCacheWidget()
     cacheGridLayout->addWidget(numberCachedTilesLabel, 1,0);
     cacheGridLayout->addWidget(numberCachedTilesEdit, 1,1);
 
-    QLabel* numberCachedSimpleGranulesLabel = new QLabel("Number of cache simple granules", cacheWidget);
+    QLabel* numberCachedSimpleGranulesLabel = new QLabel(tr("Number of cache simple granules"), cacheWidget);
     numberCachedSimpleGranulesEdit = new QSpinBox(cacheWidget);
     numberCachedSimpleGranulesEdit->setMaximum(500);
     numberCachedSimpleGranulesEdit->setMinimum(5);
@@ -82,7 +78,7 @@ void SettingsTabWidget::createCacheWidget()
     cacheGridLayout->addWidget(numberCachedSimpleGranulesLabel, 2,0);
     cacheGridLayout->addWidget(numberCachedSimpleGranulesEdit, 2,1);
 
-    QLabel* numberCachedTiledGranulesLabel = new QLabel("Number of cache tiled granules", cacheWidget);
+    QLabel* numberCachedTiledGranulesLabel = new QLabel(tr("Number of cache tiled granules"), cacheWidget);
     numberCachedTiledGranulesEdit = new QSpinBox(cacheWidget);
     numberCachedTiledGranulesEdit->setMaximum(1000);
     numberCachedTiledGranulesEdit->setMinimum(10);
@@ -93,5 +89,5 @@ void SettingsTabWidget::createCacheWidget()
 
     cacheGridLayout->setAlignment(Qt::AlignTop);
 
-    addTab(cacheWidget, "Cache");
+    addTab(cacheWidget, tr("Cache"));
 }

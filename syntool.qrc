@@ -15,6 +15,7 @@
         <file alias="orange-circle.png">resources/orange-circle.png</file>
         <file alias="logo-ru.png">resources/logo-ru.png</file>
         <file alias="logo-en.png">resources/logo-en.png</file>
+        <file alias="ru.qm">ru.qm</file>
     </qresource>
     <qresource prefix="/skybox">
         <file alias="top">resources/stars.png</file>

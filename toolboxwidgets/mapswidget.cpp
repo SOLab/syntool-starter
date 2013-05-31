@@ -14,16 +14,16 @@ MapsWidget::MapsWidget(QWidget *parent) :
                   .arg(parent->palette().background().color().blue()));
 
     vLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-    QLabel* projections = new QLabel("Projections");
+    QLabel* projections = new QLabel(tr("Projections"));
     vLayout->addWidget(projections);
 
     supportedProjections = new QComboBox;
     QStringList projList;
-    projList << "Globe" << "Flat Map" << "Mercator";
+    projList << tr("Globe") << tr("Flat Map") << tr("Mercator");
     supportedProjections->addItems(projList);
     vLayout->addWidget(supportedProjections);
 
-    QLabel* themesLbl = new QLabel("Themes");
+    QLabel* themesLbl = new QLabel(tr("Themes"));
     vLayout->addWidget(themesLbl);
 
     themesArea = new QScrollArea(this);
@@ -33,7 +33,7 @@ MapsWidget::MapsWidget(QWidget *parent) :
     QVBoxLayout* themesLayout = new QVBoxLayout(themesWgt);
 
     firstTheme = new ImageButton(":/osm.png", "OpenStreetMap", themesWgt);
-    secondTheme = new ImageButton(":/icons/picture.png", "Satellite View", themesWgt);
+    secondTheme = new ImageButton(":/icons/picture.png", tr("Satellite View"), themesWgt);
 
     themesLayout->addWidget(firstTheme, 0, Qt::AlignHCenter);
     themesLayout->addWidget(secondTheme, 0, Qt::AlignHCenter);

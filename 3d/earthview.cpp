@@ -513,7 +513,7 @@ float EarthView::getMemUsage()
     Process1->waitForFinished();
     Process2->waitForFinished();
     QString mem_percent = Process2->readAll();
-    qDebug() << "Usage " << mem_percent.toFloat() << "Kb";
+    qDebug() << tr("Usage") << ": " << mem_percent.toFloat() << "Kb";
     delete Process1;
     delete Process2;
     return mem_percent.toFloat();

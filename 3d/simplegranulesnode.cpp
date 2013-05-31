@@ -76,7 +76,7 @@ void SimpleGranulesNode::slotReadyReadImageUrl()
     qDebug() << statusCode;
     if (reply->error() == QNetworkReply::NoError)
     {
-        qDebug() << "status code: " << statusCode;
+        qDebug() << tr("status code: ") << statusCode;
 
         switch (statusCode)
         {
@@ -93,7 +93,7 @@ void SimpleGranulesNode::slotReadyReadImageUrl()
                 if (!mDocument.setContent(bytes, false, &errorMsg,
                                           &errorLine, &errorColumn))
                 {
-                    qWarning() << "Error parse XML";
+                    qWarning() << tr("Error parse XML");
 //                    qDebug() << errorMsg;
 //                    qDebug() << errorLine;
 //                    qDebug() << errorColumn;
@@ -109,7 +109,7 @@ void SimpleGranulesNode::slotReadyReadImageUrl()
                         if (!mDocument.setContent(bytes, false, &errorMsg,
                                                   &errorLine, &errorColumn))
                         {
-                                qCritical() << "Error parse XML";
+                                qCritical() << tr("Error parse XML");
                                 qCritical() << errorMsg;
                                 qCritical() << errorLine;
                                 qCritical() << errorColumn;

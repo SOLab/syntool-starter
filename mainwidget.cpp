@@ -29,7 +29,6 @@ MainWindow::MainWindow(ConfigData *_configData, QWidget *parent)
 //        qApp->installTranslator(translator);
 //    else delete translator;
 
-    QString text = tr("Test from qDebug");
     //////
 
     vlayout = new QVBoxLayout;
@@ -57,11 +56,11 @@ MainWindow::MainWindow(ConfigData *_configData, QWidget *parent)
     placeWgt = new PlaceWidget(centralwgt);
     layersWgt = new LayersWidget(centralwgt);
 
-    rightSidebar->addItem(productsWgt, "Products");
-    rightSidebar->addItem(mapsWgt, "Maps");
-    rightSidebar->addItem(layersWgt, "Layers");
-    rightSidebar->addItem(datasetsWgt, "Datasets");
-    rightSidebar->addItem(placeWgt, "Places");
+    rightSidebar->addItem(productsWgt, tr("Products"));
+    rightSidebar->addItem(mapsWgt, tr("Maps"));
+    rightSidebar->addItem(layersWgt, tr("Layers"));
+    rightSidebar->addItem(datasetsWgt, tr("Datasets"));
+    rightSidebar->addItem(placeWgt, tr("Places"));
 
 //    add all main widget
     splitter->addWidget(glwgt);
@@ -136,19 +135,19 @@ void MainWindow::createMenuBar()
 {
     menuBar()->setContentsMargins(0,0,0,0);
 
-    QMenu* fileMenu = menuBar()->addMenu(tr("&File"));
+    QMenu* fileMenu = menuBar()->addMenu("&"+tr("File"));
     fileMenu->setDisabled(true);
     QIcon::setThemeName("oxygen");
 
-    QAction* openAction = new QAction(QIcon(":/icons/open.png"), tr("&Open"), this);
+    QAction* openAction = new QAction(QIcon(":/icons/open.png"), "&"+tr("Open"), this);
     openAction->setShortcut(QKeySequence::Open);
 
 
-    QAction* saveAction = new QAction(QIcon(":/icons/save.png"), tr("&Save"), this);
+    QAction* saveAction = new QAction(QIcon(":/icons/save.png"), "&"+tr("Save"), this);
     saveAction->setShortcut(QKeySequence::Save);
 
 
-    QAction* exitAction = new QAction(QIcon(":/icons/exit.png"), tr("E&xit"), this);
+    QAction* exitAction = new QAction(QIcon(":/icons/exit.png"), tr("Exit"), this);
     exitAction->setShortcut(Qt::Key_Q+Qt::CTRL);
 //    exitAction->setShortcut(QKeySequence::Quit);
     exitAction->setShortcutContext(Qt::ApplicationShortcut);
@@ -163,7 +162,7 @@ void MainWindow::createMenuBar()
     fileMenu->addAction(exitAction);
 
 /////////////// Edit tab
-    QMenu* editMenu = menuBar()->addMenu(tr("&Edit"));
+    QMenu* editMenu = menuBar()->addMenu("&"+tr("Edit"));
     editMenu->setDisabled(true);
 
     QAction* findAction = new QAction(QIcon(":/icons/find.png"), tr("Find"), this);
@@ -175,7 +174,7 @@ void MainWindow::createMenuBar()
     editMenu->addAction(propertiesAction);
 
 /////////////// View tab
-    QMenu* viewMenu = menuBar()->addMenu(tr("&View"));
+    QMenu* viewMenu = menuBar()->addMenu("&"+tr("View"));
     viewMenu->setDisabled(true);
 
     QAction* showToolbarAction = new QAction(tr("Toolbar"), this);
@@ -192,7 +191,7 @@ void MainWindow::createMenuBar()
     viewMenu->addAction(showSidebarAction);
 
 /////////////// Settings tab
-    QMenu* toolsMenu = menuBar()->addMenu(tr("&Tools"));
+    QMenu* toolsMenu = menuBar()->addMenu("&"+tr("Tools"));
 
     QAction* settingAction = new QAction(QIcon(":/icons/settings.png"), tr("Settings"), this);
     connect (settingAction, &QAction::triggered, this, &MainWindow::showSettings);
@@ -203,20 +202,20 @@ void MainWindow::createMenuBar()
     toolsMenu->addAction(settingAction);
 
 /////////////// Help tab
-    QMenu* helpMenu = menuBar()->addMenu(tr("&Help"));
+    QMenu* helpMenu = menuBar()->addMenu("&"+tr("Help"));
 
-    QAction* aboutAction = new QAction(QIcon(":/icons/help.png"), tr("&About"), this);
+    QAction* aboutAction = new QAction(QIcon(":/icons/help.png"), "&"+tr("About"), this);
     connect(aboutAction, &QAction::triggered, this, &MainWindow::aboutProgram);
 
-    QAction* bugsAction = new QAction(QIcon(":/icons/e-mail.png"), tr("Send &bugs"), this);
+    QAction* bugsAction = new QAction(QIcon(":/icons/e-mail.png"), tr("Send bugs"), this);
     bugsAction->setDisabled(true);
     bugsAction->setShortcut(Qt::Key_B);
 
-    QAction* handbookAction = new QAction(QIcon(":/icons/help_book.png"), tr("&Handbook"), this);
+    QAction* handbookAction = new QAction(QIcon(":/icons/help_book.png"), "&"+tr("Handbook"), this);
     connect(handbookAction, &QAction::triggered, this, &MainWindow::openHandBook);
     handbookAction->setShortcut(QKeySequence::HelpContents);
 
-    QAction* aboutQtAction = new QAction(QIcon(":/icons/qt.png"), tr("&About Qt"), this);
+    QAction* aboutQtAction = new QAction(QIcon(":/icons/qt.png"), "&"+tr("About Qt"), this);
     connect(aboutQtAction, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
 
     helpMenu->addAction(aboutAction);

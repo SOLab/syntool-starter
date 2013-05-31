@@ -37,5 +37,5 @@ GranuleInfoWidget::GranuleInfoWidget(Granule granule, QWidget *parent) :
 
     setFixedSize(sizeHint());
     setWindowIcon(QIcon(":/icons/properties.png"));
-    setWindowTitle("Properties "+granule.granuleName);
+    setWindowTitle(tr("Properties")+" "+granule.granuleName);
 }

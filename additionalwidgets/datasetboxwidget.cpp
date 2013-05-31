@@ -83,17 +83,17 @@ void DatasetBoxWidget::showMoreButtons()
         imageButton->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Fixed);
         connect(imageButton, &QPushButton::clicked, this, &DatasetBoxWidget::actionImageSlot);
 
-        opendapButton = new QPushButton(tr("OPeNDAP"), this);
+        opendapButton = new QPushButton("OPeNDAP", this);
         opendapButton->setMaximumHeight(20);
         opendapButton->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Fixed);
         connect(opendapButton, &QPushButton::clicked, this, &DatasetBoxWidget::actionOpendapSlot);
 
-        ftpButton = new QPushButton(tr("FTP"), this);
+        ftpButton = new QPushButton("FTP", this);
         ftpButton->setMaximumHeight(20);
         ftpButton->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Fixed);
         connect(ftpButton, &QPushButton::clicked, this, &DatasetBoxWidget::actionFtpSlot);
 
-        kmlButton = new QPushButton(tr("KML"), this);
+        kmlButton = new QPushButton("KML", this);
         kmlButton->setMaximumHeight(20);
         kmlButton->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Fixed);
         connect(kmlButton, &QPushButton::clicked, this, &DatasetBoxWidget::actionKmlSlot);

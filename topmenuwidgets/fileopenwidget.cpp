@@ -22,9 +22,9 @@ FileOpenWidget::FileOpenWidget(QString type, QString caption, QString directory,
 //    try
 //        {toolButton->setIcon(QIcon::fromTheme("document-open"));}
 //    catch (int)
-        {toolButton->setText("Change");}
+        {toolButton->setText(tr("Change"));}
 
-    toolButton->setMaximumWidth(64);
+    toolButton->setMaximumWidth(72);
 
     connect(toolButton, &QToolButton::clicked, this, &FileOpenWidget::fileDialog);
 

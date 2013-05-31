@@ -70,8 +70,11 @@ int main(int argc, char *argv[])
         return 1;
     }
     configData = readConfigFile(configData);
-//    configData.logLevel = LogLevel::ErrorOnly;
-    configData->lang = "en";
+//    configData->lang = "eng";
+
+    QTranslator myTranslator;
+    myTranslator.load(QLocale::system().name(), "../");
+    app.installTranslator(&myTranslator);
 
     QDir cacheDir(configData->cacheDir);
     if (!cacheDir.exists()){
@@ -82,7 +85,7 @@ int main(int argc, char *argv[])
     app.set_view(&view);
 
 //    // process id
-    qDebug() << "Process id:" << app.applicationPid();
+    qDebug() << QObject::tr("Process id:") << app.applicationPid();
 
 //    view->resize(800, 600);
 

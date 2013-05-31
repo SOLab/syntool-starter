@@ -2,13 +2,14 @@
 #define CONFIGFUNCTIONS_H
 #include "structure.h"
 #include <QMessageBox>
+#include <QObject>
 
 inline bool createConfigFile(ConfigData *configData)
 {
     QFile configFile(configData->configFile);
     if (!configFile.exists())
     {
-        QMessageBox::warning(NULL, ("Config file not exists"),
+        QMessageBox::warning(NULL, QObject::tr("Config file not exists"),
                              QObject::tr("Unable to open: ") + configData->configFile + "\n" +
                              QObject::tr("Will try to create a new file"), "OK");
 
@@ -25,7 +26,7 @@ inline bool createConfigFile(ConfigData *configData)
                 errorStr = QObject::tr("Access error");
             else
                 errorStr = QObject::tr("Format error");
-            QMessageBox::critical(NULL, ("Config file error"),
+            QMessageBox::critical(NULL, QObject::tr("Config file error"),
                                  QObject::tr("Cannot create file: ") + settings->fileName() + "\n" +
                                  errorStr + ".", "OK");
             delete settings;

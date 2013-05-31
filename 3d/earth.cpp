@@ -179,11 +179,11 @@ void Earth::textureDownloaded(qint32 cur_zoom, qint32 lonTileNum, qint32 latTile
         sceneNode->setObjectName(nodeObjectName);
 
         addNode(sceneNode);
-        qDebug() << "Add GLSceneNone object" << nodeObjectName;
+        qDebug() << tr("Add GLSceneNone object") << nodeObjectName;
     }
     else
     {
-        qWarning() << "Texture not added";
+        qWarning() << tr("Texture not added");
     }
     emit displayed();
 }
@@ -416,7 +416,7 @@ void Earth::updateTilesSlot(qreal scale, GeoCoords geoCoords)
         }
         buildEarthNode(a, 10, curZoom);
 
-        qDebug() << "curZoom = " << qFloor(curZoom);
+        qDebug() << "current zoom = " << qFloor(curZoom);
         emit displayed();
     }
     else

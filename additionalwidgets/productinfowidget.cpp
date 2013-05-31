@@ -9,15 +9,15 @@ ProductInfoWidget::ProductInfoWidget(QWidget *parent) :
 void ProductInfoWidget::setProduct(struct Product product, QPixmap* productImagePixmap)
 {
     Name = new QLabel(this);
-    Name->setText("Product name: "+product.Name);
-    setWindowTitle("Information about "+product.Name);
+    Name->setText(tr("Product name: ")+product.Name);
+    setWindowTitle(tr("Information about ")+product.Name);
 
     NaiadProductId = new QLabel(this);
-    NaiadProductId->setText("Naiad product Id: "+product.NaiadProductId);
+    NaiadProductId->setText(tr("Naiad product Id: ")+product.NaiadProductId);
     StartDate = new QLabel(this);
-    StartDate->setText("Start date: " + product.StartDate.toString("dd.MM.yyyy"));
+    StartDate->setText(tr("Start date: ") + product.StartDate.toString("dd.MM.yyyy"));
     EndDate = new QLabel(this);
-    EndDate->setText("End date: " + product.EndDate.toString("dd.MM.yyyy"));
+    EndDate->setText(tr("End date: ") + product.EndDate.toString("dd.MM.yyyy"));
     Description = new QLabel(this);
     Description->setText(product.Description);
     Description->setWordWrap(true);
@@ -48,14 +48,14 @@ void ProductInfoWidget::setProduct(struct Product product, QPixmap* productImage
     int i = 5;
     if (!product.ProcessingLevels.isEmpty())    {
         QLabel* ProcessingLevels = new QLabel(this);
-        ProcessingLevels->setText("Processing levels: "+product.ProcessingLevels);
+        ProcessingLevels->setText(tr("Processing levels: ")+product.ProcessingLevels);
         gridLayout->addWidget(ProcessingLevels,i,0);
         i++;
     }
 
     if (product.TotalGranulesCount != 0)    {
         QLabel* TotalGranulesCount = new QLabel(this);
-        TotalGranulesCount->setText("Total granules count: " + \
+        TotalGranulesCount->setText(tr("Total granules count: ") + \
                                     QString::number(product.TotalGranulesCount));
         gridLayout->addWidget(TotalGranulesCount,i,0);
         i++;
@@ -63,7 +63,7 @@ void ProductInfoWidget::setProduct(struct Product product, QPixmap* productImage
 
     if (!product.ProductionInterval.isEmpty())    {
         QLabel* ProductionInterval = new QLabel(this);
-        ProductionInterval->setText("Production interval: "+product.ProductionInterval);
+        ProductionInterval->setText(tr("Production interval: ")+product.ProductionInterval);
         gridLayout->addWidget(ProductionInterval,i,0);
         i++;
     }

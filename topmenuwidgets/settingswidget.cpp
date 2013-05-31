@@ -8,7 +8,7 @@ SettingsWidget::SettingsWidget(ConfigData *_configData, QWidget *parent) :
     vLayout->setAlignment(Qt::AlignTop | Qt::AlignRight);
 
     setFixedSize(450, 260);
-    setWindowTitle("Tools");
+    setWindowTitle(tr("Tools"));
 
     setWindowIcon(QIcon(":/icon/settings.png"));
 
@@ -33,7 +33,7 @@ void SettingsWidget::createForm()
     // Add clear config button
     clearConfigButton = new QPushButton(QIcon(":/icons/clear.png"),
                                         tr("Clear the configuration file") + ": " + configData->configFile, this);
-    clearConfigButton->setMaximumWidth(360);
+//    clearConfigButton->setMaximumWidth(380);
     connect(clearConfigButton, &QPushButton::clicked, this, &SettingsWidget::clearConfig);
 
     vLayout->addWidget(clearConfigButton);
@@ -50,14 +50,14 @@ void SettingsWidget::createForm()
     okButton = new QPushButton(tr("Ok"), this);
     okButton->setFixedWidth(50);
     okButton->setShortcut(QKeySequence(Qt::Key_Return));
-    okButton->setToolTip("Save changes to the current tab and exit");
+    okButton->setToolTip(tr("Save changes to the current tab and exit"));
     connect(okButton, &QPushButton::clicked, this, &SettingsWidget::saveChanges);
     connect(okButton, &QPushButton::clicked, this, &SettingsWidget::close);
     buttonsLayout->addWidget(okButton);
 
     applyButton = new QPushButton(tr("Apply"), this);
     applyButton->setFixedWidth(100);
-    applyButton->setToolTip("Save changes to the current tab");
+    applyButton->setToolTip(tr("Save changes to the current tab"));
     connect(applyButton, &QPushButton::clicked, this, &SettingsWidget::saveChanges);
     buttonsLayout->addWidget(applyButton);
 

@@ -28,8 +28,8 @@ TimeLine::TimeLine(ConfigData *configData, QWidget *parent)
     displayedGranules = new QHash<qint32, qint32>;
 
     // Granule statuses
-    GranuleStatuses << "New" << "Ingesting" << "Completed" << "Error" << "Ingested"
-                  << "Processing" << "WaitingForPostProcessing";
+    GranuleStatuses << tr("New") << tr("Ingesting") << tr("Completed") << tr("Error") << tr("Ingested")
+                  << tr("Processing") << tr("Waiting for postprocessing");
 
     setContentsMargins(0,0,0,0);
     // <granuleId, granuleRectCoords>
@@ -38,7 +38,7 @@ TimeLine::TimeLine(ConfigData *configData, QWidget *parent)
     serverName = configData->serverName;
 
     QHBoxLayout* hLayout = new QHBoxLayout(this);
-    QPushButton* calendarButton = new QPushButton("Set date", this);
+    QPushButton* calendarButton = new QPushButton(tr("Set date"), this);
     calendarButton->setFixedSize(60, 24);
     calendarButton->setStyleSheet(" QPushButton {\
                                         border: 1px solid #8f8f91; border-radius: 10px; \
@@ -66,24 +66,24 @@ void TimeLine::createGranulesContextMenu()
 {
     granulesContextMenu = new QMenu(this);
 
-    QAction *actionImage = new QAction(QString::fromUtf8("View image"), this);
+    QAction *actionImage = new QAction(tr("View image"), this);
     connect(actionImage, &QAction::triggered, this, &TimeLine::actionImageSlot);
     granulesContextMenu->addAction(actionImage);
 
-    QAction *actionOpendap = new QAction(QString::fromUtf8("Open in OPeNDAP"), this);
+    QAction *actionOpendap = new QAction(tr("Open in OPeNDAP"), this);
     connect(actionOpendap, &QAction::triggered, this, &TimeLine::actionOpendapSlot);
     granulesContextMenu->addAction(actionOpendap);
 
-    QAction *actionFtp = new QAction(QString::fromUtf8("Download"), this);
+    QAction *actionFtp = new QAction(tr("Download"), this);
     connect(actionFtp, &QAction::triggered, this, &TimeLine::actionFtpSlot);
     granulesContextMenu->addAction(actionFtp);
 
-    QAction *actionKml = new QAction(QString::fromUtf8("Get KML"), this);
+    QAction *actionKml = new QAction(tr("Get KML"), this);
     connect(actionKml, &QAction::triggered, this, &TimeLine::actionKmlSlot);
     granulesContextMenu->addAction(actionKml);
     granulesContextMenu->addSeparator();
 
-    QAction *actionProperties = new QAction(QString::fromUtf8("Properties"), this);
+    QAction *actionProperties = new QAction(tr("Properties"), this);
     connect(actionProperties, &QAction::triggered, this, &TimeLine::actionPropertiesSlot);
     granulesContextMenu->addAction(actionProperties);
 }
@@ -94,7 +94,7 @@ void TimeLine::actionImageSlot() {
 //    {
 //        QMessageBox* msgBox = new QMessageBox(/*this*/);
 
-//        msgBox->setText("Granule status: " + QString(GranuleStatuses.at(status)));
+//        msgBox->setText(tr("Granule status: ") + QString(GranuleStatuses.at(status)));
 //        msgBox->exec();
 //        return;
 //    }
@@ -116,7 +116,7 @@ void TimeLine::actionKmlSlot() {
 //    {
 //        QMessageBox* msgBox = new QMessageBox(/*this*/);
 
-//        msgBox->setText("Granule status: " + QString(GranuleStatuses.at(status)));
+//        msgBox->setText(tr("Granule status: ") + QString(GranuleStatuses.at(status)));
 //        msgBox->exec();
 //        return;
 //    }
@@ -610,7 +610,7 @@ void TimeLine::changedDay()
 
     while ( cur != last)
     {
-        qDebug() << "REMOVE GRANULES: " << granuleIdlist.at(0);
+        qDebug() << tr("Removal granule: ") << granuleIdlist.at(0);
         granulesHash->remove(granuleIdlist.takeFirst());
         cur = granuleIdlist.begin();
         last = granuleIdlist.end();

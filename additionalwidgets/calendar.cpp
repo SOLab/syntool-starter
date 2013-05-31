@@ -5,10 +5,10 @@ Calendar::Calendar(QDate date, QWidget *parent) :
 {
     gridLayout = new QGridLayout(this);
 
-    okButton = new QPushButton("Set date", this);
+    okButton = new QPushButton(tr("Set date"), this);
     connect(okButton, &QPushButton::clicked, this, &Calendar::okClicked);
 
-    cancelButton = new QPushButton("Cancel", this);
+    cancelButton = new QPushButton(tr("Cancel"), this);
     connect(cancelButton, &QPushButton::clicked, this, &Calendar::close);
 
     calendar = new QCalendarWidget(this);

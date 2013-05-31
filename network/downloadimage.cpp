@@ -42,5 +42,5 @@ void DownloadImage::slotReadyRead(QNetworkReply *reply)
 
 void DownloadImage::getError(QNetworkReply::NetworkError)
 {
-    qWarning() << "Unable to download the image";
+    qWarning() << tr("Unable to download the image");
 }

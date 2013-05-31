@@ -115,6 +115,8 @@ LIBS += -lglut -lGL -lGLU
 
 QTPLUGIN += xcb
 
+TRANSLATIONS += ru.ts
+
 #unix:PYTHON_VERSION=2.7
 #unix:LIBS += $$system(python$${PYTHON_VERSION}-config --libs)
 #unix:QMAKE_CXXFLAGS += $$system(python$${PYTHON_VERSION}-config --includes)
