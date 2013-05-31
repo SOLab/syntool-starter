@@ -84,6 +84,8 @@ void SettingsWidget::saveChanges()
         settings->setValue("common/server_name",mainTabWidget->serverNameEdit->text());
         settings->setValue("common/logging_level",
                            mainTabWidget->logLevelCombo->itemData(mainTabWidget->logLevelCombo->currentIndex()).toInt());
+        settings->setValue("common/lang",
+                           mainTabWidget->langCombo->itemData(mainTabWidget->langCombo->currentIndex()).toString());
     }
     // if cache
     else if (mainTabWidget->currentIndex() == 1)

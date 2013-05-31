@@ -70,10 +70,9 @@ int main(int argc, char *argv[])
         return 1;
     }
     configData = readConfigFile(configData);
-//    configData->lang = "eng";
 
     QTranslator myTranslator;
-    myTranslator.load(QLocale::system().name(), "../");
+    myTranslator.load(configData->lang, "../");
     app.installTranslator(&myTranslator);
 
     QDir cacheDir(configData->cacheDir);

@@ -14,14 +14,27 @@ void SettingsTabWidget::createCommonWidget()
 
     QGridLayout* commonGridLayout = new QGridLayout(commonWidget);
 
+    QLabel* langLabel = new QLabel(tr("Language"), commonWidget);
+    langCombo = new QComboBox(commonWidget);
+    langCombo->addItem(tr("English"), "en");
+    langCombo->addItem(tr("Russian"), "ru");
+
+    if(configData->lang.left(2).toLower() == "en")
+        langCombo->setCurrentIndex(0);
+    else if (configData->lang.left(2).toLower() == "ru")
+        langCombo->setCurrentIndex(1);
+
+    commonGridLayout->addWidget(langLabel, 0,0);
+    commonGridLayout->addWidget(langCombo, 0,1);
+
     QLabel* serverNameLabel = new QLabel(tr("Server name"), commonWidget);
-    serverNameEdit = new QLineEdit("", commonWidget);
+    serverNameEdit = new QLineEdit(commonWidget);
     serverNameEdit->setText(configData->serverName);
 
-    commonGridLayout->addWidget(serverNameLabel, 0,0);
-    commonGridLayout->addWidget(serverNameEdit, 0,1);
+    commonGridLayout->addWidget(serverNameLabel, 1,0);
+    commonGridLayout->addWidget(serverNameEdit, 1,1);
 
-    QLabel* logLevelLabel = new QLabel("Logging level", commonWidget);
+    QLabel* logLevelLabel = new QLabel(tr("Logging level"), commonWidget);
     logLevelCombo = new QComboBox(commonWidget);
     logLevelCombo->addItem(tr("no message"), 0);
     logLevelCombo->addItem(tr("debug only"), 1);

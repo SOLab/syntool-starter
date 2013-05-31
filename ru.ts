@@ -463,7 +463,7 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="main.cpp" line="91"/>
+        <location filename="main.cpp" line="87"/>
         <source>Process id:</source>
         <translation>Id процесса:</translation>
     </message>
@@ -506,88 +506,108 @@
 <context>
     <name>SettingsTabWidget</name>
     <message>
+        <location filename="topmenuwidgets/settingstabwidget.cpp" line="17"/>
+        <source>Language</source>
+        <translation>Язык</translation>
+    </message>
+    <message>
         <location filename="topmenuwidgets/settingstabwidget.cpp" line="19"/>
+        <source>English</source>
+        <translation>English</translation>
+    </message>
+    <message>
+        <location filename="topmenuwidgets/settingstabwidget.cpp" line="20"/>
+        <source>Russian</source>
+        <translation>Русский</translation>
+    </message>
+    <message>
+        <location filename="topmenuwidgets/settingstabwidget.cpp" line="30"/>
         <source>Server name</source>
         <translation>Имя сервера</translation>
     </message>
     <message>
-        <location filename="topmenuwidgets/settingstabwidget.cpp" line="30"/>
+        <location filename="topmenuwidgets/settingstabwidget.cpp" line="37"/>
+        <source>Logging level</source>
+        <translation>Уровень логирования</translation>
+    </message>
+    <message>
+        <location filename="topmenuwidgets/settingstabwidget.cpp" line="39"/>
         <source>no message</source>
         <translation>нет сообщений</translation>
     </message>
     <message>
-        <location filename="topmenuwidgets/settingstabwidget.cpp" line="31"/>
+        <location filename="topmenuwidgets/settingstabwidget.cpp" line="40"/>
         <source>debug only</source>
         <translation>только отладочные</translation>
     </message>
     <message>
-        <location filename="topmenuwidgets/settingstabwidget.cpp" line="32"/>
+        <location filename="topmenuwidgets/settingstabwidget.cpp" line="41"/>
         <source>warning only</source>
         <translation>только предупреждения</translation>
     </message>
     <message>
-        <location filename="topmenuwidgets/settingstabwidget.cpp" line="33"/>
+        <location filename="topmenuwidgets/settingstabwidget.cpp" line="42"/>
         <source>debug and warning</source>
         <translation>предупреждения и отладочные</translation>
     </message>
     <message>
-        <location filename="topmenuwidgets/settingstabwidget.cpp" line="34"/>
+        <location filename="topmenuwidgets/settingstabwidget.cpp" line="43"/>
         <source>error only</source>
         <translation>только ошибки</translation>
     </message>
     <message>
-        <location filename="topmenuwidgets/settingstabwidget.cpp" line="35"/>
+        <location filename="topmenuwidgets/settingstabwidget.cpp" line="44"/>
         <source>debug and error</source>
         <translation>ошибки и отладочные</translation>
     </message>
     <message>
-        <location filename="topmenuwidgets/settingstabwidget.cpp" line="36"/>
+        <location filename="topmenuwidgets/settingstabwidget.cpp" line="45"/>
         <source>warning and error</source>
         <translation>ошибки и предупреждения</translation>
     </message>
     <message>
-        <location filename="topmenuwidgets/settingstabwidget.cpp" line="37"/>
+        <location filename="topmenuwidgets/settingstabwidget.cpp" line="46"/>
         <source>debug, warning and error</source>
         <translation>ошибки, предупреждения и отладочные</translation>
     </message>
     <message>
-        <location filename="topmenuwidgets/settingstabwidget.cpp" line="38"/>
+        <location filename="topmenuwidgets/settingstabwidget.cpp" line="47"/>
         <source>info only</source>
         <translation>только информация</translation>
     </message>
     <message>
-        <location filename="topmenuwidgets/settingstabwidget.cpp" line="39"/>
+        <location filename="topmenuwidgets/settingstabwidget.cpp" line="48"/>
         <source>all message</source>
         <translation>все сообщения</translation>
     </message>
     <message>
-        <location filename="topmenuwidgets/settingstabwidget.cpp" line="51"/>
+        <location filename="topmenuwidgets/settingstabwidget.cpp" line="60"/>
         <source>Common</source>
         <translation>Общее</translation>
     </message>
     <message>
-        <location filename="topmenuwidgets/settingstabwidget.cpp" line="60"/>
-        <location filename="topmenuwidgets/settingstabwidget.cpp" line="61"/>
+        <location filename="topmenuwidgets/settingstabwidget.cpp" line="69"/>
+        <location filename="topmenuwidgets/settingstabwidget.cpp" line="70"/>
         <source>Cache directory</source>
         <translation>Кэш-директория</translation>
     </message>
     <message>
-        <location filename="topmenuwidgets/settingstabwidget.cpp" line="67"/>
+        <location filename="topmenuwidgets/settingstabwidget.cpp" line="76"/>
         <source>Number of cache tiles</source>
         <translation>Количество тайлов</translation>
     </message>
     <message>
-        <location filename="topmenuwidgets/settingstabwidget.cpp" line="76"/>
+        <location filename="topmenuwidgets/settingstabwidget.cpp" line="85"/>
         <source>Number of cache simple granules</source>
         <translation>Количество простых гранул</translation>
     </message>
     <message>
-        <location filename="topmenuwidgets/settingstabwidget.cpp" line="85"/>
+        <location filename="topmenuwidgets/settingstabwidget.cpp" line="94"/>
         <source>Number of cache tiled granules</source>
         <translation>Количество тайлов гранул</translation>
     </message>
     <message>
-        <location filename="topmenuwidgets/settingstabwidget.cpp" line="96"/>
+        <location filename="topmenuwidgets/settingstabwidget.cpp" line="105"/>
         <source>Cache</source>
         <translation>Кэш</translation>
     </message>
