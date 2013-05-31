@@ -77,6 +77,7 @@ private:
 
 public slots:
     void aboutProgram();
+    void openHandBook();
     void showTimeLine();
 
     void showSettings();

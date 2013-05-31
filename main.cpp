@@ -71,6 +71,7 @@ int main(int argc, char *argv[])
     }
     configData = readConfigFile(configData);
 //    configData.logLevel = LogLevel::ErrorOnly;
+    configData->lang = "en";
 
     QDir cacheDir(configData->cacheDir);
     if (!cacheDir.exists()){

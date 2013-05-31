@@ -19,11 +19,14 @@ namespace LogLevel {
 }
 
 struct ConfigData{
-    QString serverName;
-    QString cacheDir;
     QString configDir;
     QString configFile;
+
+    QString serverName;
     LogLevel::LogLevelValue logLevel;
+    QString lang;
+
+    QString cacheDir;
     qint32 numberCachedTiles;
     qint32 numberCachedSimpleGranules;
     qint32 numberCachedTiledGranules;

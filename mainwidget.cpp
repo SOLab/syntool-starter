@@ -119,6 +119,11 @@ void MainWindow::aboutProgram()
     aboutWgt = new AboutWidget;
 }
 
+void MainWindow::openHandBook()
+{
+    QDesktopServices::openUrl(QUrl("http://wiki.solab.rshu.ru/Main_Page"));
+}
+
 void MainWindow::showTimeLine()
 {
     if (timeLine->isVisible())
@@ -204,9 +209,11 @@ void MainWindow::createMenuBar()
     connect(aboutAction, &QAction::triggered, this, &MainWindow::aboutProgram);
 
     QAction* bugsAction = new QAction(QIcon(":/icons/e-mail.png"), tr("Send &bugs"), this);
+    bugsAction->setDisabled(true);
     bugsAction->setShortcut(Qt::Key_B);
 
     QAction* handbookAction = new QAction(QIcon(":/icons/help_book.png"), tr("&Handbook"), this);
+    connect(handbookAction, &QAction::triggered, this, &MainWindow::openHandBook);
     handbookAction->setShortcut(QKeySequence::HelpContents);
 
     QAction* aboutQtAction = new QAction(QIcon(":/icons/qt.png"), tr("&About Qt"), this);
