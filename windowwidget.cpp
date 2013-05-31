@@ -79,6 +79,9 @@ bool WindowWidget::event(QEvent *evt)
         case QEvent::Hide:
             windowHandle()->close();
             break;
+        default:
+            qGuiApp->sendEvent(m_hostedWindow, evt);
+            break;
         }
     }
     return ret;

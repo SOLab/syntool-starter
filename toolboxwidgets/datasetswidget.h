@@ -5,10 +5,12 @@
 #include <QVBoxLayout>
 #include <QCheckBox>
 #include <QDebug>
+#include <QPushButton>
 
 #include "additionalwidgets/datasetboxwidget.h"
 #include "more/ProductStructures.h"
 #include "more/structure.h"
+#include "more/granuleactions.h"
 
 class DatasetsWidget : public QWidget
 {
@@ -20,9 +22,11 @@ public:
 protected:
     QVBoxLayout* vLayout;
     QCheckBox* showAllCheck;
+    QPushButton *downloadAllButton;
     // <granuleId, productId>
     QHash<qint32, qint32>* currentDatasets;
     QList<qint32>* currentRemoveNumbers;
+    QList<qint32>* selectedGranuleList;
 
     QHash<QString, Granule>* _granulesHash;
     QString serverName;
@@ -38,7 +42,7 @@ public slots:
     void addDatasets(QHash<qint32, qint32>* displayedGranules);
     void actionPropertiesSlot(qint32 granuleId);
     void changedDisplayGranule(bool checked, qint32 granuleId, qint32 productId);
-    
+    void downloadAllSlot();
 };
 
 #endif // DATASETSWIDGET_H

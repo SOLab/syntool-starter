@@ -7,6 +7,7 @@ DatasetsWidget::DatasetsWidget(ConfigData *configData, QWidget *parent) :
 
     currentDatasets = new QHash<qint32, qint32>;
     currentRemoveNumbers = new QList<qint32>;
+    selectedGranuleList = new QList<qint32>;
 
     vLayout = new QVBoxLayout(this);
     vLayout->setContentsMargins(0,0,0,0);
@@ -25,6 +26,11 @@ DatasetsWidget::DatasetsWidget(ConfigData *configData, QWidget *parent) :
     showAllCheck->setChecked(true);
 
     vLayout->addWidget(showAllCheck);
+
+    downloadAllButton = new QPushButton(tr("Download all"), this);
+    downloadAllButton->setToolTip(tr("Download all selected granules"));
+    connect(downloadAllButton, &QPushButton::clicked, this, &DatasetsWidget::downloadAllSlot);
+    vLayout->addWidget(downloadAllButton);
 
     QFrame* hLine = new QFrame(this);
     hLine->setFrameShape(QFrame::HLine);
@@ -51,6 +57,10 @@ void DatasetsWidget::addDatasets(QHash<qint32, qint32> *displayedGranules)
             DatasetBoxWidget* datasetBox = new DatasetBoxWidget(serverName,
                                            _granulesHash->value(QString::number(dgi.key())), this);
             datasetBox->setChecked(showAllCheck->isChecked());
+            if (showAllCheck->isChecked())
+                if (!selectedGranuleList->contains(dgi.key()))
+                    selectedGranuleList->append(dgi.key());
+
             connect(datasetBox, &DatasetBoxWidget::granulePropertiesSignal,
                     this, &DatasetsWidget::actionPropertiesSlot);
 
@@ -75,6 +85,7 @@ void DatasetsWidget::addDatasets(QHash<qint32, qint32> *displayedGranules)
             emit closeDatasetForGranuleId(cdi.key());
             currentRemoveNumbers->append(cdi.key());
             emit hideGranule(cdi.key(), cdi.value());
+            selectedGranuleList->removeAll(cdi.key());
         }
         ++cdi;
     }
@@ -97,9 +108,22 @@ void DatasetsWidget::changedDisplayGranule(bool checked, qint32 granuleId, qint3
     if (checked)
     {
         emit displayGranule(granuleId, productId);
+        if (!selectedGranuleList->contains(granuleId))
+            selectedGranuleList->append(granuleId);
     }
     else
     {
         emit hideGranule(granuleId, productId);
+        selectedGranuleList->removeAll(granuleId);
     }
+}
+
+void DatasetsWidget::downloadAllSlot()
+{
+    for (int i = 0; i < selectedGranuleList->size(); ++i) {
+         granuleActions(serverName, QString::number(selectedGranuleList->at(i)), "ftp");
+         qCritical() << "DOWNLOAD GRANULE: "<< selectedGranuleList->at(i);
+     }
+
+
 }
