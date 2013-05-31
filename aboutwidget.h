@@ -3,6 +3,8 @@
 
 #include <QDialog>
 #include <QLabel>
+#include <QDate>
+#include <QImageReader>
 #include <QHBoxLayout>
 
 class AboutWidget : public QWidget
@@ -13,6 +15,7 @@ public:
     
 protected:
     QLabel* statusLabel;
+    QLabel *imageLabel;
     QHBoxLayout *topLayout;
     
 public slots:

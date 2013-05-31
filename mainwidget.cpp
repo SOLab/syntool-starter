@@ -132,6 +132,7 @@ void MainWindow::createMenuBar()
     menuBar()->setContentsMargins(0,0,0,0);
 
     QMenu* fileMenu = menuBar()->addMenu(tr("&File"));
+    fileMenu->setDisabled(true);
     QIcon::setThemeName("oxygen");
 
     QAction* openAction = new QAction(QIcon(":/icons/open.png"), tr("&Open"), this);
@@ -158,6 +159,7 @@ void MainWindow::createMenuBar()
 
 /////////////// Edit tab
     QMenu* editMenu = menuBar()->addMenu(tr("&Edit"));
+    editMenu->setDisabled(true);
 
     QAction* findAction = new QAction(QIcon(":/icons/find.png"), tr("Find"), this);
     // properties current object
@@ -169,6 +171,7 @@ void MainWindow::createMenuBar()
 
 /////////////// View tab
     QMenu* viewMenu = menuBar()->addMenu(tr("&View"));
+    viewMenu->setDisabled(true);
 
     QAction* showToolbarAction = new QAction(tr("Toolbar"), this);
     showToolbarAction->setCheckable(true);
