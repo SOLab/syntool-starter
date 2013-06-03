@@ -8,25 +8,28 @@ ProductInfoWidget::ProductInfoWidget(QWidget *parent) :
 
 void ProductInfoWidget::setProduct(struct Product product, QPixmap* productImagePixmap)
 {
-    Name = new QLabel(this);
-    Name->setText(tr("Product name: ")+product.Name);
+    name = new QLabel(this);
+    name->setText(tr("Product name: ")+product.Name);
     setWindowTitle(tr("Information about ")+product.Name);
 
-    NaiadProductId = new QLabel(this);
-    NaiadProductId->setText(tr("Naiad product Id: ")+product.NaiadProductId);
-    StartDate = new QLabel(this);
-    StartDate->setText(tr("Start date: ") + product.StartDate.toString("dd.MM.yyyy"));
-    EndDate = new QLabel(this);
-    EndDate->setText(tr("End date: ") + product.EndDate.toString("dd.MM.yyyy"));
-    Description = new QLabel(this);
-    Description->setText(product.Description);
-    Description->setWordWrap(true);
-    Description->setTextInteractionFlags(Qt::TextSelectableByMouse | Qt::TextSelectableByKeyboard);
+    naiadProductId = new QLabel(this);
+    naiadProductId->setText(tr("Naiad product Id: ")+product.NaiadProductId);
+    productId = new QLabel(this);
+    productId->setText(tr("Naiad Id: ")+QString::number(product.Id));
+    startDate = new QLabel(this);
+    startDate->setText(tr("Start date: ") + product.StartDate.toString("dd.MM.yyyy"));
+    endDate = new QLabel(this);
+    endDate->setText(tr("End date: ") + product.EndDate.toString("dd.MM.yyyy"));
+    description = new QLabel(this);
+    description->setText(product.Description);
+    description->setWordWrap(true);
+    description->setTextInteractionFlags(Qt::TextSelectableByMouse | Qt::TextSelectableByKeyboard);
 
-    gridLayout->addWidget(Name,0,0);
-    gridLayout->addWidget(NaiadProductId,1,0);
-    gridLayout->addWidget(StartDate,2,0);
-    gridLayout->addWidget(EndDate,3,0);
+    gridLayout->addWidget(name,0,0);
+    gridLayout->addWidget(naiadProductId,1,0);
+    gridLayout->addWidget(productId,2,0);
+    gridLayout->addWidget(startDate,3,0);
+    gridLayout->addWidget(endDate,4,0);
 
     // Add parameters
     QLabel* productParameters = new QLabel(this);
@@ -42,10 +45,10 @@ void ProductInfoWidget::setProduct(struct Product product, QPixmap* productImage
     }
     productParameters->setText(parametersString);
     productParameters->setWordWrap(true);
-    gridLayout->addWidget(productParameters,4,0);
+    gridLayout->addWidget(productParameters,5,0);
 
     // add more values
-    int i = 5;
+    int i = 6;
     if (!product.ProcessingLevels.isEmpty())    {
         QLabel* ProcessingLevels = new QLabel(this);
         ProcessingLevels->setText(tr("Processing levels: ")+product.ProcessingLevels);
@@ -69,7 +72,7 @@ void ProductInfoWidget::setProduct(struct Product product, QPixmap* productImage
     }
 
 
-    gridLayout->addWidget(Description,i,0,1,2);
+    gridLayout->addWidget(description,i,0,1,2);
 
     if (!product.ImageUrl.isEmpty())
     {
