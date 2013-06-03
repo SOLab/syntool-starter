@@ -18,22 +18,21 @@ class GetGranules : public QObject
     Q_OBJECT
 public:
     explicit GetGranules(QObject *parent = 0);
-    void setSelectedProducts(QHash<QString, selectedProduct>* _selectedProducts,
-                             QHash<QString, Granule> *_granulesHash);
+    void setSelectedProducts(QHash<QString, selectedProduct>* selectedProductsValue,
+                             QHash<QString, Granule> *granulesHashValue);
     void setParameters(QNetworkRequest request, QString methodName);
 
 protected:
     QHash<QString, selectedProduct>* selectedProducts;
-    QHash<QString, Granule>* granulesHash;
+    QHash<QString, Granule>*         granulesHash;
+    QNetworkAccessManager*           networkManager;
+    QByteArray                       currentRequest;
 
-    QNetworkAccessManager *networkManager;
-    QByteArray currentRequest;
-
-    QNetworkRequest _request;
-    QString _methodName;
-    int countGranule;
-    int currentCountGranule;
-    int currentStep;
+    QNetworkRequest m_request;
+    QString         m_methodName;
+    int             countGranule;
+    int             currentCountGranule;
+    int             currentStep;
 
 private:
     QReadWriteLock lock;

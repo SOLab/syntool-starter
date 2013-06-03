@@ -1,9 +1,9 @@
 #include "settingswidget.h"
 
-SettingsWidget::SettingsWidget(ConfigData *_configData, QWidget *parent) :
+SettingsWidget::SettingsWidget(ConfigData *configValue, QWidget *parent) :
     QWidget(parent)
 {
-    configData = _configData;
+    configData = configValue;
     vLayout = new QVBoxLayout(this);
     vLayout->setAlignment(Qt::AlignTop | Qt::AlignRight);
 

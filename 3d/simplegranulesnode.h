@@ -30,13 +30,13 @@ public:
                                 ConfigData *configData, qint32 granuleId, qint32 productId, bool IsGlobalCoverage);
     ~SimpleGranulesNode();
 
-    qint32  height(){return _height;}
-    void    setHeight(qint32 height){_height = height;}
-    qint32  granuleId(){return _granuleId;}
-    void    setGranuleId(qint32 granuleId){_granuleId = granuleId;}
-    qint32  productId(){return _productId;}
-    void    setProductId(qint32 productId){_productId = productId;}
-    qint32  transparency(){return _transparency;}
+    qint32  height(){return m_height;}
+    void    setHeight(qint32 height){m_height = height;}
+    qint32  granuleId(){return m_granuleId;}
+    void    setGranuleId(qint32 granuleId){m_granuleId = granuleId;}
+    qint32  productId(){return m_productId;}
+    void    setProductId(qint32 productId){m_productId = productId;}
+    qint32  transparency(){return m_transparency;}
 
     void getGranuleImageUrl();
     void show();
@@ -55,12 +55,12 @@ private:
 
     void addGranuleNodeStart();
     void downloadGranuleImage();
-    void addGranuleNode(QString _image_path);
+    void addGranuleNode(QString image_path);
 
-    qint32  _height;
-    qint32  _transparency;
-    qint32  _granuleId;
-    qint32  _productId;
+    qint32  m_height;
+    qint32  m_transparency;
+    qint32  m_granuleId;
+    qint32  m_productId;
     QString cacheDir;
     QString serverName;
     QUrl    urlGranules;

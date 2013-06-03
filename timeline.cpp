@@ -163,11 +163,11 @@ void TimeLine::paintEvent(QPaintEvent * pe)
     painter.drawLine(maxWidth/2, height(), maxWidth/2, 0);
 }
 
-void TimeLine::setSelectedProducts(QHash<QString, selectedProduct> *_selectedProducts,
-                                   QHash<QString, Granule>* _granulesHash)
+void TimeLine::setSelectedProducts(QHash<QString, selectedProduct> *selectedProductsValue,
+                                   QHash<QString, Granule>* granulesHashValue)
 {
-    selectedProducts = _selectedProducts;
-    granulesHash = _granulesHash;
+    selectedProducts = selectedProductsValue;
+    granulesHash = granulesHashValue;
 }
 
 // press mouse

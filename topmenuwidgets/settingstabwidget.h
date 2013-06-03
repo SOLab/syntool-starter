@@ -19,7 +19,7 @@ class SettingsTabWidget : public QTabWidget
 {
     Q_OBJECT
 public:
-    explicit SettingsTabWidget(ConfigData *_configData, QWidget *parent = 0);
+    explicit SettingsTabWidget(ConfigData *configValue, QWidget *parent = 0);
     QComboBox* langCombo;
     QLineEdit* serverNameEdit;
     QComboBox* logLevelCombo;

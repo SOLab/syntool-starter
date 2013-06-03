@@ -12,10 +12,10 @@ public:
     explicit GLSceneNodeWrapper(QObject *parent = 0);
     ~GLSceneNodeWrapper();
     void setGLSceneNodeObject(QGLSceneNode *glSceneNode);
-    QGLSceneNode* glSceneNodeObject(){return _glSceneNode;}
+    QGLSceneNode* glSceneNodeObject(){return m_glSceneNode;}
     
 private:
-    QGLSceneNode* _glSceneNode;
+    QGLSceneNode* m_glSceneNode;
 
 signals:
     

@@ -13,10 +13,10 @@ static void logMessageHandler(QtMsgType type, const QMessageLogContext &context,
 //#include "PythonQt.h"
 //#include "gui/PythonQtScriptingConsole.h"
 
-MainWindow::MainWindow(ConfigData *_configData, QWidget *parent)
+MainWindow::MainWindow(ConfigData *configValue, QWidget *parent)
     : QMainWindow(parent)
 {
-    configData = _configData;
+    configData = configValue;
 
     self = this;
 

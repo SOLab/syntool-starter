@@ -36,28 +36,26 @@ class ProductsWidget : public QWidget
     Q_OBJECT
 public:
     explicit ProductsWidget(ConfigData *configData, QWidget *parent = 0);
-    void setSelectedProducts(QHash<QString, selectedProduct>* _selectedProducts,
-                             QHash<QString, Granule> *_granulesHash);
-    void setObjectsPointer(TimeLine* _timeLinePointer);
+    void setSelectedProducts(QHash<QString, selectedProduct>* selectedProductsValue,
+                             QHash<QString, Granule>* granulesHashValue);
+    void setObjectsPointer(TimeLine* timeLine);
 
 protected:
-    QVBoxLayout* vLayout;
-    QDomDocument* dom;
+    QVBoxLayout*           vLayout;
+    QDomDocument*          dom;
+    QString                serverName;
+    QString                cacheDir;
+    QUrl                   urlProducts;
+    QUrl                   urlGranules;
+    QNetworkAccessManager* networkManager;
+    QByteArray             currentRequest;
 
-    QString serverName;
-    QString cacheDir;
-    QUrl urlProducts;
-    QUrl urlGranules;
-    QNetworkAccessManager *networkManager;
-//    QNetworkReply *reply;
-    QByteArray currentRequest;
-
-    QLabel* productsLbl;
+    QLabel*      productsLbl;
     QPushButton* viewProductInfo;
 
-    QComboBox* comboProducts;
-    QLabel* productImageLbl;
-    QPixmap* productImagePixmap;
+    QComboBox*   comboProducts;
+    QLabel*      productImageLbl;
+    QPixmap*     productImagePixmap;
     QPushButton* reloadProductsButton;
 
     InputBox* North;
@@ -75,23 +73,22 @@ protected:
 //    QTimeEdit* productTimeStart;
 //    QTimeEdit* productTimeEnd;
 
-    QLabel* parametersLbl;
-    QComboBox* comboParameters;
-
+    QLabel*      parametersLbl;
+    QComboBox*   comboParameters;
     QPushButton* addProductLabel;
 
-    QHash<QString, int> parametersList;
+    QHash<QString, int>      parametersList;
     // <productNaiadId, Product>
     QHash<QString, Product>* productsHash;
     // <productId, productNaiadId>
-    QHash<qint32, QString>* productsIdName;
+    QHash<qint32, QString>*  productsIdName;
 
     QHash<QString, selectedProduct>* selectedProducts;
-    QHash<QString, Granule>* granulesHash;
+    QHash<QString, Granule>*         granulesHash;
 
-    void getGranulesForNewProduct();
-    TimeLine* timeLinePointer;
+    TimeLine*    timeLinePointer;
     GetGranules* getGranulesPointer;
+    void getGranulesForNewProduct();
 signals:
     void productAdded(QString productId);
     void productDeleted(QString productId);

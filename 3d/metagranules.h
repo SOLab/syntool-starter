@@ -19,7 +19,7 @@ public:
     MetaGranules(EarthView *parentView, QSharedPointer<QGLMaterialCollection> palette, ConfigData *configData);
     void drawSimpleGranules(QGLPainter *painter);
     void drawTiledGranules(QGLPainter *painter);
-    void setParent(EarthView *parentView){_parentView = parentView;}
+    void setParent(EarthView *parentView){m_parentView = parentView;}
 
     void addGranuleNode(qint32 granuleId, qint32 productId);
 private:
@@ -32,16 +32,16 @@ private:
     QCache<TileCacheNumber, QGLSceneNode> tiledGranuleCache;
 //    SimpleGranulesNode *granulesNode;
 
-    EarthView *_parentView;
+    EarthView *m_parentView;
     QSharedPointer<QGLMaterialCollection> m_palette;
     ConfigData *m_configData;
     qint32 currentHeight;
     qint32 maxHeight;
 
     // <NaiadProductId, Product>
-    QHash<QString, Product>* _productsHash;
+    QHash<QString, Product>* m_productsHash;
     // <NaiadId, NaiadProductId>
-    QHash<qint32, QString>* _productsIdName;
+    QHash<qint32, QString>* m_productsIdName;
 
 signals:
     void displayed();

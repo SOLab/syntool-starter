@@ -61,12 +61,12 @@ struct param
     QDateTime maxDate;
     QDateTime minDate;
     QDateTime currentDate;
-    QRect dayRect;
-    QRect weekRect;
-    bool moveDay;
-    bool moveWeek;
-    bool flagMovedIntervalos_;
-    QPoint pos_;
+    QRect     dayRect;
+    QRect     weekRect;
+    bool      moveDay;
+    bool      moveWeek;
+    bool      flagMovedIntervalos_;
+    QPoint    pos_;
 
     int markerDistance;
 };
@@ -79,37 +79,36 @@ public:
     TimeLine(ConfigData *configData, QWidget *parent = 0);
     ~TimeLine();
     void paintEvent(QPaintEvent * pe);
-    void setSelectedProducts(QHash<QString, selectedProduct>* _selectedProducts,
-                             QHash<QString, Granule>* _granulesHash);
+    void setSelectedProducts(QHash<QString, selectedProduct>* selectedProductsValue,
+                             QHash<QString, Granule>* granulesHashValue);
     param control_;
 
 protected:
     void createBottomRect();
     void createTopRect();
+    void createGranulesContextMenu();
+    void drawAllMarkers();
+
     Calendar* calendar;
 
-    QList<geoPoint>* geoPointList;
-    QList<geoSegment> geoSegmentList;
+    QList<geoPoint>*                 geoPointList;
+    QList<geoSegment>                geoSegmentList;
     QHash<QString, selectedProduct>* selectedProducts;
-    QHash<QString, Granule>* granulesHash;
-    QHash<qint32, QRect>* rectsGranules;
-
-    QImage imageGeoPoint;
-    GetGranules* getGranulesPointer;
-
-    void drawAllMarkers();
-    QDate notChangedDate;
-
-    QMenu* granulesContextMenu;
-    qint32 currentGranuleId;
-    void createGranulesContextMenu();
-    QString serverName;
-
+    QHash<QString, Granule>*         granulesHash;
+    QHash<qint32, QRect>*            rectsGranules;
     // <granuleId, productId>
-    QHash<qint32, qint32>* displayedGranules;
-    QList<QString> GranuleStatuses;
+    QHash<qint32, qint32>*           displayedGranules;
+    QList<QString>                   GranuleStatuses;
 
-    int hourPixels;
+    QImage       imageGeoPoint;
+    GetGranules* getGranulesPointer;
+    QDate        notChangedDate;
+    QMenu*       granulesContextMenu;
+    qint32       currentGranuleId;
+    QString      serverName;
+
+
+    int   hourPixels;
     float minutePixels;
     float secondsInPixel;
 
@@ -139,9 +138,9 @@ private slots:
     void actionPropertiesSlot();
 
 signals:
-  void getNewAllGranules(int scale);
-  void changedDisplayGranules(QHash<qint32, qint32>* displayedGranules);
-  void moveEarth(float lat, float lot);
+    void getNewAllGranules(int scale);
+    void changedDisplayGranules(QHash<qint32, qint32>* displayedGranules);
+    void moveEarth(float lat, float lot);
 
 private:
 };

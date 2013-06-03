@@ -11,7 +11,7 @@ void DownloadImage::run()
 
     connect(m_netwManager, &QNetworkAccessManager::finished, this, &DownloadImage::slotReadyRead);
 
-    QNetworkRequest request(_imageUrl);
+    QNetworkRequest request(m_imageUrl);
     QNetworkReply* reply = m_netwManager->get(request);
 
     connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
@@ -20,8 +20,8 @@ void DownloadImage::run()
 
 void DownloadImage::setImageUrl(QString imageUrl, QString imagePath)
 {
-    _imageUrl = imageUrl;
-    _imagePath = imagePath;
+    m_imageUrl = imageUrl;
+    m_imagePath = imagePath;
 }
 
 void DownloadImage::slotReadyRead(QNetworkReply *reply)
@@ -34,9 +34,9 @@ void DownloadImage::slotReadyRead(QNetworkReply *reply)
     QByteArray jpegData = reply->readAll();
     QPixmap* pixmap = new QPixmap();
     pixmap->loadFromData(jpegData);
-    pixmap->save(_imagePath);
+    pixmap->save(m_imagePath);
     delete pixmap;
-    emit downloaded(_imagePath);
+    emit downloaded(m_imagePath);
     deleteLater();
 }
 

@@ -31,22 +31,22 @@ Granule createGranuleFromXml(QDomElement domElement)
     return newGranule;
 }
 
-void GetGranules::setSelectedProducts(QHash<QString, selectedProduct> *_selectedProducts,
-                                      QHash<QString, Granule> *_granulesHash)
+void GetGranules::setSelectedProducts(QHash<QString, selectedProduct> *selectedProductsValue,
+                                      QHash<QString, Granule> *granulesHashValue)
 {
-    selectedProducts = _selectedProducts;
-    granulesHash = _granulesHash;
+    selectedProducts = selectedProductsValue;
+    granulesHash = granulesHashValue;
 }
 
 void GetGranules::setParameters(QNetworkRequest request, QString methodName)
 {
-    _request = request;
-    _methodName = methodName;
+    m_request = request;
+    m_methodName = methodName;
 }
 
 void GetGranules::run()
 {
-    if (_methodName == "getGranulesForNewProduct")
+    if (m_methodName == "getGranulesForNewProduct")
         // get granules for new added products
         getGranulesForNewProduct();
     else
@@ -56,7 +56,7 @@ void GetGranules::run()
 
 void GetGranules::getGranulesForNewProduct()
 {
-    QNetworkReply* reply = networkManager->get(_request);
+    QNetworkReply* reply = networkManager->get(m_request);
     connect(reply, &QNetworkReply::readyRead, this, &GetGranules::slotReadyReadGranules);
     connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
             this, SLOT(getErrorGranules(QNetworkReply::NetworkError)));
@@ -69,7 +69,7 @@ void GetGranules::getErrorGranules(QNetworkReply::NetworkError)
 
 void GetGranules::getNewGranules()
 {
-    QNetworkReply* reply = networkManager->get(_request);
+    QNetworkReply* reply = networkManager->get(m_request);
     connect(reply, &QNetworkReply::readyRead, this, &GetGranules::slotReadyReadGranules);
     connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
             this, SLOT(getErrorGranules(QNetworkReply::NetworkError)));
@@ -156,13 +156,13 @@ void GetGranules::slotReadyReadGranules()
             {
                 currentStep += 1;
 //                currentCountGranule = 0;
-                if (_request.url().toString().indexOf("step=") == -1)
+                if (m_request.url().toString().indexOf("step=") == -1)
                 {
-                    _request.setUrl(QUrl(_request.url().toString() + "&step="+QString::number(currentStep)));
+                    m_request.setUrl(QUrl(m_request.url().toString() + "&step="+QString::number(currentStep)));
                 }
                 else
                 {
-                    _request.setUrl(QUrl(_request.url().toString().replace \
+                    m_request.setUrl(QUrl(m_request.url().toString().replace \
                                              ("step="+QString::number(currentStep-1),
                                               "step="+QString::number(currentStep))));
                 }

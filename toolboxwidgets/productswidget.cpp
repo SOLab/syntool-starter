@@ -344,16 +344,16 @@ void ProductsWidget::currentProductChanged(int index)
     }
 }
 
-void ProductsWidget::setSelectedProducts(QHash<QString, selectedProduct> *_selectedProducts,
-                                         QHash<QString, Granule>* _granulesHash)
+void ProductsWidget::setSelectedProducts(QHash<QString, selectedProduct> *selectedProductsValue,
+                                         QHash<QString, Granule>* granulesHashValue)
 {
-    selectedProducts = _selectedProducts;
-    granulesHash = _granulesHash;
+    selectedProducts = selectedProductsValue;
+    granulesHash = granulesHashValue;
 }
 
-void ProductsWidget::setObjectsPointer(TimeLine *_timeLinePointer)
+void ProductsWidget::setObjectsPointer(TimeLine *timeLine)
 {
-    timeLinePointer = _timeLinePointer;
+    timeLinePointer = timeLine;
 }
 
 // add new product

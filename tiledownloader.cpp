@@ -1,16 +1,16 @@
 #include "tiledownloader.h"
 
-TileDownloader::TileDownloader(qint32 _separation, qint32 _lonTileNum, qint32 _latTileNum,
-                               qint32 _cur_zoom, QString texStorePath, QObject *parent):
+TileDownloader::TileDownloader(qint32 separationValue, qint32 lonTileNumValue, qint32 latTileNumValue,
+                               qint32 curZoomValue, QString texStorePath, QObject *parent):
     QObject(parent)
 {
-    separation = _separation;
-    lonTileNum = _lonTileNum;
-    latTileNum = _latTileNum;
-    cur_zoom = _cur_zoom;
+    separation = separationValue;
+    lonTileNum = lonTileNumValue;
+    latTileNum = latTileNumValue;
+    curZoom = curZoomValue;
 
     QString path = "http://tile.openstreetmap.org/%1/%2/%3.png";
-    QString arg(path.arg(cur_zoom).arg(lonTileNum).arg(separation-1-latTileNum));
+    QString arg(path.arg(curZoom).arg(lonTileNum).arg(separation-1-latTileNum));
 
     texUrl = QUrl::fromEncoded(arg.toLocal8Bit());
 
@@ -46,7 +46,7 @@ void TileDownloader::fileDownloaded(QNetworkReply* pReply)
       image.write(m_DownloadedData);
       image.close();
     }
-    emit resultReady(cur_zoom, lonTileNum, latTileNum);
+    emit resultReady(curZoom, lonTileNum, latTileNum);
 }
 
 QByteArray TileDownloader::downloadedData() const

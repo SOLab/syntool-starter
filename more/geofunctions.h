@@ -39,18 +39,18 @@ inline double Lat2MercatorLatitude(double latitude)
     return sign * (qLn((1.0 + sin) / (1.0 - sin)) / 2.0);
 }
 
-inline QVector3D llh2xyz(qreal _lat, qreal _lon, qreal h = 0)
+inline QVector3D llh2xyz(qreal lat, qreal lon, qreal h = 0)
 {
-    qreal lat = _lat;//*M_PI/180.0;
-    qreal lon = _lon;//*M_PI/180.0;
+    qreal m_lat = lat;//*M_PI/180.0;
+    qreal m_lon = lon;//*M_PI/180.0;
     qreal e2 = 0.00669436619;
-    qreal N = sphereRarius/qSqrt(1 - e2 * qPow(qSin(lat),2));
+    qreal N = sphereRarius/qSqrt(1 - e2 * qPow(qSin(m_lat),2));
 
     QVector3D decartCoordPoint;
 
-    decartCoordPoint.setX( (N + h)*qCos(lat)*qCos(lon) );
-    decartCoordPoint.setY( (N + h)*qCos(lat)*qSin(lon) );
-    decartCoordPoint.setZ( (N*(1-e2)+h)*qSin(lat) );
+    decartCoordPoint.setX( (N + h)*qCos(m_lat)*qCos(m_lon) );
+    decartCoordPoint.setY( (N + h)*qCos(m_lat)*qSin(m_lon) );
+    decartCoordPoint.setZ( (N*(1-e2)+h)*qSin(m_lat) );
 
     return decartCoordPoint;
 }

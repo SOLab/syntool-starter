@@ -17,14 +17,14 @@ public:
     explicit LayerBoxWidget(QString ProductName, QWidget *parent = 0);
     
 protected:
-    QGridLayout* gridLayout;
-    QPushButton* removeLayerButton;
-    QCheckBox* showLayerCheckBox;
-    QSlider* transparencySlider;
-    QLabel* productNameLabel;
-    QLabel* percentLabel;
+    QGridLayout*  gridLayout;
+    QPushButton*  removeLayerButton;
+    QCheckBox*    showLayerCheckBox;
+    QSlider*      transparencySlider;
+    QLabel*       productNameLabel;
+    QLabel*       percentLabel;
 
-    QString _productName;
+    QString       m_productName;
 
 signals:
     void removeLayer(QString productId);

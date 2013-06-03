@@ -19,8 +19,8 @@ SimpleGranulesNode::SimpleGranulesNode(QObject *parent, QSharedPointer<QGLMateri
 
     networkManager = new QNetworkAccessManager(this);
 
-    _height = 0;
-    _transparency = 0;
+    m_height = 0;
+    m_transparency = 0;
 
     QGraphicsRotation3D *axialTilt1 = new QGraphicsRotation3D(this);
     axialTilt1->setAngle(270.0f);
@@ -137,8 +137,8 @@ void SimpleGranulesNode::getErrorImageUrl(QNetworkReply::NetworkError)
 
 void SimpleGranulesNode::setTransparency(qint32 granuleId, qint32 transparency)
 {
-    if (granuleId == _granuleId)
-        _transparency = transparency;
+    if (granuleId == m_granuleId)
+        m_transparency = transparency;
 }
 
 void SimpleGranulesNode::addGranuleNodeStart()
@@ -170,9 +170,9 @@ void SimpleGranulesNode::downloadGranuleImage()
     }
 }
 
-void SimpleGranulesNode::addGranuleNode(QString _image_path)
+void SimpleGranulesNode::addGranuleNode(QString image_path)
 {
-    Q_UNUSED(_image_path);
+    Q_UNUSED(image_path);
 
 //    QString imagePath = "/mnt/d/OISST-AVHRR-AMSR-V2.png";
 //    QString filename = "/mnt/d/ascat_20120704_003001.png";

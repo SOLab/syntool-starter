@@ -42,7 +42,7 @@ DatasetsWidget::DatasetsWidget(ConfigData *configData, QWidget *parent) :
 
 void DatasetsWidget::setGranules(QHash<QString, Granule> *granulesHash)
 {
-    _granulesHash = granulesHash;
+    m_granulesHash = granulesHash;
 }
 
 void DatasetsWidget::addDatasets(QHash<qint32, qint32> *displayedGranules)
@@ -55,7 +55,7 @@ void DatasetsWidget::addDatasets(QHash<qint32, qint32> *displayedGranules)
             emit displayGranule(dgi.key(), dgi.value());
 
             DatasetBoxWidget* datasetBox = new DatasetBoxWidget(serverName,
-                                           _granulesHash->value(QString::number(dgi.key())), this);
+                                           m_granulesHash->value(QString::number(dgi.key())), this);
             datasetBox->setChecked(showAllCheck->isChecked());
             if (showAllCheck->isChecked())
                 if (!selectedGranuleList->contains(dgi.key()))
@@ -99,7 +99,7 @@ void DatasetsWidget::addDatasets(QHash<qint32, qint32> *displayedGranules)
 void DatasetsWidget::actionPropertiesSlot(qint32 granuleId)
 {
         GranuleInfoWidget* currentGranuleWidget =
-                new GranuleInfoWidget(_granulesHash->value(QString::number(granuleId)));
+                new GranuleInfoWidget(m_granulesHash->value(QString::number(granuleId)));
         currentGranuleWidget->show();
 }
 

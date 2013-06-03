@@ -22,27 +22,27 @@ public:
     QCheckBox* showDatasetCheck;
 
 protected:
-    QGridLayout* gridLayout;
-    QLabel* granuleNameLabel;
-    QSlider* transparencySlider;
-    QLabel* percentLabel;
-    QFrame* hLine;
+    QGridLayout*    gridLayout;
+    QLabel*         granuleNameLabel;
+    QSlider*        transparencySlider;
+    QLabel*         percentLabel;
+    QFrame*         hLine;
 
-    QPushButton* moreActions;
+    QPushButton*    moreActions;
 
-    QGridLayout* buttonsHLayout;
-    QWidget* buttonsWidget;
+    QGridLayout*    buttonsHLayout;
+    QWidget*        buttonsWidget;
 
-    QPushButton* imageButton;
-    QPushButton* opendapButton;
-    QPushButton* ftpButton;
-    QPushButton* kmlButton;
-    QPushButton* propertiesButton;
-    bool buttonsCreated;
+    QPushButton*    imageButton;
+    QPushButton*    opendapButton;
+    QPushButton*    ftpButton;
+    QPushButton*    kmlButton;
+    QPushButton*    propertiesButton;
+    bool            buttonsCreated;
 
-    qint32 _granuleId;
-    qint32 _productId;
-    QString _serverName;
+    qint32          m_granuleId;
+    qint32          m_productId;
+    QString         m_serverName;
 
 signals:
     void changedTransparency(qint32 granuleId, qint32 transparentValue);

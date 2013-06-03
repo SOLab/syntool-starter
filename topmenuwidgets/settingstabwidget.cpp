@@ -1,9 +1,9 @@
 #include "settingstabwidget.h"
 
-SettingsTabWidget::SettingsTabWidget(ConfigData *_configData, QWidget *parent) :
+SettingsTabWidget::SettingsTabWidget(ConfigData *configValue, QWidget *parent) :
     QTabWidget(parent)
 {
-    configData = _configData;
+    configData = configValue;
     createCommonWidget();
     createCacheWidget();
 }

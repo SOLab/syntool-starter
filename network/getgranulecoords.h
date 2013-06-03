@@ -17,11 +17,11 @@ public:
     void getCoords(QString serverName, qint32 granuleId);
 
 protected:
-    QString _serverName;
-    int _granuleId;
-    QNetworkAccessManager* networkManager;
-    QNetworkRequest request;
-    QByteArray currentRequest;
+    QString                 m_serverName;
+    int                     m_granuleId;
+    QNetworkAccessManager*  networkManager;
+    QNetworkRequest         request;
+    QByteArray              currentRequest;
 
 signals:
     void coordsSignal(qint32 granuleId, float north, float east, float south, float west);

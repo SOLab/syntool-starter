@@ -3,7 +3,7 @@
 LayerBoxWidget::LayerBoxWidget(QString ProductName, QWidget *parent) :
     QWidget(parent)
 {
-    _productName = ProductName;
+    m_productName = ProductName;
 
     gridLayout = new QGridLayout(this);
     gridLayout->setContentsMargins(0,0,0,0);
@@ -51,18 +51,18 @@ LayerBoxWidget::LayerBoxWidget(QString ProductName, QWidget *parent) :
 void LayerBoxWidget::changedTransparencySlot(int value)
 {
     percentLabel->setText(QString::number(value)+"%");
-    emit changedTransparency(_productName, value);
+    emit changedTransparency(m_productName, value);
 }
 
 void LayerBoxWidget::removeLayerSlot()
 {
-    emit removeLayer(_productName);
+    emit removeLayer(m_productName);
     close();
 }
 
 void LayerBoxWidget::showChangedSlot(int state)
 {
-    emit showLayer(_productName, state);
+    emit showLayer(m_productName, state);
 }
 
 void LayerBoxWidget::removeLayerBox(QString productId)

@@ -3,7 +3,7 @@
 DatasetBoxWidget::DatasetBoxWidget(QString serverName, Granule granule, QWidget *parent):
     QWidget(parent)
 {
-    _serverName = serverName;
+    m_serverName = serverName;
 
     gridLayout = new QGridLayout(this);
     gridLayout->setContentsMargins(0, 0, 0, 0);
@@ -17,8 +17,8 @@ DatasetBoxWidget::DatasetBoxWidget(QString serverName, Granule granule, QWidget 
     granuleNameLabel->setMinimumSize(1,1);
     granuleNameLabel->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Fixed);
 
-    _granuleId = granule.granuleId;
-    _productId = granule.productId;
+    m_granuleId = granule.granuleId;
+    m_productId = granule.productId;
 
     moreActions = new QPushButton(QIcon(":/icons/down.png"), "", this);
     moreActions->setIconSize(QSize(16, 16));
@@ -51,12 +51,12 @@ void DatasetBoxWidget::setChecked(bool checked)
 void DatasetBoxWidget::checkedSlot(int state)
 {
     bool checked = (state == Qt::Unchecked) ? false : true;
-    emit changedDisplayGranule(checked, _granuleId, _productId);
+    emit changedDisplayGranule(checked, m_granuleId, m_productId);
 }
 
 void DatasetBoxWidget::closeGranuleId(qint32 granuleId)
 {
-    if (_granuleId == granuleId)
+    if (m_granuleId == granuleId)
     {
         hide();
         deleteLater();
@@ -66,7 +66,7 @@ void DatasetBoxWidget::closeGranuleId(qint32 granuleId)
 void DatasetBoxWidget::changedTransparencySlot(qint32 transparentValue)
 {
     percentLabel->setText(QString::number(transparentValue)+"%");
-    emit changedTransparency(_granuleId, transparentValue);
+    emit changedTransparency(m_granuleId, transparentValue);
 }
 
 void DatasetBoxWidget::showMoreButtons()
@@ -139,28 +139,28 @@ void DatasetBoxWidget::showMoreButtons()
 
 void DatasetBoxWidget::actionImageSlot()
 {
-    granuleActions(_serverName, QString::number(_granuleId), "image");
+    granuleActions(m_serverName, QString::number(m_granuleId), "image");
 }
 
 void DatasetBoxWidget::actionOpendapSlot()
 {
-    granuleActions(_serverName, QString::number(_granuleId), "opendap");
+    granuleActions(m_serverName, QString::number(m_granuleId), "opendap");
 }
 
 void DatasetBoxWidget::actionFtpSlot()
 {
-    granuleActions(_serverName, QString::number(_granuleId), "ftp");
+    granuleActions(m_serverName, QString::number(m_granuleId), "ftp");
 }
 
 void DatasetBoxWidget::actionKmlSlot()
 {
-    granuleActions(_serverName, QString::number(_granuleId), "kml");
+    granuleActions(m_serverName, QString::number(m_granuleId), "kml");
 }
 
 void DatasetBoxWidget::actionPropertiesSlot()
 {
 //    GranuleInfoWidget* currentGranuleWidget =
-//            new GranuleInfoWidget(granulesHash->value(QString::number(_granuleId)));
+//            new GranuleInfoWidget(granulesHash->value(QString::number(m_granuleId)));
 //    currentGranuleWidget->show();
-    emit granulePropertiesSignal(_granuleId);
+    emit granulePropertiesSignal(m_granuleId);
 }

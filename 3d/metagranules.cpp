@@ -62,7 +62,7 @@ void MetaGranules::addSimpleGranuleNode(qint32 granuleId, qint32 productId)
         }
 
         SimpleGranulesNode* granulesNode = new SimpleGranulesNode(this, m_palette, m_configData, granuleId, productId,
-                                           _productsHash->value(_productsIdName->value(productId)).IsGlobalCoverage);
+                                           m_productsHash->value(m_productsIdName->value(productId)).IsGlobalCoverage);
         granulesNode->setHeight(currentHeight);
         simpleGranuleCache->insert(granuleId, granulesNode);
         heightGranuleMap.insert(currentHeight, granuleId);
@@ -94,6 +94,6 @@ void MetaGranules::removeSimpleGranuleNode(qint32 granuleId, qint32 productId)
 
 void MetaGranules::setProductsHashSlot(QHash<QString, Product> *productsHash, QHash<qint32, QString> *productsIdName)
 {
-    _productsHash = productsHash;
-    _productsIdName = productsIdName;
+    m_productsHash = productsHash;
+    m_productsIdName = productsIdName;
 }

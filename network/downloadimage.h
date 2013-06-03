@@ -19,8 +19,8 @@ public:
     void setImageUrl(QString imageUrl, QString imagePath);
 
 protected:
-    QUrl _imageUrl;
-    QString _imagePath;
+    QUrl    m_imageUrl;
+    QString m_imagePath;
 
 signals:
     void downloaded(QString);

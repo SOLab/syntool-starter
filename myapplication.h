@@ -14,7 +14,7 @@ public:
     myApplication(int argc ,char** argv):
     QApplication( argc, argv)
     {
-        _view = NULL;
+        m_view = NULL;
     }
     ~myApplication()
     {}
@@ -26,7 +26,7 @@ public:
       if(event->type() == QEvent::KeyPress)
       {
           QKeyEvent * key = (QKeyEvent *) event;
-          if (_view)
+          if (m_view)
           {
               switch (key->key())
               {
@@ -37,7 +37,7 @@ public:
                   case Qt::Key_Plus:
                   case Qt::Key_Minus:
                   {
-                      _view->keyPress(key);
+                      m_view->keyPress(key);
                   }
                   break;
               }
@@ -56,11 +56,11 @@ public:
 
 void set_view(EarthView *view)
     {
-        _view = view;
+        m_view = view;
     }
 
 protected:
-    EarthView* _view;
+    EarthView* m_view;
 };
 
 #endif // KEYSINTERCEPTION_H

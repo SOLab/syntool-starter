@@ -20,16 +20,16 @@ public:
 
     void setGranules(QHash<QString, Granule>* granulesHash);
 protected:
-    QVBoxLayout* vLayout;
-    QCheckBox* showAllCheck;
-    QPushButton *downloadAllButton;
+    QVBoxLayout*             vLayout;
+    QCheckBox*               showAllCheck;
+    QPushButton*             downloadAllButton;
     // <granuleId, productId>
-    QHash<qint32, qint32>* currentDatasets;
-    QList<qint32>* currentRemoveNumbers;
-    QList<qint32>* selectedGranuleList;
+    QHash<qint32, qint32>*   currentDatasets;
+    QList<qint32>*           currentRemoveNumbers;
+    QList<qint32>*           selectedGranuleList;
 
-    QHash<QString, Granule>* _granulesHash;
-    QString serverName;
+    QHash<QString, Granule>* m_granulesHash;
+    QString                  serverName;
 
 signals:
     void closeAllDatasetBoxWidgets();

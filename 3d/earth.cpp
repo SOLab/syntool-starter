@@ -143,9 +143,6 @@ void Earth::textureDownloaded(qint32 cur_zoom, qint32 lonTileNum, qint32 latTile
 
     int separation = qPow(2, cur_zoom);
 
-//    QString _filepath = cacheDir+"/%1-%2-%3.png";
-//    QString texStorePath = _filepath.arg(cur_zoom).arg(lonTileNum).arg(separation-1-latTileNum);
-
     qreal NTLon = 2*M_PI / separation;
 
     qreal minSphereLat = -tiley2lat(latTileNum, separation)/180.0*M_PI;
@@ -316,8 +313,8 @@ bool Earth::addTextureToTile(QGLSceneNode* tempNode, int separation, int lonTile
     tex = new QGLTexture2D();
 //    tex->setSize(QSize(512, 256));
 
-    QString _filepath = cacheDir+"/%1-%2-%3.png";
-    QString filepath(_filepath.arg(cur_zoom).arg(lonTileNum).arg(separation-1-latTileNum));
+    QString t_filepath = cacheDir+"/%1-%2-%3.png";
+    QString filepath(t_filepath.arg(cur_zoom).arg(lonTileNum).arg(separation-1-latTileNum));
 
     if (!QFile::exists(filepath))
     {
@@ -346,8 +343,8 @@ bool Earth::addTextureToTile(QGLSceneNode* tempNode, int separation, int lonTile
 */
 void Earth::tileDownload(qint32 cur_zoom, qint32 separation, qint32 lonTileNum, qint32 latTileNum)
 {
-    QString _filepath = cacheDir+"/%1-%2-%3.png";
-    QString textureStorePath = (_filepath.arg(cur_zoom).arg(lonTileNum).arg(separation-1-latTileNum));
+    QString m_filepath = cacheDir+"/%1-%2-%3.png";
+    QString textureStorePath = (m_filepath.arg(cur_zoom).arg(lonTileNum).arg(separation-1-latTileNum));
 
     TileDownloader *tileDownloader = new TileDownloader(separation, lonTileNum, latTileNum,
                                                         cur_zoom, textureStorePath);

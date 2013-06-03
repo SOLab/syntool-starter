@@ -3,20 +3,20 @@
 GLSceneNodeWrapper::GLSceneNodeWrapper(QObject *parent) :
     QObject(parent)
 {
-    _glSceneNode = NULL;
+    m_glSceneNode = NULL;
 }
 
 GLSceneNodeWrapper::~GLSceneNodeWrapper()
 {
-    if(_glSceneNode)
+    if(m_glSceneNode)
     {
-        _glSceneNode->palette()->material(_glSceneNode->materialIndex())->texture()->cleanupResources();
-        delete _glSceneNode->palette()->material(_glSceneNode->materialIndex())->texture();
-        _glSceneNode->deleteLater();
+        m_glSceneNode->palette()->material(m_glSceneNode->materialIndex())->texture()->cleanupResources();
+        delete m_glSceneNode->palette()->material(m_glSceneNode->materialIndex())->texture();
+        m_glSceneNode->deleteLater();
     }
 }
 
 void GLSceneNodeWrapper::setGLSceneNodeObject(QGLSceneNode *glSceneNode)
 {
-    _glSceneNode = glSceneNode;
+    m_glSceneNode = glSceneNode;
 }

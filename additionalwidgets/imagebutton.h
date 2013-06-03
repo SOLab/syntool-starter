@@ -14,8 +14,8 @@ public:
     explicit ImageButton(QString image_name, QString label, QWidget *parent = 0);
     
 protected:
-    QVBoxLayout* _layout;
-    QLabel* image_lbl;
+    QVBoxLayout*    m_layout;
+    QLabel*         image_lbl;
 
 signals:
     

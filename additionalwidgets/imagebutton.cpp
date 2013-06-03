@@ -3,8 +3,8 @@
 ImageButton::ImageButton(QString image_name, QString label, QWidget *parent) :
     QPushButton(parent)
 {
-    _layout = new QVBoxLayout();
-    _layout->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
+    m_layout = new QVBoxLayout(this);
+    m_layout->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
 
     image_lbl = new QLabel(this);
 //    if (!image_name.isNull())
@@ -29,7 +29,7 @@ ImageButton::ImageButton(QString image_name, QString label, QWidget *parent) :
     // add transparency
     image_lbl->setAttribute(Qt::WA_NoSystemBackground);
 
-    _layout->addWidget(image_lbl);
+    m_layout->addWidget(image_lbl);
     setFlat(true);
 
 //    if (!label.isNull())
@@ -43,9 +43,9 @@ ImageButton::ImageButton(QString image_name, QString label, QWidget *parent) :
     // add transparency
     lbl->setAttribute(Qt::WA_NoSystemBackground);
 
-    _layout->addWidget(lbl);
-    _layout->setContentsMargins(0,8,0,0);
-//    _layout->setSpacing(28);
+    m_layout->addWidget(lbl);
+    m_layout->setContentsMargins(0,8,0,0);
+//    m_layout->setSpacing(28);
 
     setFixedSize(96,80);
 //    setObjectName(name)
@@ -57,5 +57,4 @@ ImageButton::ImageButton(QString image_name, QString label, QWidget *parent) :
                        "QPushButton:hover:!pressed{background-color: "
                        "rgb(230,230,230); border-radius: 7px;}");
     updateGeometry();
-    setLayout(_layout);
 }

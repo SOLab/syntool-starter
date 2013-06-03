@@ -8,10 +8,10 @@ GetGranuleCoords::GetGranuleCoords(QObject *parent) :
 
 void GetGranuleCoords::getCoords(QString serverName, qint32 granuleId)
 {
-    _serverName = serverName;
-    _granuleId = granuleId;
+    m_serverName = serverName;
+    m_granuleId = granuleId;
 
-    request = QNetworkRequest(QUrl(_serverName+"/api/granules/"+QString::number(_granuleId)+"/coordinates"));
+    request = QNetworkRequest(QUrl(m_serverName+"/api/granules/"+QString::number(m_granuleId)+"/coordinates"));
     request.setRawHeader("Content-Type", "text/xml");
 
     request.setUrl(request.url());
@@ -86,7 +86,7 @@ void GetGranuleCoords::slotReadyReadCoords()
                     // West
                     float west = coordsElement.firstChildElement("minLon").text().toFloat();
 
-                    emit coordsSignal(_granuleId, north, east, south, west);
+                    emit coordsSignal(m_granuleId, north, east, south, west);
 
 //                    coordsElement = coordsElement.nextSiblingElement("Coordinates");
 //                }
