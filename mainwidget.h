@@ -47,27 +47,26 @@ public:
     void log(QtMsgType type, const QMessageLogContext &context, const QString &msg);
     static MainWindow *self;
 protected:
-    QSplitter *splitter;
+    QSplitter*    splitter;
     WindowWidget* glwgt;
-    TopMenu* topMenu;
-    TimeLine* timeLine;
+    TopMenu*      topMenu;
+    TimeLine*     timeLine;
     RightSidebar* rightSidebar;
 
-    PlaceWidget* placeWgt;
-    MapsWidget* mapsWgt;
+    PlaceWidget*    placeWgt;
+    MapsWidget*     mapsWgt;
     DatasetsWidget* datasetsWgt;
     ProductsWidget* productsWgt;
-    LayersWidget* layersWgt;
+    LayersWidget*   layersWgt;
 
     QVBoxLayout* vlayout;
     QHBoxLayout* hlayout;
-    QWidget* centralwgt;
+    QWidget*     centralwgt;
 
-    AboutWidget* aboutWgt;
+    AboutWidget*    aboutWgt;
     SettingsWidget* settingsWidget;
-
-    EarthView* earthViewPointer;
-    MetaGranules* metaGranulesPointer;
+    EarthView*      earthViewPointer;
+    MetaGranules*   metaGranulesPointer;
 
     void createMenuBar();
     void createPythonConsole();

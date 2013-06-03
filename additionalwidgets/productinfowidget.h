@@ -15,12 +15,12 @@ public:
 
 protected:
     QGridLayout* gridLayout;
-    QLabel* description;
-    QLabel* startDate;
-    QLabel* endDate;
-    QLabel* naiadProductId;
-    QLabel* productId;
-    QLabel* name;
+    QLabel*      description;
+    QLabel*      startDate;
+    QLabel*      endDate;
+    QLabel*      naiadProductId;
+    QLabel*      productId;
+    QLabel*      name;
 
 private slots:
     void closeEvent(QCloseEvent *event);

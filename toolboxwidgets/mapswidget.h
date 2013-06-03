@@ -17,7 +17,7 @@ public:
 protected:
     QVBoxLayout* vLayout;
 
-    QComboBox* supportedProjections;
+    QComboBox*   supportedProjections;
     QScrollArea* themesArea;
     ImageButton* firstTheme;
     ImageButton* secondTheme;

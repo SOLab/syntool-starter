@@ -193,6 +193,7 @@ void NavigateButton::drawSector(QVector2D navigateVector, QGLPainter *painter)
     painter->clearAttributes();
     painter->setVertexAttribute(QGL::Position, vertices);
     painter->setVertexAttribute(QGL::Normal, normals);
+
     painter->draw(QGL::TriangleFan, 6);
 
 ////////////////////////////////////////////////////

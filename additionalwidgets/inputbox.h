@@ -18,9 +18,9 @@ public:
 
 protected:
     QVBoxLayout* vLayout;
-    QLabel* lbl;
-    QLineEdit* lineEdit;
-    QValidator *validator;
+    QLabel*      lbl;
+    QLineEdit*   lineEdit;
+    QValidator*  validator;
 
 signals:
     

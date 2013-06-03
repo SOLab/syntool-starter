@@ -25,12 +25,13 @@ struct Product{
     QString ImageUrl;
     QString NaiadProductId;
     QString Name;
-    QStringList Platforms;
     QString ProcessingCenters;
     QString ProcessingLevels;
     QString ProductionInterval;
-    QStringList Sensors;
     QString SpatialResolutions;
+
+    QStringList Platforms;
+    QStringList Sensors;
 
     bool IsTiled;
     bool IsGlobalCoverage;

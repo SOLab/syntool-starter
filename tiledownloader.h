@@ -34,14 +34,15 @@ private slots:
     void fileDownloaded(QNetworkReply* pReply);
 
 private:
-    QString textureStorePath;
-    QNetworkAccessManager m_WebCtrl;
-    QByteArray m_DownloadedData;
     qint32 curZoom;
     qint32 separation;
     qint32 latTileNum;
     qint32 lonTileNum;
-    QUrl texUrl;
+
+    QUrl                  texUrl;
+    QString               textureStorePath;
+    QNetworkAccessManager m_WebCtrl;
+    QByteArray            m_DownloadedData;
 };
 
 #endif // TILEDOWNLOADER_H

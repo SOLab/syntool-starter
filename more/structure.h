@@ -23,13 +23,13 @@ struct ConfigData{
     QString configFile;
 
     QString serverName;
-    LogLevel::LogLevelValue logLevel;
     QString lang;
+    LogLevel::LogLevelValue logLevel;
 
     QString cacheDir;
-    qint32 numberCachedTiles;
-    qint32 numberCachedSimpleGranules;
-    qint32 numberCachedTiledGranules;
+    qint32  numberCachedTiles;
+    qint32  numberCachedSimpleGranules;
+    qint32  numberCachedTiledGranules;
 };
 
 struct BoundingBox {
@@ -60,6 +60,6 @@ struct TileRange{
     qint32 startY;
     qint32 endX;
     qint32 endY;
-    bool end;
+    bool   end;
 };
 #endif // STRUCTURE_H

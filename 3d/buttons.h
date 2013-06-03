@@ -106,17 +106,18 @@ public:
     void draw(QGLPainter *painter);
     void clearPositions();
     void createButton();
+
+    void createButton(QSharedPointer<QGLMaterialCollection> palette);
+private:
+    QList<QGLTexture2D*> m_LoadedTextures;
+    QList<QGLTexture2D*> m_LoadedTextures_up;
+    QSize                m_size;
+    bool                 m_hovering;
+
     SubButton *m_left;
     SubButton *m_right;
     SubButton *m_up;
     SubButton *m_down;
-
-    void createButton(QSharedPointer<QGLMaterialCollection> palette);
-private:
-    QSize m_size;
-    QList<QGLTexture2D*> m_LoadedTextures;
-    QList<QGLTexture2D*> m_LoadedTextures_up;
-    bool m_hovering;
 
 signals:
     void pressed();

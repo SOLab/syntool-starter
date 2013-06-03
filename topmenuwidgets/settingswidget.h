@@ -20,13 +20,13 @@ public:
     explicit SettingsWidget(ConfigData *configValue, QWidget *parent = 0);
 
 protected:
-    ConfigData *configData;
+    ConfigData*  configData;
     QVBoxLayout* vLayout;
+
+    QPushButton*       clearConfigButton;
     SettingsTabWidget* mainTabWidget;
 
-    QPushButton* clearConfigButton;
-
-    QWidget* buttonsWidget;
+    QWidget*     buttonsWidget;
     QHBoxLayout* buttonsLayout;
     QPushButton* okButton;
     QPushButton* applyButton;

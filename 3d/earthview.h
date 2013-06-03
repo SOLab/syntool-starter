@@ -72,30 +72,15 @@ class NavigateButton;
 class EarthView : public QGLView
 {
     Q_OBJECT
-//    Q_PROPERTY(float angle1 READ angle1 WRITE setAngle1)
-//    Q_PROPERTY(float angle2 READ angle2 WRITE setAngle2)
-//    Q_PROPERTY(float angle3 READ angle3 WRITE setAngle3)
-//    Q_PROPERTY(float glowFactor READ glowFactor WRITE setGlowFactor)
 public:
     EarthView(ConfigData *configData, QWindow *parent = 0);
     ~EarthView();
-//    float angle1() const { return m_angle1; }
-//    void setAngle1(float angle) { m_angle1 = angle; update(); }
 
-//    float angle2() const { return m_angle2; }
-//    void setAngle2(float angle) { m_angle2 = angle; update(); }
-
-//    float angle3() const { return m_angle3; }
-//    void setAngle3(float angle) { m_angle3 = angle; update(); }
-
-//    float glowFactor() const { return m_glowFactor; }
-//    void setGlowFactor(float arg) { m_glowFactor = arg; update(); }
-
-    void setupViewport(int width, int height);
-    void keyPress(QKeyEvent* e);
-    EarthScene *scene() { return m_scene; }
-    float getMemUsage();
-    void timeout();
+    void        setupViewport(int width, int height);
+    void        keyPress(QKeyEvent* e);
+    EarthScene* scene() { return m_scene; }
+    float       getMemUsage();
+    void        timeout();
 
     MetaGranules* metaGranulesNode;
 
@@ -118,25 +103,26 @@ protected:
 
 //    QGLBuilder builder;
 private:
-    EarthScene *m_scene;
-    float scale;
-    bool mousePressed;
+    EarthScene* m_scene;
+    float       scale;
+    bool        mousePressed;
 
-    bool navigateButtonPressed;
-    bool navigateValueInit;
-    QVector3D centerNavigateButton;
-    QVector2D navigateVector;
-    int radiusNavigateButton;
+    bool        navigateButtonPressed;
+    bool        navigateValueInit;
+    QVector3D   centerNavigateButton;
+    QVector2D   navigateVector;
+    int         radiusNavigateButton;
 
-    QPoint startPan, lastPan;
-    Qt::KeyboardModifiers panModifiers;
-    QSizeF scale2F;
-    QVector3D startEye;
-    QVector3D startCenter;
-    QVector3D startUpVector;
+    QPoint      startPan, lastPan;
+    QSizeF      scale2F;
+    QVector3D   startEye;
+    QVector3D   startCenter;
+    QVector3D   startUpVector;
+    SkyBox*     m_skybox;
+
     NavigateButton* navigateButton;
-    SkyBox *m_skybox;
     QSharedPointer<QGLMaterialCollection> m_palette;
+    Qt::KeyboardModifiers panModifiers;
 
 //    QGLPickNode* pick_left;
 //    float m_angle1;

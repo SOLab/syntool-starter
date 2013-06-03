@@ -32,9 +32,9 @@ public:
 
 protected:
     QHash<Key, T*> hash;
-    QList<Key> granuleNumberList;
-    qint32 maxCostValue;
-    qint32 totalCostValue;
+    QList<Key>     granuleNumberList;
+    qint32         maxCostValue;
+    qint32         totalCostValue;
 };
 
 template <class Key, class T>

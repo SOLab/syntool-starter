@@ -12,7 +12,7 @@ class Calendar : public QWidget
 public:
     explicit Calendar(QDate date, QWidget *parent = 0);
     QCalendarWidget* calendar;
-    QPushButton* okButton;
+    QPushButton*     okButton;
 
 protected:
     QGridLayout* gridLayout;

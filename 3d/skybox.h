@@ -63,11 +63,11 @@ public:
     void setImagePath(const QString &imagePath);
     void draw(QGLPainter *painter) const;
 private:
-    QGLSceneNode *m_scene;
-    QString m_imagePath;
-    QGLSceneNode *m_faces[6];
-    QGLView *m_view;
-    QGLCamera *m_camera;
+    QGLSceneNode* m_scene;
+    QString       m_imagePath;
+    QGLSceneNode* m_faces[6];
+    QGLView*      m_view;
+    QGLCamera*    m_camera;
 };
 
 #endif // SKYBOX_H

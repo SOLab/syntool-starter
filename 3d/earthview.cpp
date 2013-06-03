@@ -126,7 +126,7 @@ void EarthView::initializeGL(QGLPainter *painter)
 void EarthView::paintGL(QGLPainter *painter)
 {
     glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+//    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 //    GLfloat color[4] = { 1, 1, 1, 0.2};
 //    glColor4fv(color);
 //    glDisable(GL_CULL_FACE);
@@ -136,7 +136,6 @@ void EarthView::paintGL(QGLPainter *painter)
     metaGranulesNode->drawTiledGranules(painter);
     navigateButton->draw(painter);
 
-    glDisable(GL_BLEND);
 //    getMemUsage();
 
     if (navigateButtonPressed)
@@ -153,6 +152,7 @@ void EarthView::paintGL(QGLPainter *painter)
                       navigateButton->subButton->boundingBox().minimum().x()) / 2;
         navigateValueInit = true;
     }
+    glDisable(GL_BLEND);
 }
 
 void EarthView::keyPress(QKeyEvent *e)

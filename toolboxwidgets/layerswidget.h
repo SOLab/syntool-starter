@@ -18,8 +18,8 @@ protected:
     QVBoxLayout* vLayout;
     QVBoxLayout* productsLayout;
     QVBoxLayout* otherLayout;
-    QLabel* productLayersLbl;
-    QLabel* othersLayersLbl;
+    QLabel*      productLayersLbl;
+    QLabel*      othersLayersLbl;
 
     QList<QString>* currentProducts;
 

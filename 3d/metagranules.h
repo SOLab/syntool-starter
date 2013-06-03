@@ -20,28 +20,27 @@ public:
     void drawSimpleGranules(QGLPainter *painter);
     void drawTiledGranules(QGLPainter *painter);
     void setParent(EarthView *parentView){m_parentView = parentView;}
-
     void addGranuleNode(qint32 granuleId, qint32 productId);
+
 private:
     // int idGranule
-    QCache<qint32, SimpleGranulesNode>* simpleGranuleCache;
+    QCache<qint32, SimpleGranulesNode>*      simpleGranuleCache;
     QCache<qint32, SimpleGranuleCacheNumber> simpleGranuleNumberCache;
     // <height, granuleId> - QMap items are always sorted by key.
     QMap<qint32, qint32> heightGranuleMap;
 
     QCache<TileCacheNumber, QGLSceneNode> tiledGranuleCache;
-//    SimpleGranulesNode *granulesNode;
-
-    EarthView *m_parentView;
     QSharedPointer<QGLMaterialCollection> m_palette;
-    ConfigData *m_configData;
-    qint32 currentHeight;
-    qint32 maxHeight;
+
+    EarthView*  m_parentView;
+    ConfigData* m_configData;
+    qint32      currentHeight;
+    qint32      maxHeight;
 
     // <NaiadProductId, Product>
     QHash<QString, Product>* m_productsHash;
     // <NaiadId, NaiadProductId>
-    QHash<qint32, QString>* m_productsIdName;
+    QHash<qint32, QString>*  m_productsIdName;
 
 signals:
     void displayed();

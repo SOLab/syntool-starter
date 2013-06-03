@@ -14,9 +14,9 @@ public:
     explicit AboutWidget(QWidget *parent = 0);
     
 protected:
-    QLabel* statusLabel;
-    QLabel *imageLabel;
-    QHBoxLayout *topLayout;
+    QLabel*      statusLabel;
+    QLabel*      imageLabel;
+    QHBoxLayout* topLayout;
     
 public slots:
     

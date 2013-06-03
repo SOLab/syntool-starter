@@ -13,11 +13,11 @@ class FileOpenWidget : public QWidget
     Q_OBJECT
 public:
     explicit FileOpenWidget(QString type, QString caption, QString directory, QWidget *parent = 0);
-    
-    void setLabel();
+
+    QString value();
     QString text();
     void setText(QString text);
-    QString value();
+    void setLabel();
     QStringList valueList();
 
 protected:
@@ -25,10 +25,10 @@ protected:
     QString dialogCaption;
     QString dialogDir;
 
-    QLineEdit *lineEdit;
-    QFileDialog *fd;
-    QString data;
-    QStringList dataList;
+    QLineEdit*   lineEdit;
+    QFileDialog* fd;
+    QString      data;
+    QStringList  dataList;
 
 signals:
     void textChanged();

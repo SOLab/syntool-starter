@@ -42,27 +42,28 @@ private:
     int zoom;
     int zoom_old;
 
-    qreal curScale;
-    qreal curZoom;
+    qreal     curScale;
+    qreal     curZoom;
     GeoCoords curGeoCoords;
-    bool newZoomFlag;
+    bool      newZoomFlag;
 
 //    QList<QGLTexture2D*> m_LoadedTextures;
-    QGLTexture2D *m_texture;
-    QGraphicsRotation3D *earthRotation;
-    QGLSceneNode *sn1;
-    QGLSceneNode *sn2;
-    QGLSceneNode *sn3;
-    QGLSceneNode *sn4;
-    void buildEarthNode(qreal radius = 1.0, int divisions = 5, int separation = 1);
+    QGLTexture2D*        m_texture;
+    QGraphicsRotation3D* earthRotation;
+    QGLSceneNode*        sn1;
+    QGLSceneNode*        sn2;
+    QGLSceneNode*        sn3;
+    QGLSceneNode*        sn4;
+    QString              cacheDir;
+
+    void          buildEarthNode(qreal radius = 1.0, int divisions = 5, int separation = 1);
     QGLSceneNode* BuildSpherePart(int separation, qreal minSphereLat, qreal maxSphereLat,
                                   qreal minSphereLon, qreal maxSphereLon);
-    bool addTextureToTile(QGLSceneNode *tempNode, int separation, int lonTileNum, int latTileNum, int cur_zoom);
-    bool checkTextureFile(int separation, int lonTileNum, int latTileNum, int cur_zoom);
-    QString cacheDir;
+    bool          addTextureToTile(QGLSceneNode *tempNode, int separation, int lonTileNum, int latTileNum, int cur_zoom);
+    bool          checkTextureFile(int separation, int lonTileNum, int latTileNum, int cur_zoom);
 
-    bool checkNodeInCache(int zoom, int x, int y);
-    void cleanupResources();
+    bool          checkNodeInCache(int zoom, int x, int y);
+    void          cleanupResources();
 
 signals:
     void textureDownloadedSignal(qint32 cur_zoom, qint32 lonTileNum, qint32 latTileNum);

@@ -41,9 +41,9 @@ protected:
     TopMenuButton* addGridButton;
     TopMenuButton* TimeLineButton;
     TopMenuButton* PythonScriptButton;
-    QHBoxLayout* topLayout;
-    QHBoxLayout* leftLayout;
-    QHBoxLayout* rightLayout;
+    QHBoxLayout*   topLayout;
+    QHBoxLayout*   leftLayout;
+    QHBoxLayout*   rightLayout;
 
 signals:
     

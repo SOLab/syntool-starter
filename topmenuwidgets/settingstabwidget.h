@@ -20,18 +20,18 @@ class SettingsTabWidget : public QTabWidget
     Q_OBJECT
 public:
     explicit SettingsTabWidget(ConfigData *configValue, QWidget *parent = 0);
-    QComboBox* langCombo;
-    QLineEdit* serverNameEdit;
-    QComboBox* logLevelCombo;
+    QComboBox*      langCombo;
+    QLineEdit*      serverNameEdit;
+    QComboBox*      logLevelCombo;
     FileOpenWidget* cacheDirEdit;
-    QSpinBox* numberCachedTilesEdit;
-    QSpinBox* numberCachedSimpleGranulesEdit;
-    QSpinBox* numberCachedTiledGranulesEdit;
+    QSpinBox*       numberCachedTilesEdit;
+    QSpinBox*       numberCachedSimpleGranulesEdit;
+    QSpinBox*       numberCachedTiledGranulesEdit;
 
 protected:
-    ConfigData *configData;
-    QWidget* cacheWidget;
-    QWidget* commonWidget;
+    ConfigData* configData;
+    QWidget*    cacheWidget;
+    QWidget*    commonWidget;
     void createCacheWidget();
     void createCommonWidget();
 
