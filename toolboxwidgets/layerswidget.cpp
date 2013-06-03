@@ -54,6 +54,7 @@ void LayersWidget::addProduct(QString ProductId)
         connect(this, &LayersWidget::removeLayerBox, layerBox, &LayerBoxWidget::removeLayerBox);
 
         productsLayout->addWidget(layerBox);
+        currentProducts->append(ProductId);
     }
 }
 
@@ -61,7 +62,7 @@ void LayersWidget::deleteProduct(QString ProductId)
 {
     if (currentProducts->contains(ProductId))
     {
-        currentProducts->removeOne(ProductId);
+        currentProducts->removeAll(ProductId);
         emit removeLayerBox(ProductId);
     }
 }

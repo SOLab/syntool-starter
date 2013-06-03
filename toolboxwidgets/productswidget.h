@@ -81,7 +81,10 @@ protected:
     QPushButton* addProductLabel;
 
     QHash<QString, int> parametersList;
-    QHash<QString, Product> productsHash;
+    // <productNaiadId, Product>
+    QHash<QString, Product>* productsHash;
+    // <productId, productNaiadId>
+    QHash<qint32, QString>* productsIdName;
 
     QHash<QString, selectedProduct>* selectedProducts;
     QHash<QString, Granule>* granulesHash;
@@ -92,6 +95,7 @@ protected:
 signals:
     void productAdded(QString productId);
     void productDeleted(QString productId);
+    void productsHashSignal(QHash<QString, Product>* productsHash, QHash<qint32, QString>* productsIdName);
     
 public slots:
     void currentProductChanged(int index);

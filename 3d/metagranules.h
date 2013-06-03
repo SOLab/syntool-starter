@@ -6,6 +6,7 @@
 #include <QMap>
 
 #include "more/structure.h"
+#include "more/ProductStructures.h"
 #include "tilecachenumbersclass.h"
 #include "simplegranulesnode.h"
 
@@ -37,12 +38,18 @@ private:
     qint32 currentHeight;
     qint32 maxHeight;
 
+    // <NaiadProductId, Product>
+    QHash<QString, Product>* _productsHash;
+    // <NaiadId, NaiadProductId>
+    QHash<qint32, QString>* _productsIdName;
+
 signals:
     void displayed();
     
 public slots:
     void addSimpleGranuleNode(qint32 granuleId, qint32 productId);
     void removeSimpleGranuleNode(qint32 granuleId, qint32 productId);
+    void setProductsHashSlot(QHash<QString, Product>* productsHash, QHash<qint32, QString>* productsIdName);
     
 };
 

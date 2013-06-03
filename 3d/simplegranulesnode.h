@@ -27,16 +27,16 @@ class SimpleGranulesNode : public QGLSceneNode
     Q_OBJECT
 public:
     explicit SimpleGranulesNode(QObject *parent, QSharedPointer<QGLMaterialCollection> materials,
-                                ConfigData *configData, qint32 granuleId, qint32 productId);
+                                ConfigData *configData, qint32 granuleId, qint32 productId, bool IsGlobalCoverage);
     ~SimpleGranulesNode();
 
-    qint32 height(){return _height;}
-    void setHeight(qint32 height){_height = height;}
-    qint32 granuleId(){return _granuleId;}
-    void setGranuleId(qint32 granuleId){_granuleId = granuleId;}
-    qint32 productId(){return _productId;}
-    void setProductId(qint32 productId){_productId = productId;}
-    qint32 transparency(){return _transparency;}
+    qint32  height(){return _height;}
+    void    setHeight(qint32 height){_height = height;}
+    qint32  granuleId(){return _granuleId;}
+    void    setGranuleId(qint32 granuleId){_granuleId = granuleId;}
+    qint32  productId(){return _productId;}
+    void    setProductId(qint32 productId){_productId = productId;}
+    qint32  transparency(){return _transparency;}
 
     void getGranuleImageUrl();
     void show();
@@ -44,8 +44,9 @@ public:
     bool isVisible();
 
 protected:
-    QByteArray currentRequest;
-    QString imagePath;
+    QByteArray  currentRequest;
+    QString     imagePath;
+    bool        isGlobalCoverage;
 
 private:
     QGLSceneNode *BuildGranuleMerNode(int separation, qreal minSphereLat,
@@ -56,15 +57,15 @@ private:
     void downloadGranuleImage();
     void addGranuleNode(QString _image_path);
 
-    qint32 _height;
-    qint32 _transparency;
-    qint32 _granuleId;
-    qint32 _productId;
+    qint32  _height;
+    qint32  _transparency;
+    qint32  _granuleId;
+    qint32  _productId;
     QString cacheDir;
     QString serverName;
-    QUrl urlGranules;
-    QUrl currentGranulesUrl;
-    bool visible;
+    QUrl    urlGranules;
+    QUrl    currentGranulesUrl;
+    bool    visible;
 
     QNetworkAccessManager* networkManager;
 

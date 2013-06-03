@@ -1,12 +1,13 @@
 #include "simplegranulesnode.h"
 
 SimpleGranulesNode::SimpleGranulesNode(QObject *parent, QSharedPointer<QGLMaterialCollection> materials,
-                                       ConfigData *configData, qint32 granuleId, qint32 productId) :
+                                       ConfigData *configData, qint32 granuleId, qint32 productId, bool IsGlobalCoverage) :
     QGLSceneNode(parent)
 {
     Q_UNUSED(materials);
     Q_UNUSED(configData);
 
+    isGlobalCoverage = IsGlobalCoverage;
     setGranuleId(granuleId);
     setProductId(productId);
 
@@ -179,9 +180,23 @@ void SimpleGranulesNode::addGranuleNode(QString _image_path)
     if (!testNode)// || newZoomFlag)
     {
         delete testNode;
-        qreal minSphereLat = -M_PI_2;
-        qreal maxSphereLat = M_PI_2;
-        QGLSceneNode* testNode = BuildGranuleMerNode(1, minSphereLat, maxSphereLat, -M_PI, M_PI);
+        qreal minSphereLat=0, maxSphereLat=0, minSphereLon=0, maxSphereLon=0;
+        if (isGlobalCoverage)
+        {
+            minSphereLat = -M_PI_2;
+            maxSphereLat = M_PI_2;
+            minSphereLon = -M_PI;
+            maxSphereLon = M_PI;
+        }
+        else
+        {
+            minSphereLat = M_PI_2*60.0/90.0 - M_PI_2;
+            maxSphereLat = M_PI_2 - M_PI_2*60.0/90.0;
+            minSphereLon = M_PI_2*60.0/90.0 - M_PI_2;
+            maxSphereLon = M_PI_2 - M_PI_2*60.0/90.0;
+        }
+
+        QGLSceneNode* testNode = BuildGranuleMerNode(1, minSphereLat, maxSphereLat, minSphereLon, maxSphereLon);
         qDebug() << "addTextureToGranuleNode:" << addTextureToGranuleNode(testNode, imagePath);
 
     //    testNone->setOptions(QGLSceneNode::NoOptions);
@@ -191,10 +206,17 @@ void SimpleGranulesNode::addGranuleNode(QString _image_path)
         // add SceneNode to cache
     //    TileCacheNumber tileNumber = TileCacheNumber(cur_zoom, lonTileNum,separation-1-latTileNum);
     //    tileNodeCache.insert(tileNumber, tempNode);
-
         QGLSceneNode* temp2 = builder.finalizedSceneNode();
         temp2->setObjectName(imagePath);
         addNode(temp2);
+
+        if (!isGlobalCoverage)
+        {
+            QGraphicsRotation3D *rotateX2 = new QGraphicsRotation3D(this);
+            rotateX2->setAngle(-90.0f);
+            rotateX2->setAxis(QVector3D(1,0,0));
+            addTransform(rotateX2);
+        }
     }
     else
     {

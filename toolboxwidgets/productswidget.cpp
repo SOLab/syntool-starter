@@ -4,6 +4,9 @@
 ProductsWidget::ProductsWidget(ConfigData *configData, QWidget *parent):
     QWidget(parent)
 {
+    productsHash = new QHash<QString, Product>;
+    productsIdName = new QHash<qint32, QString>;
+
     vLayout = new QVBoxLayout(this);
     vLayout->setContentsMargins(0,2,0,0);
 //    vLayout->setSpacing(3);
@@ -134,6 +137,7 @@ Product createProductFromXml(QDomElement domElement)
     newProduct.ProductionInterval = domElement.firstChildElement("ProductionInterval").text();
     newProduct.ImageUrl = domElement.firstChildElement("ImageUrl").text();
     newProduct.ProcessingLevels = domElement.firstChildElement("ProcessingLevels").text();
+    newProduct.IsGlobalCoverage = domElement.firstChildElement("IsGlobalCoverage").text().toLower().startsWith("f") ? false : true;
 
     if (domElement.firstChildElement("IsTiled").text().toLower() == "true")
         newProduct.IsTiled = true;
@@ -238,7 +242,8 @@ void ProductsWidget::slotReadyReadProductList()
                     }
 
                     QDomElement productID = mElement.firstChildElement("NaiadProductId");
-                    productsHash[productID.text()] = newProduct;
+                    productsHash->insert(productID.text(), newProduct);
+                    productsIdName->insert(newProduct.Id, newProduct.NaiadProductId);
 
                     // create parametersList <parameterName, parameterId>
                     QHash<QString, int>::const_iterator k = newProduct.productsParameters.constBegin();
@@ -253,6 +258,7 @@ void ProductsWidget::slotReadyReadProductList()
 
                     mElement = mElement.nextSiblingElement("Product");
                 }
+                emit productsHashSignal(productsHash, productsIdName);
             }
         }
     }
@@ -314,15 +320,15 @@ void ProductsWidget::currentProductChanged(int index)
     {
         // add new parameters in comboParameters
         comboParameters->addItems( \
-                    productsHash[comboProducts->currentText()].productsParameters.keys());
+                    productsHash->value(comboProducts->currentText()).productsParameters.keys());
         comboParameters->model()->sort(0);
 
         // set product image to productImageLbl
         if (QFile::exists(QString(cacheDir+"/%1.jpg").\
-                          arg(productsHash[comboProducts->currentText()].NaiadProductId)))
+                          arg(productsHash->value(comboProducts->currentText()).NaiadProductId)))
         {
             productImagePixmap->load(QString(cacheDir+"/%1.jpg").\
-                                 arg(productsHash[comboProducts->currentText()].NaiadProductId));
+                                 arg(productsHash->value(comboProducts->currentText()).NaiadProductId));
             *productImagePixmap = productImagePixmap->scaled(116,116);
 
             productImageLbl->setPixmap(*productImagePixmap);
@@ -385,7 +391,7 @@ void ProductsWidget::getNewGranules(int scale)
         QNetworkRequest request;
         QString filter = "?";
 
-        filter += "productId="+QString::number(productsHash[k.key()].Id);
+        filter += "productId="+QString::number(productsHash->value(k.key()).Id);
         filter += "&date=" + \
                 timeLinePointer->control_.currentDate.date().toString("yyyy-MM-dd");
         filter += "&range=" + QString::number(24/scale);
@@ -396,7 +402,7 @@ void ProductsWidget::getNewGranules(int scale)
         QString south = South->text();
         QString west = West->text();
 
-        if (productsHash.value(k.key()).IsTiled)
+        if (productsHash->value(k.key()).IsTiled)
         {
             filter += "&area=(" + QString("%1,%2,%3,%4)").arg(north, east, south, west);
         }
@@ -425,7 +431,7 @@ void ProductsWidget::getGranulesForNewProduct()
     //create filter
     QString filter = "?";
 
-    filter += "productId="+QString::number(productsHash[comboProducts->currentText()].Id);
+    filter += "productId="+QString::number(productsHash->value(comboProducts->currentText()).Id);
     filter += "&date=" + \
             timeLinePointer->control_.currentDate.date().toString("yyyy-MM-dd");
     filter += "&range=20";
@@ -436,7 +442,7 @@ void ProductsWidget::getGranulesForNewProduct()
     QString south = South->text();
     QString west = West->text();
 
-    if (productsHash[comboProducts->currentText()].IsTiled)
+    if (productsHash->value(comboProducts->currentText()).IsTiled)
     {
         filter += "&area=(" + QString("%1,%2,%3,%4)").arg(north, east, south, west);
     }
@@ -458,7 +464,7 @@ void ProductsWidget::getGranulesForNewProduct()
 void ProductsWidget::slotProductInfo()
 {
     ProductInfoWidget* productInfo = new ProductInfoWidget;
-    productInfo->setProduct(productsHash[comboProducts->currentText()], productImagePixmap);
+    productInfo->setProduct(productsHash->value(comboProducts->currentText()), productImagePixmap);
     productInfo->show();
 }
 
@@ -478,7 +484,7 @@ void ProductsWidget::removeProduct(QString productId)
     QHash<QString, Granule>::const_iterator k = granulesHash->constBegin();
     while ( k != granulesHash->constEnd())
     {
-        if (productsHash[productId].Id == k.value().productId)
+        if (productsHash->value(productId).Id == k.value().productId)
             granuleIdlist.append(k.key());
         ++k;
     }
