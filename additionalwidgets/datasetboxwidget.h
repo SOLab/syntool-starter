@@ -45,7 +45,7 @@ protected:
     QString         m_serverName;
 
 signals:
-    void changedTransparency(qint32 granuleId, qint32 transparentValue);
+    void changedTransparency(qint32 granuleId, qint32 productId, qint32 transparentValue);
     void granulePropertiesSignal(qint32 granuleId);
     void changedDisplayGranule(bool checked, qint32 granuleId, qint32 productId);
 

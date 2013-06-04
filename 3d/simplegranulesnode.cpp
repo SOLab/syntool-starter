@@ -110,10 +110,10 @@ void SimpleGranulesNode::slotReadyReadImageUrl()
                         if (!mDocument.setContent(bytes, false, &errorMsg,
                                                   &errorLine, &errorColumn))
                         {
-                                qCritical() << tr("Error parse XML");
-                                qCritical() << errorMsg;
-                                qCritical() << errorLine;
-                                qCritical() << errorColumn;
+                                qWarning() << tr("Error parse XML");
+                                qDebug() << errorMsg;
+                                qDebug() << errorLine;
+                                qDebug() << errorColumn;
                                 return;
                         }
                     }
@@ -138,7 +138,32 @@ void SimpleGranulesNode::getErrorImageUrl(QNetworkReply::NetworkError)
 void SimpleGranulesNode::setTransparency(qint32 granuleId, qint32 transparency)
 {
     if (granuleId == m_granuleId)
+    {
+        if (m_transparency != transparency)
+        {
+            qCritical() << "transparency" << transparency;
+            QGLSceneNode* subNode = findSceneNode(imagePath);
+            if (subNode)
+            {
+                QGLMaterial* mat1 = subNode->material();
+                int indMat = subNode->materialIndex();
+
+                QColor ambient = mat1->ambientColor();
+                QColor diffuse = mat1->diffuseColor();
+
+                ambient.setAlphaF(transparency/100.0);
+                diffuse.setAlphaF(transparency/100.0);
+
+                mat1->setAmbientColor(ambient);
+                mat1->setDiffuseColor(diffuse);
+
+                subNode->palette()->removeMaterial(indMat);
+                int earthMat = subNode->palette()->addMaterial(mat1);
+                subNode->setMaterialIndex(earthMat);
+            }
+        }
         m_transparency = transparency;
+    }
 }
 
 void SimpleGranulesNode::addGranuleNodeStart()
@@ -176,10 +201,10 @@ void SimpleGranulesNode::addGranuleNode(QString image_path)
 
 //    QString imagePath = "/mnt/d/OISST-AVHRR-AMSR-V2.png";
 //    QString filename = "/mnt/d/ascat_20120704_003001.png";
-    QGLSceneNode* testNode = findSceneNode(imagePath);
-    if (!testNode)// || newZoomFlag)
+    QGLSceneNode* tempNode = findSceneNode(imagePath);
+    if (!tempNode)// || newZoomFlag)
     {
-        delete testNode;
+        delete tempNode;
         qreal minSphereLat=0, maxSphereLat=0, minSphereLon=0, maxSphereLon=0;
         if (isGlobalCoverage)
         {
@@ -196,19 +221,11 @@ void SimpleGranulesNode::addGranuleNode(QString image_path)
             maxSphereLon = M_PI_2 - M_PI_2*60.0/90.0;
         }
 
-        QGLSceneNode* testNode = BuildGranuleMerNode(1, minSphereLat, maxSphereLat, minSphereLon, maxSphereLon);
-        qDebug() << "addTextureToGranuleNode:" << addTextureToGranuleNode(testNode, imagePath);
+        QGLSceneNode* mainNode = BuildGranuleMerNode(1, minSphereLat, maxSphereLat, minSphereLon, maxSphereLon);
+        qDebug() << "addTextureToGranuleNode:" << addTextureToGranuleNode(mainNode, imagePath);
 
-    //    testNone->setOptions(QGLSceneNode::NoOptions);
-        QGLBuilder builder;
-        builder.sceneNode()->addNode(testNode);
-
-        // add SceneNode to cache
-    //    TileCacheNumber tileNumber = TileCacheNumber(cur_zoom, lonTileNum,separation-1-latTileNum);
-    //    tileNodeCache.insert(tileNumber, tempNode);
-        QGLSceneNode* temp2 = builder.finalizedSceneNode();
-        temp2->setObjectName(imagePath);
-        addNode(temp2);
+        mainNode->setObjectName(imagePath);
+        addNode(mainNode);
 
         if (!isGlobalCoverage)
         {

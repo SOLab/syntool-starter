@@ -66,7 +66,7 @@ void DatasetBoxWidget::closeGranuleId(qint32 granuleId)
 void DatasetBoxWidget::changedTransparencySlot(qint32 transparentValue)
 {
     percentLabel->setText(QString::number(transparentValue)+"%");
-    emit changedTransparency(m_granuleId, transparentValue);
+    emit changedTransparency(m_granuleId, m_productId, transparentValue);
 }
 
 void DatasetBoxWidget::showMoreButtons()

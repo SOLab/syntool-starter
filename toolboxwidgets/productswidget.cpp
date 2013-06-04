@@ -211,10 +211,10 @@ void ProductsWidget::slotReadyReadProductList()
                         if (!mDocument.setContent(bytes, false,
                                                   &errorMsg, &errorLine, &errorColumn))
                         {
-                                qCritical() << tr("Error parse XML");
-                                qCritical() << errorMsg;
-                                qCritical() << errorLine;
-                                qCritical() << errorColumn;
+                                qWarning() << tr("Error parse XML");
+                                qDebug() << errorMsg;
+                                qDebug() << errorLine;
+                                qDebug() << errorColumn;
                                 return;
                         }
                     }

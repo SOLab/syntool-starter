@@ -42,10 +42,10 @@ public:
     void show();
     void hide();
     bool isVisible();
+    QString     imagePath;
 
 protected:
     QByteArray  currentRequest;
-    QString     imagePath;
     bool        isGlobalCoverage;
 
 private:

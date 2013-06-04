@@ -71,6 +71,9 @@ void DatasetsWidget::addDatasets(QHash<qint32, qint32> *displayedGranules)
             // showDatasetCheck clicked
             connect(datasetBox, &DatasetBoxWidget::changedDisplayGranule, this, &DatasetsWidget::changedDisplayGranule);
 
+            // changed transparency
+            connect(datasetBox, &DatasetBoxWidget::changedTransparency, this, &DatasetsWidget::changedGranuleTransparency);
+
             vLayout->addWidget(datasetBox);
         }
         ++dgi;

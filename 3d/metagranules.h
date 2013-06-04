@@ -48,6 +48,7 @@ signals:
 public slots:
     void addSimpleGranuleNode(qint32 granuleId, qint32 productId);
     void removeSimpleGranuleNode(qint32 granuleId, qint32 productId);
+    void setGranuleTransparency(qint32 granuleId, qint32 productId, qint32 transparency);
     void setProductsHashSlot(QHash<QString, Product>* productsHash, QHash<qint32, QString>* productsIdName);
     
 };

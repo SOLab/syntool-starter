@@ -92,6 +92,13 @@ void MetaGranules::removeSimpleGranuleNode(qint32 granuleId, qint32 productId)
     emit displayed();
 }
 
+void MetaGranules::setGranuleTransparency(qint32 granuleId, qint32 productId, qint32 transparency)
+{
+    Q_UNUSED(productId);
+    if (simpleGranuleCache->contains(granuleId))
+        simpleGranuleCache->object(granuleId)->setTransparency(granuleId, transparency);
+}
+
 void MetaGranules::setProductsHashSlot(QHash<QString, Product> *productsHash, QHash<qint32, QString> *productsIdName)
 {
     m_productsHash = productsHash;

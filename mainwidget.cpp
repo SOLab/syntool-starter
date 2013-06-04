@@ -111,6 +111,8 @@ void MainWindow::setHostedWindow(EarthView *window)
 
     connect(datasetsWgt, &DatasetsWidget::displayGranule, metaGranulesPointer, &MetaGranules::addGranuleNode);
     connect(datasetsWgt, &DatasetsWidget::hideGranule, metaGranulesPointer, &MetaGranules::removeSimpleGranuleNode);
+    connect(datasetsWgt, &DatasetsWidget::changedGranuleTransparency,
+            metaGranulesPointer, &MetaGranules::setGranuleTransparency);
     connect(productsWgt, &ProductsWidget::productsHashSignal, metaGranulesPointer, &MetaGranules::setProductsHashSlot);
 }
 
