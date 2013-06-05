@@ -39,12 +39,14 @@ TimeLine::TimeLine(ConfigData *configData, QWidget *parent)
 
     QHBoxLayout* hLayout = new QHBoxLayout(this);
     QPushButton* calendarButton = new QPushButton(tr("Set date"), this);
-    calendarButton->setFixedSize(60, 24);
+//    calendarButton->setFixedSize(60, 24);
+    calendarButton->setFixedSize(calendarButton->sizeHint().width()+4, 24);
     calendarButton->setStyleSheet(" QPushButton {\
                                         border: 1px solid #8f8f91; border-radius: 10px; \
                                         background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,\
                                                                           stop: 0 #f6f7fa, stop: 1 #dadbde);\
-                                        min-width: 80px;}\
+//                                        min-width: 80px;\
+                                        }\
                                     QPushButton:pressed {\
                                         background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,\
                                                                           stop: 0 #dadbde, stop: 1 #f6f7fa);}");
@@ -306,14 +308,15 @@ void TimeLine::wheelEvent(QWheelEvent *pe)
 // get current QString dayMonth (ex. 14feb.)
 QString getDayMonth(QDateTime dateTime)
 {
-    return QString::number(dateTime.date().day()) + dateTime.date().shortMonthName(dateTime.date().month());
+    return QString::number(dateTime.date().day()) + " " + QLocale().monthName(dateTime.date().month(), QLocale::ShortFormat);
+//    return QString::number(dateTime.date().day()) + " " + dateTime.date().shortMonthName(dateTime.date().month());
 }
 
 // get first day of the week QString dayMonth (ex. 14feb.)
 QString getFirstDayOfWeekMonth(QDateTime dateTime)
 {
     QDateTime tempDate = dateTime.addDays(-1*dateTime.date().dayOfWeek() + 1);
-    return QString::number(tempDate.date().day()) + tempDate.date().shortMonthName(tempDate.date().month());
+    return QString::number(tempDate.date().day()) + " " + QLocale().monthName(tempDate.date().month(), QLocale::ShortFormat);
 }
 
 void TimeLine::createTopRect()
@@ -416,14 +419,14 @@ void TimeLine::createBottomRect()
     if (halfWidth > curWeekPixel)
     {
         painter.drawLine(halfWidth - curWeekPixel, height() - 24, halfWidth - curWeekPixel, height());
-        painter.drawText(halfWidth - curWeekPixel + 2, height(), getFirstDayOfWeekMonth(control_.currentDate));
+        painter.drawText(halfWidth - curWeekPixel + 2, height() - 3, getFirstDayOfWeekMonth(control_.currentDate));
     }
 
     int dayForText = -7;
     while (halfWidth > prevWeekPixel)
     {
         painter.drawLine(halfWidth - prevWeekPixel, height() - 24, halfWidth - prevWeekPixel, height());
-        painter.drawText(halfWidth - prevWeekPixel + 2, height(),
+        painter.drawText(halfWidth - prevWeekPixel + 2, height() - 3,
                          getFirstDayOfWeekMonth(control_.currentDate.addDays(dayForText)));
         prevWeekPixel += control_.markerDistance;
         dayForText -= 7;
@@ -433,7 +436,7 @@ void TimeLine::createBottomRect()
     while (halfWidth > nextWeekPixel)
     {
         painter.drawLine(halfWidth + nextWeekPixel, height() - 24, halfWidth + nextWeekPixel, height());
-        painter.drawText(halfWidth + nextWeekPixel + 2, height(),
+        painter.drawText(halfWidth + nextWeekPixel + 2, height() - 3,
                          getFirstDayOfWeekMonth(control_.currentDate.addDays(dayForText)));
 
         nextWeekPixel += control_.markerDistance;

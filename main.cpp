@@ -75,6 +75,11 @@ int main(int argc, char *argv[])
     myTranslator.load(configData->lang, "../");
     app.installTranslator(&myTranslator);
 
+    if (configData->lang.startsWith("ru"))
+        QLocale::setDefault(QLocale("ru_RU"));
+    else
+        QLocale::setDefault(QLocale("en_EN"));
+
     QDir cacheDir(configData->cacheDir);
     if (!cacheDir.exists()){
         cacheDir.mkdir(cacheDir.path());
