@@ -63,5 +63,8 @@
         <file alias="warning.png">resources/icons/Warning.png</file>
         <file alias="info.png">resources/icons/Info.png</file>
         <file alias="down.png">resources/icons/Down.png</file>
+        <file alias="stop_gray.png">resources/icons/stop_gray.png</file>
+        <file alias="play_gray.png">resources/icons/play_gray.png</file>
+        <file alias="backplay_gray.png">resources/icons/backplay_gray.png</file>
     </qresource>
 </RCC>

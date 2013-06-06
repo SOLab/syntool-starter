@@ -49,7 +49,8 @@ SOURCES = \
     3d/metagranules.cpp \
     3d/glscenenodewrapper.cpp \
     3d/tilecachenumbersclass.cpp \
-    topmenuwidgets/fileopenwidget.cpp
+    topmenuwidgets/fileopenwidget.cpp \
+    additionalwidgets/timelineplayer.cpp
 HEADERS = \
     mainwidget.h \
     windowwidget.h \
@@ -94,7 +95,8 @@ HEADERS = \
     3d/tilecachenumbersclass.h \
     glclasses/glnodecache.h \
     topmenuwidgets/fileopenwidget.h \
-    more/configfunctions.h
+    more/configfunctions.h \
+    additionalwidgets/timelineplayer.h
 RESOURCES += \
     syntool.qrc
 DEPENDPATH += resources

@@ -37,10 +37,12 @@ TimeLine::TimeLine(ConfigData *configData, QWidget *parent)
     currentGranuleId = 0;
     serverName = configData->serverName;
 
-    QHBoxLayout* hLayout = new QHBoxLayout(this);
+    QVBoxLayout* vLayout = new QVBoxLayout(this);
     QPushButton* calendarButton = new QPushButton(tr("Set date"), this);
-//    calendarButton->setFixedSize(60, 24);
-    calendarButton->setFixedSize(calendarButton->sizeHint().width()+4, 24);
+
+    qint8 buttonSize = (calendarButton->sizeHint().width()<108) ? 112: calendarButton->sizeHint().width()+4;
+
+    calendarButton->setFixedSize(buttonSize, 24);
     calendarButton->setStyleSheet(" QPushButton {\
                                         border: 1px solid #8f8f91; border-radius: 10px; \
                                         background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,\
@@ -53,9 +55,18 @@ TimeLine::TimeLine(ConfigData *configData, QWidget *parent)
 
     connect(calendarButton, &QPushButton::clicked, this, &TimeLine::setDate);
 
+
+    timelinePlayer = new TimeLinePlayer(this);
+    timelinePlayer->setFixedSize(buttonSize, 24);
+    connect(timelinePlayer, &TimeLinePlayer::addTimeSignal, this, &TimeLine::plusTime);
+    connect(timelinePlayer, &TimeLinePlayer::deductTimeSignal, this, &TimeLine::minusTime);
+
     imageGeoPoint = QImage(":/orange-circle.png");
 
-    hLayout->addWidget(calendarButton, 0, Qt::AlignRight | Qt::AlignTop);
+    vLayout->addWidget(calendarButton, 0, Qt::AlignRight | Qt::AlignTop);
+    vLayout->addWidget(timelinePlayer, 0, Qt::AlignRight | Qt::AlignTop);
+    vLayout->setSpacing(0);
+    vLayout->addSpacing(24);
     createGranulesContextMenu();
 }
 
@@ -574,9 +585,7 @@ void TimeLine::setDate()
 
 void TimeLine::setCurrentDate()
 {
-    qWarning() << calendar->calendar->selectedDate().toString();
     control_.currentDate.setDate(calendar->calendar->selectedDate());
-    qWarning() << control_.currentDate.toString();
     calendar->close();
     calendar->deleteLater();
 
@@ -622,4 +631,16 @@ void TimeLine::changedDay()
     // get new granules for all products
     emit getNewAllGranules(control_.markerDistance/360);
 
+}
+
+void TimeLine::plusTime(qint32 minutes)
+{
+    control_.currentDate = control_.currentDate.addSecs(minutes*60);
+    repaint();
+}
+
+void TimeLine::minusTime(qint32 minutes)
+{
+    control_.currentDate = control_.currentDate.addSecs(minutes*(-60));
+    repaint();
 }

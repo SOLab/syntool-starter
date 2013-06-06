@@ -20,6 +20,7 @@
 #include <QList>
 #include <qmath.h>
 #include "additionalwidgets/calendar.h"
+#include "additionalwidgets/timelineplayer.h"
 #include "additionalwidgets/granuleinfowidget.h"
 #include "more/ProductStructures.h"
 #include "more/granuleactions.h"
@@ -90,6 +91,7 @@ protected:
     void drawAllMarkers();
 
     Calendar* calendar;
+    TimeLinePlayer* timelinePlayer;
 
     QList<geoPoint>*                 geoPointList;
     QList<geoSegment>                geoSegmentList;
@@ -115,6 +117,8 @@ protected:
 public slots:
     void setDate();
     void setCurrentDate();
+    void plusTime(qint32 minutes);
+    void minusTime(qint32 minutes);
 
     void addGeoPoint(QDateTime dateTime, qint32 granuleId, float lat, float lon, int productId);
     void addGeoSegment(QDateTime startDateTime, QDateTime endDateTime, float lat, float lon);
