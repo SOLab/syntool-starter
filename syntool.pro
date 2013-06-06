@@ -34,8 +34,6 @@ SOURCES = \
     additionalwidgets/imagebutton.cpp \
     topmenuwidgets/settingswidget.cpp \
     topmenuwidgets/settingstabwidget.cpp \
-    topmenuwidgets/cachetabwidget.cpp \
-    topmenuwidgets/commontabwidget.cpp \
     network/downloadimage.cpp \
     additionalwidgets/productinfowidget.cpp \
     network/getgranules.cpp \
@@ -74,8 +72,6 @@ HEADERS = \
     additionalwidgets/imagebutton.h \
     topmenuwidgets/settingswidget.h \
     topmenuwidgets/settingstabwidget.h \
-    topmenuwidgets/cachetabwidget.h \
-    topmenuwidgets/commontabwidget.h \
     network/downloadimage.h \
     additionalwidgets/productinfowidget.h \
     more/ProductStructures.h \
