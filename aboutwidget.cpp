@@ -1,6 +1,6 @@
 #include "aboutwidget.h"
 
-AboutWidget::AboutWidget(QWidget *parent) :
+AboutWidget::AboutWidget(ConfigData *configData, QWidget *parent):
     QWidget(parent)
 {
     QString copyright = "&copy;";
@@ -20,7 +20,11 @@ AboutWidget::AboutWidget(QWidget *parent) :
     statusLabel = new QLabel(htmlHelp, this);
     statusLabel->setOpenExternalLinks(true);
 
-    QImageReader *ir = new QImageReader(":/logo-en.png");
+    QImageReader *ir = new QImageReader;
+    if (configData->lang.toLower().startsWith("ru"))
+        ir->setFileName(":/logo-ru.png");
+    else
+        ir->setFileName(":/logo-en.png");
     imageLabel = new QLabel(this);
 
     QPixmap pm2 = QPixmap().fromImageReader(ir);

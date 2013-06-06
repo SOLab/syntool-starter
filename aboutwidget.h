@@ -6,12 +6,13 @@
 #include <QDate>
 #include <QImageReader>
 #include <QHBoxLayout>
+#include "more/structure.h"
 
 class AboutWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit AboutWidget(QWidget *parent = 0);
+    explicit AboutWidget(ConfigData *configData, QWidget *parent = 0);
     
 protected:
     QLabel*      statusLabel;
