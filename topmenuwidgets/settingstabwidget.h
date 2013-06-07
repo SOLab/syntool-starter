@@ -10,9 +10,7 @@
 #include <QDebug>
 #include <QSettings>
 
-#include "topmenuwidgets/cachetabwidget.h"
 #include "more/structure.h"
-#include "topmenuwidgets/commontabwidget.h"
 #include "fileopenwidget.h"
 
 class SettingsTabWidget : public QTabWidget
