@@ -9,6 +9,7 @@
 #include <QPushButton>
 
 #include <QDebug>
+#include <QMouseEvent>
 
 #include "more/ProductStructures.h"
 #include "more/granuleactions.h"
@@ -20,6 +21,7 @@ class DatasetBoxWidget : public QWidget
 public:
     explicit DatasetBoxWidget(QString serverName, Granule granule, QWidget *parent = 0);
     QCheckBox* showDatasetCheck;
+    void setBold(bool value);
 
 protected:
     QGridLayout*    gridLayout;
@@ -44,10 +46,13 @@ protected:
     qint32          m_productId;
     QString         m_serverName;
 
+    void mousePressEvent (QMouseEvent * e);
+
 signals:
     void changedTransparency(qint32 granuleId, qint32 productId, qint32 transparentValue);
     void granulePropertiesSignal(qint32 granuleId);
     void changedDisplayGranule(bool checked, qint32 granuleId, qint32 productId);
+    void selectDataset(qint32 qranuleId);
 
 public slots:
     void closeGranuleId(qint32 granuleId);

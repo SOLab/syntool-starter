@@ -30,6 +30,8 @@ protected:
 
     QHash<QString, Granule>* m_granulesHash;
     QString                  serverName;
+    DatasetBoxWidget*        selectedDataset;
+    qint32                   selectedGranuleId;
 
 signals:
     void closeAllDatasetBoxWidgets();
@@ -43,6 +45,10 @@ public slots:
     void actionPropertiesSlot(qint32 granuleId);
     void changedDisplayGranule(bool checked, qint32 granuleId, qint32 productId);
     void downloadAllSlot();
+
+    void selectDatasetSlot(qint32 granuleId);
+    void upDatasetSlot();
+    void downDatasetSlot();
 };
 
 #endif // DATASETSWIDGET_H

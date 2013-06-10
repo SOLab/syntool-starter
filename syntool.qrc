@@ -57,5 +57,7 @@
         <file alias="stop_gray.png">resources/icons/stop_gray.png</file>
         <file alias="play_gray.png">resources/icons/play_gray.png</file>
         <file alias="backplay_gray.png">resources/icons/backplay_gray.png</file>
+        <file alias="go_down.png">resources/icons/go_down.png</file>
+        <file alias="go_up.png">resources/icons/go_up.png</file>
     </qresource>
 </RCC>

@@ -21,11 +21,41 @@ DatasetsWidget::DatasetsWidget(ConfigData *configData, QWidget *parent) :
                   .arg(parent->palette().background().color().green())
                   .arg(parent->palette().background().color().blue()));
 
+    QHBoxLayout* hLayout = new QHBoxLayout;
+
     showAllCheck = new QCheckBox(this);
     showAllCheck->setText(tr("Show all"));
     showAllCheck->setChecked(true);
 
-    vLayout->addWidget(showAllCheck);
+    hLayout->addWidget(showAllCheck);
+
+    QPushButton* upButton = new QPushButton(this);
+    upButton->setIcon(QIcon(":/icons/go_up.png"));
+    upButton->setFlat(true);
+    upButton->setFocusPolicy(Qt::NoFocus);
+    upButton->setStyleSheet("QPushButton:pressed {\
+                             background-color: #EEEEEE;\
+                             border: 0;}");
+    upButton->setIconSize(QSize(16, 16));
+    upButton->setFixedSize(20, 20);
+    connect(upButton, &QPushButton::clicked, this, &DatasetsWidget::upDatasetSlot);
+
+    QPushButton* downButton = new QPushButton(this);
+    downButton->setIcon(QIcon(":/icons/go_down.png"));
+    downButton->setFlat(true);
+    downButton->setFocusPolicy(Qt::NoFocus);
+    downButton->setStyleSheet("QPushButton:pressed {\
+                               background-color: #EEEEEE;\
+                               border: 0;}");
+    downButton->setIconSize(QSize(16, 16));
+    downButton->setFixedSize(20, 20);
+    connect(downButton, &QPushButton::clicked, this, &DatasetsWidget::downDatasetSlot);
+
+    hLayout->addWidget(upButton);
+    hLayout->addWidget(downButton);
+    hLayout->setSpacing(0);
+
+    vLayout->addLayout(hLayout);
 
     downloadAllButton = new QPushButton(tr("Download all"), this);
     downloadAllButton->setToolTip(tr("Download all selected granules"));
@@ -36,6 +66,9 @@ DatasetsWidget::DatasetsWidget(ConfigData *configData, QWidget *parent) :
     hLine->setFrameShape(QFrame::HLine);
     hLine->setFrameShadow(QFrame::Sunken);
     vLayout->addWidget(hLine);
+
+    selectedDataset = NULL;
+    selectedGranuleId = 0;
 
     setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
 }
@@ -61,11 +94,9 @@ void DatasetsWidget::addDatasets(QHash<qint32, qint32> *displayedGranules)
                 if (!selectedGranuleList->contains(dgi.key()))
                     selectedGranuleList->append(dgi.key());
 
-            connect(datasetBox, &DatasetBoxWidget::granulePropertiesSignal,
-                    this, &DatasetsWidget::actionPropertiesSlot);
+            connect(datasetBox, &DatasetBoxWidget::granulePropertiesSignal, this, &DatasetsWidget::actionPropertiesSlot);
 
-            connect(this, &DatasetsWidget::closeDatasetForGranuleId,
-                    datasetBox, &DatasetBoxWidget::closeGranuleId);
+            connect(this, &DatasetsWidget::closeDatasetForGranuleId, datasetBox, &DatasetBoxWidget::closeGranuleId);
             connect(showAllCheck, &QCheckBox::clicked, datasetBox, &DatasetBoxWidget::setChecked);
 
             // showDatasetCheck clicked
@@ -73,6 +104,8 @@ void DatasetsWidget::addDatasets(QHash<qint32, qint32> *displayedGranules)
 
             // changed transparency
             connect(datasetBox, &DatasetBoxWidget::changedTransparency, this, &DatasetsWidget::changedGranuleTransparency);
+            // select new dataset
+            connect(datasetBox, &DatasetBoxWidget::selectDataset, this, &DatasetsWidget::selectDatasetSlot);
 
             vLayout->addWidget(datasetBox);
         }
@@ -89,6 +122,11 @@ void DatasetsWidget::addDatasets(QHash<qint32, qint32> *displayedGranules)
             currentRemoveNumbers->append(cdi.key());
             emit hideGranule(cdi.key(), cdi.value());
             selectedGranuleList->removeAll(cdi.key());
+            if (selectedGranuleId == cdi.key())
+            {
+                selectedDataset = NULL;
+                selectedGranuleId = 0;
+            }
         }
         ++cdi;
     }
@@ -126,7 +164,23 @@ void DatasetsWidget::downloadAllSlot()
     for (int i = 0; i < selectedGranuleList->size(); ++i) {
          granuleActions(serverName, QString::number(selectedGranuleList->at(i)), "ftp");
          qCritical() << "DOWNLOAD GRANULE: "<< selectedGranuleList->at(i);
-     }
+    }
+}
 
+void DatasetsWidget::selectDatasetSlot(qint32 granuleId)
+{
+    DatasetBoxWidget* tempDataset = qobject_cast<DatasetBoxWidget *>(sender());
+    if (selectedDataset)
+        selectedDataset->setBold(false);
+    tempDataset->setBold(true);
+    selectedGranuleId = granuleId;
+    selectedDataset = tempDataset;
+}
 
+void DatasetsWidget::upDatasetSlot()
+{
+}
+
+void DatasetsWidget::downDatasetSlot()
+{
 }

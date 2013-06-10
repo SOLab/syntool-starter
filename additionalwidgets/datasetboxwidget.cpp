@@ -159,8 +159,18 @@ void DatasetBoxWidget::actionKmlSlot()
 
 void DatasetBoxWidget::actionPropertiesSlot()
 {
-//    GranuleInfoWidget* currentGranuleWidget =
-//            new GranuleInfoWidget(granulesHash->value(QString::number(m_granuleId)));
-//    currentGranuleWidget->show();
     emit granulePropertiesSignal(m_granuleId);
+}
+
+void DatasetBoxWidget::setBold(bool value)
+{
+    QFont lblFont = granuleNameLabel->font();
+    lblFont.setBold(value);
+    granuleNameLabel->setFont(lblFont);
+}
+
+void DatasetBoxWidget::mousePressEvent(QMouseEvent *e)
+{
+    emit selectDataset(m_granuleId);
+    e->accept();
 }
