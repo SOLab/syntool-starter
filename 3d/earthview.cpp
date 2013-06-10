@@ -57,7 +57,6 @@ EarthView::EarthView(ConfigData *configData, QWindow *parent)
     : QGLView(parent)
     , m_scene(0)
     , m_palette(new QGLMaterialCollection())
-//    , sunEffect(0)
 {
     //Generate geometry for the scene
 //    spaceScene = createScene();
@@ -81,13 +80,15 @@ EarthView::EarthView(ConfigData *configData, QWindow *parent)
     lastPan = QPoint(-1, -1);
     panModifiers = Qt::NoModifier;
 
-    m_scene = new EarthScene(this);
     navigateButton = new NavigateButton(this, m_palette);
 
+    m_scene = new EarthScene(this);
     m_scene->setPickable(true);
-    m_scene->mainNode()->addNode(navigateButton);
+//    m_scene->mainNode()->addNode(navigateButton);
 
     earth = new Earth(this, m_palette, configData);
+    earth->setObjectName("Earth");
+
     connect (this, &EarthView::updatedTilesSignal, earth, &Earth::updateTilesSlot);
     connect (earth, &Earth::displayed, this, &EarthView::update);
 
@@ -108,6 +109,8 @@ EarthView::EarthView(ConfigData *configData, QWindow *parent)
 
     GeoCoords pos = getGeoCoordsPos(camera()->eye());
     emit updatedTilesSignal(scale, pos);
+
+    test = false;
 }
 
 EarthView::~EarthView()
@@ -152,6 +155,7 @@ void EarthView::paintGL(QGLPainter *painter)
                       navigateButton->subButton->boundingBox().minimum().x()) / 2;
         navigateValueInit = true;
     }
+
     glDisable(GL_BLEND);
 }
 
@@ -395,6 +399,18 @@ void EarthView::mousePressEvent(QMouseEvent *e)
 {
     Q_UNUSED(e);
 
+    registerPicking();
+    if (objectForPoint(e->pos()))
+    {
+        QGLPickNode* node = qobject_cast<QGLPickNode*>(objectForPoint(e->pos()));
+//        qCritical() << node->target();
+//        qCritical() << earth;
+        QString search_path = QString("tile-0-0-0");
+//        qCritical() << earth->findSceneNode(search_path);
+        if (node->target() == qobject_cast<QGLSceneNode*>(earth))
+            qDebug() << "111111111";
+    }
+
     int centerX = qRound(centerNavigateButton.x());
     int centerY = qRound(centerNavigateButton.y());
     int mouseX = e->pos().x();
@@ -517,4 +533,67 @@ float EarthView::getMemUsage()
     delete Process1;
     delete Process2;
     return mem_percent.toFloat();
+}
+
+void EarthView::registerPicking()
+{
+    if (test)
+        return;
+
+//    QString search_path = QString("tile-0-0-0");
+//    m_scene->mainNode()->addNode(earth->findSceneNode(search_path));
+//    QGLAbstractScene *manager = m_scene->manager();
+    QList<QGLPickNode *>nodes = m_scene->pickNodes();
+    QList<QGLPickNode *>::const_iterator it = nodes.constBegin();
+    for ( ; it != nodes.constEnd(); ++it)
+    {
+        QGLPickNode *node = *it;
+//        qCritical() << node->objectName();
+//        qCritical() << "!!!!!!!!!!!!!" << node->target();
+//        qCritical() << "55555555" << node->target()->objectName();
+
+        if (node->target()->objectName().startsWith("tile") || node->target()->objectName().startsWith("E"))
+            qCritical() << node->target()->geometry();
+
+        {
+            registerObject(node->id(), node);
+//            qCritical() << "6666666666";
+            connect(node, SIGNAL(clicked()),
+                    this, SLOT(objectPicked()));
+        }
+
+    }
+//    qCritical() << "777777777777";
+    test = true;
+}
+
+void EarthView::objectPicked()
+{
+//    qCritical() << "88888888888";
+    Q_ASSERT(m_treeView);
+    QGLPickNode *node = qobject_cast<QGLPickNode*>(sender());
+    Q_ASSERT(node);
+    QGLSceneNode *target = qobject_cast<QGLSceneNode*>(node->target());
+//    QModelIndex ix = m_model->selectNode(target);
+//    m_treeView->expand(ix);
+//    m_treeView->selectionModel()->clearSelection();
+//    m_treeView->selectionModel()->select(ix, QItemSelectionModel::Select);
+//    qCritical() << "Picked:" << node->target();
+//    qCritical() << "Picked:" << target->objectName();
+}
+
+void EarthView::unregisterPicking()
+{
+//    qCritical() << "99999999";
+    QGLPickNode* node = earth->pickNode();
+    deregisterObject(node->id());
+//    connect(node, &QGLPickNode::clicked, this, &EarthView::objectPicked);
+
+//        QList<QGLPickNode *>nodes = earth->pickNode();
+//        QList<QGLPickNode *>::const_iterator it = nodes.constBegin();
+//        for ( ; it != nodes.constEnd(); ++it)
+//        {
+//            QGLPickNode *node = *it;
+//            deregisterObject(node->id());
+//        }
 }

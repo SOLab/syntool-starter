@@ -48,6 +48,7 @@
 #include <QTimer>
 #include <QApplication>
 #include <GL/gl.h>
+#include <QGLPickNode>
 
 #include "qglview.h"
 #include "earth.h"
@@ -103,6 +104,7 @@ protected:
 
 //    QGLBuilder builder;
 private:
+    bool test;
     EarthScene* m_scene;
     float       scale;
     bool        mousePressed;
@@ -120,9 +122,9 @@ private:
     QVector3D   startUpVector;
     SkyBox*     m_skybox;
 
-    NavigateButton* navigateButton;
+    NavigateButton*                       navigateButton;
     QSharedPointer<QGLMaterialCollection> m_palette;
-    Qt::KeyboardModifiers panModifiers;
+    Qt::KeyboardModifiers                 panModifiers;
 
 //    QGLPickNode* pick_left;
 //    float m_angle1;
@@ -133,12 +135,18 @@ private:
     void scalePlus();
     void scaleMinus();
 protected slots:
-    void rotate(int deltax, int deltay);
     void scalePlusMinusSlot(bool plus);
     void leftSlot();
 
     void navigateButtonPress();
     void rotateInertia();
+
+public slots:
+    void rotate(int deltax, int deltay);
+
+    void registerPicking();
+    void unregisterPicking();
+    void objectPicked();
 
 signals:
   void updatedTilesSignal(qreal scale, GeoCoords geoCoords);

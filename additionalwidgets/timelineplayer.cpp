@@ -33,7 +33,7 @@ TimeLinePlayer::TimeLinePlayer(QWidget *parent) :
                                   }");
     connect(playButton, &QPushButton::clicked, this, &TimeLinePlayer::play);
 
-    stopButton = new QPushButton(QIcon(":/icons/pause_gray.png"),"", this);
+    stopButton = new QPushButton(QIcon(":/icons/stop_gray.png"),"", this);
     stopButton->setFlat(true);
     stopButton->setFocusPolicy(Qt::NoFocus);
     stopButton->setFixedSize(18,18);
