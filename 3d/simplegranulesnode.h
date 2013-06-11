@@ -67,6 +67,7 @@ private:
     QUrl    urlGranules;
     QUrl    currentGranulesUrl;
     bool    visible;
+    bool    rebuild;
 
     QNetworkAccessManager*  networkManager;
     QGLSceneNode*           mainNode;

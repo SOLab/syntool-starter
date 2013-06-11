@@ -22,6 +22,7 @@ SimpleGranulesNode::SimpleGranulesNode(QObject *parent, QSharedPointer<QGLMateri
 
     m_height = 0;
     m_transparency = 100;
+    rebuild = false;
 
     QGraphicsRotation3D *axialTilt1 = new QGraphicsRotation3D(this);
     axialTilt1->setAngle(270.0f);
@@ -224,12 +225,12 @@ void SimpleGranulesNode::addGranuleNode(QString image_path)
         mainNode->setObjectName(imagePath);
         addNode(mainNode);
 
-        if (!isGlobalCoverage)
+        if (!(isGlobalCoverage || rebuild))
         {
-            QGraphicsRotation3D *rotateX2 = new QGraphicsRotation3D(this);
-            rotateX2->setAngle(-90.0f);
-            rotateX2->setAxis(QVector3D(1,0,0));
-            addTransform(rotateX2);
+            QGraphicsRotation3D *rotateX = new QGraphicsRotation3D(this);
+            rotateX->setAngle(-90.0f);
+            rotateX->setAxis(QVector3D(1,0,0));
+            addTransform(rotateX);
         }
     }
     else
@@ -240,6 +241,7 @@ void SimpleGranulesNode::addGranuleNode(QString image_path)
 
 void SimpleGranulesNode::rebuildGranuleNode()
 {
+    rebuild = true;
     if (mainNode)
         removeNode(mainNode);
     addGranuleNode(imagePath);
