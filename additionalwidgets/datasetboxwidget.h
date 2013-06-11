@@ -22,6 +22,7 @@ public:
     explicit DatasetBoxWidget(QString serverName, Granule granule, QWidget *parent = 0);
     QCheckBox* showDatasetCheck;
     void setBold(bool value);
+    qint32 granuleId(){return m_granuleId;}
 
 protected:
     QGridLayout*    gridLayout;

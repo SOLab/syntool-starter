@@ -43,6 +43,7 @@ public:
     void hide();
     bool isVisible();
     QString     imagePath;
+    void rebuildGranuleNode();
 
 protected:
     QByteArray  currentRequest;
@@ -67,7 +68,8 @@ private:
     QUrl    currentGranulesUrl;
     bool    visible;
 
-    QNetworkAccessManager* networkManager;
+    QNetworkAccessManager*  networkManager;
+    QGLSceneNode*           mainNode;
 
 signals:
     void granuleImageUrlReceived();

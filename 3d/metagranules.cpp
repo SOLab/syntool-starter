@@ -5,11 +5,9 @@ MetaGranules::MetaGranules(EarthView *parentView, QSharedPointer<QGLMaterialColl
     m_palette = palette;
     m_configData = configData;
     setParent(parentView);
-    currentHeight = 1;
 
     simpleGranuleCache = new QCache<int, SimpleGranulesNode>;
     simpleGranuleCache->setMaxCost(configData->numberCachedSimpleGranules);
-    maxHeight = configData->numberCachedSimpleGranules + configData->numberCachedTiledGranules + 50;
 }
 
 void MetaGranules::drawSimpleGranules(QGLPainter *painter)
@@ -41,32 +39,20 @@ void MetaGranules::drawTiledGranules(QGLPainter *painter)
     Q_UNUSED(painter);
 }
 
-void MetaGranules::addGranuleNode(qint32 granuleId, qint32 productId)
+void MetaGranules::addGranuleNode(qint32 granuleId, qint32 productId, qint32 height, GranuleType::Type type)
 {
-    addSimpleGranuleNode(granuleId, productId);
+    addSimpleGranuleNode(granuleId, productId, height);
 }
 
-void MetaGranules::addSimpleGranuleNode(qint32 granuleId, qint32 productId)
+void MetaGranules::addSimpleGranuleNode(qint32 granuleId, qint32 productId, qint32 height)
 {
     if (!simpleGranuleCache->contains(granuleId))
     {
-        if (currentHeight >= maxHeight)
-            currentHeight = 1;
-
-        while (heightGranuleMap.contains(currentHeight))
-        {
-            if (currentHeight < maxHeight)
-                currentHeight++;
-            else
-                currentHeight = 1;
-        }
-
         SimpleGranulesNode* granulesNode = new SimpleGranulesNode(this, m_palette, m_configData, granuleId, productId,
                                            m_productsHash->value(m_productsIdName->value(productId)).IsGlobalCoverage);
-        granulesNode->setHeight(currentHeight);
+        granulesNode->setHeight(height);
         simpleGranuleCache->insert(granuleId, granulesNode);
-        heightGranuleMap.insert(currentHeight, granuleId);
-        currentHeight++;
+        heightGranuleMap.insert(height, granuleId);
         connect(granulesNode, &SimpleGranulesNode::updated, this, &MetaGranules::displayed);
     }
     else
@@ -76,18 +62,12 @@ void MetaGranules::addSimpleGranuleNode(qint32 granuleId, qint32 productId)
             heightGranuleMap.insert(simpleGranuleCache->object(granuleId)->height(), granuleId);
         emit displayed();
     }
-
-//    connect (this, &EarthView::updatedTilesSignal, earth, &Earth::updateTilesSlot);
-//        connect (granulesNode, &SimpleGranulesNode::displayed, parent, &EarthView::update);
-
-    //    m_scene->mainNode()->addNode(granulesNode);
 }
 
 void MetaGranules::removeSimpleGranuleNode(qint32 granuleId, qint32 productId)
 {
     Q_UNUSED(productId);
     heightGranuleMap.remove(simpleGranuleCache->object(granuleId)->height());
-//    simpleGranuleCache->remove(granuleId);
 
     emit displayed();
 }
@@ -103,4 +83,39 @@ void MetaGranules::setProductsHashSlot(QHash<QString, Product> *productsHash, QH
 {
     m_productsHash = productsHash;
     m_productsIdName = productsIdName;
+}
+
+void MetaGranules::changedGranuleHeight(qint32 granuleId, qint32 height)
+{
+    if (simpleGranuleCache->object(granuleId))
+    {
+        qint32 oldHeight = simpleGranuleCache->object(granuleId)->height();
+        heightGranuleMap.remove(oldHeight);
+        heightGranuleMap.insert(height, granuleId);
+        simpleGranuleCache->object(granuleId)->setHeight(height);
+        simpleGranuleCache->object(granuleId)->rebuildGranuleNode();
+    }
+}
+
+void MetaGranules::changedGranulesHeight(qint32 granuleId1, qint32 height1, qint32 granuleId2, qint32 height2)
+{
+    if (simpleGranuleCache->object(granuleId1) && simpleGranuleCache->object(granuleId1))
+    {
+        qint32 oldHeight1 = height2;
+        qint32 oldHeight2 = height1;
+
+        heightGranuleMap.remove(oldHeight1);
+        heightGranuleMap.remove(oldHeight2);
+
+        heightGranuleMap.insert(height1, granuleId1);
+        simpleGranuleCache->object(granuleId1)->setHeight(height1);
+
+        heightGranuleMap.insert(height2, granuleId2);
+        simpleGranuleCache->object(granuleId2)->setHeight(height2);
+
+        simpleGranuleCache->object(granuleId1)->rebuildGranuleNode();
+        simpleGranuleCache->object(granuleId2)->rebuildGranuleNode();
+
+        emit displayed();
+    }
 }

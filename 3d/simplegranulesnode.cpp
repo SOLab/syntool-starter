@@ -18,9 +18,10 @@ SimpleGranulesNode::SimpleGranulesNode(QObject *parent, QSharedPointer<QGLMateri
     urlGranules = QUrl(serverName + "/api/granules");
 
     networkManager = new QNetworkAccessManager(this);
+    mainNode = NULL;
 
     m_height = 0;
-    m_transparency = 0;
+    m_transparency = 100;
 
     QGraphicsRotation3D *axialTilt1 = new QGraphicsRotation3D(this);
     axialTilt1->setAngle(270.0f);
@@ -133,20 +134,17 @@ void SimpleGranulesNode::slotReadyReadImageUrl()
 
 void SimpleGranulesNode::getErrorImageUrl(QNetworkReply::NetworkError)
 {
+    qWarning() << "error image:" << imagePath;
 }
 
 void SimpleGranulesNode::setTransparency(qint32 granuleId, qint32 transparency)
 {
     if (granuleId == m_granuleId)
     {
-        if (m_transparency != transparency)
-        {
-            qCritical() << "transparency" << transparency;
-            QGLSceneNode* subNode = findSceneNode(imagePath);
-            if (subNode)
+            if (mainNode)
             {
-                QGLMaterial* mat1 = subNode->material();
-                int indMat = subNode->materialIndex();
+                QGLMaterial* mat1 = mainNode->material();
+                int indMat = mainNode->materialIndex();
 
                 QColor ambient = mat1->ambientColor();
                 QColor diffuse = mat1->diffuseColor();
@@ -157,11 +155,10 @@ void SimpleGranulesNode::setTransparency(qint32 granuleId, qint32 transparency)
                 mat1->setAmbientColor(ambient);
                 mat1->setDiffuseColor(diffuse);
 
-                subNode->palette()->removeMaterial(indMat);
-                int earthMat = subNode->palette()->addMaterial(mat1);
-                subNode->setMaterialIndex(earthMat);
+                mainNode->palette()->removeMaterial(indMat);
+                int earthMat = mainNode->palette()->addMaterial(mat1);
+                mainNode->setMaterialIndex(earthMat);
             }
-        }
         m_transparency = transparency;
     }
 }
@@ -221,7 +218,7 @@ void SimpleGranulesNode::addGranuleNode(QString image_path)
             maxSphereLon = M_PI_2 - M_PI_2*60.0/90.0;
         }
 
-        QGLSceneNode* mainNode = BuildGranuleMerNode(1, minSphereLat, maxSphereLat, minSphereLon, maxSphereLon);
+        mainNode = BuildGranuleMerNode(1, minSphereLat, maxSphereLat, minSphereLon, maxSphereLon);
         qDebug() << "addTextureToGranuleNode:" << addTextureToGranuleNode(mainNode, imagePath);
 
         mainNode->setObjectName(imagePath);
@@ -239,6 +236,14 @@ void SimpleGranulesNode::addGranuleNode(QString image_path)
     {
         emit updated();
     }
+}
+
+void SimpleGranulesNode::rebuildGranuleNode()
+{
+    if (mainNode)
+        removeNode(mainNode);
+    addGranuleNode(imagePath);
+    setTransparency(granuleId(), transparency());
 }
 
 QGLSceneNode* SimpleGranulesNode::BuildGranuleMerNode(int separation, qreal minSphereLat, qreal maxSphereLat,

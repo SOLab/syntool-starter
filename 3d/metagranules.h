@@ -20,7 +20,7 @@ public:
     void drawSimpleGranules(QGLPainter *painter);
     void drawTiledGranules(QGLPainter *painter);
     void setParent(EarthView *parentView){m_parentView = parentView;}
-    void addGranuleNode(qint32 granuleId, qint32 productId);
+    void addGranuleNode(qint32 granuleId, qint32 productId, qint32 height, GranuleType::Type type);
 
 private:
     // int idGranule
@@ -34,8 +34,6 @@ private:
 
     EarthView*  m_parentView;
     ConfigData* m_configData;
-    qint32      currentHeight;
-    qint32      maxHeight;
 
     // <NaiadProductId, Product>
     QHash<QString, Product>* m_productsHash;
@@ -46,11 +44,13 @@ signals:
     void displayed();
     
 public slots:
-    void addSimpleGranuleNode(qint32 granuleId, qint32 productId);
+    void addSimpleGranuleNode(qint32 granuleId, qint32 productId, qint32 height);
     void removeSimpleGranuleNode(qint32 granuleId, qint32 productId);
     void setGranuleTransparency(qint32 granuleId, qint32 productId, qint32 transparency);
     void setProductsHashSlot(QHash<QString, Product>* productsHash, QHash<qint32, QString>* productsIdName);
-    
+
+    void changedGranuleHeight(qint32 granuleId, qint32 height);
+    void changedGranulesHeight(qint32 granuleId1, qint32 height1, qint32 granuleId2, qint32 height2);
 };
 
 #endif // METAGRANULES_H

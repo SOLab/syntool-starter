@@ -67,8 +67,16 @@ DatasetsWidget::DatasetsWidget(ConfigData *configData, QWidget *parent) :
     hLine->setFrameShadow(QFrame::Sunken);
     vLayout->addWidget(hLine);
 
+    datasetsLayout = new QVBoxLayout;
+    vLayout->addLayout(datasetsLayout);
+
+    heightGranuleMap = new QMap<qint32, qint32>;
+    heightDatasetBoxMap = new QMap<qint32, DatasetBoxWidget*>;
+
     selectedDataset = NULL;
     selectedGranuleId = 0;
+
+    maxHeight = configData->numberCachedSimpleGranules + configData->numberCachedTiledGranules + 50;
 
     setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
 }
@@ -84,15 +92,33 @@ void DatasetsWidget::addDatasets(QHash<qint32, qint32> *displayedGranules)
     while (dgi != displayedGranules->constEnd()) {
         if (!currentDatasets->contains(dgi.key()))
         {
+            // calculate height for new granule
+            if (currentHeight >= maxHeight)
+                currentHeight = 1;
+
+            while (heightGranuleMap->contains(currentHeight))
+            {
+                if (currentHeight < maxHeight)
+                    currentHeight++;
+                else
+                    currentHeight = 1;
+            }
+
             currentDatasets->insert(dgi.key(), dgi.value());
-            emit displayGranule(dgi.key(), dgi.value());
+            emit displayGranule(dgi.key(), dgi.value(), currentHeight);
 
             DatasetBoxWidget* datasetBox = new DatasetBoxWidget(serverName,
                                            m_granulesHash->value(QString::number(dgi.key())), this);
             datasetBox->setChecked(showAllCheck->isChecked());
             if (showAllCheck->isChecked())
+            {
                 if (!selectedGranuleList->contains(dgi.key()))
                     selectedGranuleList->append(dgi.key());
+            }
+            else
+            {
+                emit hideGranule(dgi.key(), dgi.value());
+            }
 
             connect(datasetBox, &DatasetBoxWidget::granulePropertiesSignal, this, &DatasetsWidget::actionPropertiesSlot);
 
@@ -107,7 +133,16 @@ void DatasetsWidget::addDatasets(QHash<qint32, qint32> *displayedGranules)
             // select new dataset
             connect(datasetBox, &DatasetBoxWidget::selectDataset, this, &DatasetsWidget::selectDatasetSlot);
 
-            vLayout->addWidget(datasetBox);
+            qint32 index = datasetsLayout->indexOf(heightDatasetBoxMap->lowerBound(currentHeight).value());
+            if (index < 0)
+                index = datasetsLayout->count();
+
+            // add elements to QMap
+            heightGranuleMap->insert(dgi.key(), currentHeight);
+            heightDatasetBoxMap->insert(currentHeight, datasetBox);
+
+            datasetsLayout->insertWidget(index, datasetBox);
+            currentHeight++;
         }
         ++dgi;
     }
@@ -122,6 +157,10 @@ void DatasetsWidget::addDatasets(QHash<qint32, qint32> *displayedGranules)
             currentRemoveNumbers->append(cdi.key());
             emit hideGranule(cdi.key(), cdi.value());
             selectedGranuleList->removeAll(cdi.key());
+            // remove from QMap
+            heightDatasetBoxMap->remove(heightGranuleMap->value(cdi.key()));
+            heightGranuleMap->remove(cdi.key());
+
             if (selectedGranuleId == cdi.key())
             {
                 selectedDataset = NULL;
@@ -148,7 +187,7 @@ void DatasetsWidget::changedDisplayGranule(bool checked, qint32 granuleId, qint3
 {
     if (checked)
     {
-        emit displayGranule(granuleId, productId);
+        emit displayGranule(granuleId, productId, heightGranuleMap->value(granuleId));
         if (!selectedGranuleList->contains(granuleId))
             selectedGranuleList->append(granuleId);
     }
@@ -179,8 +218,66 @@ void DatasetsWidget::selectDatasetSlot(qint32 granuleId)
 
 void DatasetsWidget::upDatasetSlot()
 {
+    if (!selectedDataset)
+        return;
+    qint32 selectedIndex = datasetsLayout->indexOf(selectedDataset);
+    if (selectedIndex < 1)
+        return;
+
+    qint32 newIndex = selectedIndex - 1;
+
+    qint32 selectedHeight = heightGranuleMap->value(selectedDataset->granuleId());
+    qint32 granuleIdSelectedDataset = selectedDataset->granuleId();
+    qint32 granuleIdSecondDataset = heightDatasetBoxMap->value(newIndex+1)->granuleId();
+    qint32 newHeight = heightGranuleMap->value(granuleIdSecondDataset);
+
+    heightGranuleMap->remove(granuleIdSelectedDataset);
+    heightGranuleMap->remove(granuleIdSecondDataset);
+
+    heightGranuleMap->insert(granuleIdSelectedDataset, newHeight);
+    heightGranuleMap->insert(granuleIdSecondDataset, selectedHeight);
+
+    heightDatasetBoxMap->remove(selectedHeight);
+    heightDatasetBoxMap->insert(selectedHeight, heightDatasetBoxMap->value(newHeight));
+
+    heightDatasetBoxMap->remove(newHeight);
+    heightDatasetBoxMap->insert(newHeight, selectedDataset);
+
+    emit changedGranulesHeight(granuleIdSelectedDataset, newHeight, granuleIdSecondDataset, selectedHeight);
+
+    datasetsLayout->removeWidget(selectedDataset);
+    datasetsLayout->insertWidget(newIndex, selectedDataset);
 }
 
 void DatasetsWidget::downDatasetSlot()
 {
+    if (!selectedDataset)
+        return;
+    qint32 selectedIndex = datasetsLayout->indexOf(selectedDataset);
+
+    qint32 newIndex = selectedIndex + 1;
+    if (newIndex >= heightDatasetBoxMap->count())
+        return;
+
+    qint32 selectedHeight = heightGranuleMap->value(selectedDataset->granuleId());
+    qint32 granuleIdSelectedDataset = selectedDataset->granuleId();
+    qint32 granuleIdSecondDataset = heightDatasetBoxMap->value(newIndex+1)->granuleId();
+    qint32 newHeight = heightGranuleMap->value(granuleIdSecondDataset);
+
+    heightGranuleMap->remove(granuleIdSelectedDataset);
+    heightGranuleMap->remove(granuleIdSecondDataset);
+    heightGranuleMap->insert(granuleIdSelectedDataset, newHeight);
+    heightGranuleMap->insert(granuleIdSecondDataset, selectedHeight);
+
+    heightDatasetBoxMap->remove(selectedHeight);
+    heightDatasetBoxMap->insert(selectedHeight, heightDatasetBoxMap->value(newHeight));
+
+    heightDatasetBoxMap->remove(newHeight);
+    heightDatasetBoxMap->insert(newHeight, selectedDataset);
+
+    emit changedGranulesHeight(granuleIdSelectedDataset, newHeight, granuleIdSecondDataset, selectedHeight);
+//    emit changedGranuleHeight(granuleIdSecondDataset, selectedHeight);
+
+    datasetsLayout->removeWidget(selectedDataset);
+    datasetsLayout->insertWidget(newIndex, selectedDataset);
 }

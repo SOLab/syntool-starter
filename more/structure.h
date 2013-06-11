@@ -18,6 +18,14 @@ namespace LogLevel {
     };
 }
 
+namespace GranuleType {
+    enum Type{
+        Error = 0,
+        Simple = 1,
+        Tiled = 2
+    };
+}
+
 struct ConfigData{
     QString configDir;
     QString configFile;
