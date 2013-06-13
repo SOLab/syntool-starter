@@ -120,6 +120,8 @@ void MainWindow::setHostedWindow(EarthView *window)
             metaGranulesPointer, SLOT(changedGranulesHeight(qint32,qint32,qint32,qint32)));
 
     connect(productsWgt, &ProductsWidget::productsHashSignal, metaGranulesPointer, &MetaGranules::setProductsHashSlot);
+
+    connect(mapsWgt, &MapsWidget::changeMapTheme, earthViewPointer->earth, &Earth::setMapTheme);
 }
 
 void MainWindow::aboutProgram()

@@ -6,6 +6,7 @@
 #include <QLabel>
 #include <QComboBox>
 #include <QScrollArea>
+#include <QDebug>
 #include "additionalwidgets/imagebutton.h"
 
 class MapsWidget : public QWidget
@@ -19,11 +20,18 @@ protected:
 
     QComboBox*   supportedProjections;
     QScrollArea* themesArea;
-    ImageButton* firstTheme;
-    ImageButton* secondTheme;
+    ImageButton* OSMTheme;
+    ImageButton* transportOSMTheme;
+    ImageButton* yandexSatelliteTheme;
+
+private:
+    QString currentMapTheme;
+
 signals:
+    void changeMapTheme(QString mapTheme);
     
 public slots:
+    void changeStyle();
     
 };
 

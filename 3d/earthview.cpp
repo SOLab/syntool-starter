@@ -399,7 +399,7 @@ void EarthView::mousePressEvent(QMouseEvent *e)
 {
     Q_UNUSED(e);
 
-    registerPicking();
+//    registerPicking();
     if (objectForPoint(e->pos()))
     {
         QGLPickNode* node = qobject_cast<QGLPickNode*>(objectForPoint(e->pos()));

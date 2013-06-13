@@ -13,8 +13,9 @@ Earth::Earth(QObject *parent, QSharedPointer<QGLMaterialCollection> materials, C
     downloadQueue = new QCache<QString, TileDownloader>;
     downloadQueue->setMaxCost(25);
 
+    tileNodeCache = new QCache<TileCacheNumber, GLSceneNodeWrapper>;
     // set maximum cost for cache
-    tileNodeCache.setMaxCost(configData->numberCachedTiles);
+    tileNodeCache->setMaxCost(configData->numberCachedTiles);
 //    m_LoadedTextures.setMaxCost(50);
 
     buildEarthNode(a, 10, 0);
@@ -37,7 +38,12 @@ Earth::Earth(QObject *parent, QSharedPointer<QGLMaterialCollection> materials, C
 
     connect(this, &Earth::textureDownloadedSignal, this, &Earth::textureDownloaded);
 
-//    tileDownloader = new TileDownloader();
+    mapThemeList.insert("OSM", "http://tile.openstreetmap.org/%1/%2/%3.png");
+    mapThemeList.insert("transportOSM", "http://tile2.opencyclemap.org/transport/%1/%2/%3.png");
+    mapThemeList.insert("yandexSatellite", "http://sat.maps.yandex.net/tiles?l=sat&x=%1&y=%2&z=%3");
+
+    currentMapTheme = "OSM";
+    currentMapThemeUrl = mapThemeList.value(currentMapTheme);
 }
 
 /*!
@@ -47,9 +53,9 @@ Earth::Earth(QObject *parent, QSharedPointer<QGLMaterialCollection> materials, C
 bool Earth::checkNodeInCache(int zoom, int x, int y)
 {
     TileCacheNumber currentCacheNumber = TileCacheNumber(zoom, x, y);
-    if (tileNodeCache.contains(currentCacheNumber))
+    if (tileNodeCache->contains(currentCacheNumber))
     {
-        QGLSceneNode* sceneNode = tileNodeCache.object(currentCacheNumber)->glSceneNodeObject();
+        QGLSceneNode* sceneNode = tileNodeCache->object(currentCacheNumber)->glSceneNodeObject();
         if (sceneNode->options().testFlag(QGLSceneNode::HideNode))
         {
             sceneNode->setOptions(QGLSceneNode::CullBoundingBox);
@@ -172,7 +178,7 @@ void Earth::textureDownloaded(qint32 cur_zoom, qint32 lonTileNum, qint32 latTile
         GLSceneNodeWrapper* sceneNodeWrapper = new GLSceneNodeWrapper;
         sceneNodeWrapper->setGLSceneNodeObject(sceneNode);
 
-        tileNodeCache.insert(tileNumber, sceneNodeWrapper);
+        tileNodeCache->insert(tileNumber, sceneNodeWrapper);
         sceneNode->setObjectName(nodeObjectName);
 
         addNode(sceneNode);
@@ -347,7 +353,7 @@ void Earth::tileDownload(qint32 cur_zoom, qint32 separation, qint32 lonTileNum, 
     QString textureStorePath = (m_filepath.arg(cur_zoom).arg(lonTileNum).arg(separation-1-latTileNum));
 
     TileDownloader *tileDownloader = new TileDownloader(separation, lonTileNum, latTileNum,
-                                                        cur_zoom, textureStorePath);
+                                                        cur_zoom, textureStorePath, currentMapThemeUrl);
 
     downloadQueue->insert(textureStorePath, tileDownloader);
 
@@ -391,9 +397,9 @@ void Earth::updateTilesSlot(qreal scale, GeoCoords geoCoords)
             {
                 TileCacheNumber currentCacheNumber = TileCacheNumber(zoom_old, x, y);
 
-                if (tileNodeCache.contains(currentCacheNumber))
+                if (tileNodeCache->contains(currentCacheNumber))
                 {
-                    QGLSceneNode* sceneNode = tileNodeCache.object(currentCacheNumber)->glSceneNodeObject();
+                    QGLSceneNode* sceneNode = tileNodeCache->object(currentCacheNumber)->glSceneNodeObject();
 
                     if (!sceneNode->options().testFlag(QGLSceneNode::HideNode))
                     {
@@ -435,4 +441,33 @@ Earth::~Earth()
 void Earth::cleanupResources()
 {
 
+}
+
+void Earth::setMapTheme(QString mapThemeName)
+{
+    if (mapThemeList.contains(mapThemeName))
+    {
+        currentMapTheme = mapThemeName;
+        currentMapThemeUrl = mapThemeList.value(mapThemeName);
+        tileNodeCache->clear();
+        clearTileCache();
+        buildEarthNode(a, 10, curZoom);
+    }
+}
+
+void Earth::clearTileCache()
+{
+    // list files from cache dir
+    QDir dir(cacheDir);
+    QStringList lstFiles = dir.entryList(QDir::Files);
+    QRegExp rx(dir.absolutePath() + "/"+"(\\d+)-(\\d+)-(\\d+)\.png");
+
+    //remove files (earth tile e.g. 0-0-0.png)
+    foreach (QString entry, lstFiles)
+    {
+        QString entryAbsPath = dir.absolutePath() + "/" + entry;
+//        QFile::setPermissions(entryAbsPath, QFile::ReadOwner | QFile::WriteOwner);
+        if (rx.exactMatch(entryAbsPath))
+            QFile::remove(entryAbsPath);
+    }
 }

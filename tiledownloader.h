@@ -21,7 +21,7 @@ class TileDownloader : public QObject
     Q_OBJECT
 public:
     explicit TileDownloader(qint32 separationValue, qint32 lonTileNumValue, qint32 latTileNumValue,
-                            qint32 curZoomValue, QString texStorePath, QObject *parent = 0);
+                            qint32 curZoomValue, QString texStorePath, QString MapThemeUrl, QObject *parent = 0);
 
     virtual ~TileDownloader();
     QByteArray downloadedData() const;

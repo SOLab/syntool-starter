@@ -84,10 +84,9 @@ public:
     void        timeout();
 
     MetaGranules* metaGranulesNode;
-
-protected:
     Earth *earth;
 
+protected:
     void initializeGL(QGLPainter *painter);
     void paintGL(QGLPainter *painter);
     void keyPressEvent(QKeyEvent *e);

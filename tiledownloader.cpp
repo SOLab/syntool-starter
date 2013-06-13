@@ -1,7 +1,7 @@
 #include "tiledownloader.h"
 
 TileDownloader::TileDownloader(qint32 separationValue, qint32 lonTileNumValue, qint32 latTileNumValue,
-                               qint32 curZoomValue, QString texStorePath, QObject *parent):
+                               qint32 curZoomValue, QString texStorePath, QString MapThemeUrl, QObject *parent):
     QObject(parent)
 {
     separation = separationValue;
@@ -9,11 +9,14 @@ TileDownloader::TileDownloader(qint32 separationValue, qint32 lonTileNumValue, q
     latTileNum = latTileNumValue;
     curZoom = curZoomValue;
 
-    QString path = "http://tile.openstreetmap.org/%1/%2/%3.png";
-    QString arg(path.arg(curZoom).arg(lonTileNum).arg(separation-1-latTileNum));
+//    QString path = "http://tile.openstreetmap.org/%1/%2/%3.png";
+//    QString path = "http://otile4.mqcdn.com/tiles/1.0.0/osm/%1/%2/%3.png";
+//    QString path = "http://tile2.opencyclemap.org/transport/%1/%2/%3.png";
+    QString arg(MapThemeUrl.arg(curZoom).arg(lonTileNum).arg(separation-1-latTileNum));
 
     texUrl = QUrl::fromEncoded(arg.toLocal8Bit());
 
+    qCritical() << texUrl.url();
     textureStorePath = texStorePath;
 
     connect(&m_WebCtrl, &QNetworkAccessManager::finished,

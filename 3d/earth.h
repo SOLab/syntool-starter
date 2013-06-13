@@ -10,6 +10,7 @@
 #include <QImage>
 #include <QTimer>
 #include <QObject>
+#include <QDir>
 #include <typeinfo>
 
 #include "tiledownloader.h"
@@ -37,7 +38,7 @@ public:
 
 private:
     QCache<QString, TileDownloader>* downloadQueue;
-    QCache<TileCacheNumber, GLSceneNodeWrapper> tileNodeCache;
+    QCache<TileCacheNumber, GLSceneNodeWrapper>* tileNodeCache;
 
     int zoom;
     int zoom_old;
@@ -64,6 +65,12 @@ private:
 
     bool          checkNodeInCache(int zoom, int x, int y);
     void          cleanupResources();
+    void          clearTileCache();
+
+    // <mapThemeName, tile url>
+    QMap<QString, QString> mapThemeList;
+    QString                currentMapTheme;
+    QString                currentMapThemeUrl;
 
 signals:
     void textureDownloadedSignal(qint32 cur_zoom, qint32 lonTileNum, qint32 latTileNum);
@@ -72,6 +79,7 @@ public slots:
     void updateTilesSlot(qreal scale, GeoCoords geoCoords);
     void addTileNode(int cur_zoom, qint32 lonTileNum, qint32 latTileNum);
     void textureDownloaded(qint32 cur_zoom, qint32 lonTileNum, qint32 latTileNum);
+    void setMapTheme(QString mapThemeName);
 
 };
 
