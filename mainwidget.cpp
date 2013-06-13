@@ -98,7 +98,7 @@ MainWindow::MainWindow(ConfigData *configValue, QWidget *parent)
 
     productsWgt->setObjectsPointer(timeLine);
 
-    rightSidebar->setMinimumWidth(120);
+    rightSidebar->setMinimumWidth(136);
 
     setWindowTitle("Syntool");
 }

@@ -13,7 +13,7 @@ DatasetBoxWidget::DatasetBoxWidget(QString serverName, Granule granule, QWidget 
     connect(showDatasetCheck, &QCheckBox::stateChanged, this, &DatasetBoxWidget::checkedSlot);
 
     granuleNameLabel = new QLabel(granule.granuleName, this);
-    granuleNameLabel->setWordWrap(true);
+//    granuleNameLabel->setWordWrap(true);
     granuleNameLabel->setMinimumSize(1,1);
     granuleNameLabel->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Fixed);
 
@@ -40,7 +40,7 @@ DatasetBoxWidget::DatasetBoxWidget(QString serverName, Granule granule, QWidget 
 
     resize(sizeHint());
 
-    setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Fixed);
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 }
 
 void DatasetBoxWidget::setChecked(bool checked)
