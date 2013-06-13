@@ -30,7 +30,7 @@ protected:
 signals:
     void removeLayer(QString productId);
     void showLayer(QString productName, qint32 productId, qint32 showState);
-    void changedTransparency(QString productId, int value);
+    void changedTransparency(QString productName, qint32 productId, int value);
     
 public slots:
     void changedTransparencySlot(int value);

@@ -49,7 +49,7 @@ void LayersWidget::addProduct(QString ProductNaiadId, qint32 productId)
         // connect signals with signals
         connect(layerBox, &LayerBoxWidget::removeLayer, this, &LayersWidget::removeLayer);
         connect(layerBox, &LayerBoxWidget::showLayer, this, &LayersWidget::showLayer);
-        connect(layerBox, &LayerBoxWidget::changedTransparency, this, &LayersWidget::changedTransparency);
+        connect(layerBox, &LayerBoxWidget::changedTransparency, this, &LayersWidget::changedProductTransparency);
 
         // other connects
         connect(this, &LayersWidget::removeLayerBox, layerBox, &LayerBoxWidget::removeLayerBox);

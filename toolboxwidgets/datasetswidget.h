@@ -30,7 +30,10 @@ protected:
     QList<qint32>*           selectedGranuleList;
     QList<qint32>*           hiddenProducts;
 
+    // <GranuleId, Granule>
     QHash<QString, Granule>* m_granulesHash;
+    // <productId, transparency>
+    QMap<qint32, qint32>*   productTransparency;
     QString                  serverName;
     DatasetBoxWidget*        selectedDataset;
     qint32                   selectedGranuleId;
@@ -65,6 +68,7 @@ public slots:
     void downDatasetSlot();
 
     void setShowProduct(QString productName, qint32 productId, qint32 showState);
+    void changedProductTransparency(QString productName, qint32 productId, int value);
 };
 
 #endif // DATASETSWIDGET_H

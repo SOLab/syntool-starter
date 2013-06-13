@@ -53,7 +53,7 @@ LayerBoxWidget::LayerBoxWidget(QString ProductName, qint32 productId, QWidget *p
 void LayerBoxWidget::changedTransparencySlot(int value)
 {
     percentLabel->setText(QString::number(value)+"%");
-    emit changedTransparency(m_productName, value);
+    emit changedTransparency(m_productName, m_productId, value);
 }
 
 void LayerBoxWidget::removeLayerSlot()

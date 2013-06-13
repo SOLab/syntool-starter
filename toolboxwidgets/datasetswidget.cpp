@@ -9,6 +9,7 @@ DatasetsWidget::DatasetsWidget(ConfigData *configData, QWidget *parent) :
     currentRemoveNumbers = new QList<qint32>;
     selectedGranuleList = new QList<qint32>;
     hiddenProducts = new QList<qint32>;
+    productTransparency = new QMap<qint32, qint32>;
 
     vLayout = new QVBoxLayout(this);
     vLayout->setContentsMargins(0,0,0,0);
@@ -289,6 +290,7 @@ void DatasetsWidget::downDatasetSlot()
 
 void DatasetsWidget::setShowProduct(QString productName, qint32 productId, qint32 showState)
 {
+    Q_UNUSED(productName);
     if (showState == Qt::Unchecked)
     {
         hiddenProducts->append(productId);
@@ -315,6 +317,21 @@ void DatasetsWidget::setShowProduct(QString productName, qint32 productId, qint3
                 qint32 _height = granuleHeightMap->value(i.key());
                 heightDatasetBoxMap->value(_height)->setChecked(true);
             }
+        }
+    }
+}
+
+void DatasetsWidget::changedProductTransparency(QString productName, qint32 productId, int value)
+{
+    Q_UNUSED(productName);
+    productTransparency->insert(productId, value);
+
+    QHash<qint32, qint32>::iterator i;
+    for (i = currentDatasets->begin(); i != currentDatasets->end(); ++i)
+    {
+        if (i.value() == productId)
+        {
+            emit changedGranuleTransparency(i.key(), productId, value);
         }
     }
 }

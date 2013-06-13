@@ -94,6 +94,7 @@ MainWindow::MainWindow(ConfigData *configValue, QWidget *parent)
 
     connect(layersWgt, &LayersWidget::removeLayer, productsWgt, &ProductsWidget::removeProduct);
     connect(layersWgt, &LayersWidget::showLayer, datasetsWgt, &DatasetsWidget::setShowProduct);
+    connect(layersWgt, &LayersWidget::changedProductTransparency, datasetsWgt, &DatasetsWidget::changedProductTransparency);
 
     connect(timeLine, &TimeLine::changedDisplayGranules, datasetsWgt, &DatasetsWidget::addDatasets);
 

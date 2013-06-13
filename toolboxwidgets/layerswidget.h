@@ -26,7 +26,7 @@ protected:
 signals:
     void removeLayer(QString productId);
     void showLayer(QString productName, qint32 productId, qint32 showState);
-    void changedTransparency(QString productId, int value);
+    void changedProductTransparency(QString productName, qint32 productId, int value);
 
     void removeLayerBox(QString productId);
     
