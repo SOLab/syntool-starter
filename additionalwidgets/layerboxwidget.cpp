@@ -1,9 +1,10 @@
 #include "layerboxwidget.h"
 
-LayerBoxWidget::LayerBoxWidget(QString ProductName, QWidget *parent) :
+LayerBoxWidget::LayerBoxWidget(QString ProductName, qint32 productId, QWidget *parent) :
     QWidget(parent)
 {
     m_productName = ProductName;
+    m_productId = productId;
 
     gridLayout = new QGridLayout(this);
     gridLayout->setContentsMargins(0,0,0,0);
@@ -19,6 +20,7 @@ LayerBoxWidget::LayerBoxWidget(QString ProductName, QWidget *parent) :
 
     showLayerCheckBox = new QCheckBox(this);
     showLayerCheckBox->setToolTip(tr("Show layer"));
+    showLayerCheckBox->setCheckState(Qt::Checked);
     connect(showLayerCheckBox, &QCheckBox::stateChanged, this, &LayerBoxWidget::showChangedSlot);
 
     transparencySlider = new QSlider(Qt::Horizontal, this);
@@ -30,7 +32,7 @@ LayerBoxWidget::LayerBoxWidget(QString ProductName, QWidget *parent) :
     productNameLabel = new QLabel(ProductName, this);
     productNameLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     productNameLabel->setToolTip(ProductName);
-    productNameLabel->setWordWrap(true);
+//    productNameLabel->setWordWrap(true);
 
     percentLabel = new QLabel("100%", this);
     percentLabel->setFixedWidth(percentLabel->sizeHint().width());
@@ -62,7 +64,7 @@ void LayerBoxWidget::removeLayerSlot()
 
 void LayerBoxWidget::showChangedSlot(int state)
 {
-    emit showLayer(m_productName, state);
+    emit showLayer(m_productName, m_productId, state);
 }
 
 void LayerBoxWidget::removeLayerBox(QString productId)

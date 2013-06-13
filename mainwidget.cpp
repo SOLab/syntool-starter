@@ -93,6 +93,7 @@ MainWindow::MainWindow(ConfigData *configValue, QWidget *parent)
     connect(productsWgt, &ProductsWidget::productDeleted, layersWgt, &LayersWidget::deleteProduct);
 
     connect(layersWgt, &LayersWidget::removeLayer, productsWgt, &ProductsWidget::removeProduct);
+    connect(layersWgt, &LayersWidget::showLayer, datasetsWgt, &DatasetsWidget::setShowProduct);
 
     connect(timeLine, &TimeLine::changedDisplayGranules, datasetsWgt, &DatasetsWidget::addDatasets);
 
@@ -182,7 +183,6 @@ void MainWindow::createMenuBar()
 
 /////////////// View tab
     QMenu* viewMenu = menuBar()->addMenu("&"+tr("View"));
-    viewMenu->setDisabled(true);
 
     QAction* showToolbarAction = new QAction(tr("Toolbar"), this);
     showToolbarAction->setCheckable(true);

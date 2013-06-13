@@ -39,11 +39,11 @@ LayersWidget::LayersWidget(QWidget *parent) :
     vLayout->addLayout(otherLayout);
 }
 
-void LayersWidget::addProduct(QString ProductId)
+void LayersWidget::addProduct(QString ProductNaiadId, qint32 productId)
 {
-    if (!currentProducts->contains(ProductId))
+    if (!currentProducts->contains(ProductNaiadId))
     {
-        LayerBoxWidget* layerBox = new LayerBoxWidget(ProductId, this);
+        LayerBoxWidget* layerBox = new LayerBoxWidget(ProductNaiadId, productId, this);
 
         // connect signals with signals
         connect(layerBox, &LayerBoxWidget::removeLayer, this, &LayersWidget::removeLayer);
@@ -54,7 +54,7 @@ void LayersWidget::addProduct(QString ProductId)
         connect(this, &LayersWidget::removeLayerBox, layerBox, &LayerBoxWidget::removeLayerBox);
 
         productsLayout->addWidget(layerBox);
-        currentProducts->append(ProductId);
+        currentProducts->append(ProductNaiadId);
     }
 }
 

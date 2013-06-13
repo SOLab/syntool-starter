@@ -90,7 +90,7 @@ protected:
     GetGranules* getGranulesPointer;
     void getGranulesForNewProduct();
 signals:
-    void productAdded(QString productId);
+    void productAdded(QString productNaiadId, qint32 productId);
     void productDeleted(QString productId);
     void productsHashSignal(QHash<QString, Product>* productsHash, QHash<qint32, QString>* productsIdName);
     

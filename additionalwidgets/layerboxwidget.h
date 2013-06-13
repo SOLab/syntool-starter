@@ -14,7 +14,7 @@ class LayerBoxWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit LayerBoxWidget(QString ProductName, QWidget *parent = 0);
+    explicit LayerBoxWidget(QString ProductName, qint32 productId, QWidget *parent = 0);
     
 protected:
     QGridLayout*  gridLayout;
@@ -25,10 +25,11 @@ protected:
     QLabel*       percentLabel;
 
     QString       m_productName;
+    qint32        m_productId;
 
 signals:
     void removeLayer(QString productId);
-    void showLayer(QString productId, int showState);
+    void showLayer(QString productName, qint32 productId, qint32 showState);
     void changedTransparency(QString productId, int value);
     
 public slots:

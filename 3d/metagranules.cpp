@@ -67,7 +67,8 @@ void MetaGranules::addSimpleGranuleNode(qint32 granuleId, qint32 productId, qint
 void MetaGranules::removeSimpleGranuleNode(qint32 granuleId, qint32 productId)
 {
     Q_UNUSED(productId);
-    heightGranuleMap.remove(simpleGranuleCache->object(granuleId)->height());
+    if(simpleGranuleCache->object(granuleId))
+        heightGranuleMap.remove(simpleGranuleCache->object(granuleId)->height());
 
     emit displayed();
 }

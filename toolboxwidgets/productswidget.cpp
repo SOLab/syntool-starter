@@ -377,7 +377,7 @@ void ProductsWidget::addProduct()
     selectedProducts->insert(newSelectedProduct.productName, newSelectedProduct);
     getGranulesForNewProduct();
 
-    emit productAdded(newSelectedProduct.productName);
+    emit productAdded(newSelectedProduct.productName, productsIdName->key(newSelectedProduct.productName));
 
     qDebug() << selectedProducts->keys();
 }

@@ -28,6 +28,7 @@ protected:
     QHash<qint32, qint32>*   currentDatasets;
     QList<qint32>*           currentRemoveNumbers;
     QList<qint32>*           selectedGranuleList;
+    QList<qint32>*           hiddenProducts;
 
     QHash<QString, Granule>* m_granulesHash;
     QString                  serverName;
@@ -35,7 +36,7 @@ protected:
     qint32                   selectedGranuleId;
 
     // <granuleId, height> - QMap items are always sorted by key.
-    QMap<qint32, qint32>*            heightGranuleMap;
+    QMap<qint32, qint32>*            granuleHeightMap;
     // <height, datasetBox>
     QMap<qint32, DatasetBoxWidget*>* heightDatasetBoxMap;
     qint32                           currentHeight;
@@ -62,6 +63,8 @@ public slots:
     void selectDatasetSlot(qint32 granuleId);
     void upDatasetSlot();
     void downDatasetSlot();
+
+    void setShowProduct(QString productName, qint32 productId, qint32 showState);
 };
 
 #endif // DATASETSWIDGET_H

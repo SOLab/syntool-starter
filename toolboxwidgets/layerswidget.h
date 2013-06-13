@@ -25,13 +25,13 @@ protected:
 
 signals:
     void removeLayer(QString productId);
-    void showLayer(QString productId, int showState);
+    void showLayer(QString productName, qint32 productId, qint32 showState);
     void changedTransparency(QString productId, int value);
 
     void removeLayerBox(QString productId);
     
 public slots:
-    void addProduct(QString ProductId);
+    void addProduct(QString ProductNaiadId, qint32 productId);
     void deleteProduct(QString ProductId);
     
 };
