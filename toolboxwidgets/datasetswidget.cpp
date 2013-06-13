@@ -105,7 +105,6 @@ void DatasetsWidget::addDatasets(QHash<qint32, qint32> *displayedGranules)
             }
 
             currentDatasets->insert(dgi.key(), dgi.value());
-            emit displayGranule(dgi.key(), dgi.value(), currentHeight);
 
             DatasetBoxWidget* datasetBox = new DatasetBoxWidget(serverName,
                                            m_granulesHash->value(QString::number(dgi.key())), this);
@@ -114,10 +113,7 @@ void DatasetsWidget::addDatasets(QHash<qint32, qint32> *displayedGranules)
             {
                 if (!selectedGranuleList->contains(dgi.key()))
                     selectedGranuleList->append(dgi.key());
-            }
-            else
-            {
-                emit hideGranule(dgi.key(), dgi.value());
+                emit displayGranule(dgi.key(), dgi.value(), currentHeight);
             }
 
             connect(datasetBox, &DatasetBoxWidget::granulePropertiesSignal, this, &DatasetsWidget::actionPropertiesSlot);
