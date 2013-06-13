@@ -37,6 +37,7 @@ LayersWidget::LayersWidget(QWidget *parent) :
     othersLayersLbl = new QLabel(tr("Others:"), this);
     vLayout->addWidget(othersLayersLbl);
     vLayout->addLayout(otherLayout);
+    setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
 }
 
 void LayersWidget::addProduct(QString ProductNaiadId, qint32 productId)

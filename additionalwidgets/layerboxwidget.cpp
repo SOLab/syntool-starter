@@ -30,9 +30,9 @@ LayerBoxWidget::LayerBoxWidget(QString ProductName, qint32 productId, QWidget *p
     connect(transparencySlider, &QSlider::valueChanged, this, &LayerBoxWidget::changedTransparencySlot);
 
     productNameLabel = new QLabel(ProductName, this);
-    productNameLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    productNameLabel->setMinimumSize(1,1);
+    productNameLabel->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Fixed);
     productNameLabel->setToolTip(ProductName);
-//    productNameLabel->setWordWrap(true);
 
     percentLabel = new QLabel("100%", this);
     percentLabel->setFixedWidth(percentLabel->sizeHint().width());

@@ -13,7 +13,6 @@ DatasetBoxWidget::DatasetBoxWidget(QString serverName, Granule granule, QWidget 
     connect(showDatasetCheck, &QCheckBox::stateChanged, this, &DatasetBoxWidget::checkedSlot);
 
     granuleNameLabel = new QLabel(granule.granuleName, this);
-//    granuleNameLabel->setWordWrap(true);
     granuleNameLabel->setMinimumSize(1,1);
     granuleNameLabel->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Fixed);
 
