@@ -71,6 +71,7 @@ private:
     QMap<QString, QString> mapThemeList;
     QString                currentMapTheme;
     QString                currentMapThemeUrl;
+    QString                tileExtension;
 
 signals:
     void textureDownloadedSignal(qint32 cur_zoom, qint32 lonTileNum, qint32 latTileNum);

@@ -40,13 +40,13 @@ MapsWidget::MapsWidget(QWidget *parent) :
     transportOSMTheme->setObjectName("transportOSM");
     connect(transportOSMTheme, &ImageButton::clicked, this, &MapsWidget::changeStyle);
 
-//    yandexSatelliteTheme = new ImageButton(":/icons/picture.png", tr("Yandex Satellite"), themesWgt);
-//    yandexSatelliteTheme->setObjectName("yandexSatellite");
-//    connect(yandexSatelliteTheme, &ImageButton::clicked, this, &MapsWidget::changeStyle);
+    yandexSatelliteTheme = new ImageButton(":/icons/picture.png", tr("Yandex Satellite"), themesWgt);
+    yandexSatelliteTheme->setObjectName("yandexSatellite");
+    connect(yandexSatelliteTheme, &ImageButton::clicked, this, &MapsWidget::changeStyle);
 
     themesLayout->addWidget(OSMTheme, 0, Qt::AlignHCenter);
     themesLayout->addWidget(transportOSMTheme, 0, Qt::AlignHCenter);
-//    themesLayout->addWidget(yandexSatelliteTheme, 0, Qt::AlignHCenter);
+    themesLayout->addWidget(yandexSatelliteTheme, 0, Qt::AlignHCenter);
 
     themesLayout->setContentsMargins(0,8,0,0);
 

@@ -9,6 +9,14 @@ Earth::Earth(QObject *parent, QSharedPointer<QGLMaterialCollection> materials, C
     setPalette(materials);
     cacheDir = configData->cacheDir;
 
+    // create Theme variables
+    mapThemeList.insert("OSM", "http://tile.openstreetmap.org/%1/%2/%3.png");
+    mapThemeList.insert("transportOSM", "http://tile2.opencyclemap.org/transport/%1/%2/%3.png");
+    mapThemeList.insert("yandexSatellite", "http://sat.maps.yandex.net/tiles?l=sat&v=3.102.0&z=%1&x=%2&y=%3");
+    currentMapTheme = "OSM";
+    currentMapThemeUrl = mapThemeList.value(currentMapTheme);
+    tileExtension = "png";
+
     // set the maximum number of threads to download images tiles
     downloadQueue = new QCache<QString, TileDownloader>;
     downloadQueue->setMaxCost(25);
@@ -37,13 +45,6 @@ Earth::Earth(QObject *parent, QSharedPointer<QGLMaterialCollection> materials, C
     zoom_old = 0;
 
     connect(this, &Earth::textureDownloadedSignal, this, &Earth::textureDownloaded);
-
-    mapThemeList.insert("OSM", "http://tile.openstreetmap.org/%1/%2/%3.png");
-    mapThemeList.insert("transportOSM", "http://tile2.opencyclemap.org/transport/%1/%2/%3.png");
-    mapThemeList.insert("yandexSatellite", "http://sat.maps.yandex.net/tiles?l=sat&x=%1&y=%2&z=%3");
-
-    currentMapTheme = "OSM";
-    currentMapThemeUrl = mapThemeList.value(currentMapTheme);
 }
 
 /*!
@@ -127,7 +128,6 @@ void Earth::addTileNode(int cur_zoom, qint32 lonTileNum, qint32 latTileNum)
 {
     int separation = qPow(2, cur_zoom);
 
-    qWarning() << cur_zoom;
     if (!checkTextureFile(separation, lonTileNum, latTileNum, cur_zoom))
     {
         tileDownload(cur_zoom, separation, lonTileNum, latTileNum);
@@ -303,8 +303,8 @@ QGLSceneNode* Earth::BuildSpherePart(int separation, qreal minSphereLat, qreal m
 */
 bool Earth::checkTextureFile(int separation, int lonTileNum, int latTileNum, int cur_zoom)
 {
-    QString texFilePath = QString(cacheDir+"/%1-%2-%3.png").arg(cur_zoom).
-                                                arg(lonTileNum).arg(separation-1-latTileNum);
+    QString texFilePath = QString(cacheDir+"/%1-%2-%3.%4").arg(cur_zoom).
+                          arg(lonTileNum).arg(separation-1-latTileNum).arg(tileExtension);
     return QFile::exists(texFilePath);
 }
 
@@ -319,8 +319,8 @@ bool Earth::addTextureToTile(QGLSceneNode* tempNode, int separation, int lonTile
     tex = new QGLTexture2D();
 //    tex->setSize(QSize(512, 256));
 
-    QString t_filepath = cacheDir+"/%1-%2-%3.png";
-    QString filepath(t_filepath.arg(cur_zoom).arg(lonTileNum).arg(separation-1-latTileNum));
+    QString t_filepath = cacheDir+"/%1-%2-%3.%4";
+    QString filepath(t_filepath.arg(cur_zoom).arg(lonTileNum).arg(separation-1-latTileNum).arg(tileExtension));
 
     if (!QFile::exists(filepath))
     {
@@ -349,8 +349,8 @@ bool Earth::addTextureToTile(QGLSceneNode* tempNode, int separation, int lonTile
 */
 void Earth::tileDownload(qint32 cur_zoom, qint32 separation, qint32 lonTileNum, qint32 latTileNum)
 {
-    QString m_filepath = cacheDir+"/%1-%2-%3.png";
-    QString textureStorePath = (m_filepath.arg(cur_zoom).arg(lonTileNum).arg(separation-1-latTileNum));
+    QString m_filepath = cacheDir+"/%1-%2-%3.%4";
+    QString textureStorePath = (m_filepath.arg(cur_zoom).arg(lonTileNum).arg(separation-1-latTileNum).arg(tileExtension));
 
     TileDownloader *tileDownloader = new TileDownloader(separation, lonTileNum, latTileNum,
                                                         cur_zoom, textureStorePath, currentMapThemeUrl);
@@ -449,6 +449,9 @@ void Earth::setMapTheme(QString mapThemeName)
     {
         currentMapTheme = mapThemeName;
         currentMapThemeUrl = mapThemeList.value(mapThemeName);
+
+        tileExtension = (currentMapTheme.indexOf("yandex") >= 0) ? "jpg": "png";
+
         tileNodeCache->clear();
         clearTileCache();
         buildEarthNode(a, 10, curZoom);
@@ -460,14 +463,17 @@ void Earth::clearTileCache()
     // list files from cache dir
     QDir dir(cacheDir);
     QStringList lstFiles = dir.entryList(QDir::Files);
-    QRegExp rx(dir.absolutePath() + "/"+"(\\d+)-(\\d+)-(\\d+)\.png");
+    QRegExp rxPNG(dir.absolutePath() + "/"+"(\\d+)-(\\d+)-(\\d+).png");
+    QRegExp rxJPG(dir.absolutePath() + "/"+"(\\d+)-(\\d+)-(\\d+).jpg");
 
     //remove files (earth tile e.g. 0-0-0.png)
     foreach (QString entry, lstFiles)
     {
         QString entryAbsPath = dir.absolutePath() + "/" + entry;
 //        QFile::setPermissions(entryAbsPath, QFile::ReadOwner | QFile::WriteOwner);
-        if (rx.exactMatch(entryAbsPath))
+        if (rxPNG.exactMatch(entryAbsPath))
+            QFile::remove(entryAbsPath);
+        else if (rxJPG.exactMatch(entryAbsPath))
             QFile::remove(entryAbsPath);
     }
 }

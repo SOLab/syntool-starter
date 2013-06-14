@@ -306,7 +306,6 @@ void EarthView::rotate(int deltax, int deltay)
     // emit signal about changed center
     GeoCoords pos = getGeoCoordsPos(camera()->eye());
     emit updatedTilesSignal(scale, pos);
-
 }
 
 void EarthView::leftSlot()
@@ -557,19 +556,16 @@ void EarthView::registerPicking()
 
         {
             registerObject(node->id(), node);
-//            qCritical() << "6666666666";
             connect(node, SIGNAL(clicked()),
                     this, SLOT(objectPicked()));
         }
 
     }
-//    qCritical() << "777777777777";
     test = true;
 }
 
 void EarthView::objectPicked()
 {
-//    qCritical() << "88888888888";
     Q_ASSERT(m_treeView);
     QGLPickNode *node = qobject_cast<QGLPickNode*>(sender());
     Q_ASSERT(node);
