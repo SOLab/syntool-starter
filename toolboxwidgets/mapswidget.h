@@ -22,8 +22,10 @@ protected:
     QScrollArea* themesArea;
     ImageButton* OSMTheme;
     ImageButton* transportOSMTheme;
+    ImageButton* yandexMapsTheme;
     ImageButton* yandexSatelliteTheme;
     ImageButton* googleMapsTheme;
+    ImageButton* googleSatelliteTheme;
 
 private:
     QString currentMapTheme;

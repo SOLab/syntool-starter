@@ -62,5 +62,7 @@
         <file alias="transport.png">resources/icons/transport.png</file>
         <file alias="googlemaps.png">resources/icons/googlemaps.png</file>
         <file alias="yandexmaps.png">resources/icons/yandexmaps.png</file>
+        <file alias="yandexsatellite.png">resources/icons/yandexsatellite.png</file>
+        <file alias="googlesatellite.png">resources/icons/googlesatellite.png</file>
     </qresource>
 </RCC>

@@ -12,8 +12,10 @@ Earth::Earth(QObject *parent, QSharedPointer<QGLMaterialCollection> materials, C
     // create Theme variables
     mapThemeList.insert("OSM", "http://tile.openstreetmap.org/%1/%2/%3.png");
     mapThemeList.insert("transportOSM", "http://tile2.opencyclemap.org/transport/%1/%2/%3.png");
-    mapThemeList.insert("yandexSatellite", "http://sat.maps.yandex.net/tiles?l=sat&v=3.102.0&z=%1&x=%2&y=%3");
-    mapThemeList.insert("googleMaps", "https://mts.google.com/vt/lyrs=m&hl=ru&z=%1&x=%2&y=%3&s=Galile");
+    mapThemeList.insert("yandexSatellite", "http://sat.maps.yandex.net/tiles?l=sat&v=3.102.0&z=%1&x=%2&y=%3&lang=ru_RU");
+    mapThemeList.insert("yandexMaps", "http://vec.maps.yandex.net/tiles?l=map&v=2.45.0&z=%1&x=%2&y=%3&lang=ru_RU");
+    mapThemeList.insert("googleMaps", "http://mts.google.com/vt/lyrs=m&hl=ru&z=%1&x=%2&y=%3&s=Galile");
+    mapThemeList.insert("googleSatellite", "http://khms.google.ru/kh/v=130&src=app&z=%1&x=%2&y=%3&s=Gal");
     currentMapTheme = "OSM";
     currentMapThemeUrl = mapThemeList.value(currentMapTheme);
     tileExtension = "png";
@@ -451,7 +453,7 @@ void Earth::setMapTheme(QString mapThemeName)
         currentMapTheme = mapThemeName;
         currentMapThemeUrl = mapThemeList.value(mapThemeName);
 
-        tileExtension = (currentMapTheme.indexOf("yandex") >= 0) ? "jpg": "png";
+        tileExtension = (currentMapTheme.indexOf("Satellite") >= 0) ? "jpg": "png";
 
         tileNodeCache->clear();
         clearTileCache();

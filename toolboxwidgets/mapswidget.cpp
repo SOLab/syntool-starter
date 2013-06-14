@@ -42,7 +42,12 @@ MapsWidget::MapsWidget(QWidget *parent) :
     connect(transportOSMTheme, &ImageButton::clicked, this, &MapsWidget::changeStyle);
     connect(this, &MapsWidget::changeMapTheme, transportOSMTheme, &ImageButton::setCurrentName);
 
-    yandexSatelliteTheme = new ImageButton(":/icons/yandexmaps.png", tr("Yandex Satellite"), themesWgt);
+    yandexMapsTheme = new ImageButton(":/icons/yandexmaps.png", tr("Yandex Maps"), themesWgt);
+    yandexMapsTheme->setObjectName("yandexMaps");
+    connect(yandexMapsTheme, &ImageButton::clicked, this, &MapsWidget::changeStyle);
+    connect(this, &MapsWidget::changeMapTheme, yandexMapsTheme, &ImageButton::setCurrentName);
+
+    yandexSatelliteTheme = new ImageButton(":/icons/yandexsatellite.png", tr("Yandex Satellite"), themesWgt);
     yandexSatelliteTheme->setObjectName("yandexSatellite");
     connect(yandexSatelliteTheme, &ImageButton::clicked, this, &MapsWidget::changeStyle);
     connect(this, &MapsWidget::changeMapTheme, yandexSatelliteTheme, &ImageButton::setCurrentName);
@@ -52,10 +57,17 @@ MapsWidget::MapsWidget(QWidget *parent) :
     connect(googleMapsTheme, &ImageButton::clicked, this, &MapsWidget::changeStyle);
     connect(this, &MapsWidget::changeMapTheme, googleMapsTheme, &ImageButton::setCurrentName);
 
+    googleSatelliteTheme = new ImageButton(":/icons/googlesatellite.png", tr("Google Satellite"), themesWgt);
+    googleSatelliteTheme->setObjectName("googleSatellite");
+    connect(googleSatelliteTheme, &ImageButton::clicked, this, &MapsWidget::changeStyle);
+    connect(this, &MapsWidget::changeMapTheme, googleSatelliteTheme, &ImageButton::setCurrentName);
+
     themesLayout->addWidget(OSMTheme, 0, Qt::AlignHCenter);
     themesLayout->addWidget(transportOSMTheme, 0, Qt::AlignHCenter);
+    themesLayout->addWidget(yandexMapsTheme, 0, Qt::AlignHCenter);
     themesLayout->addWidget(yandexSatelliteTheme, 0, Qt::AlignHCenter);
     themesLayout->addWidget(googleMapsTheme, 0, Qt::AlignHCenter);
+    themesLayout->addWidget(googleSatelliteTheme, 0, Qt::AlignHCenter);
 
     themesLayout->setContentsMargins(0,8,0,0);
 
