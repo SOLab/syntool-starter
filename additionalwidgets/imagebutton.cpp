@@ -48,13 +48,32 @@ ImageButton::ImageButton(QString image_name, QString label, QWidget *parent) :
 //    m_layout->setSpacing(28);
 
     setFixedSize(96,80);
-//    setObjectName(name)
 
-    setStyleSheet("QPushButton:flat {border: None;}"
-                       "QPushButton:hover:pressed {border: none;"
-                       "background-color: rgb(218,218,218);"
-                       "border-radius: 7px;}"
-                       "QPushButton:hover:!pressed{background-color: "
-                       "rgb(230,230,230); border-radius: 7px;}");
+    styleSheetStr = "QPushButton:flat {border: None;}"
+                    "QPushButton:hover:pressed {border: none;"
+                    "background-color: rgb(218,218,218);"
+                    "border-radius: 7px;}"
+                    "QPushButton:hover:!pressed{background-color: "
+                    "rgb(230,230,230); border-radius: 7px;}";
+    setStyleSheet(styleSheetStr);
     updateGeometry();
+}
+
+void ImageButton::setSelected()
+{
+    setStyleSheet(styleSheetStr + "QPushButton{background-color: "
+                       "rgb(200,200,200); border-radius: 7px;}");
+}
+
+void ImageButton::setUnSelected()
+{
+    setStyleSheet(styleSheetStr);
+}
+
+void ImageButton::setCurrentName(QString newName)
+{
+    if (objectName() == newName)
+        setSelected();
+    else
+        setUnSelected();
 }

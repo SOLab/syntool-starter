@@ -17,10 +17,15 @@ protected:
     QVBoxLayout* m_layout;
     QLabel*      image_lbl;
     QString      m_themeName;
+    QString      styleSheetStr;
+
+    void setSelected();
+    void setUnSelected();
 
 signals:
     
 public slots:
+    void setCurrentName(QString themeName);
     
 };
 

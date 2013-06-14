@@ -35,18 +35,22 @@ MapsWidget::MapsWidget(QWidget *parent) :
     OSMTheme = new ImageButton(":/osm.png", "OpenStreetMap", themesWgt);
     OSMTheme->setObjectName("OSM");
     connect(OSMTheme, &ImageButton::clicked, this, &MapsWidget::changeStyle);
+    connect(this, &MapsWidget::changeMapTheme, OSMTheme, &ImageButton::setCurrentName);
 
     transportOSMTheme = new ImageButton(":/icons/transport.png", tr("Transport View"), themesWgt);
     transportOSMTheme->setObjectName("transportOSM");
     connect(transportOSMTheme, &ImageButton::clicked, this, &MapsWidget::changeStyle);
+    connect(this, &MapsWidget::changeMapTheme, transportOSMTheme, &ImageButton::setCurrentName);
 
     yandexSatelliteTheme = new ImageButton(":/icons/yandexmaps.png", tr("Yandex Satellite"), themesWgt);
     yandexSatelliteTheme->setObjectName("yandexSatellite");
     connect(yandexSatelliteTheme, &ImageButton::clicked, this, &MapsWidget::changeStyle);
+    connect(this, &MapsWidget::changeMapTheme, yandexSatelliteTheme, &ImageButton::setCurrentName);
 
     googleMapsTheme = new ImageButton(":/icons/googlemaps.png", tr("Google Maps"), themesWgt);
     googleMapsTheme->setObjectName("googleMaps");
     connect(googleMapsTheme, &ImageButton::clicked, this, &MapsWidget::changeStyle);
+    connect(this, &MapsWidget::changeMapTheme, googleMapsTheme, &ImageButton::setCurrentName);
 
     themesLayout->addWidget(OSMTheme, 0, Qt::AlignHCenter);
     themesLayout->addWidget(transportOSMTheme, 0, Qt::AlignHCenter);
