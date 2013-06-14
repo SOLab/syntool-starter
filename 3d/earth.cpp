@@ -13,6 +13,7 @@ Earth::Earth(QObject *parent, QSharedPointer<QGLMaterialCollection> materials, C
     mapThemeList.insert("OSM", "http://tile.openstreetmap.org/%1/%2/%3.png");
     mapThemeList.insert("transportOSM", "http://tile2.opencyclemap.org/transport/%1/%2/%3.png");
     mapThemeList.insert("yandexSatellite", "http://sat.maps.yandex.net/tiles?l=sat&v=3.102.0&z=%1&x=%2&y=%3");
+    mapThemeList.insert("googleMaps", "https://mts.google.com/vt/lyrs=m&hl=ru&z=%1&x=%2&y=%3&s=Galile");
     currentMapTheme = "OSM";
     currentMapThemeUrl = mapThemeList.value(currentMapTheme);
     tileExtension = "png";

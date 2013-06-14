@@ -23,6 +23,7 @@ protected:
     ImageButton* OSMTheme;
     ImageButton* transportOSMTheme;
     ImageButton* yandexSatelliteTheme;
+    ImageButton* googleMapsTheme;
 
 private:
     QString currentMapTheme;

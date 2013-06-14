@@ -16,7 +16,7 @@ TileDownloader::TileDownloader(qint32 separationValue, qint32 lonTileNumValue, q
 
     texUrl = QUrl::fromEncoded(arg.toLocal8Bit());
 
-    qCritical() << texUrl.url();
+    qDebug() << texUrl.url();
     textureStorePath = texStorePath;
 
     connect(&m_WebCtrl, &QNetworkAccessManager::finished,

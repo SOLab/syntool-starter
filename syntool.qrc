@@ -60,5 +60,7 @@
         <file alias="go_down.png">resources/icons/go_down.png</file>
         <file alias="go_up.png">resources/icons/go_up.png</file>
         <file alias="transport.png">resources/icons/transport.png</file>
+        <file alias="googlemaps.png">resources/icons/googlemaps.png</file>
+        <file alias="yandexmaps.png">resources/icons/yandexmaps.png</file>
     </qresource>
 </RCC>
