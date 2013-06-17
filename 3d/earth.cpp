@@ -209,9 +209,9 @@ QGLSceneNode* Earth::BuildSpherePart(int separation, qreal minSphereLat, qreal m
     qreal maxMerLat = Lat2MercatorLatitude(maxSphereLat);
 
     // all stacks and slices
-    int stacks = 128;
-    int slices = 128;
-    if (curZoom > 7)
+    int stacks = 32;
+    int slices = 32;
+    if (curZoom > 5)
     {
         stacks = qPow(2, qFloor(curZoom));
         slices = qPow(2, qFloor(curZoom));
