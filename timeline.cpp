@@ -637,10 +637,22 @@ void TimeLine::plusTime(qint32 minutes)
 {
     control_.currentDate = control_.currentDate.addSecs(minutes*60);
     repaint();
+
+    if (qAbs(notChangedDate.daysTo(control_.currentDate.date())) > 2)
+    {
+        notChangedDate = control_.currentDate.date();
+        changedDay();
+    }
 }
 
 void TimeLine::minusTime(qint32 minutes)
 {
     control_.currentDate = control_.currentDate.addSecs(minutes*(-60));
     repaint();
+
+    if (notChangedDate.daysTo(control_.currentDate.date()))
+    {
+        notChangedDate = control_.currentDate.date();
+        changedDay();
+    }
 }

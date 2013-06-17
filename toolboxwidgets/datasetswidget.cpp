@@ -78,7 +78,7 @@ DatasetsWidget::DatasetsWidget(ConfigData *configData, QWidget *parent) :
     selectedDataset = NULL;
     selectedGranuleId = 0;
 
-    maxHeight = configData->numberCachedSimpleGranules + configData->numberCachedTiledGranules + 50;
+    maxHeight = configData->numberCachedSimpleGranules + configData->numberCachedTiledGranules + 25;
 
     setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
 }
