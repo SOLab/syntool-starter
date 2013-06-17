@@ -30,8 +30,9 @@ struct ConfigData{
     QString configDir;
     QString configFile;
 
-    QString serverName;
-    QString lang;
+    QString                 serverName;
+    QString                 lang;
+    QString                 mapThemeName;
     LogLevel::LogLevelValue logLevel;
 
     QString cacheDir;

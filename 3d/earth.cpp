@@ -7,6 +7,7 @@ Earth::Earth(QObject *parent, QSharedPointer<QGLMaterialCollection> materials, C
     , m_texture(0)
 {
     setPalette(materials);
+    m_configData = configData;
     cacheDir = configData->cacheDir;
 
     // create Theme variables
@@ -16,9 +17,10 @@ Earth::Earth(QObject *parent, QSharedPointer<QGLMaterialCollection> materials, C
     mapThemeList.insert("yandexMaps", "http://vec.maps.yandex.net/tiles?l=map&v=2.45.0&z=%1&x=%2&y=%3&lang=ru_RU");
     mapThemeList.insert("googleMaps", "http://mts.google.com/vt/lyrs=m&hl=ru&z=%1&x=%2&y=%3&s=Galile");
     mapThemeList.insert("googleSatellite", "http://khms.google.ru/kh/v=130&src=app&z=%1&x=%2&y=%3&s=Gal");
-    currentMapTheme = "OSM";
+
+    currentMapTheme = configData->mapThemeName;
     currentMapThemeUrl = mapThemeList.value(currentMapTheme);
-    tileExtension = "png";
+    tileExtension = (currentMapTheme.indexOf("Satellite") >= 0) ? "jpg": "png";
 
     // set the maximum number of threads to download images tiles
     downloadQueue = new QCache<QString, TileDownloader>;
@@ -450,6 +452,12 @@ void Earth::setMapTheme(QString mapThemeName)
 {
     if (mapThemeList.contains(mapThemeName))
     {
+        // save to config
+        QSettings *settings = new QSettings(m_configData->configFile, QSettings::IniFormat);
+        settings->setValue("common/map_theme", mapThemeName);
+        settings->sync();
+        delete settings;
+
         currentMapTheme = mapThemeName;
         currentMapThemeUrl = mapThemeList.value(mapThemeName);
 

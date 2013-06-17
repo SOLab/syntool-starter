@@ -12,6 +12,7 @@
 #include <QObject>
 #include <QDir>
 #include <typeinfo>
+#include <QSettings>
 
 #include "tiledownloader.h"
 #include "more/structure.h"
@@ -51,11 +52,8 @@ private:
 //    QList<QGLTexture2D*> m_LoadedTextures;
     QGLTexture2D*        m_texture;
     QGraphicsRotation3D* earthRotation;
-    QGLSceneNode*        sn1;
-    QGLSceneNode*        sn2;
-    QGLSceneNode*        sn3;
-    QGLSceneNode*        sn4;
     QString              cacheDir;
+    ConfigData*          m_configData;
 
     void          buildEarthNode(qreal radius = 1.0, int divisions = 5, int separation = 1);
     QGLSceneNode* BuildSpherePart(int separation, qreal minSphereLat, qreal maxSphereLat,
