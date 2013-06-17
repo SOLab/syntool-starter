@@ -221,8 +221,8 @@ QGLSceneNode* Earth::BuildSpherePart(int separation, qreal minSphereLat, qreal m
 //    qreal stacksForOne = stacks/(float)separation;
 //    qreal slicesForOne = slices/(float)separation;
 
-    qreal oneSphereStackDegrees = (maxSphereLat - minSphereLat) / (stacks/(float)separation);
-    qreal oneSphereSliceDegrees = (maxSphereLon - minSphereLon) / (slices/(float)separation);
+    qreal oneSphereStackDegrees = (maxSphereLat - minSphereLat) / qreal(stacks/(qreal)separation);
+    qreal oneSphereSliceDegrees = (maxSphereLon - minSphereLon) / qreal(slices/(qreal)separation);
 
     QVector3D curDecart;
     QVector3D curDecartNext;
@@ -261,6 +261,10 @@ QGLSceneNode* Earth::BuildSpherePart(int separation, qreal minSphereLat, qreal m
         curMerLat = Lat2MercatorLatitude(curSphereLat);
         curMerLatNext = Lat2MercatorLatitude(curSphereLatNext);
 
+        // calculate xTexCoord for this lat and next lat
+        yTexCoord = (curMerLat - minMerLat) / qreal(maxMerLat - minMerLat);
+        yTexCoordNext = (curMerLatNext - minMerLat) / qreal(maxMerLat - minMerLat);
+
         prim.clear();
         for (qreal curSphereLon = minSphereLon; curSphereLon < maxSphereLonApprox;
                                                 curSphereLon += oneSphereSliceDegrees)
@@ -272,8 +276,6 @@ QGLSceneNode* Earth::BuildSpherePart(int separation, qreal minSphereLat, qreal m
             xTexCoord = ((curSphereLon) - (minSphereLon))/qreal((maxSphereLon) - (minSphereLon));
             if (firstFlag)
                 yTexCoord = 0;
-            else
-                yTexCoord = (curMerLat - minMerLat) / qreal(maxMerLat - minMerLat);
 
             prim.appendVertex(curDecart);
             prim.appendNormal(curDecart);
@@ -284,8 +286,6 @@ QGLSceneNode* Earth::BuildSpherePart(int separation, qreal minSphereLat, qreal m
             xTexCoordNext = ((curSphereLon) - (minSphereLon)) / qreal((maxSphereLon) - (minSphereLon));
             if (lastFlag)
                 yTexCoordNext = 1;
-            else
-                yTexCoordNext = (curMerLatNext - minMerLat) / qreal(maxMerLat - minMerLat);
 
             prim.appendVertex(curDecartNext);
             prim.appendNormal(curDecartNext);
