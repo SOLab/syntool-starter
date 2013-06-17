@@ -213,8 +213,8 @@ QGLSceneNode* Earth::BuildSpherePart(int separation, qreal minSphereLat, qreal m
     int slices = 128;
     if (curZoom > 7)
     {
-        stacks = qPow(2, curZoom);
-        slices = qPow(2, curZoom);
+        stacks = qPow(2, qFloor(curZoom));
+        slices = qPow(2, qFloor(curZoom));
     }
 
     // stacks and slices for one tile
