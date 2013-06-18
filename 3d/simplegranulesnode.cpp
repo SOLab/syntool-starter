@@ -292,6 +292,7 @@ QGLSceneNode* SimpleGranulesNode::BuildGranuleMerNode(int separation, qreal minS
     qreal maxSphereLonApprox = maxSphereLon+0.0001;
     bool firstFlag = true;
     bool lastFlag = false;
+    m_altitude = 0.001 + height()/10000.0;
 
     for (qreal curSphereLat = minSphereLat; curSphereLat < maxSphereLat;
                                             curSphereLat+=oneSphereStackDegrees) {
@@ -312,31 +313,31 @@ QGLSceneNode* SimpleGranulesNode::BuildGranuleMerNode(int separation, qreal minS
         curMerLat = (curSphereLat);
         curMerLatNext = (curSphereLatNext);
 
+        // calculate xTexCoord for this lat and next lat
+        yTexCoord = (curMerLat - minMerLat) / qreal(maxMerLat - minMerLat);
+        yTexCoordNext = (curMerLatNext - minMerLat) / qreal(maxMerLat - minMerLat);
+
         prim.clear();
         for (qreal curSphereLon = minSphereLon; curSphereLon < maxSphereLonApprox;
                                                 curSphereLon += oneSphereSliceDegrees)
         {
             // calculate decart coordinates (x,y,z) for Vertex and Normal
-            curDecart = llh2xyz(curSphereLat, curSphereLon, 0.001 + height()/10000.0);
+            curDecart = llh2xyz(curSphereLat, curSphereLon, m_altitude);
 
             // calculate texture coordinates
             xTexCoord = ((curSphereLon) - (minSphereLon))/qreal((maxSphereLon) - (minSphereLon));
             if (firstFlag)
                 yTexCoord = 0;
-            else
-                yTexCoord = (curMerLat - minMerLat) / qreal(maxMerLat - minMerLat);
 
             prim.appendVertex(curDecart);
             prim.appendNormal(curDecart);
             prim.appendTexCoord(QVector2D(xTexCoord, (yTexCoord)));
 
             // all for next point
-            curDecartNext = llh2xyz(curSphereLatNext, curSphereLon, 0.001 + height()/10000.0);
+            curDecartNext = llh2xyz(curSphereLatNext, curSphereLon, m_altitude);
             xTexCoordNext = ((curSphereLon) - (minSphereLon)) / qreal((maxSphereLon) - (minSphereLon));
             if (lastFlag)
                 yTexCoordNext = 1;
-            else
-                yTexCoordNext = (curMerLatNext - minMerLat) / qreal(maxMerLat - minMerLat);
 
             prim.appendVertex(curDecartNext);
             prim.appendNormal(curDecartNext);
