@@ -404,27 +404,14 @@ void Earth::updateTilesSlot(qreal scale, GeoCoords geoCoords)
 
                 if (tileNodeCache->contains(currentCacheNumber))
                 {
-                    QGLSceneNode* sceneNode = tileNodeCache->object(currentCacheNumber)->glSceneNodeObject();
+                    tileNodeCache->object(currentCacheNumber)->glSceneNodeObject()->setOptions(QGLSceneNode::HideNode);
 
-                    if (!sceneNode->options().testFlag(QGLSceneNode::HideNode))
-                    {
-                        sceneNode->setOptions(QGLSceneNode::HideNode);
-                    }
-                }
-
-                QString search_path = QString("tile-%1-%2-%3").arg(zoom_old).arg(x).arg(y);
-                QGLSceneNode* sceneNode = this->findSceneNode(search_path);
-
-                if (sceneNode)
-                {
-                    removeNode(sceneNode);
-//                    delete tempNode;
+                    removeNode(tileNodeCache->object(currentCacheNumber)->glSceneNodeObject());
                 }
             }
         }
         buildEarthNode(a, 10, curZoom);
 
-        qDebug() << "current zoom = " << qFloor(curZoom);
         emit displayed();
     }
     else
