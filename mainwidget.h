@@ -70,7 +70,8 @@ protected:
 
     void createMenuBar();
     void createPythonConsole();
-//    void keyPressEvent(QKeyEvent *e);
+
+    QAction* fullScreenAction;
 
 private:
 
@@ -80,6 +81,7 @@ public slots:
     void showTimeLine();
 
     void showSettings();
+    void setFullScreen(bool value=false);
 };
 
 #endif // MAINWIDGET_H

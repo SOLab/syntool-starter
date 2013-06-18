@@ -22,28 +22,30 @@ public:
     bool notify(QObject* object,QEvent* event)
     {
 
-      //If this is keypress event , do not send it to the receiver
-      if(event->type() == QEvent::KeyPress)
-      {
-          QKeyEvent * key = (QKeyEvent *) event;
-          if (m_view)
-          {
-              switch (key->key())
-              {
-                  case Qt::Key_Left:
-                  case Qt::Key_Right:
-                  case Qt::Key_Up:
-                  case Qt::Key_Down:
-                  case Qt::Key_Plus:
-                  case Qt::Key_Minus:
-                  {
-                      m_view->keyPress(key);
-                  }
-                  break;
+        //If this is keypress event , do not send it to the receiver
+        if(event->type() == QEvent::KeyPress)
+        {
+            QKeyEvent * key = (QKeyEvent *) event;
+            if (m_view)
+            {
+                switch (key->key())
+                {
+                    case Qt::Key_Left:
+                    case Qt::Key_Right:
+                    case Qt::Key_Up:
+                    case Qt::Key_Down:
+                    case Qt::Key_Plus:
+                    case Qt::Key_Minus:
+                    {
+                        m_view->keyPress(key);
+                        break;
+                    }
+                    default:
+                        m_mainWindow->keyPress(key);
               }
           }
 
-        QApplication::notify(object, event);
+//        QApplication::notify(object, event);
         return true;
       }
       //else do the regular processing
@@ -58,9 +60,14 @@ void set_view(EarthView *view)
     {
         m_view = view;
     }
+void setMainWidget(MainWindow *mainWindow)
+    {
+        m_mainWindow = mainWindow;
+    }
 
 protected:
     EarthView* m_view;
+    MainWindow* m_mainWindow;
 };
 
 #endif // KEYSINTERCEPTION_H

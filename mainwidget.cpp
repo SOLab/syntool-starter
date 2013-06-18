@@ -147,7 +147,6 @@ void MainWindow::createMenuBar()
     menuBar()->setContentsMargins(0,0,0,0);
 
     QMenu* fileMenu = menuBar()->addMenu("&"+tr("File"));
-    fileMenu->setDisabled(true);
     QIcon::setThemeName("oxygen");
 
     QAction* openAction = new QAction(QIcon(":/icons/open.png"), "&"+tr("Open"), this);
@@ -159,7 +158,7 @@ void MainWindow::createMenuBar()
 
 
     QAction* exitAction = new QAction(QIcon(":/icons/exit.png"), tr("Exit"), this);
-    exitAction->setShortcut(Qt::Key_Q+Qt::CTRL);
+//    exitAction->setShortcut(Qt::Key_Q+Qt::CTRL);
 //    exitAction->setShortcut(QKeySequence::Quit);
     exitAction->setShortcutContext(Qt::ApplicationShortcut);
 
@@ -167,9 +166,9 @@ void MainWindow::createMenuBar()
 //    connect(saveAction, SIGNAL(triggered()), this, SLOT(save()));
     connect(exitAction, &QAction::triggered, this, &MainWindow::close);
 
-    fileMenu->addAction(openAction);
-    fileMenu->addAction(saveAction);
-    fileMenu->addSeparator();
+//    fileMenu->addAction(openAction);
+//    fileMenu->addAction(saveAction);
+//    fileMenu->addSeparator();
     fileMenu->addAction(exitAction);
 
 /////////////// Edit tab
@@ -197,13 +196,21 @@ void MainWindow::createMenuBar()
     showSidebarAction->setChecked(true);
     connect(showSidebarAction, &QAction::triggered, rightSidebar, &RightSidebar::setVisible);
 
+    fullScreenAction = new QAction(tr("Full screen"), this);
+    fullScreenAction->setCheckable(true);
+    fullScreenAction->setChecked(false);
+    fullScreenAction->setShortcut(Qt::Key_F11);
+    connect(fullScreenAction, &QAction::triggered, this, &MainWindow::setFullScreen);
+
     viewMenu->addAction(showToolbarAction);
     viewMenu->addAction(showSidebarAction);
+    viewMenu->addAction(fullScreenAction);
 
 /////////////// Settings tab
     QMenu* toolsMenu = menuBar()->addMenu("&"+tr("Tools"));
 
     QAction* settingAction = new QAction(QIcon(":/icons/settings.png"), tr("Settings"), this);
+    settingAction->setShortcut(Qt::Key_S+Qt::ALT);
     connect (settingAction, &QAction::triggered, this, &MainWindow::showSettings);
 
     QAction* rulerAction = new QAction(QIcon(":/icons/ruler.png"), tr("Ruler"), this);
@@ -217,13 +224,13 @@ void MainWindow::createMenuBar()
     QAction* aboutAction = new QAction(QIcon(":/icons/help.png"), "&"+tr("About"), this);
     connect(aboutAction, &QAction::triggered, this, &MainWindow::aboutProgram);
 
+    QAction* handbookAction = new QAction(QIcon(":/icons/help_book.png"), "&"+tr("Handbook"), this);
+    connect(handbookAction, &QAction::triggered, this, &MainWindow::openHandBook);
+    handbookAction->setShortcut(Qt::Key_F1);
+
     QAction* bugsAction = new QAction(QIcon(":/icons/e-mail.png"), tr("Send bugs"), this);
     bugsAction->setDisabled(true);
     bugsAction->setShortcut(Qt::Key_B);
-
-    QAction* handbookAction = new QAction(QIcon(":/icons/help_book.png"), "&"+tr("Handbook"), this);
-    connect(handbookAction, &QAction::triggered, this, &MainWindow::openHandBook);
-    handbookAction->setShortcut(QKeySequence::HelpContents);
 
     QAction* aboutQtAction = new QAction(QIcon(":/icons/qt.png"), "&"+tr("About Qt"), this);
     connect(aboutQtAction, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
@@ -232,6 +239,20 @@ void MainWindow::createMenuBar()
     helpMenu->addAction(handbookAction);
     helpMenu->addAction(bugsAction);
     helpMenu->addAction(aboutQtAction);
+}
+
+void MainWindow::setFullScreen(bool value)
+{
+    if (isFullScreen() && !value)
+    {
+        showNormal();
+        fullScreenAction->setChecked(false);
+    }
+    else
+    {
+        showFullScreen();
+        fullScreenAction->setChecked(true);
+    }
 }
 
 void MainWindow::showSettings()
@@ -268,6 +289,14 @@ void MainWindow::createPythonConsole()
 
 void MainWindow::keyPress(QKeyEvent *e)
 {
+    if(e->key() == Qt::Key_F11)
+        setFullScreen();
+    if(e->key() == Qt::Key_S && e->modifiers() == Qt::AltModifier)
+        showSettings();
+    if(e->key() == Qt::Key_Q && e->modifiers() == Qt::ControlModifier)
+        close();
+    if(e->key() == Qt::Key_F1)
+         openHandBook();
     keyPressEvent(e);
 }
 

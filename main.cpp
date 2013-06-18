@@ -122,6 +122,8 @@ int main(int argc, char *argv[])
     wgt.setHostedWindow(&view);
     wgt.resize(900,900);
 
+    app.setMainWidget(&wgt);
+
     app.setWindowIcon(QIcon(":/icons/layers.png"));
     wgt.show();
 
