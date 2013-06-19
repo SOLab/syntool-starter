@@ -85,6 +85,8 @@ int main(int argc, char *argv[])
         cacheDir.mkdir(cacheDir.path());
     }
 
+    clearCacheDir(configData->cacheDir);
+
     EarthView view(configData);
     app.set_view(&view);
 

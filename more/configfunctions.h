@@ -53,4 +53,29 @@ inline ConfigData* readConfigFile(ConfigData *configData)
     return configData;
 }
 
+// remove all granules and tiles from cache
+void clearCacheDir(QString cacheDir)
+{
+    // list files from cache dir
+    QDir dir(cacheDir);
+    QStringList lstFiles = dir.entryList(QDir::Files);
+    QRegExp rxPNG(dir.absolutePath() + "/"+"(\\d+)-(\\d+)-(\\d+).png");
+    QRegExp rxJPG(dir.absolutePath() + "/"+"(\\d+)-(\\d+)-(\\d+).jpg");
+
+    QRegExp rxGranule(dir.absolutePath() + "/"+"granule_(\\d+).png");
+
+    //remove files (earth tile e.g. 0-0-0.png)
+    foreach (QString entry, lstFiles)
+    {
+        QString entryAbsPath = dir.absolutePath() + "/" + entry;
+//        QFile::setPermissions(entryAbsPath, QFile::ReadOwner | QFile::WriteOwner);
+        if (rxPNG.exactMatch(entryAbsPath))
+            QFile::remove(entryAbsPath);
+        else if (rxJPG.exactMatch(entryAbsPath))
+            QFile::remove(entryAbsPath);
+        if (rxGranule.exactMatch(entryAbsPath))
+            QFile::remove(entryAbsPath);
+    }
+}
+
 #endif // CONFIGFUNCTIONS_H
