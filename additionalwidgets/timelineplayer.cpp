@@ -18,30 +18,21 @@ TimeLinePlayer::TimeLinePlayer(ConfigData *configData, QWidget *parent) :
     backPlayButton->setFlat(true);
     backPlayButton->setFocusPolicy(Qt::NoFocus);
     backPlayButton->setFixedSize(18,18);
-    backPlayButton->setStyleSheet("QPushButton:pressed {\
-                                  background-color: #EEEEEE;\
-                                  border: 0;\
-                                  }");
+    backPlayButton->setStyleSheet("QPushButton:pressed {background-color: #EEEEEE; border: 0;}");
     connect(backPlayButton, &QPushButton::clicked, this, &TimeLinePlayer::backPlay);
 
     playButton = new QPushButton(QIcon(":/icons/play_gray.png"),"", this);
     playButton->setFlat(true);
     playButton->setFocusPolicy(Qt::NoFocus);
     playButton->setFixedSize(18,18);
-    playButton->setStyleSheet("QPushButton:pressed {\
-                                  background-color: #EEEEEE;\
-                                  border: 0;\
-                                  }");
+    playButton->setStyleSheet(backPlayButton->styleSheet());
     connect(playButton, &QPushButton::clicked, this, &TimeLinePlayer::play);
 
     stopButton = new QPushButton(QIcon(":/icons/stop_gray.png"),"", this);
     stopButton->setFlat(true);
     stopButton->setFocusPolicy(Qt::NoFocus);
     stopButton->setFixedSize(18,18);
-    stopButton->setStyleSheet("QPushButton:pressed {\
-                                  background-color: #EEEEEE;\
-                                  border: 0;\
-                                  }");
+    stopButton->setStyleSheet(backPlayButton->styleSheet());
     connect(stopButton, &QPushButton::clicked, this, &TimeLinePlayer::stop);
 
     hLayout->addWidget(playSpeed, 10);

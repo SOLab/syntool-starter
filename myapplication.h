@@ -42,7 +42,10 @@ public:
                     }
                     default:
                         m_mainWindow->keyPress(key);
-              }
+                }
+
+                if(key->key() != Qt::Key_F11 && key->key() != Qt::Key_F1)
+                    QApplication::notify(object, event);
           }
 
 //        QApplication::notify(object, event);
