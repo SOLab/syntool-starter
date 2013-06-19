@@ -54,7 +54,7 @@ inline ConfigData* readConfigFile(ConfigData *configData)
 }
 
 // remove all granules and tiles from cache
-void clearCacheDir(QString cacheDir)
+inline void clearCacheDir(QString cacheDir)
 {
     // list files from cache dir
     QDir dir(cacheDir);
@@ -73,7 +73,7 @@ void clearCacheDir(QString cacheDir)
             QFile::remove(entryAbsPath);
         else if (rxJPG.exactMatch(entryAbsPath))
             QFile::remove(entryAbsPath);
-        if (rxGranule.exactMatch(entryAbsPath))
+        else if (rxGranule.exactMatch(entryAbsPath))
             QFile::remove(entryAbsPath);
     }
 }
