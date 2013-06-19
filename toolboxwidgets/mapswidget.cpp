@@ -1,6 +1,6 @@
 #include "mapswidget.h"
 
-MapsWidget::MapsWidget(QWidget *parent) :
+MapsWidget::MapsWidget(ConfigData *configData, QWidget *parent) :
     QWidget(parent)
 {
     vLayout = new QVBoxLayout(this);
@@ -75,7 +75,8 @@ MapsWidget::MapsWidget(QWidget *parent) :
 
     vLayout->addWidget(themesArea);
 
-    currentMapTheme = "OSM";
+    currentMapTheme = configData->mapThemeName;
+    emit changeMapTheme(currentMapTheme);
 }
 
 void MapsWidget::changeStyle()

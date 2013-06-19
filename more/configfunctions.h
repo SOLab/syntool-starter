@@ -68,7 +68,6 @@ inline void clearCacheDir(QString cacheDir)
     foreach (QString entry, lstFiles)
     {
         QString entryAbsPath = dir.absolutePath() + "/" + entry;
-//        QFile::setPermissions(entryAbsPath, QFile::ReadOwner | QFile::WriteOwner);
         if (rxPNG.exactMatch(entryAbsPath))
             QFile::remove(entryAbsPath);
         else if (rxJPG.exactMatch(entryAbsPath))

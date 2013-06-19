@@ -437,7 +437,7 @@ void Earth::cleanupResources()
 
 void Earth::setMapTheme(QString mapThemeName)
 {
-    if (mapThemeList.contains(mapThemeName))
+    if (mapThemeList.contains(mapThemeName) && mapThemeName != currentMapTheme)
     {
         // save to config
         QSettings *settings = new QSettings(m_configData->configFile, QSettings::IniFormat);

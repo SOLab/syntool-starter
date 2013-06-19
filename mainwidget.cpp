@@ -50,7 +50,7 @@ MainWindow::MainWindow(ConfigData *configValue, QWidget *parent)
 //    create right toolBox
     rightSidebar = new RightSidebar;
 
-    mapsWgt = new MapsWidget(centralwgt);
+    mapsWgt = new MapsWidget(configData, centralwgt);
     productsWgt = new ProductsWidget(configData, centralwgt);
     datasetsWgt = new DatasetsWidget(configData, centralwgt);
     placeWgt = new PlaceWidget(centralwgt);

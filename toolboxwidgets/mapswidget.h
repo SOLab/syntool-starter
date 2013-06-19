@@ -8,12 +8,13 @@
 #include <QScrollArea>
 #include <QDebug>
 #include "additionalwidgets/imagebutton.h"
+#include "more/structure.h"
 
 class MapsWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit MapsWidget(QWidget *parent = 0);
+    explicit MapsWidget(ConfigData* configData, QWidget *parent = 0);
 
 protected:
     QVBoxLayout* vLayout;
