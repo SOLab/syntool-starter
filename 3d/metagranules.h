@@ -3,6 +3,8 @@
 
 #include <QObject>
 #include <QGLSceneNode>
+#include <QGLPickNode>
+#include <QGLView>
 #include <QMap>
 
 #include "more/structure.h"
@@ -19,7 +21,7 @@ public:
     MetaGranules(EarthView *parentView, QSharedPointer<QGLMaterialCollection> palette, ConfigData *configData);
     void drawSimpleGranules(QGLPainter *painter);
     void drawTiledGranules(QGLPainter *painter);
-    void setParent(EarthView *parentView){m_parentView = parentView;}
+    void setParent(EarthView *parentView);
     void addGranuleNode(qint32 granuleId, qint32 productId, qint32 height, GranuleType::Type type);
 
 private:
@@ -32,7 +34,7 @@ private:
     QCache<TileCacheNumber, QGLSceneNode> tiledGranuleCache;
     QSharedPointer<QGLMaterialCollection> m_palette;
 
-    EarthView*  m_parentView;
+    QGLView*  m_parentView;
     ConfigData* m_configData;
 
     // <NaiadProductId, Product>
@@ -51,6 +53,10 @@ public slots:
 
     void changedGranuleHeight(qint32 granuleId, qint32 height);
     void changedGranulesHeight(qint32 granuleId1, qint32 height1, qint32 granuleId2, qint32 height2);
+
+    void registerPicking(SimpleGranulesNode *granulesNode);
+    void unregisterPicking();
+    void objectPicked();
 };
 
 #endif // METAGRANULES_H

@@ -39,6 +39,11 @@ void MetaGranules::drawTiledGranules(QGLPainter *painter)
     Q_UNUSED(painter);
 }
 
+void MetaGranules::setParent(EarthView *parentView)
+{
+    m_parentView = (QGLView*)parentView;
+}
+
 void MetaGranules::addGranuleNode(qint32 granuleId, qint32 productId, qint32 height, GranuleType::Type type)
 {
     addSimpleGranuleNode(granuleId, productId, height);
@@ -53,6 +58,7 @@ void MetaGranules::addSimpleGranuleNode(qint32 granuleId, qint32 productId, qint
         granulesNode->setHeight(height);
         simpleGranuleCache->insert(granuleId, granulesNode);
         heightGranuleMap.insert(height, granuleId);
+//        registerPicking(granulesNode);
         connect(granulesNode, &SimpleGranulesNode::updated, this, &MetaGranules::displayed);
     }
     else
@@ -119,4 +125,25 @@ void MetaGranules::changedGranulesHeight(qint32 granuleId1, qint32 height1, qint
 
         emit displayed();
     }
+}
+
+void MetaGranules::registerPicking(SimpleGranulesNode* granulesNode)
+{
+    granulesNode->setPickNode(new QGLPickNode);
+    QGLPickNode *node = granulesNode->pickNode();
+
+    m_parentView->registerObject(node->id(), node);
+    connect(node, SIGNAL(clicked()), this, SLOT(objectPicked()));
+}
+
+void MetaGranules::unregisterPicking()
+{
+}
+
+void MetaGranules::objectPicked()
+{
+    Q_ASSERT(m_treeView);
+    QGLPickNode *node = qobject_cast<QGLPickNode*>(sender());
+    Q_ASSERT(node);
+    SimpleGranulesNode *target = qobject_cast<SimpleGranulesNode*>(node->target());
 }
