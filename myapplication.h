@@ -15,6 +15,8 @@ public:
     QApplication( argc, argv)
     {
         m_view = NULL;
+        focusIsInvolved = false;
+        connect(this, &myApplication::focusChanged, this, &myApplication::focusChangedSlot);
     }
     ~myApplication()
     {}
@@ -37,7 +39,8 @@ public:
                     case Qt::Key_Plus:
                     case Qt::Key_Minus:
                     {
-                        m_view->keyPress(key);
+                        if (!focusIsInvolved)
+                            m_view->keyPress(key);
                         break;
                     }
                     default:
@@ -71,6 +74,20 @@ void setMainWidget(MainWindow *mainWindow)
 protected:
     EarthView* m_view;
     MainWindow* m_mainWindow;
+
+    bool focusIsInvolved;
+
+public slots:
+    void focusChangedSlot(QWidget* old, QWidget* now)
+    {
+        Q_UNUSED(old);
+        if (qobject_cast<QLineEdit*>(now) || qobject_cast<QSpinBox*>(now))
+        {
+            focusIsInvolved = true;
+        }
+        else
+            focusIsInvolved = false;
+    }
 };
 
 #endif // KEYSINTERCEPTION_H
