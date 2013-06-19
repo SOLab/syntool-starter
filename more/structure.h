@@ -39,6 +39,8 @@ struct ConfigData{
     qint32  numberCachedTiles;
     qint32  numberCachedSimpleGranules;
     qint32  numberCachedTiledGranules;
+
+    qint32 timeLineMoveFrequency;
 };
 
 struct BoundingBox {

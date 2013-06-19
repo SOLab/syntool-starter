@@ -8,11 +8,13 @@
 #include <QTimer>
 #include <QDebug>
 
+#include "more/structure.h"
+
 class TimeLinePlayer : public QWidget
 {
     Q_OBJECT
 public:
-    explicit TimeLinePlayer(QWidget *parent = 0);
+    explicit TimeLinePlayer(ConfigData *configData, QWidget *parent = 0);
     QSpinBox* playSpeed;
     QPushButton* backPlayButton;
     QPushButton* playButton;
@@ -28,6 +30,8 @@ private:
     qint32 m_currentSpeed;
     QTimer *timerPlay;
     QTimer *timerBackPlay;
+
+    ConfigData* m_configData;
     
 signals:
     void addTimeSignal(qint32 minutes);

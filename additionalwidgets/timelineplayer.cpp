@@ -1,8 +1,9 @@
 #include "timelineplayer.h"
 
-TimeLinePlayer::TimeLinePlayer(QWidget *parent) :
+TimeLinePlayer::TimeLinePlayer(ConfigData *configData, QWidget *parent) :
     QWidget(parent)
 {
+    m_configData = configData;
     hLayout = new QHBoxLayout(this);
     hLayout->setContentsMargins(0,0,0,0);
     hLayout->setSpacing(2);
@@ -63,13 +64,13 @@ bool TimeLinePlayer::isPlaying()
 void TimeLinePlayer::play()
 {
     stop();
-    timerPlay->start(500);
+    timerPlay->start(m_configData->timeLineMoveFrequency);
 }
 
 void TimeLinePlayer::backPlay()
 {
     stop();
-    timerBackPlay->start(500);
+    timerBackPlay->start(m_configData->timeLineMoveFrequency);
 }
 
 void TimeLinePlayer::stop()

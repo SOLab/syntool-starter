@@ -49,6 +49,8 @@ inline ConfigData* readConfigFile(ConfigData *configData)
     configData->numberCachedTiles = settings->value("cache/number_tiles", 200).toInt();
     configData->numberCachedSimpleGranules = settings->value("cache/number_simple_granules", 50).toInt();
     configData->numberCachedTiledGranules = settings->value("cache/number_tiled_granules", 100).toInt();
+
+    configData->timeLineMoveFrequency = settings->value("other/timeline_move_frequency", 500).toInt();
     delete settings;
     return configData;
 }

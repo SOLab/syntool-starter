@@ -56,7 +56,7 @@ TimeLine::TimeLine(ConfigData *configData, QWidget *parent)
     connect(calendarButton, &QPushButton::clicked, this, &TimeLine::setDate);
 
 
-    timelinePlayer = new TimeLinePlayer(this);
+    timelinePlayer = new TimeLinePlayer(configData, this);
     timelinePlayer->setFixedSize(buttonSize, 24);
     connect(timelinePlayer, &TimeLinePlayer::addTimeSignal, this, &TimeLine::plusTime);
     connect(timelinePlayer, &TimeLinePlayer::deductTimeSignal, this, &TimeLine::minusTime);
