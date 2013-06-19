@@ -62,14 +62,14 @@ public:
 
     }
 
-void set_view(EarthView *view)
-    {
-        m_view = view;
-    }
-void setMainWidget(MainWindow *mainWindow)
-    {
-        m_mainWindow = mainWindow;
-    }
+    void set_view(EarthView *view)
+        {
+            m_view = view;
+        }
+    void setMainWidget(MainWindow *mainWindow)
+        {
+            m_mainWindow = mainWindow;
+        }
 
 protected:
     EarthView* m_view;

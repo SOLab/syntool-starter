@@ -75,10 +75,16 @@ void FileOpenWidget::setText(QString text)
 
 QString FileOpenWidget::value()
 {
-    return data;
+    if (!data.isEmpty())
+        return data;
+    else
+        return text();
 }
 
 QStringList FileOpenWidget::valueList()
 {
-    return dataList;
+    if (!dataList.isEmpty())
+        return dataList;
+    else
+        return text().split(",");
 }
