@@ -41,7 +41,7 @@ inline ConfigData* readConfigFile(ConfigData *configData)
 {
     QSettings *settings = new QSettings(configData->configFile, QSettings::IniFormat);
     configData->serverName = settings->value("common/server_name", "http://staging.satin.rshu.ru").toString();
-    configData->logLevel = (LogLevel::LogLevelValue)settings->value("common/logging_level", LogLevel::DebugOnly).toInt();
+    configData->logLevel = (LogLevel::LogLevelValue)settings->value("common/logging_level", LogLevel::ErrorOnly).toInt();
     configData->lang = settings->value("common/lang", QLocale::system().name()).toString();
     configData->mapThemeName = settings->value("common/map_theme", "OSM").toString();
 

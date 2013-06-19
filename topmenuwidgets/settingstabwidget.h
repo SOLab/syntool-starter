@@ -21,17 +21,22 @@ public:
     QComboBox*      langCombo;
     QLineEdit*      serverNameEdit;
     QComboBox*      logLevelCombo;
+
     FileOpenWidget* cacheDirEdit;
     QSpinBox*       numberCachedTilesEdit;
     QSpinBox*       numberCachedSimpleGranulesEdit;
     QSpinBox*       numberCachedTiledGranulesEdit;
 
+    QSpinBox*       timelineFrequencyEdit;
+
 protected:
     ConfigData* configData;
-    QWidget*    cacheWidget;
     QWidget*    commonWidget;
+    QWidget*    cacheWidget;
+    QWidget*    otherWidget;
     void createCacheWidget();
     void createCommonWidget();
+    void createOtherWidget();
 
 signals:
 

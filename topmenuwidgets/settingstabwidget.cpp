@@ -6,6 +6,7 @@ SettingsTabWidget::SettingsTabWidget(ConfigData *configValue, QWidget *parent) :
     configData = configValue;
     createCommonWidget();
     createCacheWidget();
+    createOtherWidget();
 }
 
 void SettingsTabWidget::createCommonWidget()
@@ -103,4 +104,25 @@ void SettingsTabWidget::createCacheWidget()
     cacheGridLayout->setAlignment(Qt::AlignTop);
 
     addTab(cacheWidget, tr("Cache"));
+}
+
+void SettingsTabWidget::createOtherWidget()
+{
+    otherWidget = new QWidget(this);
+
+    QGridLayout* otherGridLayout = new QGridLayout(otherWidget);
+
+    QLabel* TimelineFrequencyLabel = new QLabel(tr("Timeline move frequency"), otherWidget);
+    timelineFrequencyEdit = new QSpinBox(otherWidget);
+    timelineFrequencyEdit->setMaximum(2000);
+    timelineFrequencyEdit->setMinimum(500);
+    timelineFrequencyEdit->setSingleStep(100);
+    timelineFrequencyEdit->setValue(configData->timeLineMoveFrequency);
+
+    otherGridLayout->addWidget(TimelineFrequencyLabel, 0,0);
+    otherGridLayout->addWidget(timelineFrequencyEdit, 0,1);
+
+    otherGridLayout->setAlignment(Qt::AlignTop);
+
+    addTab(otherWidget, tr("Other"));
 }

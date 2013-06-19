@@ -95,6 +95,11 @@ void SettingsWidget::saveChanges()
         settings->setValue("cache/number_simple_granules",mainTabWidget->numberCachedSimpleGranulesEdit->value());
         settings->setValue("cache/number_tiled_granules",mainTabWidget->numberCachedTiledGranulesEdit->value());
     }
+    // if other
+    else if (mainTabWidget->currentIndex() == 2)
+    {
+        settings->setValue("other/timeline_move_frequency",mainTabWidget->timelineFrequencyEdit->value());
+    }
     settings->sync();
     delete settings;
 
