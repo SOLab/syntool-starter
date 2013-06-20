@@ -5,37 +5,37 @@
 #include "more/structure.h"
 #include <QVector3D>
 
-const qint32 lEarth = 40075.017;
+const float lEarth = 40075.017;
 
-inline double mercator(double x) {
-    return 0.5*log((1.0+qSin(x))/(1.0-qSin(x)));
+inline qreal mercator(qreal x) {
+    return 0.5*qLn((1.0+qSin(x))/(1.0-qSin(x)));
 }
 
-const double maxAbsLon = 180.0;
-const double maxAbsLat = 85.051128;
+const qreal maxAbsLon = 180.0;
+const qreal maxAbsLat = 85.051128;
 #define maxAbsLatMer 85.051128
-const double defMercAngle = maxAbsLat * M_PI / 180.0;
-const double defMercScale = M_PI_2 / mercator(defMercAngle);
+const qreal defMercAngle = maxAbsLat * M_PI / 180.0;
+const qreal defMercScale = M_PI_2 / mercator(defMercAngle);
 
-const double sphereRarius = 0.5;
+const qreal sphereRarius = 0.5;
 
-inline double Mercator2SphereAnalytic(double iTY, const double scale = defMercScale,
-                               const double maxAng = defMercAngle)
+inline qreal Mercator2SphereAnalytic(qreal iTY, const qreal scale = defMercScale,
+                                     const qreal maxAng = defMercAngle)
 {
-    double angle = (iTY * 2 - 1) * M_PI_2;		// texture V to angle
-    double angle2 = fabs(angle);
-    double val = (angle2 > maxAng) ? M_PI_2 : (mercator(angle2) * scale);
+    qreal angle = (iTY * 2 - 1) * M_PI_2;		// texture V to angle
+    qreal angle2 = qFabs(angle);
+    qreal val = (angle2 > maxAng) ? M_PI_2 : (mercator(angle2) * scale);
     if (angle < 0.0) val = -val;
     return (1 + val / M_PI_2) * 0.5;	// angle to texture V
 }
 
 
 #define RADIANS_PER_DEGREE M_PI/180.0
-inline double Lat2MercatorLatitude(double latitude)
+inline qreal Lat2MercatorLatitude(qreal latitude)
 {
     latitude = latitude*180.0/M_PI;
-    double sign = (latitude < 0) ? -1 : 1;
-    double sin = qSin(latitude * RADIANS_PER_DEGREE * sign);
+    qreal sign = (latitude < 0) ? -1 : 1;
+    qreal sin = qSin(latitude * RADIANS_PER_DEGREE * sign);
     return sign * (qLn((1.0 + sin) / (1.0 - sin)) / 2.0);
 }
 
@@ -55,24 +55,25 @@ inline QVector3D llh2xyz(qreal lat, qreal lon, qreal h = 0)
     return decartCoordPoint;
 }
 
-inline GeoCoords ecef2wgs84Rad(double x, double y, double z)
+inline GeoCoords ecef2wgs84Rad(qreal x, qreal y, qreal z)
 {
     GeoCoords pos;
 
-    pos.lat=atan2(z,qSqrt(x*x+y*y));
-    pos.lon=atan2(y,x);
+    pos.lat=qAtan2(z,qSqrt(x*x+y*y));
+    pos.lon=qAtan2(y,x);
     return pos;
 }
 
-inline GeoCoords ecef2wgs84Deg(double x, double y, double z)
+inline GeoCoords ecef2wgs84Deg(qreal x, qreal y, qreal z)
 {
     GeoCoords pos;
 
-    pos.lat=atan2(z,qSqrt(x*x+y*y))/M_PI*180;
-    pos.lon=atan2(y,x)/M_PI*180;
+    pos.lat=qAtan2(z,qSqrt(x*x+y*y))/M_PI*180;
+    pos.lon=qAtan2(y,x)/M_PI*180;
     return pos;
 }
-inline qreal tiley2lat(int y, int separation)
+
+inline qreal tiley2lat(qint32 y, qint32 separation)
 {
     double n = M_PI - 2.0 * M_PI * y / qreal(separation);
     return 180.0 / M_PI * qAtan(0.5 * (qExp(n) - qExp(-n)));
@@ -83,7 +84,7 @@ inline qreal deg2rad(qreal degrees)
     return degrees*M_PI/180.0;
 }
 
-inline TileNumber deg2TileNum(GeoCoords geoCoords, int zoom)
+inline TileNumber deg2TileNum(GeoCoords geoCoords, qint16 zoom)
 {
     qreal lat_rad = deg2rad(geoCoords.lat);
     int n = qPow(2, zoom);
@@ -100,7 +101,7 @@ inline TileNumber deg2TileNum(GeoCoords geoCoords, int zoom)
  * Rt - the number of km in each tile
  * Ntiles - the number of tiles
  */
-inline qint32 getNumberTiles(int zoom, qreal visibleDistance)
+inline qint32 getNumberTiles(qint16 zoom, qreal visibleDistance)
 {
     qreal Rt = lEarth/qPow(2, zoom);
     qreal Ntiles = visibleDistance/Rt;
