@@ -395,23 +395,35 @@ void Earth::updateTilesSlot(qreal scale, GeoCoords geoCoords)
         zoom_old = zoom;
         zoom = qFloor(curZoom);
 
-        int separation_old = qPow(2, zoom_old);
-        for (int y = 0; y < separation_old; y++)
+        if (curZoom>10)
         {
-            for (int x = 0; x < separation_old; x++)
+            QList<QGLSceneNode *> childrens = allChildren();
+            for (int i = 0; i < childrens.size(); ++i)
             {
-                TileCacheNumber currentCacheNumber = TileCacheNumber(zoom_old, x, y);
-
-                if (tileNodeCache->contains(currentCacheNumber))
+                removeNode(childrens.at(i));
+            }
+            tileNodeCache->clear();
+        }
+        else
+        {
+            int separation_old = qPow(2, zoom_old);
+            for (int y = 0; y < separation_old; y++)
+            {
+                for (int x = 0; x < separation_old; x++)
                 {
-                    tileNodeCache->object(currentCacheNumber)->glSceneNodeObject()->setOptions(QGLSceneNode::HideNode);
+                    TileCacheNumber currentCacheNumber = TileCacheNumber(zoom_old, x, y);
 
-                    removeNode(tileNodeCache->object(currentCacheNumber)->glSceneNodeObject());
+                    if (tileNodeCache->contains(currentCacheNumber))
+                    {
+                        tileNodeCache->object(currentCacheNumber)->glSceneNodeObject()->setOptions(QGLSceneNode::HideNode);
+
+                        removeNode(tileNodeCache->object(currentCacheNumber)->glSceneNodeObject());
+                    }
                 }
             }
         }
-        buildEarthNode(a, 10, curZoom);
 
+        buildEarthNode(a, 10, curZoom);
         emit displayed();
     }
     else

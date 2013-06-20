@@ -235,9 +235,10 @@ void EarthView::wheelEvent(QWheelEvent *e)
 // for calling from wheelEvent on press button
 void EarthView::scalePlus()
 {
+    // 28672 - zoom 14
     // 1792 - zoom 10
     // 224 - zoom 7 maximum
-    if (scale < 1792)
+    if (scale < 28672)
     {
         scalePlusMinusSlot(true);
     }
