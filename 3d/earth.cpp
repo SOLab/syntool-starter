@@ -395,7 +395,7 @@ void Earth::updateTilesSlot(qreal scale, GeoCoords geoCoords)
         zoom_old = zoom;
         zoom = qFloor(curZoom);
 
-        if (curZoom>10)
+        if (curZoom>12)
         {
             QList<QGLSceneNode *> childrens = allChildren();
             for (int i = 0; i < childrens.size(); ++i)

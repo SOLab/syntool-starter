@@ -86,6 +86,7 @@ public:
     MetaGranules* metaGranulesNode;
     Earth *earth;
 
+    GeoCoords mousePos2coords(QPoint pos);
 protected:
     void initializeGL(QGLPainter *painter);
     void paintGL(QGLPainter *painter);
@@ -97,6 +98,7 @@ protected:
     void mouseMoveEvent(QMouseEvent *e);
     void mousePressEvent(QMouseEvent *e);
     void mouseReleaseEvent(QMouseEvent *e);
+    void mouseDoubleClickEvent(QMouseEvent *e);
 
     QTime lastMouseMoveTime;
     QPoint delta;

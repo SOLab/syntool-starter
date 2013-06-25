@@ -38,6 +38,8 @@ LayersWidget::LayersWidget(QWidget *parent) :
     vLayout->addWidget(othersLayersLbl);
     vLayout->addLayout(otherLayout);
     setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+
+    connect(this, &LayersWidget::removeLayer, this, &LayersWidget::deleteProduct);
 }
 
 void LayersWidget::addProduct(QString ProductNaiadId, qint32 productId)
@@ -63,7 +65,7 @@ void LayersWidget::deleteProduct(QString ProductId)
 {
     if (currentProducts->contains(ProductId))
     {
-        currentProducts->removeAll(ProductId);
+        currentProducts->removeOne(ProductId);
         emit removeLayerBox(ProductId);
     }
 }

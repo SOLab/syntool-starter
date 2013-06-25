@@ -570,6 +570,7 @@ void EarthView::objectPicked()
     QGLPickNode *node = qobject_cast<QGLPickNode*>(sender());
     Q_ASSERT(node);
     QGLSceneNode *target = qobject_cast<QGLSceneNode*>(node->target());
+    Q_UNUSED(target);
 //    QModelIndex ix = m_model->selectNode(target);
 //    m_treeView->expand(ix);
 //    m_treeView->selectionModel()->clearSelection();
@@ -592,4 +593,89 @@ void EarthView::unregisterPicking()
 //            QGLPickNode *node = *it;
 //            deregisterObject(node->id());
 //        }
+}
+
+// length of the vector
+qreal norm(QVector3D v)
+{
+  return sqrt(v.x()*v.x()+v.y()*v.y()+v.z()*v.z());
+}
+//---------------------------------------------------------------------------
+// scalar multiplication of two vectors
+qreal sprod(QVector3D v1, QVector3D v2)
+{
+  return v1.x()*v2.x()+v1.y()*v2.y()+v1.z()*v2.z();
+}
+//---------------------------------------------------------------------------
+// Sign
+// x>0 : 1;   x=0 : 0;   x<0 : -1
+int Sign(float x)
+{
+  return (x>0)-(x<0);
+}
+
+/*
+ *p - the starting point of the ray
+ *l - direction vector of the ray
+ *c - center of the sphere
+ *r - radius of the sphere
+ */
+float Ray2Sphere(QVector3D p, QVector3D l, QVector3D c, float r)
+{
+    // square of the radius
+    r*=r;
+
+    // square of the distance from the start point to the center of the sphere
+    float d=qPow(norm(c-p),2);
+
+    // projection of the sphere center on ray
+    float s=sprod(c-p,l)/norm(l);
+
+    if(d>r && s<0) // point outside the sphere and the ray is directed from the sphere
+        return -1; // is no intersection
+
+    // square of the distance from the line to the center of the sphere (Pythagoras' theorem)
+    float h=d-s*s;
+
+    if(h>r) // ray does not intersect the sphere
+        return -1;
+
+    return s+sqrt(r-h)*Sign(r-d); // distance to the intersection
+}
+
+GeoCoords EarthView::mousePos2coords(QPoint pos)
+{
+    QVector3D p = QVector3D(0,0,0);
+    QVector3D l = mapPoint(pos);
+    QVector3D c = camera()->modelViewMatrix() * camera()->center();
+
+    float r = 0.5;
+    // distance to the point
+    qreal R_p = Ray2Sphere(p,l,c,r);
+    if (R_p == -1)
+    {
+        GeoCoords pos = {-1000, -1000};
+        return pos;
+    }
+
+    // distance to the front
+    qreal R_front = qSqrt(qPow(p.x() - l.x(),2) + qPow(p.y() - l.y(),2) + qPow(p.z() - l.z(),2));
+
+    qreal x1 = R_p*l.x()/R_front;
+    qreal y1 = R_p*l.y()/R_front;
+    qreal z1 = R_p*l.z()/R_front;
+
+    QVector3D pointVector = QVector3D(x1,y1,z1);
+
+    // from the camera coordinate to world coordinates
+    QVector3D aaa = camera()->modelViewMatrix().inverted() * pointVector;
+
+    return ecef2wgs84Deg(aaa.z(), aaa.x(), aaa.y());
+}
+
+void EarthView::mouseDoubleClickEvent(QMouseEvent *e)
+{
+    GeoCoords pos = mousePos2coords(e->pos());
+    if (pos.lat > -100)
+        qCritical() << "lat:" << pos.lat << ", lon:" << pos.lon;
 }
