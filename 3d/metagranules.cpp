@@ -15,8 +15,6 @@ void MetaGranules::drawSimpleGranules(QGLPainter *painter)
     if (heightGranuleMap.keys().isEmpty())
         return;
 
-    qCritical() << heightGranuleMap.keys();
-
     QList<qint32>::iterator i;
     QList<qint32> keys = heightGranuleMap.keys();
 
@@ -56,6 +54,7 @@ void MetaGranules::addSimpleGranuleNode(qint32 granuleId, qint32 productId, qint
         SimpleGranulesNode* granulesNode = new SimpleGranulesNode(this, m_palette, m_configData, granuleId, productId,
                                            m_productsHash->value(m_productsIdName->value(productId)).IsGlobalCoverage);
         granulesNode->setHeight(height);
+        granulesNode->show();
         simpleGranuleCache->insert(granuleId, granulesNode);
         heightGranuleMap.insert(height, granuleId);
 //        registerPicking(granulesNode);
@@ -66,6 +65,7 @@ void MetaGranules::addSimpleGranuleNode(qint32 granuleId, qint32 productId, qint
         // displayed granule
         if (!heightGranuleMap.contains(simpleGranuleCache->object(granuleId)->height()))
             heightGranuleMap.insert(simpleGranuleCache->object(granuleId)->height(), granuleId);
+        simpleGranuleCache->object(granuleId)->show();
         emit displayed();
     }
 }
@@ -74,7 +74,10 @@ void MetaGranules::removeSimpleGranuleNode(qint32 granuleId, qint32 productId)
 {
     Q_UNUSED(productId);
     if(simpleGranuleCache->object(granuleId))
+    {
         heightGranuleMap.remove(simpleGranuleCache->object(granuleId)->height());
+        simpleGranuleCache->object(granuleId)->hide();
+    }
 
     emit displayed();
 }

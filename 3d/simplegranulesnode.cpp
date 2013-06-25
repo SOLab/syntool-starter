@@ -6,6 +6,7 @@ SimpleGranulesNode::SimpleGranulesNode(QObject *parent, QSharedPointer<QGLMateri
 {
     Q_UNUSED(materials);
     Q_UNUSED(configData);
+    visible = true;
 
     isGlobalCoverage = IsGlobalCoverage;
     setGranuleId(granuleId);
@@ -246,6 +247,8 @@ void SimpleGranulesNode::rebuildGranuleNode()
         removeNode(mainNode);
     addGranuleNode(imagePath);
     setTransparency(granuleId(), transparency());
+
+    isVisible() ? show() : hide();
 }
 
 QGLSceneNode* SimpleGranulesNode::BuildGranuleMerNode(int separation, qreal minSphereLat, qreal maxSphereLat,
