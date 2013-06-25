@@ -370,8 +370,9 @@ void ProductsWidget::addProduct()
 
     if (selectedProducts->keys().contains(newSelectedProduct.productName))
     {
-        selectedProducts->remove(newSelectedProduct.productName);
-        emit productDeleted(newSelectedProduct.productName);
+        return;
+//        selectedProducts->remove(newSelectedProduct.productName);
+//        emit productDeleted(newSelectedProduct.productName);
     }
 
     selectedProducts->insert(newSelectedProduct.productName, newSelectedProduct);
