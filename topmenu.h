@@ -28,7 +28,7 @@ class TopMenu : public QWidget
     Q_OBJECT
 public:
     explicit TopMenu(QWidget *parent = 0);
-    
+
 protected:
     TopMenuButton* moveButton;
     TopMenuButton* addLineButton;
@@ -45,10 +45,22 @@ protected:
     QHBoxLayout*   leftLayout;
     QHBoxLayout*   rightLayout;
 
+private:
+    void unSelectAll();
+
 signals:
+    void setMoveAction(bool value);
+    void addLineAction(bool value);
+    void addRectAction(bool value);
+    void addTagAction(bool value);
+    void addPinAction(bool value);
+
+    void showGridAction(bool value);
+    void hideAllAction(bool value);
+    void addPictureLayerAction();
     
 public slots:
-    
+    void setCheckedButton(bool value);
 };
 
 #endif // TOPMENU_H

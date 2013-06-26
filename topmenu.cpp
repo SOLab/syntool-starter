@@ -17,42 +17,60 @@ TopMenu::TopMenu(QWidget *parent) :
     moveButton->setIcon(QIcon(":/icons/move.png"));
     moveButton->setIconSize(QSize(16,16));
     moveButton->setToolTip(tr("Move"));
+    moveButton->setCheckable(true);
+    connect(moveButton, &QPushButton::clicked, this, &TopMenu::setCheckedButton);
+    connect(moveButton, &QPushButton::clicked, this, &TopMenu::setMoveAction);
 
     addLineButton = new TopMenuButton;
     addLineButton->setIcon(QIcon(":/icons/line.png"));
     addLineButton->setIconSize(QSize(16,16));
     addLineButton->setToolTip(tr("Add line"));
+    addLineButton->setCheckable(true);
+    connect(addLineButton, &QPushButton::clicked, this, &TopMenu::setCheckedButton);
+    connect(addLineButton, &QPushButton::clicked, this, &TopMenu::addLineAction);
 
     addRectButton = new TopMenuButton;
     addRectButton->setIcon(QIcon(":/icons/rectangle.png"));
     addRectButton->setIconSize(QSize(16,16));
     addRectButton->setToolTip(tr("Add rectangle"));
+    addRectButton->setCheckable(true);
+    connect(addRectButton, &QPushButton::clicked, this, &TopMenu::setCheckedButton);
+    connect(addRectButton, &QPushButton::clicked, this, &TopMenu::addRectAction);
 
     addTagButton = new TopMenuButton;
     addTagButton->setIcon(QIcon(":/icons/tag.png"));
     addTagButton->setIconSize(QSize(16,16));
     addTagButton->setToolTip(tr("Add tag"));
+    addTagButton->setCheckable(true);
+    connect(addTagButton, &QPushButton::clicked, this, &TopMenu::setCheckedButton);
+    connect(addTagButton, &QPushButton::clicked, this, &TopMenu::addTagAction);
 
     addPinButton = new TopMenuButton;
     addPinButton->setIcon(QIcon(":/icons/pin.png"));
     addPinButton->setIconSize(QSize(16,16));
     addPinButton->setToolTip(tr("Add pin"));
-
-    addLayerButton = new TopMenuButton;
-    addLayerButton->setIcon(QIcon(":/icons/layers.png"));
-    addLayerButton->setToolTip(tr("Add layer"));
+    addPinButton->setCheckable(true);
+    connect(addPinButton, &QPushButton::clicked, this, &TopMenu::setCheckedButton);
+    connect(addPinButton, &QPushButton::clicked, this, &TopMenu::addPinAction);
 
     addGridButton = new TopMenuButton;
     addGridButton->setIcon(QIcon(":/icons/grid.png"));
     addGridButton->setToolTip(tr("Show grid"));
-
-    addPictureButton = new TopMenuButton;
-    addPictureButton->setIcon(QIcon(":/icons/picture.png"));
-    addPictureButton->setToolTip(tr("Overlay an image"));
+    addGridButton->setCheckable(true);
+    connect(addGridButton, &QPushButton::clicked, this, &TopMenu::showGridAction);
 
     addShowButton = new TopMenuButton;
     addShowButton->setIcon(QIcon(":/icons/show.png"));
     addShowButton->setToolTip(tr("Show/Hide all layers"));
+    addShowButton->setCheckable(true);
+    connect(addShowButton, &QPushButton::clicked, this, &TopMenu::hideAllAction);
+
+    addPictureButton = new TopMenuButton;
+    addPictureButton->setIcon(QIcon(":/icons/picture.png"));
+    addPictureButton->setToolTip(tr("Overlay an image"));
+    connect(addPictureButton, &QPushButton::clicked, this, &TopMenu::addPictureLayerAction);
+
+    // create right side
 
     TimeLineButton = new TopMenuButton;
     TimeLineButton->setIcon(QIcon(":/icons/time_line.png"));
@@ -72,7 +90,6 @@ TopMenu::TopMenu(QWidget *parent) :
     leftLayout->addWidget(addRectButton);
     leftLayout->addWidget(addTagButton);
     leftLayout->addWidget(addPinButton);
-    leftLayout->addWidget(addLayerButton);
 
     QFrame* VLine = new QFrame();
     VLine->setFrameShape(QFrame::VLine);
@@ -80,8 +97,8 @@ TopMenu::TopMenu(QWidget *parent) :
     leftLayout->addWidget(VLine);
 
     leftLayout->addWidget(addGridButton);
-    leftLayout->addWidget(addPictureButton);
     leftLayout->addWidget(addShowButton);
+    leftLayout->addWidget(addPictureButton);
 
     QFrame* VLine2 = new QFrame();
     VLine2->setFrameShape(QFrame::VLine);
@@ -95,4 +112,28 @@ TopMenu::TopMenu(QWidget *parent) :
     topLayout->addLayout(rightLayout, 0);
     topLayout->setAlignment(rightLayout, Qt::AlignRight);
     setLayout(topLayout);
+}
+
+void TopMenu::unSelectAll()
+{
+    moveButton->setChecked(false);
+    addLineButton->setChecked(false);
+    addRectButton->setChecked(false);
+    addTagButton->setChecked(false);
+    addPinButton->setChecked(false);
+}
+
+void TopMenu::setCheckedButton(bool value)
+{
+    if (value)
+    {
+        unSelectAll();
+        TopMenuButton* _sender = qobject_cast<TopMenuButton*>(sender());
+        _sender->setChecked(true);
+    }
+    else
+    {
+        unSelectAll();
+        moveButton->setChecked(true);
+    }
 }
