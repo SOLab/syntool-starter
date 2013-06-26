@@ -58,6 +58,7 @@
 #include "earthscene.h"
 #include "skybox.h"
 #include "navigatebutton.h"
+#include "more/structure.h"
 
 
 QT_BEGIN_NAMESPACE

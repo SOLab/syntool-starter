@@ -6,6 +6,9 @@
 #include <QHBoxLayout>
 #include <QPushButton>
 #include <QStyle>
+#include <QDebug>
+
+#include "more/structure.h"
 
 class TopMenuButton : public QPushButton
 {
@@ -35,7 +38,6 @@ protected:
     TopMenuButton* addRectButton;
     TopMenuButton* addTagButton;
     TopMenuButton* addPinButton;
-    TopMenuButton* addLayerButton;
     TopMenuButton* addShowButton;
     TopMenuButton* showCoordsButton;
     TopMenuButton* addPictureButton;
@@ -50,11 +52,7 @@ private:
     void unSelectAll();
 
 signals:
-    void setMoveAction(bool value);
-    void addLineAction(bool value);
-    void addRectAction(bool value);
-    void addTagAction(bool value);
-    void addPinAction(bool value);
+    void setCursorMode(CursorMode::Mode value);
 
     void showCoordsAction(bool value);
     void showGridAction(bool value);

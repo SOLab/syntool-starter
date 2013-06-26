@@ -26,6 +26,16 @@ namespace GranuleType {
     };
 }
 
+namespace CursorMode {
+    enum Mode{
+        Move = 0,
+        AddLine = 1,
+        AddRect = 2,
+        AddTag = 3,
+        AddPin = 4
+    };
+}
+
 struct ConfigData{
     QString configDir;
     QString configFile;

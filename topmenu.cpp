@@ -19,7 +19,6 @@ TopMenu::TopMenu(QWidget *parent) :
     moveButton->setToolTip(tr("Move"));
     moveButton->setCheckable(true);
     connect(moveButton, &QPushButton::clicked, this, &TopMenu::setCheckedButton);
-    connect(moveButton, &QPushButton::clicked, this, &TopMenu::setMoveAction);
 
     addLineButton = new TopMenuButton;
     addLineButton->setIcon(QIcon(":/icons/line.png"));
@@ -27,7 +26,6 @@ TopMenu::TopMenu(QWidget *parent) :
     addLineButton->setToolTip(tr("Add line"));
     addLineButton->setCheckable(true);
     connect(addLineButton, &QPushButton::clicked, this, &TopMenu::setCheckedButton);
-    connect(addLineButton, &QPushButton::clicked, this, &TopMenu::addLineAction);
 
     addRectButton = new TopMenuButton;
     addRectButton->setIcon(QIcon(":/icons/rectangle.png"));
@@ -35,7 +33,6 @@ TopMenu::TopMenu(QWidget *parent) :
     addRectButton->setToolTip(tr("Add rectangle"));
     addRectButton->setCheckable(true);
     connect(addRectButton, &QPushButton::clicked, this, &TopMenu::setCheckedButton);
-    connect(addRectButton, &QPushButton::clicked, this, &TopMenu::addRectAction);
 
     addTagButton = new TopMenuButton;
     addTagButton->setIcon(QIcon(":/icons/tag.png"));
@@ -43,7 +40,6 @@ TopMenu::TopMenu(QWidget *parent) :
     addTagButton->setToolTip(tr("Add tag"));
     addTagButton->setCheckable(true);
     connect(addTagButton, &QPushButton::clicked, this, &TopMenu::setCheckedButton);
-    connect(addTagButton, &QPushButton::clicked, this, &TopMenu::addTagAction);
 
     addPinButton = new TopMenuButton;
     addPinButton->setIcon(QIcon(":/icons/pin.png"));
@@ -51,7 +47,8 @@ TopMenu::TopMenu(QWidget *parent) :
     addPinButton->setToolTip(tr("Add pin"));
     addPinButton->setCheckable(true);
     connect(addPinButton, &QPushButton::clicked, this, &TopMenu::setCheckedButton);
-    connect(addPinButton, &QPushButton::clicked, this, &TopMenu::addPinAction);
+
+    // end mode section
 
     showCoordsButton = new TopMenuButton;
     showCoordsButton->setIcon(QIcon(":/icons/xy.png"));
@@ -137,10 +134,21 @@ void TopMenu::setCheckedButton(bool value)
         unSelectAll();
         TopMenuButton* _sender = qobject_cast<TopMenuButton*>(sender());
         _sender->setChecked(true);
+        CursorMode::Mode curMode = CursorMode::Move;
+        if(sender() == addLineButton)
+            curMode = CursorMode::AddLine;
+        else if(sender() == addRectButton)
+            curMode = CursorMode::AddRect;
+        else if(sender() == addTagButton)
+            curMode = CursorMode::AddTag;
+        else if(sender() == addPinButton)
+            curMode = CursorMode::AddPin;
+        emit setCursorMode(curMode);
     }
     else
     {
         unSelectAll();
         moveButton->setChecked(true);
+        emit setCursorMode(CursorMode::Move);
     }
 }
