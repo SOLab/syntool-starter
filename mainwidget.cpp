@@ -122,6 +122,8 @@ void MainWindow::setHostedWindow(EarthView *window)
     connect(productsWgt, &ProductsWidget::productsHashSignal, metaGranulesPointer, &MetaGranules::setProductsHashSlot);
 
     connect(mapsWgt, &MapsWidget::changeMapTheme, earthViewPointer->earth, &Earth::setMapTheme);
+
+    connect(topMenu, &TopMenu::setCursorMode, earthViewPointer, &EarthView::setCursorModeSlot);
 }
 
 void MainWindow::aboutProgram()

@@ -18,6 +18,7 @@ TopMenu::TopMenu(QWidget *parent) :
     moveButton->setIconSize(QSize(16,16));
     moveButton->setToolTip(tr("Move"));
     moveButton->setCheckable(true);
+    moveButton->setChecked(true);
     connect(moveButton, &QPushButton::clicked, this, &TopMenu::setCheckedButton);
 
     addLineButton = new TopMenuButton;
@@ -151,4 +152,19 @@ void TopMenu::setCheckedButton(bool value)
         moveButton->setChecked(true);
         emit setCursorMode(CursorMode::Move);
     }
+}
+
+void TopMenu::setCursorModeSlot(CursorMode::Mode value)
+{
+    unSelectAll();
+    if (value == CursorMode::Move)
+        moveButton->setChecked(true);
+    else if (value == CursorMode::AddLine)
+        addLineButton->setChecked(true);
+    else if (value == CursorMode::AddRect)
+        addRectButton->setChecked(true);
+    else if (value == CursorMode::AddTag)
+        addTagButton->setChecked(true);
+    else
+        addPinButton->setChecked(true);
 }

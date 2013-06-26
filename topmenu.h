@@ -58,9 +58,10 @@ signals:
     void showGridAction(bool value);
     void hideAllAction(bool value);
     void addPictureLayerAction();
-    
+
 public slots:
     void setCheckedButton(bool value);
+    void setCursorModeSlot(CursorMode::Mode value);
 };
 
 #endif // TOPMENU_H

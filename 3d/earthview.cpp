@@ -79,6 +79,7 @@ EarthView::EarthView(ConfigData *configData, QWindow *parent)
     startPan = QPoint(-1, -1);
     lastPan = QPoint(-1, -1);
     panModifiers = Qt::NoModifier;
+    currentCursorMode = CursorMode::Move;
 
     navigateButton = new NavigateButton(this, m_palette);
 
@@ -578,6 +579,17 @@ void EarthView::objectPicked()
 //    m_treeView->selectionModel()->select(ix, QItemSelectionModel::Select);
 //    qCritical() << "Picked:" << node->target();
 //    qCritical() << "Picked:" << target->objectName();
+}
+
+void EarthView::setCursorModeSlot(CursorMode::Mode value)
+{
+    currentCursorMode = value;
+    if (currentCursorMode == CursorMode::Move)
+        setCursor(Qt::ArrowCursor);
+    else if (currentCursorMode == CursorMode::AddLine || currentCursorMode == CursorMode::AddRect)
+        setCursor(Qt::CrossCursor);
+    else
+        setCursor(Qt::PointingHandCursor);
 }
 
 void EarthView::unregisterPicking()

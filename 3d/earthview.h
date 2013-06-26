@@ -128,6 +128,7 @@ private:
     QSharedPointer<QGLMaterialCollection> m_palette;
     Qt::KeyboardModifiers                 panModifiers;
 
+    CursorMode::Mode currentCursorMode;
 //    QGLPickNode* pick_left;
 //    float m_angle1;
 //    float m_angle2;
@@ -150,8 +151,11 @@ public slots:
     void unregisterPicking();
     void objectPicked();
 
+    void setCursorModeSlot(CursorMode::Mode value);
+
 signals:
-  void updatedTilesSignal(qreal scale, GeoCoords geoCoords);
+    void updatedTilesSignal(qreal scale, GeoCoords geoCoords);
+    void setCursorMode(CursorMode::Mode value);
 
 };
 
