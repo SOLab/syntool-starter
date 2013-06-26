@@ -64,10 +64,11 @@ TopMenu::TopMenu(QWidget *parent) :
     connect(addGridButton, &QPushButton::clicked, this, &TopMenu::showGridAction);
 
     addShowButton = new TopMenuButton;
-    addShowButton->setIcon(QIcon(":/icons/hide.png"));
+    addShowButton->setIcon(QIcon(":/icons/show.png"));
     addShowButton->setToolTip(tr("Show/Hide all layers"));
     addShowButton->setCheckable(true);
     connect(addShowButton, &QPushButton::clicked, this, &TopMenu::hideAllAction);
+    connect(addShowButton, &QPushButton::clicked, this, &TopMenu::changeShowIcon);
 
     addPictureButton = new TopMenuButton;
     addPictureButton->setIcon(QIcon(":/icons/picture.png"));
@@ -167,4 +168,12 @@ void TopMenu::setCursorModeSlot(CursorMode::Mode value)
         addTagButton->setChecked(true);
     else
         addPinButton->setChecked(true);
+}
+
+void TopMenu::changeShowIcon(bool value)
+{
+    if (value)
+        addShowButton->setIcon(QIcon(":/icons/hide.png"));
+    else
+        addShowButton->setIcon(QIcon(":/icons/show.png"));
 }

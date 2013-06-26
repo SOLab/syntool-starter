@@ -62,6 +62,7 @@ signals:
 public slots:
     void setCheckedButton(bool value);
     void setCursorModeSlot(CursorMode::Mode value);
+    void changeShowIcon(bool value);
 };
 
 #endif // TOPMENU_H
