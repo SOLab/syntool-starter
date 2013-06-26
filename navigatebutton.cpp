@@ -11,6 +11,7 @@ NavigateButton::NavigateButton(QObject *parent, QSharedPointer<QGLMaterialCollec
     setPalette(palette);
     setOption(QGLSceneNode::CullBoundingBox, false);
     createButton();
+    viewPointer = qobject_cast<QGLView*>(parent);
 }
 
 NavigateButton::~NavigateButton()
@@ -20,7 +21,7 @@ NavigateButton::~NavigateButton()
     }
 }
 
-void NavigateButton::draw(QGLPainter *painter)
+void NavigateButton::draw(QGLPainter *painter, bool drawCoords, qreal lat, qreal lon)
 {
     painter->projectionMatrix().push();
     painter->modelViewMatrix().push();
@@ -39,59 +40,67 @@ void NavigateButton::draw(QGLPainter *painter)
 
     glDisable(GL_DEPTH_TEST);
 
+
     QGLSceneNode::draw(painter);
 
-///////////////////////////////////////////////////
-//    painter->setStandardEffect(QGL::FlatColor);
-//    painter->setColor(QColor(88, 131, 190, 255));
-
-//    QGLVertexBundle vertices1;
-//    QVector3DArray positions;
-//    positions.append(QVector3D(boundingBox().center().x(),  boundingBox().center().y()-20,  0.0f));
-//    positions.append(QVector3D(boundingBox().center().x()+8,  boundingBox().center().y()-12,  0.0f));
-//    positions.append(QVector3D(boundingBox().center().x()-8,  boundingBox().center().y()-12,  0.0f));
-//    vertices1.addAttribute(QGL::Position, positions);
-//    vertices1.upload();
-
-//    QGLVertexBundle vertices2;
-//    positions.clear();
-//    positions.append(QVector3D(boundingBox().center().x(),  boundingBox().center().y()+20,  0.0f));
-//    positions.append(QVector3D(boundingBox().center().x()+8,  boundingBox().center().y()+12,  0.0f));
-//    positions.append(QVector3D(boundingBox().center().x()-8,  boundingBox().center().y()+12,  0.0f));
-//    vertices2.addAttribute(QGL::Position, positions);
-//    vertices2.upload();
-
-//    QGLVertexBundle vertices3;
-//    positions.clear();
-//    positions.append(QVector3D(boundingBox().center().x()+20,  boundingBox().center().y(),  0.0f));
-//    positions.append(QVector3D(boundingBox().center().x()+12,  boundingBox().center().y()-8,  0.0f));
-//    positions.append(QVector3D(boundingBox().center().x()+12,  boundingBox().center().y()+8,  0.0f));
-//    vertices3.addAttribute(QGL::Position, positions);
-//    vertices3.upload();
-
-//    QGLVertexBundle vertices4;
-//    positions.clear();
-//    positions.append(QVector3D(boundingBox().center().x()-20,  boundingBox().center().y(),  0.0f));
-//    positions.append(QVector3D(boundingBox().center().x()-12,  boundingBox().center().y()-8,  0.0f));
-//    positions.append(QVector3D(boundingBox().center().x()-12,  boundingBox().center().y()+8,  0.0f));
-//    vertices4.addAttribute(QGL::Position, positions);
-//    vertices4.upload();
-
-
-//    painter->setVertexBundle(vertices1);
-//    painter->draw(QGL::Triangles, 3);
-//    painter->setVertexBundle(vertices2);
-//    painter->draw(QGL::Triangles, 3);
-//    painter->setVertexBundle(vertices3);
-//    painter->draw(QGL::Triangles, 3);
-//    painter->setVertexBundle(vertices4);
-//    painter->draw(QGL::Triangles, 3);
-////////////////////////////////////////////////////
+    if (drawCoords && lat > -91 && lat < 91)
+    {
+        QString viewStr = "lat: " + QString::number(lat) + ", lon:" + QString::number(lon);
+        drawText(painter, viewStr,
+                 QPoint(viewPointer->size().width() - 350, viewPointer->size().height() - 20));
+    }
 
     glEnable(GL_DEPTH_TEST);
 
+
     painter->projectionMatrix().pop();
     painter->modelViewMatrix().pop();
+}
+
+void NavigateButton::drawText(QGLPainter *painter, const QString& str, const QPoint& posn)
+{
+    QFont f = QFont();
+    f.setBold(true);
+    f.setFamily("Monospace");
+    f.setPixelSize(20);
+    QFontMetrics metrics = QFontMetrics(f);
+    QRect rect = metrics.boundingRect(str);
+    rect.adjust(0, 0, 1, 1);
+
+    QImage image(rect.size(), QImage::Format_ARGB32);
+    image.fill(0);
+    QPainter p2(&image);
+    p2.setFont(f);
+    p2.setPen(Qt::white);
+    p2.drawText(-rect.x(), metrics.ascent(), str);
+    p2.end();
+
+    QGLTexture2D texture;
+    texture.setImage(image);
+
+    int x = posn.x();
+    int y = posn.y();
+
+    QVector2DArray vertices;
+    vertices.append(x + rect.x(), y + metrics.ascent());
+    vertices.append(x + rect.x(), y - metrics.descent());
+    vertices.append(x + rect.x() + rect.width(), y - metrics.descent());
+    vertices.append(x + rect.x() + rect.width(), y + metrics.ascent());
+
+    QVector2DArray texCoord;
+    texCoord.append(0.0f, 0.0f);
+    texCoord.append(0.0f, 1.0f);
+    texCoord.append(1.0f, 1.0f);
+    texCoord.append(1.0f, 0.0f);
+
+    painter->clearAttributes();
+    painter->setStandardEffect(QGL::FlatReplaceTexture2D);
+    texture.bind();
+    painter->setVertexAttribute(QGL::Position, vertices);
+    painter->setVertexAttribute(QGL::TextureCoord0, texCoord);
+    painter->draw(QGL::TriangleFan, 4);
+    painter->setStandardEffect(QGL::FlatColor);
+    glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void NavigateButton::clearPositions()

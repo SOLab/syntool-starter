@@ -84,6 +84,8 @@ EarthView::EarthView(ConfigData *configData, QWindow *parent)
     lastPan = QPoint(-1, -1);
     panModifiers = Qt::NoModifier;
     currentCursorMode = CursorMode::Move;
+    currentMouseLat = -1000;
+    currentMouseLon = -1000;
 
     navigateButton = new NavigateButton(this, m_palette);
 
@@ -143,7 +145,11 @@ void EarthView::paintGL(QGLPainter *painter)
         metaGranulesNode->drawSimpleGranules(painter);
         metaGranulesNode->drawTiledGranules(painter);
     }
-    navigateButton->draw(painter);
+
+    if (showCoordsFlag)
+        navigateButton->draw(painter, showCoordsFlag, currentMouseLat, currentMouseLon);
+    else
+        navigateButton->draw(painter, showCoordsFlag);
 
 //    getMemUsage();
 
@@ -399,6 +405,14 @@ void EarthView::mouseMoveEvent(QMouseEvent *e)
 //    }
 
 
+    if (showCoordsFlag)
+    {
+        GeoCoords pos = mousePos2coords(e->pos());
+        currentMouseLat = pos.lat;
+        currentMouseLon = pos.lon;
+        update();
+    }
+
     lastMouseMoveTime = QTime::currentTime();
     QWindow::mouseMoveEvent(e);
 }
@@ -601,6 +615,8 @@ void EarthView::setCursorModeSlot(CursorMode::Mode value)
 
 void EarthView::showCoordsSlot(bool value)
 {
+    showCoordsFlag = value;
+    update();
 }
 
 void EarthView::showGridSlot(bool value)

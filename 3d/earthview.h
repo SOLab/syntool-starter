@@ -104,6 +104,9 @@ protected:
     QTime lastMouseMoveTime;
     QPoint delta;
 
+    qreal currentMouseLat;
+    qreal currentMouseLon;
+
 //    QGLBuilder builder;
 private:
     bool test;
