@@ -51,7 +51,6 @@ private:
 
 //    QList<QGLTexture2D*> m_LoadedTextures;
     QGLTexture2D*        m_texture;
-    QGraphicsRotation3D* earthRotation;
     QString              cacheDir;
     ConfigData*          m_configData;
 

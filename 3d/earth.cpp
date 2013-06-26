@@ -33,15 +33,15 @@ Earth::Earth(QObject *parent, QSharedPointer<QGLMaterialCollection> materials, C
 
     buildEarthNode(a, 10, 0);
 
-    QGraphicsRotation3D *axialTilt1 = new QGraphicsRotation3D(this);
-    axialTilt1->setAngle(270.0f);
-    axialTilt1->setAxis(QVector3D(1,0,0));
+    QGraphicsRotation3D *rotateX = new QGraphicsRotation3D(this);
+    rotateX->setAngle(180.0f);
+    rotateX->setAxis(QVector3D(1,0,0));
 
     QGraphicsRotation3D *rotateY = new QGraphicsRotation3D(this);
-    rotateY->setAngle(-90.0f);
+    rotateY->setAngle(90.0f);
     rotateY->setAxis(QVector3D(0,1,0));
 
-    addTransform(axialTilt1);
+    addTransform(rotateX);
     addTransform(rotateY);
 
 //    addNode(sphere);
