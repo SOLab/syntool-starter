@@ -53,6 +53,12 @@ TopMenu::TopMenu(QWidget *parent) :
     connect(addPinButton, &QPushButton::clicked, this, &TopMenu::setCheckedButton);
     connect(addPinButton, &QPushButton::clicked, this, &TopMenu::addPinAction);
 
+    showCoordsButton = new TopMenuButton;
+    showCoordsButton->setIcon(QIcon(":/icons/xy.png"));
+    showCoordsButton->setToolTip(tr("Show coordinates"));
+    showCoordsButton->setCheckable(true);
+    connect(showCoordsButton, &QPushButton::clicked, this, &TopMenu::showCoordsAction);
+
     addGridButton = new TopMenuButton;
     addGridButton->setIcon(QIcon(":/icons/grid.png"));
     addGridButton->setToolTip(tr("Show grid"));
@@ -96,6 +102,7 @@ TopMenu::TopMenu(QWidget *parent) :
     VLine->setFrameShadow(QFrame::Sunken);
     leftLayout->addWidget(VLine);
 
+    leftLayout->addWidget(showCoordsButton);
     leftLayout->addWidget(addGridButton);
     leftLayout->addWidget(addShowButton);
     leftLayout->addWidget(addPictureButton);

@@ -37,6 +37,7 @@ protected:
     TopMenuButton* addPinButton;
     TopMenuButton* addLayerButton;
     TopMenuButton* addShowButton;
+    TopMenuButton* showCoordsButton;
     TopMenuButton* addPictureButton;
     TopMenuButton* addGridButton;
     TopMenuButton* TimeLineButton;
@@ -55,6 +56,7 @@ signals:
     void addTagAction(bool value);
     void addPinAction(bool value);
 
+    void showCoordsAction(bool value);
     void showGridAction(bool value);
     void hideAllAction(bool value);
     void addPictureLayerAction();

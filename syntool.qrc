@@ -64,5 +64,6 @@
         <file alias="yandexmaps.png">resources/icons/yandexmaps.png</file>
         <file alias="yandexsatellite.png">resources/icons/yandexsatellite.png</file>
         <file alias="googlesatellite.png">resources/icons/googlesatellite.png</file>
+        <file alias="xy.png">resources/icons/xy.png</file>
     </qresource>
 </RCC>
