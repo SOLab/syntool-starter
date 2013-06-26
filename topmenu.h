@@ -52,7 +52,7 @@ private:
     void unSelectAll();
 
 signals:
-    void setCursorMode(CursorMode::Mode value);
+    void setCursorModeSignal(CursorMode::Mode value);
 
     void showCoordsAction(bool value);
     void showGridAction(bool value);

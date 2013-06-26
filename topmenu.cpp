@@ -64,7 +64,7 @@ TopMenu::TopMenu(QWidget *parent) :
     connect(addGridButton, &QPushButton::clicked, this, &TopMenu::showGridAction);
 
     addShowButton = new TopMenuButton;
-    addShowButton->setIcon(QIcon(":/icons/show.png"));
+    addShowButton->setIcon(QIcon(":/icons/hide.png"));
     addShowButton->setToolTip(tr("Show/Hide all layers"));
     addShowButton->setCheckable(true);
     connect(addShowButton, &QPushButton::clicked, this, &TopMenu::hideAllAction);
@@ -144,13 +144,13 @@ void TopMenu::setCheckedButton(bool value)
             curMode = CursorMode::AddTag;
         else if(sender() == addPinButton)
             curMode = CursorMode::AddPin;
-        emit setCursorMode(curMode);
+        emit setCursorModeSignal(curMode);
     }
     else
     {
         unSelectAll();
         moveButton->setChecked(true);
-        emit setCursorMode(CursorMode::Move);
+        emit setCursorModeSignal(CursorMode::Move);
     }
 }
 

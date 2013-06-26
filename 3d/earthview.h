@@ -129,6 +129,9 @@ private:
     Qt::KeyboardModifiers                 panModifiers;
 
     CursorMode::Mode currentCursorMode;
+    bool showCoordsFlag;
+    bool showGridFlag;
+    bool hideAllFlag;
 //    QGLPickNode* pick_left;
 //    float m_angle1;
 //    float m_angle2;
@@ -152,10 +155,14 @@ public slots:
     void objectPicked();
 
     void setCursorModeSlot(CursorMode::Mode value);
+    void showCoordsSlot(bool value);
+    void showGridSlot(bool value);
+    void hideAllSlot(bool value);
 
 signals:
     void updatedTilesSignal(qreal scale, GeoCoords geoCoords);
-    void setCursorMode(CursorMode::Mode value);
+    void setCursorModeSignal(CursorMode::Mode value);
+
 
 };
 

@@ -123,7 +123,11 @@ void MainWindow::setHostedWindow(EarthView *window)
 
     connect(mapsWgt, &MapsWidget::changeMapTheme, earthViewPointer->earth, &Earth::setMapTheme);
 
-    connect(topMenu, &TopMenu::setCursorMode, earthViewPointer, &EarthView::setCursorModeSlot);
+    connect(earthViewPointer, &EarthView::setCursorModeSignal, topMenu, &TopMenu::setCursorModeSlot);
+    connect(topMenu, &TopMenu::setCursorModeSignal, earthViewPointer, &EarthView::setCursorModeSlot);
+//    connect(topMenu, &TopMenu::showCoordsAction, earthViewPointer, &EarthView::setCursorModeSlot);
+//    connect(topMenu, &TopMenu::showGridAction, earthViewPointer, &EarthView::setCursorModeSlot);
+    connect(topMenu, &TopMenu::hideAllAction, earthViewPointer, &EarthView::hideAllSlot);
 }
 
 void MainWindow::aboutProgram()

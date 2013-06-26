@@ -64,6 +64,10 @@ EarthView::EarthView(ConfigData *configData, QWindow *parent)
     //Set up the camera
     camera()->setEye(QVector3D(0, 0, 10));
 
+    hideAllFlag = false;
+    showCoordsFlag = false;
+    showGridFlag = false;
+
     scale = 1;
     scale2F = QSizeF(2/scale,2/scale);
     float fov = camera()->fieldOfView();
@@ -134,8 +138,11 @@ void EarthView::paintGL(QGLPainter *painter)
 //    glDisable(GL_CULL_FACE);
     m_skybox->draw(painter);
     earth->draw(painter);
-    metaGranulesNode->drawSimpleGranules(painter);
-    metaGranulesNode->drawTiledGranules(painter);
+    if (!hideAllFlag)
+    {
+        metaGranulesNode->drawSimpleGranules(painter);
+        metaGranulesNode->drawTiledGranules(painter);
+    }
     navigateButton->draw(painter);
 
 //    getMemUsage();
@@ -590,6 +597,20 @@ void EarthView::setCursorModeSlot(CursorMode::Mode value)
         setCursor(Qt::CrossCursor);
     else
         setCursor(Qt::PointingHandCursor);
+}
+
+void EarthView::showCoordsSlot(bool value)
+{
+}
+
+void EarthView::showGridSlot(bool value)
+{
+}
+
+void EarthView::hideAllSlot(bool value)
+{
+    hideAllFlag = value;
+    update();
 }
 
 void EarthView::unregisterPicking()
