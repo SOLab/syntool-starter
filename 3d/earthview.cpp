@@ -235,10 +235,11 @@ void EarthView::wheelEvent(QWheelEvent *e)
 // for calling from wheelEvent on press button
 void EarthView::scalePlus()
 {
+    // for OSM maximum 18 zoom - 458752
     // 28672 - zoom 14
     // 1792 - zoom 10
     // 224 - zoom 7 maximum
-    if (scale < 28672)
+    if (scale < 20480)
     {
         scalePlusMinusSlot(true);
     }
