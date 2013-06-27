@@ -128,6 +128,12 @@ void MainWindow::setHostedWindow(EarthView *window)
     connect(topMenu, &TopMenu::showCoordsAction, earthViewPointer, &EarthView::showCoordsSlot);
     connect(topMenu, &TopMenu::showGridAction, earthViewPointer, &EarthView::showGridSlot);
     connect(topMenu, &TopMenu::hideAllAction, earthViewPointer, &EarthView::hideAllSlot);
+
+    // connects earthView and productsWgt
+    connect(earthViewPointer, &EarthView::setCursorModeSignal, productsWgt, &ProductsWidget::setCursorModeSlot);
+    connect(earthViewPointer, &EarthView::leftTopCoordsSignal, productsWgt, &ProductsWidget::leftTopCoordsSlot);
+    connect(earthViewPointer, &EarthView::rightBottomCoordsSignal, productsWgt, &ProductsWidget::rightBottomCoordsSlot);
+    connect(productsWgt, &ProductsWidget::setCursorModeSignal, earthViewPointer, &EarthView::setCursorModeSlot);
 }
 
 void MainWindow::aboutProgram()

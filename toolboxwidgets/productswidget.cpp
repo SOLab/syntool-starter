@@ -58,9 +58,37 @@ ProductsWidget::ProductsWidget(ConfigData *configData, QWidget *parent):
 
 // Add widgets for select Area
 
+    QHBoxLayout* selectAreaLayout = new QHBoxLayout;
     QLabel* AreaLbl = new QLabel(tr("Select Area:"), this);
     AreaLbl->setContentsMargins(0,2,0,0);
-    vLayout->addWidget(AreaLbl);
+
+    leftTopButton = new QPushButton(this);
+    leftTopButton->setContentsMargins(0,0,0,0);
+    leftTopButton->setFixedSize(24,24);
+    leftTopButton->setIconSize(QSize(16, 16));
+    leftTopButton->setFocusPolicy(Qt::NoFocus);
+
+    leftTopButton->setIcon(QIcon(":/icons/left_top.png"));
+    leftTopButton->setToolTip(tr("Overlay an image"));
+    leftTopButton->setCheckable(true);
+    connect(leftTopButton, &QPushButton::clicked, this, &ProductsWidget::setCheckedButton);
+
+    rightBottomButton = new QPushButton(this);
+    rightBottomButton->setContentsMargins(0,0,0,0);
+    rightBottomButton->setFixedSize(24,24);
+    rightBottomButton->setIconSize(QSize(16, 16));
+    rightBottomButton->setFocusPolicy(Qt::NoFocus);
+
+    rightBottomButton->setIcon(QIcon(":/icons/right_bottom.png"));
+    rightBottomButton->setToolTip(tr("Get South-East coords"));
+    rightBottomButton->setCheckable(true);
+    connect(rightBottomButton, &QPushButton::clicked, this, &ProductsWidget::setCheckedButton);
+
+    selectAreaLayout->addWidget(AreaLbl);
+    selectAreaLayout->addWidget(leftTopButton);
+    selectAreaLayout->addWidget(rightBottomButton);
+
+    vLayout->addLayout(selectAreaLayout);
 
     North = new InputBox(tr("North: "), this);
     North->setValidator("double");
@@ -83,9 +111,9 @@ ProductsWidget::ProductsWidget(ConfigData *configData, QWidget *parent):
     East->setDisabled(true);
 
     vLayout->addWidget(North);
+    vLayout->addWidget(East);
     vLayout->addWidget(South);
     vLayout->addWidget(West);
-    vLayout->addWidget(East);
 
     QFrame* hLine2 = new QFrame();
     hLine2->setFrameShape(QFrame::HLine);
@@ -500,4 +528,50 @@ void ProductsWidget::removeProduct(QString productId)
         cur = granuleIdlist.begin();
         last = granuleIdlist.end();
     };
+}
+
+void ProductsWidget::leftTopCoordsSlot(qreal lat, qreal lon)
+{
+    North->setText(QString::number(lat));
+    West->setText(QString::number(lon));
+}
+
+void ProductsWidget::rightBottomCoordsSlot(qreal lat, qreal lon)
+{
+    South->setText(QString::number(lat));
+    East->setText(QString::number(lon));
+}
+
+void ProductsWidget::setCheckedButton(bool value)
+{
+    if (value)
+    {
+        leftTopButton->setChecked(false);
+        rightBottomButton->setChecked(false);
+
+        QPushButton* _sender = qobject_cast<QPushButton*>(sender());
+        _sender->setChecked(true);
+        CursorMode::Mode curMode;
+        if(sender() == leftTopButton)
+            curMode = CursorMode::LeftTopCoords;
+        else
+            curMode = CursorMode::RightBottomCoords;
+        emit setCursorModeSignal(curMode);
+    }
+    else
+    {
+        leftTopButton->setChecked(false);
+        rightBottomButton->setChecked(false);
+        emit setCursorModeSignal(CursorMode::Move);
+    }
+}
+
+void ProductsWidget::setCursorModeSlot(CursorMode::Mode value)
+{
+    leftTopButton->setChecked(false);
+    rightBottomButton->setChecked(false);
+    if (value == CursorMode::LeftTopCoords)
+        leftTopButton->setChecked(true);
+    else if (value == CursorMode::RightBottomCoords)
+        rightBottomButton->setChecked(true);
 }

@@ -66,5 +66,7 @@
         <file alias="googlesatellite.png">resources/icons/googlesatellite.png</file>
         <file alias="xy.png">resources/icons/xy.png</file>
         <file alias="hide.png">resources/icons/Hide.png</file>
+        <file alias="right_bottom.png">resources/icons/right_bottom.png</file>
+        <file alias="left_top.png">resources/icons/left_top.png</file>
     </qresource>
 </RCC>

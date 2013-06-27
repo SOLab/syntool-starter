@@ -15,7 +15,6 @@ TopMenu::TopMenu(QWidget *parent) :
 
     moveButton = new TopMenuButton;
     moveButton->setIcon(QIcon(":/icons/move.png"));
-    moveButton->setIconSize(QSize(16,16));
     moveButton->setToolTip(tr("Move"));
     moveButton->setCheckable(true);
     moveButton->setChecked(true);
@@ -23,28 +22,24 @@ TopMenu::TopMenu(QWidget *parent) :
 
     addLineButton = new TopMenuButton;
     addLineButton->setIcon(QIcon(":/icons/line.png"));
-    addLineButton->setIconSize(QSize(16,16));
     addLineButton->setToolTip(tr("Add line"));
     addLineButton->setCheckable(true);
     connect(addLineButton, &QPushButton::clicked, this, &TopMenu::setCheckedButton);
 
     addRectButton = new TopMenuButton;
     addRectButton->setIcon(QIcon(":/icons/rectangle.png"));
-    addRectButton->setIconSize(QSize(16,16));
     addRectButton->setToolTip(tr("Add rectangle"));
     addRectButton->setCheckable(true);
     connect(addRectButton, &QPushButton::clicked, this, &TopMenu::setCheckedButton);
 
     addTagButton = new TopMenuButton;
     addTagButton->setIcon(QIcon(":/icons/tag.png"));
-    addTagButton->setIconSize(QSize(16,16));
     addTagButton->setToolTip(tr("Add tag"));
     addTagButton->setCheckable(true);
     connect(addTagButton, &QPushButton::clicked, this, &TopMenu::setCheckedButton);
 
     addPinButton = new TopMenuButton;
     addPinButton->setIcon(QIcon(":/icons/pin.png"));
-    addPinButton->setIconSize(QSize(16,16));
     addPinButton->setToolTip(tr("Add pin"));
     addPinButton->setCheckable(true);
     connect(addPinButton, &QPushButton::clicked, this, &TopMenu::setCheckedButton);
@@ -79,7 +74,6 @@ TopMenu::TopMenu(QWidget *parent) :
 
     TimeLineButton = new TopMenuButton;
     TimeLineButton->setIcon(QIcon(":/icons/time_line.png"));
-    TimeLineButton->setIconSize(QSize(16,16));
     TimeLineButton->setToolTip(tr("TimeLine"));
     connect(TimeLineButton, SIGNAL(clicked()), parent, SLOT(showTimeLine()));
 
@@ -166,7 +160,7 @@ void TopMenu::setCursorModeSlot(CursorMode::Mode value)
         addRectButton->setChecked(true);
     else if (value == CursorMode::AddTag)
         addTagButton->setChecked(true);
-    else
+    else if (value == CursorMode::AddPin)
         addPinButton->setChecked(true);
 }
 

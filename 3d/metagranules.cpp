@@ -145,7 +145,7 @@ void MetaGranules::unregisterPicking()
 
 void MetaGranules::objectPicked()
 {
-    Q_ASSERT(m_treeView);
+//    Q_ASSERT(m_treeView);
     QGLPickNode *node = qobject_cast<QGLPickNode*>(sender());
     Q_ASSERT(node);
     SimpleGranulesNode *target = qobject_cast<SimpleGranulesNode*>(node->target());

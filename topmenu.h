@@ -19,9 +19,8 @@ public:
         setContentsMargins(0,0,0,0);
         setFixedSize(24,24);
 
-        int size = 16;//style()->pixelMetric(QStyle::PM_ToolBarIconSize);
-        QSize iconSize(size, size);
-        setIconSize(iconSize);
+        int _iconSize = 16;
+        setIconSize(QSize(_iconSize, _iconSize));
         setFocusPolicy(Qt::NoFocus);
     }
 };

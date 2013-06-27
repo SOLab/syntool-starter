@@ -58,6 +58,9 @@ protected:
     QPixmap*     productImagePixmap;
     QPushButton* reloadProductsButton;
 
+    QPushButton* leftTopButton;
+    QPushButton* rightBottomButton;
+
     InputBox* North;
     InputBox* South;
     InputBox* West;
@@ -93,6 +96,8 @@ signals:
     void productAdded(QString productNaiadId, qint32 productId);
     void productDeleted(QString productId);
     void productsHashSignal(QHash<QString, Product>* productsHash, QHash<qint32, QString>* productsIdName);
+
+    void setCursorModeSignal(CursorMode::Mode value);
     
 public slots:
     void currentProductChanged(int index);
@@ -106,6 +111,11 @@ public slots:
     void slotProductInfo();
 
     void removeProduct(QString productId);
+
+    void leftTopCoordsSlot(qreal lat, qreal lon);
+    void rightBottomCoordsSlot(qreal lat, qreal lon);
+    void setCheckedButton(bool value);
+    void setCursorModeSlot(CursorMode::Mode value);
 };
 
 #endif // PRODUCTSWIDGET_H

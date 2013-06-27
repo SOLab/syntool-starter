@@ -165,7 +165,8 @@ public slots:
 signals:
     void updatedTilesSignal(qreal scale, GeoCoords geoCoords);
     void setCursorModeSignal(CursorMode::Mode value);
-
+    void leftTopCoordsSignal(qreal lat, qreal lon);
+    void rightBottomCoordsSignal(qreal lat, qreal lon);
 
 };
 

@@ -32,7 +32,9 @@ namespace CursorMode {
         AddLine = 1,
         AddRect = 2,
         AddTag = 3,
-        AddPin = 4
+        AddPin = 4,
+        LeftTopCoords = 5,
+        RightBottomCoords = 6
     };
 }
 
