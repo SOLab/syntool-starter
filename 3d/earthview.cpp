@@ -104,6 +104,9 @@ EarthView::EarthView(ConfigData *configData, QWindow *parent)
     metaGranulesNode = new MetaGranules(this, m_palette, configData);
     connect (metaGranulesNode, &MetaGranules::displayed, this, &EarthView::update);
 
+
+    metaGLInfoNode = new MetaGLInfoClass(this, earth, m_palette, configData);
+
 //    m_scene->mainNode()->addNode(granulesNode);
 
     QString path = ":/skybox";
@@ -167,6 +170,8 @@ void EarthView::paintGL(QGLPainter *painter)
                       navigateButton->subButton->boundingBox().minimum().x()) / 2;
         navigateValueInit = true;
     }
+
+    metaGLInfoNode->drawAll(painter);
 
     glDisable(GL_BLEND);
 }
@@ -436,6 +441,49 @@ void EarthView::mousePressEvent(QMouseEvent *e)
             emit setCursorModeSignal(currentCursorMode);
             return;
         }
+    }
+
+    if (currentCursorMode == CursorMode::AddPin || currentCursorMode == CursorMode::AddTag)
+    {
+        GeoCoords pos = mousePos2coords(e->pos());
+        if (pos.lat > -100)
+        {
+//            if (currentCursorMode == CursorMode::AddPin)
+//                emit addPinSignal(pos.lat, pos.lon);
+//            else if (currentCursorMode == CursorMode::AddTag)
+//                emit addTagSignal(pos.lat, pos.lon);
+
+            currentCursorMode = CursorMode::Move;
+            setCursor(Qt::ArrowCursor);
+            emit setCursorModeSignal(currentCursorMode);
+            return;
+        }
+    }
+
+    if (currentCursorMode == CursorMode::AddLine || currentCursorMode == CursorMode::AddRect)
+    {
+//        GeoCoords pos = mousePos2coords(e->pos());
+//        if (pos.lat > -100)
+//        {
+//            if (!firstPointFlag)
+//            {
+//                if (currentCursorMode == CursorMode::AddLine)
+//                    emit addLineSignal(firstPoint.lat, firstPoint.lon, pos.lat, pos.lon);
+//                else if (currentCursorMode == CursorMode::AddRect)
+//                    emit addRectSignal(firstPoint.lat, firstPoint.lon, pos.lat, pos.lon);
+
+//                currentCursorMode = CursorMode::Move;
+//                setCursor(Qt::ArrowCursor);
+//                emit setCursorModeSignal(currentCursorMode);
+//                firstPointFlag = true;
+//            }
+//            else
+//            {
+//                firstPointFlag = false;
+//                firstPoint = pos;
+//            }
+//            return;
+//        }
     }
 
 //    registerPicking();

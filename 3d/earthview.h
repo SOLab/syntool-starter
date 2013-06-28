@@ -53,6 +53,7 @@
 #include "qglview.h"
 #include "earth.h"
 #include "metagranules.h"
+#include "metaglinfoclass.h"
 #include "more/geofunctions.h"
 #include "qglscenenode.h"
 #include "earthscene.h"
@@ -86,6 +87,7 @@ public:
 
     MetaGranules* metaGranulesNode;
     Earth *earth;
+    MetaGLInfoClass* metaGLInfoNode;
 
     GeoCoords mousePos2coords(QPoint pos);
 protected:

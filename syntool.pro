@@ -48,7 +48,11 @@ SOURCES = \
     3d/glscenenodewrapper.cpp \
     3d/tilecachenumbersclass.cpp \
     topmenuwidgets/fileopenwidget.cpp \
-    additionalwidgets/timelineplayer.cpp
+    additionalwidgets/timelineplayer.cpp \
+    3d/metaglinfoclass.cpp \
+    3d/line3dnode.cpp \
+    3d/point3dnode.cpp \
+    3d/rect3dnode.cpp
 HEADERS = \
     mainwidget.h \
     windowwidget.h \
@@ -92,7 +96,11 @@ HEADERS = \
     glclasses/glnodecache.h \
     topmenuwidgets/fileopenwidget.h \
     more/configfunctions.h \
-    additionalwidgets/timelineplayer.h
+    additionalwidgets/timelineplayer.h \
+    3d/metaglinfoclass.h \
+    3d/line3dnode.h \
+    3d/point3dnode.h \
+    3d/rect3dnode.h
 RESOURCES += \
     syntool.qrc
 DEPENDPATH += resources
