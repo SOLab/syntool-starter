@@ -143,6 +143,9 @@ private:
 //    float m_angle3;
 //    float m_glowFactor;
 
+    GeoCoords firstPoint;
+    bool firstPointFlag;
+
     void scalePlus();
     void scaleMinus();
 protected slots:

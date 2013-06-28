@@ -119,6 +119,7 @@ EarthView::EarthView(ConfigData *configData, QWindow *parent)
     emit updatedTilesSignal(scale, pos);
 
     test = false;
+    firstPointFlag = true;
 }
 
 EarthView::~EarthView()
@@ -462,28 +463,31 @@ void EarthView::mousePressEvent(QMouseEvent *e)
 
     if (currentCursorMode == CursorMode::AddLine || currentCursorMode == CursorMode::AddRect)
     {
-//        GeoCoords pos = mousePos2coords(e->pos());
-//        if (pos.lat > -100)
-//        {
-//            if (!firstPointFlag)
-//            {
-//                if (currentCursorMode == CursorMode::AddLine)
+        GeoCoords pos = mousePos2coords(e->pos());
+        if (pos.lat > -100)
+        {
+            if (!firstPointFlag)
+            {
+                if (currentCursorMode == CursorMode::AddLine)
+                    metaGLInfoNode->addLine(firstPoint, GeoCoordsDeg2Rad(pos));
 //                    emit addLineSignal(firstPoint.lat, firstPoint.lon, pos.lat, pos.lon);
-//                else if (currentCursorMode == CursorMode::AddRect)
+                else if (currentCursorMode == CursorMode::AddRect)
+                    metaGLInfoNode->addRect(firstPoint, GeoCoordsDeg2Rad(pos));
 //                    emit addRectSignal(firstPoint.lat, firstPoint.lon, pos.lat, pos.lon);
 
-//                currentCursorMode = CursorMode::Move;
-//                setCursor(Qt::ArrowCursor);
-//                emit setCursorModeSignal(currentCursorMode);
-//                firstPointFlag = true;
-//            }
-//            else
-//            {
-//                firstPointFlag = false;
-//                firstPoint = pos;
-//            }
-//            return;
-//        }
+                currentCursorMode = CursorMode::Move;
+                setCursor(Qt::ArrowCursor);
+                emit setCursorModeSignal(currentCursorMode);
+                firstPointFlag = true;
+                update();
+            }
+            else
+            {
+                firstPointFlag = false;
+                firstPoint = GeoCoordsDeg2Rad(pos);
+            }
+            return;
+        }
     }
 
 //    registerPicking();

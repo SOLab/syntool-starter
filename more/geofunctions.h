@@ -70,6 +70,13 @@ inline GeoCoords ecef2wgs84Deg(qreal x, qreal y, qreal z)
     return pos;
 }
 
+inline GeoCoords GeoCoordsDeg2Rad(GeoCoords pos)
+{
+    pos.lat = pos.lat*M_PI/180.0;
+    pos.lon = pos.lon*M_PI/180.0;
+    return pos;
+}
+
 inline qreal tiley2lat(qint32 y, qint32 separation)
 {
     double n = M_PI - 2.0 * M_PI * y / qreal(separation);
