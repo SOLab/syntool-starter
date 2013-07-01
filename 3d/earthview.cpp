@@ -318,8 +318,8 @@ void EarthView::rotate(int deltax, int deltay)
     if (rotation == 180 || rotation == 270) {
         deltay = -deltay;
     }
-    float anglex = 4*deltax * 90.0f / (width() * temp_scale);
-    float angley = 4*deltay * 90.0f / (height() * temp_scale);
+    float anglex = 5*deltax * 90.0f / (width() * temp_scale);
+    float angley = 5*deltay * 90.0f / (height() * temp_scale);
     QQuaternion q = camera()->pan(-anglex);
 
     q *= camera()->tilt(-angley);
@@ -328,6 +328,40 @@ void EarthView::rotate(int deltax, int deltay)
     // emit signal about changed center
     GeoCoords pos = getGeoCoordsPos(camera()->eye());
     emit updatedTilesSignal(scale, pos);
+}
+
+void EarthView::rotateToCoords(GeoCoords pos)
+{
+    pos.lat = pos.lat*180/M_PI;
+    pos.lon = pos.lon*180/M_PI;
+
+    float anglex = 10;
+    float angley = 10;
+    QQuaternion q;
+    GeoCoords cameraPos;
+
+    while (qAbs(anglex) > 0.01 || qAbs(angley) > 0.01)
+    {
+        cameraPos = getGeoCoordsPos(camera()->eye());
+
+        if (pos.lon < cameraPos.lon)
+            anglex = float(qAbs(cameraPos.lon - pos.lon)*-1);
+        else
+            anglex = float(qAbs(cameraPos.lon - pos.lon));
+
+        if (pos.lat > cameraPos.lat)
+            angley = float(qAbs(cameraPos.lat - pos.lat)*-1);
+        else
+            angley = float(qAbs(cameraPos.lat - pos.lat));
+
+        q = camera()->pan(anglex);
+        q *= camera()->tilt(angley);
+
+        camera()->rotateCenter(q);
+    }
+
+    cameraPos = getGeoCoordsPos(camera()->eye());
+    emit updatedTilesSignal(scale, cameraPos);
 }
 
 void EarthView::leftSlot()
@@ -797,9 +831,9 @@ GeoCoords EarthView::mousePos2coords(QPoint pos)
     QVector3D pointVector = QVector3D(x1,y1,z1);
 
     // from the camera coordinate to world coordinates
-    QVector3D aaa = camera()->modelViewMatrix().inverted() * pointVector;
+    QVector3D worldPos = camera()->modelViewMatrix().inverted() * pointVector;
 
-    return ecef2wgs84Deg(aaa.z(), aaa.x(), aaa.y());
+    return ecef2wgs84Deg(worldPos.z(), worldPos.x(), worldPos.y());
 }
 
 void EarthView::mouseDoubleClickEvent(QMouseEvent *e)

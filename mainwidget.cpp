@@ -140,6 +140,7 @@ void MainWindow::setHostedWindow(EarthView *window)
     connect(earthViewPointer->metaGLInfoNode, &MetaGLInfoClass::addLineSignal, placeWgt, &PlaceWidget::addLine);
     connect(earthViewPointer->metaGLInfoNode, &MetaGLInfoClass::addRectSignal, placeWgt, &PlaceWidget::addRect);
     connect(placeWgt, &PlaceWidget::removeObjectSignal, earthViewPointer->metaGLInfoNode, &MetaGLInfoClass::removeObjectSlot);
+    connect(placeWgt, &PlaceWidget::moveToCoordsSignal, earthViewPointer, &EarthView::rotateToCoords);
 }
 
 void MainWindow::aboutProgram()

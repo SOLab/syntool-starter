@@ -167,6 +167,8 @@ public slots:
     void showGridSlot(bool value);
     void hideAllSlot(bool value);
 
+    void rotateToCoords(GeoCoords pos);
+
 signals:
     void updatedTilesSignal(qreal scale, GeoCoords geoCoords);
     void setCursorModeSignal(CursorMode::Mode value);

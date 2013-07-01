@@ -27,6 +27,7 @@ protected:
 
 signals:
     void removeObjectSignal(Geometry::Type type, qint32 objectNumber);
+    void moveToCoordsSignal(GeoCoords pos);
     
 public slots:
     void addPoint(qint32 pointNumber, GeoCoords pos, QString pointName);

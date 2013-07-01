@@ -28,9 +28,11 @@ private:
 
 signals:
     void removeSignal(Geometry::Type type, qint32 objectNumber);
+    void moveToObjectSignal(GeoCoords pos);
     
 public slots:
     void removeSlot();
+    void moveToObject();
     
 };
 

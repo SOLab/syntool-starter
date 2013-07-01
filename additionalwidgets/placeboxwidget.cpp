@@ -17,6 +17,7 @@ PlaceBoxWidget::PlaceBoxWidget(QString nameValue, Geometry::Type type, qint32 ob
     showPosButton->setFixedSize(20, 20);
     showPosButton->setIconSize(QSize(12,12));
     showPosButton->setToolTip(tr("Go to object"));
+    connect(showPosButton, &QPushButton::clicked, this, &PlaceBoxWidget::moveToObject);
 
     removeButton = new QPushButton(QIcon(":/icons/delete.png"), "", this);
     removeButton->setFixedSize(20, 20);
@@ -40,4 +41,13 @@ void PlaceBoxWidget::setCoordinates(GeoCoords pos1, GeoCoords pos2)
 void PlaceBoxWidget::removeSlot()
 {
     emit removeSignal(_typeObject, _objectNumber);
+}
+
+void PlaceBoxWidget::moveToObject()
+{
+//    if (_typeObject == Geometry::Line || _typeObject == Geometry::Rect)
+//    {
+//        GeoCoords pos = {(_pos1.lat + _pos2.lat)/2.0}
+//    }
+    emit moveToObjectSignal(_pos1);
 }
