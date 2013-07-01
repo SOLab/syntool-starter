@@ -16,7 +16,7 @@ class Point3DNode : public QObject
     Q_OBJECT
 public:
     explicit Point3DNode(QObject *parent = 0);
-    void createPoint(GeoCoords pos);
+    void createPoint(Geometry::Type objectType, GeoCoords pos);
     void draw(QGLPainter *painter);
     void setObjectName(QString value){_objectName = value;}
     QString objectName(){return _objectName;}

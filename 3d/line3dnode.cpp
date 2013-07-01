@@ -7,6 +7,8 @@ Line3DNode::Line3DNode(QObject *parent) :
 
 void Line3DNode::createLine(GeoCoords pos1, GeoCoords pos2)
 {
+    verts.clear();
+
     pos1.lat = -1*pos1.lat;
     pos1.lon += M_PI_2;
     pos1.lon = -1*pos1.lon;

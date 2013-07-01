@@ -59,7 +59,7 @@ protected:
     QPushButton* reloadProductsButton;
 
     QPushButton* leftTopButton;
-    QPushButton* rightBottomButton;
+//    QPushButton* rightBottomButton;
 
     InputBox* North;
     InputBox* South;
@@ -112,8 +112,8 @@ public slots:
 
     void removeProduct(QString productId);
 
-    void leftTopCoordsSlot(qreal lat, qreal lon);
-    void rightBottomCoordsSlot(qreal lat, qreal lon);
+    void areaCoordsSlot(GeoCoords pos1, GeoCoords pos2);
+//    void rightBottomCoordsSlot(qreal lat, qreal lon);
     void setCheckedButton(bool value);
     void setCursorModeSlot(CursorMode::Mode value);
 };

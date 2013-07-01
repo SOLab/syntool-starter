@@ -5,7 +5,7 @@ Point3DNode::Point3DNode(QObject *parent) :
 {
 }
 
-void Point3DNode::createPoint(GeoCoords pos)
+void Point3DNode::createPoint(Geometry::Type objectType, GeoCoords pos)
 {
     pos.lat = -1*pos.lat;
     pos.lon += M_PI_2;

@@ -370,6 +370,17 @@ void EarthView::leftSlot()
 
 void EarthView::mouseMoveEvent(QMouseEvent *e)
 {
+    if (currentCursorMode == CursorMode::GetAreaCoords && !firstPointFlag)
+    {
+        GeoCoords pos = mousePos2coords(e->pos());
+
+        if (pos.lat > -100)
+        {
+            metaGLInfoNode->moveIteractionRect(GeoCoordsDeg2Rad(pos));
+            update();
+        }
+    }
+
     if (mousePressed)
     {
         delta = e->pos() - startPan;
@@ -462,36 +473,52 @@ void EarthView::mousePressEvent(QMouseEvent *e)
 {
     Q_UNUSED(e);
 
-    if (currentCursorMode == CursorMode::LeftTopCoords || currentCursorMode == CursorMode::RightBottomCoords)
+    if (currentCursorMode == CursorMode::GetAreaCoords)
     {
         GeoCoords pos = mousePos2coords(e->pos());
         if (pos.lat > -100)
         {
-            if (currentCursorMode == CursorMode::LeftTopCoords)
-                emit leftTopCoordsSignal(pos.lat, pos.lon);
-            else if (currentCursorMode == CursorMode::RightBottomCoords)
-                emit rightBottomCoordsSignal(pos.lat, pos.lon);
+            if (firstPointFlag)
+            {
+                firstPointFlag = false;
+                firstPoint = GeoCoordsDeg2Rad(pos);
+                metaGLInfoNode->addIteractionRect(firstPoint, firstPoint);
+            }
+            else
+            {
+                emit areaCoordsSignal(firstPoint, GeoCoordsDeg2Rad(pos));
+                currentCursorMode = CursorMode::Move;
+                setCursor(Qt::ArrowCursor);
+                emit setCursorModeSignal(currentCursorMode);
+                update();
+            }
+//            if (currentCursorMode == CursorMode::GetAreaCoords)
+//                emit areaCoordsSignal(pos1, pos2);
+//            else if (currentCursorMode == CursorMode::RightBottomCoords)
+//                emit rightBottomCoordsSignal(pos.lat, pos.lon);
 
-            currentCursorMode = CursorMode::Move;
-            setCursor(Qt::ArrowCursor);
-            emit setCursorModeSignal(currentCursorMode);
             return;
         }
     }
 
-    if (currentCursorMode == CursorMode::AddPin || currentCursorMode == CursorMode::AddTag)
+    if (currentCursorMode == CursorMode::AddPin ||
+        currentCursorMode == CursorMode::AddTag ||
+        currentCursorMode == CursorMode::AddPoint)
     {
         GeoCoords pos = mousePos2coords(e->pos());
         if (pos.lat > -100)
         {
-//            if (currentCursorMode == CursorMode::AddPin)
-//                emit addPinSignal(pos.lat, pos.lon);
-//            else if (currentCursorMode == CursorMode::AddTag)
-//                emit addTagSignal(pos.lat, pos.lon);
+            if (currentCursorMode == CursorMode::AddPin)
+                metaGLInfoNode->addPoint(GeoCoordsDeg2Rad(pos), Geometry::Pin);
+            else if (currentCursorMode == CursorMode::AddTag)
+                metaGLInfoNode->addPoint(GeoCoordsDeg2Rad(pos), Geometry::Tag);
+            else if (currentCursorMode == CursorMode::AddPoint)
+                metaGLInfoNode->addPoint(GeoCoordsDeg2Rad(pos), Geometry::Point);
 
             currentCursorMode = CursorMode::Move;
             setCursor(Qt::ArrowCursor);
             emit setCursorModeSignal(currentCursorMode);
+            update();
             return;
         }
     }
@@ -505,10 +532,8 @@ void EarthView::mousePressEvent(QMouseEvent *e)
             {
                 if (currentCursorMode == CursorMode::AddLine)
                     metaGLInfoNode->addLine(firstPoint, GeoCoordsDeg2Rad(pos));
-//                    emit addLineSignal(firstPoint.lat, firstPoint.lon, pos.lat, pos.lon);
                 else if (currentCursorMode == CursorMode::AddRect)
                     metaGLInfoNode->addRect(firstPoint, GeoCoordsDeg2Rad(pos));
-//                    emit addRectSignal(firstPoint.lat, firstPoint.lon, pos.lat, pos.lon);
 
                 currentCursorMode = CursorMode::Move;
                 setCursor(Qt::ArrowCursor);
@@ -713,8 +738,7 @@ void EarthView::setCursorModeSlot(CursorMode::Mode value)
         setCursor(Qt::ArrowCursor);
     else if (currentCursorMode == CursorMode::AddLine ||
              currentCursorMode == CursorMode::AddRect ||
-             currentCursorMode == CursorMode::LeftTopCoords ||
-             currentCursorMode == CursorMode::RightBottomCoords)
+             currentCursorMode == CursorMode::GetAreaCoords)
         setCursor(Qt::CrossCursor);
     else if (currentCursorMode == CursorMode::AddPin ||
              currentCursorMode == CursorMode::AddTag)

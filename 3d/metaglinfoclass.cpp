@@ -34,10 +34,10 @@ void MetaGLInfoClass::drawAll(QGLPainter *painter)
     }
 }
 
-void MetaGLInfoClass::addPoint(GeoCoords pos)
+void MetaGLInfoClass::addPoint(GeoCoords pos, Geometry::Type objectType)
 {
     Point3DNode* pointNode = new Point3DNode(this);
-    pointNode->createPoint(pos);
+    pointNode->createPoint(objectType, pos);
 
     qint32 pointNumber;
     if (pointHash->size() == 0)
@@ -52,7 +52,12 @@ void MetaGLInfoClass::addPoint(GeoCoords pos)
     }
     pointHash->insert(pointNumber, pointNode);
 
-    pointNode->setObjectName("Point"+QString::number(pointNumber));
+    if (objectType == Geometry::Point)
+        pointNode->setObjectName("Point"+QString::number(pointNumber));
+    else if (objectType == Geometry::Tag)
+        pointNode->setObjectName("Tag"+QString::number(pointNumber));
+    else if (objectType == Geometry::Pin)
+        pointNode->setObjectName("Pin"+QString::number(pointNumber));
     emit addPointSignal(pointNumber, pos, pointNode->objectName());
 }
 
@@ -78,7 +83,7 @@ void MetaGLInfoClass::addLine(GeoCoords pos1, GeoCoords pos2)
     emit addLineSignal(lineNumber, pos1, pos2, lineNode->objectName());
 }
 
-void MetaGLInfoClass::addRect(GeoCoords pos1, GeoCoords pos2)
+qint32 MetaGLInfoClass::addRect(GeoCoords pos1, GeoCoords pos2)
 {
     Rect3DNode* rectNode = new Rect3DNode(this);
     rectNode->createRect(pos1, pos2);
@@ -98,6 +103,17 @@ void MetaGLInfoClass::addRect(GeoCoords pos1, GeoCoords pos2)
 
     rectNode->setObjectName("Rect"+QString::number(rectNumber));
     emit addRectSignal(rectNumber, pos1, pos2, rectNode->objectName());
+    return rectNumber;
+}
+
+void MetaGLInfoClass::addIteractionRect(GeoCoords pos1, GeoCoords pos2)
+{
+    iteractionRectNumber = addRect(pos1, pos2);
+}
+
+void MetaGLInfoClass::moveIteractionRect(GeoCoords pos2)
+{
+    rectHash->value(iteractionRectNumber)->changedPoint(pos2);
 }
 
 void MetaGLInfoClass::removeObjectSlot(Geometry::Type type, qint32 objectNumber)

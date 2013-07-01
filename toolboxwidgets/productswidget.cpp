@@ -73,20 +73,8 @@ ProductsWidget::ProductsWidget(ConfigData *configData, QWidget *parent):
     leftTopButton->setCheckable(true);
     connect(leftTopButton, &QPushButton::clicked, this, &ProductsWidget::setCheckedButton);
 
-    rightBottomButton = new QPushButton(this);
-    rightBottomButton->setContentsMargins(0,0,0,0);
-    rightBottomButton->setFixedSize(24,24);
-    rightBottomButton->setIconSize(QSize(16, 16));
-    rightBottomButton->setFocusPolicy(Qt::NoFocus);
-
-    rightBottomButton->setIcon(QIcon(":/icons/right_bottom.png"));
-    rightBottomButton->setToolTip(tr("Get South-East coords"));
-    rightBottomButton->setCheckable(true);
-    connect(rightBottomButton, &QPushButton::clicked, this, &ProductsWidget::setCheckedButton);
-
     selectAreaLayout->addWidget(AreaLbl);
     selectAreaLayout->addWidget(leftTopButton);
-    selectAreaLayout->addWidget(rightBottomButton);
 
     vLayout->addLayout(selectAreaLayout);
 
@@ -530,16 +518,17 @@ void ProductsWidget::removeProduct(QString productId)
     };
 }
 
-void ProductsWidget::leftTopCoordsSlot(qreal lat, qreal lon)
+void ProductsWidget::areaCoordsSlot(GeoCoords pos1, GeoCoords pos2)
 {
-    North->setText(QString::number(lat));
-    West->setText(QString::number(lon));
-}
+    qreal north = ((pos1.lat > pos2.lat) ? pos1.lat : pos2.lat)*180/M_PI;
+    qreal west = ((pos1.lon < pos2.lon) ? pos1.lon : pos2.lon)*180/M_PI;
+    qreal south = ((pos1.lat < pos2.lat) ? pos1.lat : pos2.lat)*180/M_PI;
+    qreal east = ((pos1.lon > pos2.lon) ? pos1.lon : pos2.lon)*180/M_PI;
 
-void ProductsWidget::rightBottomCoordsSlot(qreal lat, qreal lon)
-{
-    South->setText(QString::number(lat));
-    East->setText(QString::number(lon));
+    North->setText(QString::number(north));
+    West->setText(QString::number(west));
+    South->setText(QString::number(south));
+    East->setText(QString::number(east));
 }
 
 void ProductsWidget::setCheckedButton(bool value)
@@ -547,21 +536,12 @@ void ProductsWidget::setCheckedButton(bool value)
     if (value)
     {
         leftTopButton->setChecked(false);
-        rightBottomButton->setChecked(false);
-
-        QPushButton* _sender = qobject_cast<QPushButton*>(sender());
-        _sender->setChecked(true);
-        CursorMode::Mode curMode;
-        if(sender() == leftTopButton)
-            curMode = CursorMode::LeftTopCoords;
-        else
-            curMode = CursorMode::RightBottomCoords;
+        CursorMode::Mode curMode = CursorMode::GetAreaCoords;
         emit setCursorModeSignal(curMode);
     }
     else
     {
         leftTopButton->setChecked(false);
-        rightBottomButton->setChecked(false);
         emit setCursorModeSignal(CursorMode::Move);
     }
 }
@@ -569,9 +549,6 @@ void ProductsWidget::setCheckedButton(bool value)
 void ProductsWidget::setCursorModeSlot(CursorMode::Mode value)
 {
     leftTopButton->setChecked(false);
-    rightBottomButton->setChecked(false);
-    if (value == CursorMode::LeftTopCoords)
+    if (value == CursorMode::GetAreaCoords)
         leftTopButton->setChecked(true);
-    else if (value == CursorMode::RightBottomCoords)
-        rightBottomButton->setChecked(true);
 }

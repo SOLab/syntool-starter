@@ -29,6 +29,7 @@ private:
 signals:
     
 public slots:
+    void changedPoint(GeoCoords pos2);
     
 };
 

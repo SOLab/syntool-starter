@@ -131,8 +131,7 @@ void MainWindow::setHostedWindow(EarthView *window)
 
     // connects earthView and productsWgt
     connect(earthViewPointer, &EarthView::setCursorModeSignal, productsWgt, &ProductsWidget::setCursorModeSlot);
-    connect(earthViewPointer, &EarthView::leftTopCoordsSignal, productsWgt, &ProductsWidget::leftTopCoordsSlot);
-    connect(earthViewPointer, &EarthView::rightBottomCoordsSignal, productsWgt, &ProductsWidget::rightBottomCoordsSlot);
+    connect(earthViewPointer, &EarthView::areaCoordsSignal, productsWgt, &ProductsWidget::areaCoordsSlot);
     connect(productsWgt, &ProductsWidget::setCursorModeSignal, earthViewPointer, &EarthView::setCursorModeSlot);
 
     // connects MetaGLInfoClass and PlaceWidget

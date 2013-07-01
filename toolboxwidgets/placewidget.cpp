@@ -51,7 +51,7 @@ PlaceWidget::PlaceWidget(QWidget *parent) :
 
 void PlaceWidget::addPoint(qint32 pointNumber, GeoCoords pos, QString pointName)
 {
-    PlaceBoxWidget* pointWidget = new PlaceBoxWidget(pointName, Geometry::Rect, pointNumber, this);
+    PlaceBoxWidget* pointWidget = new PlaceBoxWidget(pointName, Geometry::Point, pointNumber, this);
     GeoCoords pos2 = {-1000, -1000};
     pointWidget->setCoordinates(pos, pos2);
 
