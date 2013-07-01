@@ -20,10 +20,8 @@ void Line3DNode::createLine(GeoCoords pos1, GeoCoords pos2)
     qint32 slices = 64;
     qint32 separation = 1;
 
-    int ind = 1;
     if (qAbs(pos2.lon - pos1.lon) > M_PI)
     {
-        ind = -1;
         if (pos2.lon > 0)
             pos2.lon -= 2*M_PI;
         else

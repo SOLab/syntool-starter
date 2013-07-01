@@ -10,7 +10,16 @@ PlaceBoxWidget::PlaceBoxWidget(QString nameValue, Geometry::Type type, qint32 ob
     hLayout->setContentsMargins(0, 0, 0, 0);
     hLayout->setSpacing(0);
 
-    QLabel* nameLbl = new QLabel(nameValue, this);
+    nameLbl = new QLineEdit(nameValue, this);
+    nameLbl->setReadOnly(true);
+    _style = "QLineEdit{border: red;"
+            "background-color: "+
+            QString("rgb(%1, %2, %3);}")
+            .arg(parent->palette().background().color().red())
+            .arg(parent->palette().background().color().green())
+            .arg(parent->palette().background().color().blue());
+    nameLbl->setStyleSheet(_style);
+
     hLayout->addWidget(nameLbl);
 
     showPosButton = new QPushButton(QIcon(":/icons/target.png"), "", this);
@@ -25,6 +34,14 @@ PlaceBoxWidget::PlaceBoxWidget(QString nameValue, Geometry::Type type, qint32 ob
     removeButton->setToolTip(tr("Remove object"));
     connect(removeButton, &QPushButton::clicked, this, &PlaceBoxWidget::removeSlot);
 
+    renameButton = new QPushButton(QIcon(":/icons/pencil.png"), "", this);
+    renameButton->setFixedSize(20, 20);
+    renameButton->setIconSize(QSize(12,12));
+    renameButton->setToolTip(tr("Rename"));
+    renameButton->setCheckable(true);
+    connect(renameButton, &QPushButton::clicked, this, &PlaceBoxWidget::renameSlot);
+
+    hLayout->addWidget(renameButton);
     hLayout->addWidget(showPosButton);
     hLayout->addWidget(removeButton);
 
@@ -45,9 +62,41 @@ void PlaceBoxWidget::removeSlot()
 
 void PlaceBoxWidget::moveToObject()
 {
-//    if (_typeObject == Geometry::Line || _typeObject == Geometry::Rect)
-//    {
-//        GeoCoords pos = {(_pos1.lat + _pos2.lat)/2.0}
-//    }
-    emit moveToObjectSignal(_pos1);
+    GeoCoords pos;
+    if (_typeObject == Geometry::Line || _typeObject == Geometry::Rect)
+    {
+        GeoCoords pos2 = _pos2;
+
+        if (qAbs(_pos2.lon - _pos1.lon) > M_PI)
+        {
+            if (pos2.lon > 0)
+                pos2.lon -= 2*M_PI;
+            else
+                pos2.lon += 2*M_PI;
+        }
+
+        pos.lat = (_pos1.lat + _pos2.lat)/2.0;
+        pos.lon = (_pos1.lon + pos2.lon)/2.0;
+        if (pos.lon > M_PI)
+            pos.lon -= 2*M_PI;
+        else if (pos.lon < -M_PI)
+            pos.lon += 2*M_PI;
+    }
+    else
+        pos = _pos1;
+    emit moveToObjectSignal(pos );
+}
+
+void PlaceBoxWidget::renameSlot(bool value)
+{
+    nameLbl->setReadOnly(!value);
+    if (value)
+    {
+        nameLbl->setStyleSheet("");
+        nameLbl->setFocus();
+    }
+    else
+    {
+        nameLbl->setStyleSheet(_style);
+    }
 }
