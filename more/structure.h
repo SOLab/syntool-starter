@@ -38,6 +38,16 @@ namespace CursorMode {
     };
 }
 
+namespace Geometry {
+    enum Type{
+        Point = 0,
+        Line = 1,
+        Rect = 2,
+        Tag = 3,
+        Pin = 4
+    };
+}
+
 struct ConfigData{
     QString configDir;
     QString configFile;

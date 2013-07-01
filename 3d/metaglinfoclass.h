@@ -31,11 +31,16 @@ private:
     QMap<qint32, Rect3DNode*>* rectHash;
 
 signals:
+    void addPointSignal(qint32 pointNumber, GeoCoords pos, QString pointName);
+    void addLineSignal(qint32 lineNumber, GeoCoords pos1, GeoCoords pos2, QString lineName);
+    void addRectSignal(qint32 rectNumber, GeoCoords pos1, GeoCoords pos2, QString rectName);
     
 public slots:
     void addPoint(GeoCoords pos);
     void addLine(GeoCoords pos1, GeoCoords pos2);
     void addRect(GeoCoords pos1, GeoCoords pos2);
+
+    void removeObjectSlot(Geometry::Type type, qint32 objectNumber);
     
 };
 

@@ -68,5 +68,6 @@
         <file alias="hide.png">resources/icons/Hide.png</file>
         <file alias="right_bottom.png">resources/icons/right_bottom.png</file>
         <file alias="left_top.png">resources/icons/left_top.png</file>
+        <file alias="target.png">resources/icons/Target.png</file>
     </qresource>
 </RCC>

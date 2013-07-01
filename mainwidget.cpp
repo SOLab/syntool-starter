@@ -60,7 +60,7 @@ MainWindow::MainWindow(ConfigData *configValue, QWidget *parent)
     rightSidebar->addItem(mapsWgt, tr("Maps"));
     rightSidebar->addItem(layersWgt, tr("Layers"));
     rightSidebar->addItem(datasetsWgt, tr("Datasets"));
-    rightSidebar->addItem(placeWgt, tr("Places"));
+    rightSidebar->addItem(placeWgt, tr("Markers"));
 
 //    add all main widget
     splitter->addWidget(glwgt);
@@ -134,6 +134,12 @@ void MainWindow::setHostedWindow(EarthView *window)
     connect(earthViewPointer, &EarthView::leftTopCoordsSignal, productsWgt, &ProductsWidget::leftTopCoordsSlot);
     connect(earthViewPointer, &EarthView::rightBottomCoordsSignal, productsWgt, &ProductsWidget::rightBottomCoordsSlot);
     connect(productsWgt, &ProductsWidget::setCursorModeSignal, earthViewPointer, &EarthView::setCursorModeSlot);
+
+    // connects MetaGLInfoClass and PlaceWidget
+    connect(earthViewPointer->metaGLInfoNode, &MetaGLInfoClass::addPointSignal, placeWgt, &PlaceWidget::addPoint);
+    connect(earthViewPointer->metaGLInfoNode, &MetaGLInfoClass::addLineSignal, placeWgt, &PlaceWidget::addLine);
+    connect(earthViewPointer->metaGLInfoNode, &MetaGLInfoClass::addRectSignal, placeWgt, &PlaceWidget::addRect);
+    connect(placeWgt, &PlaceWidget::removeObjectSignal, earthViewPointer->metaGLInfoNode, &MetaGLInfoClass::removeObjectSlot);
 }
 
 void MainWindow::aboutProgram()

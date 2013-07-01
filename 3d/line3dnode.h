@@ -16,12 +16,15 @@ public:
     explicit Line3DNode(QObject *parent = 0);
     void createLine(GeoCoords pos1, GeoCoords pos2);
     void draw(QGLPainter *painter);
+    void setObjectName(QString value){_objectName = value;}
+    QString objectName(){return _objectName;}
     
 private:
     QColor _color;
     GeoCoords _pos1;
     GeoCoords _pos2;
     QVector3DArray verts;
+    QString _objectName;
 
 signals:
     

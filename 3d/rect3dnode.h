@@ -14,6 +14,8 @@ public:
     explicit Rect3DNode(QObject *parent = 0);
     void createRect(GeoCoords pos1, GeoCoords pos2);
     void draw(QGLPainter *painter);
+    void setObjectName(QString value){_objectName = value;}
+    QString objectName(){return _objectName;}
 
 private:
     QColor _color;
@@ -23,6 +25,7 @@ private:
     Line3DNode* line2;
     Line3DNode* line3;
     Line3DNode* line4;
+    QString _objectName;
 signals:
     
 public slots:

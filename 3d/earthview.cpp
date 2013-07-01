@@ -106,6 +106,7 @@ EarthView::EarthView(ConfigData *configData, QWindow *parent)
 
 
     metaGLInfoNode = new MetaGLInfoClass(this, earth, m_palette, configData);
+    connect (metaGLInfoNode, &MetaGLInfoClass::displayed, this, &EarthView::update);
 
 //    m_scene->mainNode()->addNode(granulesNode);
 
@@ -685,6 +686,8 @@ void EarthView::setCursorModeSlot(CursorMode::Mode value)
              currentCursorMode == CursorMode::AddTag)
         setCursor(Qt::PointingHandCursor);
     emit setCursorModeSignal(currentCursorMode);
+
+    firstPointFlag = true;
 }
 
 void EarthView::showCoordsSlot(bool value)

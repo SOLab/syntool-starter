@@ -18,11 +18,14 @@ public:
     explicit Point3DNode(QObject *parent = 0);
     void createPoint(GeoCoords pos);
     void draw(QGLPainter *painter);
+    void setObjectName(QString value){_objectName = value;}
+    QString objectName(){return _objectName;}
 
 private:
     QColor _color;
     GeoCoords _pos;
     QVector3DArray verts;
+    QString _objectName;
 signals:
     
 public slots:

@@ -52,7 +52,8 @@ SOURCES = \
     3d/metaglinfoclass.cpp \
     3d/line3dnode.cpp \
     3d/point3dnode.cpp \
-    3d/rect3dnode.cpp
+    3d/rect3dnode.cpp \
+    additionalwidgets/placeboxwidget.cpp
 HEADERS = \
     mainwidget.h \
     windowwidget.h \
@@ -100,7 +101,8 @@ HEADERS = \
     3d/metaglinfoclass.h \
     3d/line3dnode.h \
     3d/point3dnode.h \
-    3d/rect3dnode.h
+    3d/rect3dnode.h \
+    additionalwidgets/placeboxwidget.h
 RESOURCES += \
     syntool.qrc
 DEPENDPATH += resources

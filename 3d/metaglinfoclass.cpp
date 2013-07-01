@@ -1,6 +1,7 @@
 #include "metaglinfoclass.h"
 
-MetaGLInfoClass::MetaGLInfoClass(EarthView *parentView, Earth *earth, QSharedPointer<QGLMaterialCollection> palette, ConfigData *configData) :
+MetaGLInfoClass::MetaGLInfoClass(EarthView *parentView, Earth *earth, QSharedPointer<QGLMaterialCollection> palette,
+                                 ConfigData *configData) :
     QGLSceneNode(qobject_cast<QGLSceneNode*>(earth))
 {
     m_palette = palette;
@@ -50,6 +51,9 @@ void MetaGLInfoClass::addPoint(GeoCoords pos)
             pointNumber += 1;
     }
     pointHash->insert(pointNumber, pointNode);
+
+    pointNode->setObjectName("Point"+QString::number(pointNumber));
+    emit addPointSignal(pointNumber, pos, pointNode->objectName());
 }
 
 void MetaGLInfoClass::addLine(GeoCoords pos1, GeoCoords pos2)
@@ -69,6 +73,9 @@ void MetaGLInfoClass::addLine(GeoCoords pos1, GeoCoords pos2)
             lineNumber += 1;
     }
     lineHash->insert(lineNumber, lineNode);
+
+    lineNode->setObjectName("Line"+QString::number(lineNumber));
+    emit addLineSignal(lineNumber, pos1, pos2, lineNode->objectName());
 }
 
 void MetaGLInfoClass::addRect(GeoCoords pos1, GeoCoords pos2)
@@ -88,4 +95,33 @@ void MetaGLInfoClass::addRect(GeoCoords pos1, GeoCoords pos2)
             rectNumber += 1;
     }
     rectHash->insert(rectNumber, rectNode);
+
+    rectNode->setObjectName("Rect"+QString::number(rectNumber));
+    emit addRectSignal(rectNumber, pos1, pos2, rectNode->objectName());
+}
+
+void MetaGLInfoClass::removeObjectSlot(Geometry::Type type, qint32 objectNumber)
+{
+    if (type == Geometry::Line)
+    {
+        Line3DNode* lineNode = lineHash->value(objectNumber);
+        lineHash->remove(objectNumber);
+        if (lineNode)
+            lineNode->deleteLater();
+    }
+    else if (type == Geometry::Rect)
+    {
+        Rect3DNode* rectNode = rectHash->value(objectNumber);
+        rectHash->remove(objectNumber);
+        if (rectNode)
+            rectNode->deleteLater();
+    }
+    else if (type == Geometry::Pin || type == Geometry::Tag || type == Geometry::Point)
+    {
+        Point3DNode* pointNode = pointHash->value(objectNumber);
+        pointHash->remove(objectNumber);
+        if (pointNode)
+            pointNode->deleteLater();
+    }
+    displayed();
 }
