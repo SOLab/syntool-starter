@@ -116,6 +116,14 @@ void MetaGLInfoClass::moveIteractionRect(GeoCoords pos2)
     rectHash->value(iteractionRectNumber)->changedPoint(pos2);
 }
 
+void MetaGLInfoClass::removeIteractionRect()
+{
+    Rect3DNode* iterRect = rectHash->value(iteractionRectNumber);
+    rectHash->remove(iteractionRectNumber);
+    iterRect->deleteLater();
+    emit removeObjectSignal(Geometry::Rect, iteractionRectNumber);
+}
+
 void MetaGLInfoClass::removeObjectSlot(Geometry::Type type, qint32 objectNumber)
 {
     if (type == Geometry::Line)

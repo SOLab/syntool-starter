@@ -5,6 +5,14 @@ Rect3DNode::Rect3DNode(QObject *parent) :
 {
 }
 
+Rect3DNode::~Rect3DNode()
+{
+    delete line1;
+    delete line2;
+    delete line3;
+    delete line4;
+}
+
 void Rect3DNode::createRect(GeoCoords pos1, GeoCoords pos2)
 {
     _pos1 = pos1;

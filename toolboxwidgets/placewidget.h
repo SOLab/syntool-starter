@@ -34,7 +34,7 @@ public slots:
     void addLine(qint32 lineNumber, GeoCoords pos1, GeoCoords pos2, QString lineName);
     void addRect(qint32 rectNumber, GeoCoords pos1, GeoCoords pos2, QString rectName);
 
-    void removeObject(Geometry::Type type, qint32 objectNumber);
+    void removeObjectSlot(Geometry::Type type, qint32 objectNumber);
 
 };
 

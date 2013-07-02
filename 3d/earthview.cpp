@@ -473,6 +473,18 @@ void EarthView::mousePressEvent(QMouseEvent *e)
 {
     Q_UNUSED(e);
 
+    if(currentCursorMode != CursorMode::Move && e->button() == Qt::RightButton)
+    {
+        if (currentCursorMode == CursorMode::GetAreaCoords && !firstPointFlag)
+        {
+            metaGLInfoNode->removeIteractionRect();
+        }
+        currentCursorMode = CursorMode::Move;
+        setCursor(Qt::ArrowCursor);
+        emit setCursorModeSignal(currentCursorMode);
+        update();
+    }
+
     if (currentCursorMode == CursorMode::GetAreaCoords)
     {
         GeoCoords pos = mousePos2coords(e->pos());

@@ -57,7 +57,7 @@ void PlaceWidget::addPoint(qint32 pointNumber, GeoCoords pos, QString pointName)
 
     connect(pointWidget, &PlaceBoxWidget::moveToObjectSignal, this, &PlaceWidget::moveToCoordsSignal);
 
-    connect(pointWidget, &PlaceBoxWidget::removeSignal, this, &PlaceWidget::removeObject);
+    connect(pointWidget, &PlaceBoxWidget::removeSignal, this, &PlaceWidget::removeObjectSlot);
     connect(pointWidget, &PlaceBoxWidget::removeSignal, this, &PlaceWidget::removeObjectSignal);
 
     pointLayout->addWidget(pointWidget);
@@ -71,7 +71,7 @@ void PlaceWidget::addLine(qint32 lineNumber, GeoCoords pos1, GeoCoords pos2, QSt
 
     connect(lineWidget, &PlaceBoxWidget::moveToObjectSignal, this, &PlaceWidget::moveToCoordsSignal);
 
-    connect(lineWidget, &PlaceBoxWidget::removeSignal, this, &PlaceWidget::removeObject);
+    connect(lineWidget, &PlaceBoxWidget::removeSignal, this, &PlaceWidget::removeObjectSlot);
     connect(lineWidget, &PlaceBoxWidget::removeSignal, this, &PlaceWidget::removeObjectSignal);
 
     lineLayout->addWidget(lineWidget);
@@ -85,14 +85,14 @@ void PlaceWidget::addRect(qint32 rectNumber, GeoCoords pos1, GeoCoords pos2, QSt
 
     connect(rectWidget, &PlaceBoxWidget::moveToObjectSignal, this, &PlaceWidget::moveToCoordsSignal);
 
-    connect(rectWidget, &PlaceBoxWidget::removeSignal, this, &PlaceWidget::removeObject);
+    connect(rectWidget, &PlaceBoxWidget::removeSignal, this, &PlaceWidget::removeObjectSlot);
     connect(rectWidget, &PlaceBoxWidget::removeSignal, this, &PlaceWidget::removeObjectSignal);
 
     rectLayout->addWidget(rectWidget);
     rectMap->insert(rectNumber, rectWidget);
 }
 
-void PlaceWidget::removeObject(Geometry::Type type, qint32 objectNumber)
+void PlaceWidget::removeObjectSlot(Geometry::Type type, qint32 objectNumber)
 {
     if (type == Geometry::Line)
     {

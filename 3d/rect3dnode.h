@@ -12,6 +12,7 @@ class Rect3DNode : public QObject
     Q_OBJECT
 public:
     explicit Rect3DNode(QObject *parent = 0);
+    ~Rect3DNode();
     void createRect(GeoCoords pos1, GeoCoords pos2);
     void draw(QGLPainter *painter);
     void setObjectName(QString value){_objectName = value;}

@@ -37,6 +37,7 @@ signals:
     void addPointSignal(qint32 pointNumber, GeoCoords pos, QString pointName);
     void addLineSignal(qint32 lineNumber, GeoCoords pos1, GeoCoords pos2, QString lineName);
     void addRectSignal(qint32 rectNumber, GeoCoords pos1, GeoCoords pos2, QString rectName);
+    void removeObjectSignal(Geometry::Type type, qint32 objNumber);
     
 public slots:
     void addPoint(GeoCoords pos, Geometry::Type objectType);
@@ -44,6 +45,7 @@ public slots:
     qint32 addRect(GeoCoords pos1, GeoCoords pos2);
     void addIteractionRect(GeoCoords pos1, GeoCoords pos2);
     void moveIteractionRect(GeoCoords pos2);
+    void removeIteractionRect();
 
     void removeObjectSlot(Geometry::Type type, qint32 objectNumber);
     
