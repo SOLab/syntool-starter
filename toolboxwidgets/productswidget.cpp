@@ -6,6 +6,7 @@ ProductsWidget::ProductsWidget(ConfigData *configData, QWidget *parent):
 {
     productsHash = new QHash<QString, Product>;
     productsIdName = new QHash<qint32, QString>;
+    favoritesProductsList = new QList<qint32>;
 
     vLayout = new QVBoxLayout(this);
     vLayout->setContentsMargins(0,2,0,0);
@@ -124,11 +125,29 @@ ProductsWidget::ProductsWidget(ConfigData *configData, QWidget *parent):
     hLine3->setFrameShadow(QFrame::Sunken);
     vLayout->addWidget(hLine3);
 
+
+    addProductToFavoritesButton = new QPushButton(this);
+    addProductToFavoritesButton->setContentsMargins(0,0,0,0);
+    addProductToFavoritesButton->setFixedSize(24,24);
+
+    addProductToFavoritesButton->setIconSize(QSize(16, 16));
+    addProductToFavoritesButton->setFocusPolicy(Qt::NoFocus);
+    addProductToFavoritesButton->setIcon(QIcon(":/icons/favorites.png"));
+    addProductToFavoritesButton->setToolTip(tr("Add to favorites"));
+    addProductToFavoritesButton->setCheckable(true);
+
+    addProductToFavoritesButton->setDisabled(true);
+    connect(addProductToFavoritesButton, &QPushButton::clicked, this, &ProductsWidget::addProductToFavorites);
+
     addProductLabel = new QPushButton(tr("Add product"), this);
     addProductLabel->setDisabled(true);
     connect(addProductLabel, &QPushButton::clicked, this, &ProductsWidget::addProduct);
 
-    vLayout->addWidget(addProductLabel);
+    QHBoxLayout* bottomLayout = new QHBoxLayout(this);
+    bottomLayout->addWidget(addProductToFavoritesButton);
+    bottomLayout->addWidget(addProductLabel);
+
+    vLayout->addLayout(bottomLayout);
 
 // Set style
 
@@ -329,7 +348,14 @@ void ProductsWidget::currentProductChanged(int index)
         comboParameters->setEnabled(enabledFlag);
         addProductLabel->setEnabled(enabledFlag);
         viewProductInfo->setEnabled(enabledFlag);
+
+        addProductToFavoritesButton->setEnabled(enabledFlag);
     }
+
+    // checked favorites products
+    qint32 currentProductId = productsHash->value(comboProducts->currentText()).Id;
+    if (enabledFlag)
+        addProductToFavoritesButton->setChecked(favoritesProductsList->contains(currentProductId));
 
     comboParameters->clear();
     if (enabledFlag)
@@ -397,6 +423,15 @@ void ProductsWidget::addProduct()
     emit productAdded(newSelectedProduct.productName, productsIdName->key(newSelectedProduct.productName));
 
     qDebug() << selectedProducts->keys();
+}
+
+void ProductsWidget::addProductToFavorites(bool value)
+{
+    qint32 currentKey = productsIdName->key(comboProducts->currentText());
+    if (value && !favoritesProductsList->contains(currentKey))
+        favoritesProductsList->append(currentKey);
+    else if(!value && favoritesProductsList->contains(currentKey))
+        favoritesProductsList->removeOne(currentKey);
 }
 
 void ProductsWidget::getNewGranules(int scale)

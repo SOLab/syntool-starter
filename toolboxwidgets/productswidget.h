@@ -59,26 +59,16 @@ protected:
     QPushButton* reloadProductsButton;
 
     QPushButton* leftTopButton;
-//    QPushButton* rightBottomButton;
 
     InputBox* North;
     InputBox* South;
     InputBox* West;
     InputBox* East;
 
-//    QDate* startProductDateValue;
-//    QTime* startProductTimeValue;
-//    QDateEdit* productDateStart;
-//    QDateEdit* productDateEnd;
-
-//    QDate* endProductDateValue;
-//    QTime* endProductTimeValue;
-//    QTimeEdit* productTimeStart;
-//    QTimeEdit* productTimeEnd;
-
     QLabel*      parametersLbl;
     QComboBox*   comboParameters;
     QPushButton* addProductLabel;
+    QPushButton* addProductToFavoritesButton;
 
     QHash<QString, int>      parametersList;
     // <productNaiadId, Product>
@@ -88,6 +78,9 @@ protected:
 
     QHash<QString, selectedProduct>* selectedProducts;
     QHash<QString, Granule>*         granulesHash;
+
+    // list of favorites productId
+    QList<qint32>* favoritesProductsList;
 
     TimeLine*    timeLinePointer;
     GetGranules* getGranulesPointer;
@@ -108,6 +101,7 @@ public slots:
 
     void reloadProductsList();
     void addProduct();
+    void addProductToFavorites(bool value);
     void slotProductInfo();
 
     void removeProduct(QString productId);

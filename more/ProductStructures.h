@@ -45,7 +45,7 @@ struct Product{
     QDateTime StartDate;
     QDateTime EndDate;
     int FilteredGranulesCount;
-    int Id;
+    qint32 Id;
     int TotalGranulesCount;
 };
 
