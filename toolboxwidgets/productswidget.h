@@ -86,7 +86,7 @@ protected:
     GetGranules* getGranulesPointer;
     void getGranulesForNewProduct();
 signals:
-    void productAdded(QString productNaiadId, qint32 productId);
+    void productAdded(QString productNaiadId, qint32 productId, ProductType::Type type);
     void productDeleted(QString productId);
     void productsHashSignal(QHash<QString, Product>* productsHash, QHash<qint32, QString>* productsIdName);
 
@@ -100,7 +100,7 @@ public slots:
     void getNewGranules(int scale);
 
     void reloadProductsList();
-    void addProduct();
+    void addProduct(ProductType::Type productType = ProductType::Product);
     void addProductToFavorites(bool value);
     void slotProductInfo();
 

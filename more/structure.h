@@ -48,6 +48,13 @@ namespace Geometry {
     };
 }
 
+namespace ProductType {
+    enum Type{
+        Product = 0,
+        Favorite = 1
+    };
+}
+
 struct ConfigData{
     QString configDir;
     QString configFile;

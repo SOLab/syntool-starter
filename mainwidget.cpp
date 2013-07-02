@@ -92,7 +92,7 @@ MainWindow::MainWindow(ConfigData *configValue, QWidget *parent)
     connect(productsWgt, &ProductsWidget::productAdded, layersWgt, &LayersWidget::addProduct);
     connect(productsWgt, &ProductsWidget::productDeleted, layersWgt, &LayersWidget::deleteProduct);
 
-    connect(layersWgt, &LayersWidget::removeLayer, productsWgt, &ProductsWidget::removeProduct);
+    connect(layersWgt, &LayersWidget::removeProductSignal, productsWgt, &ProductsWidget::removeProduct);
     connect(layersWgt, &LayersWidget::showLayer, datasetsWgt, &DatasetsWidget::setShowProduct);
     connect(layersWgt, &LayersWidget::changedProductTransparency, datasetsWgt, &DatasetsWidget::changedProductTransparency);
 

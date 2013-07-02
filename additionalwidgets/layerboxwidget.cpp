@@ -69,9 +69,8 @@ void LayerBoxWidget::showChangedSlot(int state)
 
 void LayerBoxWidget::removeLayerBox(QString productId)
 {
-//    if (productId == m_productName);
-//    {
-//        hide();
-//        deleteLater();
-//    }
+    if (m_productName == productId)
+    {
+        close();
+    }
 }

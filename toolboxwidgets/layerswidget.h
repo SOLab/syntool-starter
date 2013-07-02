@@ -7,6 +7,7 @@
 #include <QDebug>
 
 #include "additionalwidgets/layerboxwidget.h"
+#include "more/structure.h"
 
 class LayersWidget : public QWidget
 {
@@ -17,9 +18,9 @@ public:
 protected:
     QVBoxLayout* vLayout;
     QVBoxLayout* productsLayout;
-    QVBoxLayout* otherLayout;
+    QVBoxLayout* favoritesLayout;
     QLabel*      productLayersLbl;
-    QLabel*      othersLayersLbl;
+    QLabel*      favoritesLayersLbl;
 
     QList<QString>* currentProducts;
 
@@ -28,10 +29,10 @@ signals:
     void showLayer(QString productName, qint32 productId, qint32 showState);
     void changedProductTransparency(QString productName, qint32 productId, int value);
 
-    void removeLayerBox(QString productId);
+    void removeProductSignal(QString productId);
     
 public slots:
-    void addProduct(QString ProductNaiadId, qint32 productId);
+    void addProduct(QString ProductNaiadId, qint32 productId, ProductType::Type productType);
     void deleteProduct(QString ProductId);
     
 };

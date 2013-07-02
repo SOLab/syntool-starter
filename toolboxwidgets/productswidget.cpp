@@ -141,7 +141,7 @@ ProductsWidget::ProductsWidget(ConfigData *configData, QWidget *parent):
 
     addProductLabel = new QPushButton(tr("Add product"), this);
     addProductLabel->setDisabled(true);
-    connect(addProductLabel, &QPushButton::clicked, this, &ProductsWidget::addProduct);
+    connect(addProductLabel, SIGNAL(clicked()), this, SLOT(addProduct()));
 
     QHBoxLayout* bottomLayout = new QHBoxLayout(this);
     bottomLayout->addWidget(addProductToFavoritesButton);
@@ -399,7 +399,7 @@ void ProductsWidget::setObjectsPointer(TimeLine *timeLine)
 }
 
 // add new product
-void ProductsWidget::addProduct()
+void ProductsWidget::addProduct(ProductType::Type productType)
 {
     selectedProduct newSelectedProduct;
 
@@ -420,7 +420,8 @@ void ProductsWidget::addProduct()
     selectedProducts->insert(newSelectedProduct.productName, newSelectedProduct);
     getGranulesForNewProduct();
 
-    emit productAdded(newSelectedProduct.productName, productsIdName->key(newSelectedProduct.productName));
+    emit productAdded(newSelectedProduct.productName, productsIdName->key(newSelectedProduct.productName),
+                      productType);
 
     qDebug() << selectedProducts->keys();
 }
@@ -429,9 +430,15 @@ void ProductsWidget::addProductToFavorites(bool value)
 {
     qint32 currentKey = productsIdName->key(comboProducts->currentText());
     if (value && !favoritesProductsList->contains(currentKey))
+    {
         favoritesProductsList->append(currentKey);
+        addProduct(ProductType::Favorite);
+    }
     else if(!value && favoritesProductsList->contains(currentKey))
+    {
         favoritesProductsList->removeOne(currentKey);
+        emit productDeleted(comboProducts->currentText());
+    }
 }
 
 void ProductsWidget::getNewGranules(int scale)
@@ -551,6 +558,13 @@ void ProductsWidget::removeProduct(QString productId)
         cur = granuleIdlist.begin();
         last = granuleIdlist.end();
     };
+
+    if (favoritesProductsList->contains(productsHash->value(productId).Id))
+    {
+        favoritesProductsList->removeOne(productsHash->value(productId).Id);
+        if (comboProducts->currentText() == productId)
+            addProductToFavoritesButton->setChecked(false);
+    }
 }
 
 void ProductsWidget::areaCoordsSlot(GeoCoords pos1, GeoCoords pos2)
