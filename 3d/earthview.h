@@ -114,6 +114,7 @@ private:
     bool test;
     EarthScene* m_scene;
     float       scale;
+    float       maxScale;
     bool        mousePressed;
 
     bool        navigateButtonPressed;

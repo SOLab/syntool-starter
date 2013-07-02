@@ -4,9 +4,13 @@
 #include <QArray>
 #include <qmath.h>
 
-NavigateButton::NavigateButton(QObject *parent, QSharedPointer<QGLMaterialCollection> palette)
+NavigateButton::NavigateButton(QObject *parent, QSharedPointer<QGLMaterialCollection> palette, float maxScale)
     : QGLSceneNode(parent)
 {
+    qint32 m_maxZoom = qint32(log10(maxScale)/log10(2.0));
+    numberDivisions = m_maxZoom*4 + 1;
+    m_curDivisions = -1;
+
     setObjectName("Buttons");
     setPalette(palette);
     setOption(QGLSceneNode::CullBoundingBox, false);
@@ -21,8 +25,10 @@ NavigateButton::~NavigateButton()
     }
 }
 
-void NavigateButton::draw(QGLPainter *painter, bool drawCoords, qreal lat, qreal lon)
+void NavigateButton::draw(QGLPainter *painter, float scale, bool drawCoords, qreal lat, qreal lon)
 {
+    qint32 curDivisions = qint32((log10(scale)/log10(2.0))*4);
+
     painter->projectionMatrix().push();
     painter->modelViewMatrix().push();
 
@@ -34,12 +40,41 @@ void NavigateButton::draw(QGLPainter *painter, bool drawCoords, qreal lat, qreal
 
     if (subButton->position().isNull())
     {
-        QVector2D pos(m_size.width() - 10, m_size.height() - 10);
+        QVector2D pos(m_size.width() - 10, 38);
         subButton->setPosition(pos);
+    }
+
+    if (zoomInButton->position().isNull())
+    {
+        QVector2D pos(m_size.width() - 10, 96);
+        zoomInButton->setPosition(pos);
+    }
+
+    if (zoomOutButton->position().isNull())
+    {
+        QVector2D pos(m_size.width() - 10, 288);
+        zoomOutButton->setPosition(pos);
+    }
+
+    if (m_curDivisions != curDivisions)
+    {
+        qint32 yPos = 250 - (150/numberDivisions*curDivisions);
+        qCritical() << yPos;
+        QVector2D pos(m_size.width() - 10, yPos);
+        scaleButton->setPosition(pos);
     }
 
     glDisable(GL_DEPTH_TEST);
 
+    // draw scale line
+    glLineWidth(2.0f);
+
+    painter->clearAttributes();
+    painter->setStandardEffect(QGL::FlatColor);
+
+    painter->setVertexAttribute(QGL::Position , verts);
+    painter->setColor(QColor(0,149,183));
+    painter->draw(QGL::Lines,verts.size());
 
     QGLSceneNode::draw(painter);
 
@@ -110,8 +145,9 @@ void NavigateButton::clearPositions()
 
 void NavigateButton::createButton()
 {
+    // create subButton
     subButton = new QGLSceneNode(this);
-    subButton->setObjectName("Left Button");
+    subButton->setObjectName("Navigate");
 
     QGLMaterial *mat = new QGLMaterial;
     QImage im(":/navigate.png");
@@ -121,8 +157,8 @@ void NavigateButton::createButton()
     tex->setImage(im);
     mat->setTexture(tex);
 
-    setMaterial(mat);
-    setEffect(QGL::FlatReplaceTexture2D);
+    subButton->setMaterial(mat);
+    subButton->setEffect(QGL::FlatReplaceTexture2D);
 
     QGeometryData data;
     QSize f = im.size() / 2;
@@ -151,6 +187,121 @@ void NavigateButton::createButton()
     subButton->setGeometry(data);
     subButton->setCount(6);
     subButton->setOption(QGLSceneNode::CullBoundingBox, false);
+
+    // create zoom buttons
+    createZoomButtons();
+    createScaleNode();
+}
+
+void NavigateButton::createZoomButtons()
+{
+    zoomInButton = new QGLSceneNode(this);
+    QGLMaterial *mat = new QGLMaterial;
+    QImage im(":/icons/zoom_in.png");
+//    m_size = im.size();
+    QGLTexture2D *tex = new QGLTexture2D(mat);
+    m_LoadedTextures.push_back(tex);
+    tex->setImage(im);
+    mat->setTexture(tex);
+
+    zoomInButton->setMaterial(mat);
+    zoomInButton->setEffect(QGL::FlatReplaceTexture2D);
+
+    QGeometryData data;
+    QSize f = im.size() / 2;
+    QVector2D a(-f.width(), -f.height());
+    QVector2D b(f.width(), -f.height());
+    QVector2D c(f.width(), f.height());
+    QVector2D d(-f.width(), f.height());
+    QVector2D ta(0, 1);
+    QVector2D tb(1, 1);
+    QVector2D tc(1, 0);
+    QVector2D td(0, 0);
+    data.appendVertex(a, b, c, d);
+    data.appendTexCoord(ta, tb, tc, td);
+    data.appendIndices(0, 1, 2);
+    data.appendIndices(0, 2, 3);
+
+    // the right hand arrow geometry is same as above, flipped X <-> -X
+    data.appendGeometry(data);
+    data.texCoord(4).setX(1);
+    data.texCoord(5).setX(0);
+    data.texCoord(6).setX(0);
+    data.texCoord(7).setX(1);
+    data.appendIndices(4, 5, 6);
+    data.appendIndices(4, 6, 7);
+
+    zoomInButton->setGeometry(data);
+    zoomInButton->setCount(6);
+    zoomInButton->setOption(QGLSceneNode::CullBoundingBox, false);
+
+
+    zoomOutButton = new QGLSceneNode(this);
+    QGLMaterial *matOut = new QGLMaterial;
+    QImage imOut(":/icons/zoom_out.png");
+    QGLTexture2D *texOut = new QGLTexture2D(matOut);
+    m_LoadedTextures.push_back(texOut);
+    texOut->setImage(imOut);
+    matOut->setTexture(texOut);
+
+    zoomOutButton->setMaterial(matOut);
+    zoomOutButton->setEffect(QGL::FlatReplaceTexture2D);
+
+    zoomOutButton->setGeometry(data);
+    zoomOutButton->setCount(6);
+    zoomOutButton->setOption(QGLSceneNode::CullBoundingBox, false);
+}
+
+void NavigateButton::createScaleNode()
+{
+    scaleButton = new QGLSceneNode(this);
+    QGLMaterial *mat = new QGLMaterial;
+    QImage im(":/icons/scale_button.png");
+    QGLTexture2D *tex = new QGLTexture2D(mat);
+    m_LoadedTextures.push_back(tex);
+    tex->setImage(im);
+    mat->setTexture(tex);
+
+    scaleButton->setMaterial(mat);
+    scaleButton->setEffect(QGL::FlatReplaceTexture2D);
+
+    QGeometryData data;
+    QSize f = im.size() / 2;
+    QVector2D a(-f.width(), -f.height());
+    QVector2D b(f.width(), -f.height());
+    QVector2D c(f.width(), f.height());
+    QVector2D d(-f.width(), f.height());
+    QVector2D ta(0, 1);
+    QVector2D tb(1, 1);
+    QVector2D tc(1, 0);
+    QVector2D td(0, 0);
+    data.appendVertex(a, b, c, d);
+    data.appendTexCoord(ta, tb, tc, td);
+    data.appendIndices(0, 1, 2);
+    data.appendIndices(0, 2, 3);
+
+    // the right hand arrow geometry is same as above, flipped X <-> -X
+    data.appendGeometry(data);
+    data.texCoord(4).setX(1);
+    data.texCoord(5).setX(0);
+    data.texCoord(6).setX(0);
+    data.texCoord(7).setX(1);
+    data.appendIndices(4, 5, 6);
+    data.appendIndices(4, 6, 7);
+
+    scaleButton->setGeometry(data);
+    scaleButton->setCount(6);
+    scaleButton->setOption(QGLSceneNode::CullBoundingBox, false);
+
+    verts.clear();
+    verts.append(m_size.width() - 10, 250);
+    verts.append(m_size.width() - 10, 136);
+
+    verts.append(m_size.width() - 6, 250);
+    verts.append(m_size.width() - 14, 250);
+
+    verts.append(m_size.width() - 6, 136);
+    verts.append(m_size.width() - 14, 136);
 }
 
 void NavigateButton::drawSector(QVector2D navigateVector, QGLPainter *painter)

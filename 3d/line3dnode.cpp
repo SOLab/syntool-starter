@@ -70,7 +70,7 @@ void Line3DNode::createLine(GeoCoords pos1, GeoCoords pos2)
         verts.append(curDecartNext.x(), curDecartNext.y(), curDecartNext.z());
 
         curLon += oneSliceDegrees;
-        curLat+=oneStackDegrees;
+        curLat += oneStackDegrees;
     }
 }
 

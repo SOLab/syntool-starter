@@ -69,6 +69,7 @@ EarthView::EarthView(ConfigData *configData, QWindow *parent)
     showGridFlag = false;
 
     scale = 1;
+    maxScale = 20480;
     scale2F = QSizeF(2/scale,2/scale);
     float fov = camera()->fieldOfView();
     if (fov != 0.0f)
@@ -87,7 +88,7 @@ EarthView::EarthView(ConfigData *configData, QWindow *parent)
     currentMouseLat = -1000;
     currentMouseLon = -1000;
 
-    navigateButton = new NavigateButton(this, m_palette);
+    navigateButton = new NavigateButton(this, m_palette, maxScale);
 
     m_scene = new EarthScene(this);
     m_scene->setPickable(true);
@@ -152,9 +153,9 @@ void EarthView::paintGL(QGLPainter *painter)
     }
 
     if (showCoordsFlag)
-        navigateButton->draw(painter, showCoordsFlag, currentMouseLat, currentMouseLon);
+        navigateButton->draw(painter, scale, showCoordsFlag, currentMouseLat, currentMouseLon);
     else
-        navigateButton->draw(painter, showCoordsFlag);
+        navigateButton->draw(painter, scale, showCoordsFlag);
 
 //    getMemUsage();
 
@@ -260,7 +261,7 @@ void EarthView::scalePlus()
     // 28672 - zoom 14
     // 1792 - zoom 10
     // 224 - zoom 7 maximum
-    if (scale < 20480)
+    if (scale < maxScale)
     {
         scalePlusMinusSlot(true);
     }

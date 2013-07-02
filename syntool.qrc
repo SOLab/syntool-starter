@@ -70,5 +70,8 @@
         <file alias="left_top.png">resources/icons/left_top.png</file>
         <file alias="target.png">resources/icons/Target.png</file>
         <file alias="favorites.png">resources/icons/Favourites.png</file>
+        <file alias="zoom_in.png">resources/icons/zoom_in.png</file>
+        <file alias="zoom_out.png">resources/icons/zoom_out.png</file>
+        <file alias="scale_button.png">resources/icons/scale_button.png</file>
     </qresource>
 </RCC>
