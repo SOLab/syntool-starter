@@ -2,6 +2,7 @@
 #define STRUCTURE_H
 #include <QString>
 #include <QCache>
+#include <QDateTime>
 
 namespace LogLevel {
     enum LogLevelValue{
@@ -70,6 +71,10 @@ struct ConfigData{
     qint32  numberCachedTiledGranules;
 
     qint32 timeLineMoveFrequency;
+
+    QList<qint32>* favoriteProducts;
+    QList<qint32>* selectedProducts;
+    QDateTime     datetime;
 };
 
 struct BoundingBox {

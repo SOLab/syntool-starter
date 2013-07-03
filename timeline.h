@@ -83,6 +83,7 @@ public:
     void setSelectedProducts(QHash<QString, selectedProduct>* selectedProductsValue,
                              QHash<QString, Granule>* granulesHashValue);
     param control_;
+    void setFixedDate(QDateTime dateTime);
 
 protected:
     void createBottomRect();

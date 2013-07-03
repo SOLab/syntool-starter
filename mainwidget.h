@@ -76,6 +76,9 @@ protected:
 private:
 
 public slots:
+    void fileOpen();
+    void fileSave();
+
     void aboutProgram();
     void openHandBook();
     void showTimeLine();

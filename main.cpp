@@ -60,6 +60,8 @@ int main(int argc, char *argv[])
     QApplication::setFont(newFont);
 
     ConfigData *configData = new ConfigData;
+    configData->selectedProducts = new QList<qint32>;
+    configData->favoriteProducts = new QList<qint32>;
 
     configData->configDir = QDir::homePath();
     configData->configFile = configData->configDir + "/syntool.cfg";

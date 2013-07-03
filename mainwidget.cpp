@@ -169,13 +169,13 @@ void MainWindow::createMenuBar()
     QMenu* fileMenu = menuBar()->addMenu("&"+tr("File"));
     QIcon::setThemeName("oxygen");
 
-    QAction* openAction = new QAction(QIcon(":/icons/open.png"), "&"+tr("Open"), this);
+    QAction* openAction = new QAction(QIcon(":/icons/open.png"), "&"+tr("Load"), this);
     openAction->setShortcut(QKeySequence::Open);
-
+    connect(openAction, &QAction::triggered, this, &MainWindow::fileOpen);
 
     QAction* saveAction = new QAction(QIcon(":/icons/save.png"), "&"+tr("Save"), this);
     saveAction->setShortcut(QKeySequence::Save);
-
+    connect(saveAction, &QAction::triggered, this, &MainWindow::fileSave);
 
     QAction* exitAction = new QAction(QIcon(":/icons/exit.png"), tr("Exit"), this);
 //    exitAction->setShortcut(Qt::Key_Q+Qt::CTRL);
@@ -186,9 +186,9 @@ void MainWindow::createMenuBar()
 //    connect(saveAction, SIGNAL(triggered()), this, SLOT(save()));
     connect(exitAction, &QAction::triggered, this, &MainWindow::close);
 
-//    fileMenu->addAction(openAction);
-//    fileMenu->addAction(saveAction);
-//    fileMenu->addSeparator();
+    fileMenu->addAction(openAction);
+    fileMenu->addAction(saveAction);
+    fileMenu->addSeparator();
     fileMenu->addAction(exitAction);
 
 /////////////// Edit tab
@@ -304,7 +304,21 @@ void MainWindow::createPythonConsole()
 //    window->show();
 //    mainContext.addObject("window", window);
 //    mainContext.addObject("button1", button1);
-//    mainContext.addObject("button2", button2);
+    //    mainContext.addObject("button2", button2);
+}
+
+void MainWindow::fileOpen()
+{
+    configData = readConfigFile(configData);
+    productsWgt->updateButtons();
+    productsWgt->addSavedProducts();
+    timeLine->setFixedDate(configData->datetime);
+}
+
+void MainWindow::fileSave()
+{
+    configData->datetime = timeLine->control_.currentDate;
+    writeTimeProductsToConfig(configData);
 }
 
 void MainWindow::keyPress(QKeyEvent *e)

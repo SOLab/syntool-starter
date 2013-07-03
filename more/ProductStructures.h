@@ -51,11 +51,12 @@ struct Product{
 
 struct selectedProduct{
     QString productName;
-    float west;
-    float east;
-    float south;
-    float north;
+    float   west;
+    float   east;
+    float   south;
+    float   north;
     QString parameter;
+    qint32  id;
 };
 
 #endif // PRODUCTSTRUCTURES_H

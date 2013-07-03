@@ -583,6 +583,18 @@ void TimeLine::setDate()
     calendar->show();
 }
 
+void TimeLine::setFixedDate(QDateTime dateTime)
+{
+    control_.currentDate = dateTime;
+
+    qint64 daysDiff = notChangedDate.daysTo(control_.currentDate.date());
+    if (qAbs(daysDiff) > 3)
+    {
+        notChangedDate = control_.currentDate.date();
+        changedDay();
+    }
+}
+
 void TimeLine::setCurrentDate()
 {
     control_.currentDate.setDate(calendar->calendar->selectedDate());

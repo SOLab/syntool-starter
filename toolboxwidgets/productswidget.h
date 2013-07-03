@@ -40,9 +40,11 @@ public:
                              QHash<QString, Granule>* granulesHashValue);
     void setObjectsPointer(TimeLine* timeLine);
 
+    void updateButtons();
 protected:
     QVBoxLayout*           vLayout;
     QDomDocument*          dom;
+    ConfigData*            _configData;
     QString                serverName;
     QString                cacheDir;
     QUrl                   urlProducts;
@@ -79,9 +81,6 @@ protected:
     QHash<QString, selectedProduct>* selectedProducts;
     QHash<QString, Granule>*         granulesHash;
 
-    // list of favorites productId
-    QList<qint32>* favoritesProductsList;
-
     TimeLine*    timeLinePointer;
     GetGranules* getGranulesPointer;
     void getGranulesForNewProduct();
@@ -100,7 +99,8 @@ public slots:
     void getNewGranules(int scale);
 
     void reloadProductsList();
-    void addProduct(ProductType::Type productType = ProductType::Product);
+    void addProduct(ProductType::Type productType = ProductType::Product, QString productName = "");
+    void addSavedProducts();
     void addProductToFavorites(bool value);
     void slotProductInfo();
 

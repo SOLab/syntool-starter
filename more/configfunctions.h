@@ -3,6 +3,7 @@
 #include "structure.h"
 #include <QMessageBox>
 #include <QObject>
+#include <QSettings>
 
 inline bool createConfigFile(ConfigData *configData)
 {
@@ -51,8 +52,40 @@ inline ConfigData* readConfigFile(ConfigData *configData)
     configData->numberCachedTiledGranules = settings->value("cache/number_tiled_granules", 100).toInt();
 
     configData->timeLineMoveFrequency = settings->value("other/timeline_move_frequency", 500).toInt();
+
+    configData->datetime = settings->value("other/current_datetime",
+                                           QDateTime::currentDateTime().toString(Qt::ISODate)).toDateTime();
+
+    configData->favoriteProducts->clear();
+    QStringList favoriteProductsStringList = settings->value("other/favorite_products").toStringList();
+    foreach(QString n, favoriteProductsStringList) configData->favoriteProducts->append(n.toInt());
+
+    configData->selectedProducts->clear();
+    QStringList addedProductsStringList = settings->value("other/selected_products").toStringList();
+    foreach(QString n, addedProductsStringList) configData->selectedProducts->append(n.toInt());
+
     delete settings;
     return configData;
+}
+
+inline void writeTimeProductsToConfig(ConfigData* configData)
+{
+    QSettings *settings = new QSettings(configData->configFile, QSettings::IniFormat);
+
+    settings->setValue("other/current_datetime", configData->datetime);
+
+    QStringList favoriteProductsStringList;
+    foreach(int n, *configData->favoriteProducts) favoriteProductsStringList << QString::number(n);
+    settings->setValue("other/favorite_products", favoriteProductsStringList);
+
+    QStringList addedProductsStringList;
+    foreach(int n, *configData->selectedProducts) addedProductsStringList << QString::number(n);
+    settings->setValue("other/selected_products", addedProductsStringList);
+
+    settings->sync();
+    delete settings;
+
+    configData = readConfigFile(configData);
 }
 
 // remove all granules and tiles from cache
