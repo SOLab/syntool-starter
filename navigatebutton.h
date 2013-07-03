@@ -15,12 +15,12 @@ public:
                      QSharedPointer<QGLMaterialCollection> palette, float maxScale);
     ~NavigateButton();
     void draw(QGLPainter *painter, float scale, bool drawCoords, qreal lat=-1000, qreal lon=-1000);
-    void clearPositions();
-    void createButton();
+
+    void createButtons();
     void drawSector(QVector2D navigateVector, QGLPainter *painter);
     void drawText(QGLPainter *painter, const QString &str, const QPoint &posn);
 
-    QGLSceneNode* subButton;
+    QGLSceneNode* navButton;
     QGLSceneNode* zoomInButton;
     QGLSceneNode* zoomOutButton;
     QGLSceneNode* scaleButton;
@@ -34,8 +34,7 @@ private:
     QVector2DArray verts;
 
     QGLView* viewPointer;
-    void createZoomButtons();
-    void createScaleNode();
+    QGLSceneNode* createButton(QString imageName);
 
 signals:
     void pressed();

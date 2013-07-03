@@ -168,9 +168,9 @@ void EarthView::paintGL(QGLPainter *painter)
     // calculate position 2D buttons
     if (!navigateValueInit)
     {
-        centerNavigateButton = navigateButton->subButton->boundingBox().center();
-        radiusNavigateButton =  (navigateButton->subButton->boundingBox().maximum().x() -
-                      navigateButton->subButton->boundingBox().minimum().x()) / 2;
+        centerNavigateButton = navigateButton->navButton->boundingBox().center();
+        radiusNavigateButton =  (navigateButton->navButton->boundingBox().maximum().x() -
+                      navigateButton->navButton->boundingBox().minimum().x()) / 2;
         navigateValueInit = true;
     }
 

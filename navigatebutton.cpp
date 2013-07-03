@@ -14,7 +14,7 @@ NavigateButton::NavigateButton(QObject *parent, QSharedPointer<QGLMaterialCollec
     setObjectName("Buttons");
     setPalette(palette);
     setOption(QGLSceneNode::CullBoundingBox, false);
-    createButton();
+    createButtons();
     viewPointer = qobject_cast<QGLView*>(parent);
 }
 
@@ -38,10 +38,10 @@ void NavigateButton::draw(QGLPainter *painter, float scale, bool drawCoords, qre
     painter->projectionMatrix() = projm;
     painter->modelViewMatrix().setToIdentity();
 
-    if (subButton->position().isNull())
+    if (navButton->position().isNull())
     {
         QVector2D pos(m_size - 10, 38);
-        subButton->setPosition(pos);
+        navButton->setPosition(pos);
     }
 
     if (zoomInButton->position().isNull())
@@ -138,159 +138,15 @@ void NavigateButton::drawText(QGLPainter *painter, const QString& str, const QPo
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void NavigateButton::clearPositions()
+void NavigateButton::createButtons()
 {
-    subButton->setPosition(QVector3D());
-}
+    navButton = createButton(":/navigate_blue.png");
 
-void NavigateButton::createButton()
-{
-    // create subButton
-    subButton = new QGLSceneNode(this);
-    subButton->setObjectName("Navigate");
+    zoomInButton = createButton(":/icons/zoom_in.png");
 
-    QGLMaterial *mat = new QGLMaterial;
-    QImage im(":/navigate_blue.png");
-    m_size = 48;
-    QGLTexture2D *tex = new QGLTexture2D(mat);
-    m_LoadedTextures.push_back(tex);
-    tex->setImage(im);
-    mat->setTexture(tex);
+    zoomOutButton = createButton(":/icons/zoom_out.png");
 
-    subButton->setMaterial(mat);
-    subButton->setEffect(QGL::FlatReplaceTexture2D);
-
-    QGeometryData data;
-    QSize f = im.size() / 2;
-    QVector2D a(-f.width(), -f.height());
-    QVector2D b(f.width(), -f.height());
-    QVector2D c(f.width(), f.height());
-    QVector2D d(-f.width(), f.height());
-    QVector2D ta(0, 1);
-    QVector2D tb(1, 1);
-    QVector2D tc(1, 0);
-    QVector2D td(0, 0);
-    data.appendVertex(a, b, c, d);
-    data.appendTexCoord(ta, tb, tc, td);
-    data.appendIndices(0, 1, 2);
-    data.appendIndices(0, 2, 3);
-
-    // the right hand arrow geometry is same as above, flipped X <-> -X
-    data.appendGeometry(data);
-    data.texCoord(4).setX(1);
-    data.texCoord(5).setX(0);
-    data.texCoord(6).setX(0);
-    data.texCoord(7).setX(1);
-    data.appendIndices(4, 5, 6);
-    data.appendIndices(4, 6, 7);
-
-    subButton->setGeometry(data);
-    subButton->setCount(6);
-    subButton->setOption(QGLSceneNode::CullBoundingBox, false);
-
-    // create zoom buttons
-    createZoomButtons();
-    createScaleNode();
-}
-
-void NavigateButton::createZoomButtons()
-{
-    zoomInButton = new QGLSceneNode(this);
-    QGLMaterial *mat = new QGLMaterial;
-    QImage im(":/icons/zoom_in.png");
-    QGLTexture2D *tex = new QGLTexture2D(mat);
-    m_LoadedTextures.push_back(tex);
-    tex->setImage(im);
-    mat->setTexture(tex);
-
-    zoomInButton->setMaterial(mat);
-    zoomInButton->setEffect(QGL::FlatReplaceTexture2D);
-
-    QGeometryData data;
-    QSize f = im.size() / 2;
-    QVector2D a(-f.width(), -f.height());
-    QVector2D b(f.width(), -f.height());
-    QVector2D c(f.width(), f.height());
-    QVector2D d(-f.width(), f.height());
-    QVector2D ta(0, 1);
-    QVector2D tb(1, 1);
-    QVector2D tc(1, 0);
-    QVector2D td(0, 0);
-    data.appendVertex(a, b, c, d);
-    data.appendTexCoord(ta, tb, tc, td);
-    data.appendIndices(0, 1, 2);
-    data.appendIndices(0, 2, 3);
-
-    // the right hand arrow geometry is same as above, flipped X <-> -X
-    data.appendGeometry(data);
-    data.texCoord(4).setX(1);
-    data.texCoord(5).setX(0);
-    data.texCoord(6).setX(0);
-    data.texCoord(7).setX(1);
-    data.appendIndices(4, 5, 6);
-    data.appendIndices(4, 6, 7);
-
-    zoomInButton->setGeometry(data);
-    zoomInButton->setCount(6);
-    zoomInButton->setOption(QGLSceneNode::CullBoundingBox, false);
-
-
-    zoomOutButton = new QGLSceneNode(this);
-    QGLMaterial *matOut = new QGLMaterial;
-    QImage imOut(":/icons/zoom_out.png");
-    QGLTexture2D *texOut = new QGLTexture2D(matOut);
-    m_LoadedTextures.push_back(texOut);
-    texOut->setImage(imOut);
-    matOut->setTexture(texOut);
-
-    zoomOutButton->setMaterial(matOut);
-    zoomOutButton->setEffect(QGL::FlatReplaceTexture2D);
-
-    zoomOutButton->setGeometry(data);
-    zoomOutButton->setCount(6);
-    zoomOutButton->setOption(QGLSceneNode::CullBoundingBox, false);
-}
-
-void NavigateButton::createScaleNode()
-{
-    scaleButton = new QGLSceneNode(this);
-    QGLMaterial *mat = new QGLMaterial;
-    QImage im(":/icons/scale_button.png");
-    QGLTexture2D *tex = new QGLTexture2D(mat);
-    m_LoadedTextures.push_back(tex);
-    tex->setImage(im);
-    mat->setTexture(tex);
-
-    scaleButton->setMaterial(mat);
-    scaleButton->setEffect(QGL::FlatReplaceTexture2D);
-
-    QGeometryData data;
-    QSize f = im.size() / 2;
-    QVector2D a(-f.width(), -f.height());
-    QVector2D b(f.width(), -f.height());
-    QVector2D c(f.width(), f.height());
-    QVector2D d(-f.width(), f.height());
-    QVector2D ta(0, 1);
-    QVector2D tb(1, 1);
-    QVector2D tc(1, 0);
-    QVector2D td(0, 0);
-    data.appendVertex(a, b, c, d);
-    data.appendTexCoord(ta, tb, tc, td);
-    data.appendIndices(0, 1, 2);
-    data.appendIndices(0, 2, 3);
-
-    // the right hand arrow geometry is same as above, flipped X <-> -X
-    data.appendGeometry(data);
-    data.texCoord(4).setX(1);
-    data.texCoord(5).setX(0);
-    data.texCoord(6).setX(0);
-    data.texCoord(7).setX(1);
-    data.appendIndices(4, 5, 6);
-    data.appendIndices(4, 6, 7);
-
-    scaleButton->setGeometry(data);
-    scaleButton->setCount(6);
-    scaleButton->setOption(QGLSceneNode::CullBoundingBox, false);
+    scaleButton = createButton(":/icons/scale_button.png");
 
     verts.clear();
     verts.append(m_size - 10, 254);
@@ -301,6 +157,53 @@ void NavigateButton::createScaleNode()
 
     verts.append(m_size - 6, 130);
     verts.append(m_size - 14, 130);
+}
+
+QGLSceneNode* NavigateButton::createButton(QString imageName)
+{
+    // create _button
+    QGLSceneNode* _button = new QGLSceneNode(this);
+    _button->setObjectName(imageName);
+
+    QGLMaterial *mat = new QGLMaterial;
+    QImage im(imageName);
+    m_size = 48;
+    QGLTexture2D *tex = new QGLTexture2D(mat);
+    m_LoadedTextures.push_back(tex);
+    tex->setImage(im);
+    mat->setTexture(tex);
+
+    _button->setMaterial(mat);
+    _button->setEffect(QGL::FlatReplaceTexture2D);
+
+    QGeometryData data;
+    QSize f = im.size() / 2;
+    QVector2D a(-f.width(), -f.height());
+    QVector2D b(f.width(), -f.height());
+    QVector2D c(f.width(), f.height());
+    QVector2D d(-f.width(), f.height());
+    QVector2D ta(0, 1);
+    QVector2D tb(1, 1);
+    QVector2D tc(1, 0);
+    QVector2D td(0, 0);
+    data.appendVertex(a, b, c, d);
+    data.appendTexCoord(ta, tb, tc, td);
+    data.appendIndices(0, 1, 2);
+    data.appendIndices(0, 2, 3);
+
+    // the right hand arrow geometry is same as above, flipped X <-> -X
+    data.appendGeometry(data);
+    data.texCoord(4).setX(1);
+    data.texCoord(5).setX(0);
+    data.texCoord(6).setX(0);
+    data.texCoord(7).setX(1);
+    data.appendIndices(4, 5, 6);
+    data.appendIndices(4, 6, 7);
+
+    _button->setGeometry(data);
+    _button->setCount(6);
+    _button->setOption(QGLSceneNode::CullBoundingBox, false);
+    return _button;
 }
 
 void NavigateButton::drawSector(QVector2D navigateVector, QGLPainter *painter)
@@ -327,8 +230,8 @@ void NavigateButton::drawSector(QVector2D navigateVector, QGLPainter *painter)
     QVector2DArray vertices;
     QVector3DArray normals;
 
-    QVector3D pos = subButton->position();
-    int radius = subButton->boundingBox().maximum().x() - pos.x();
+    QVector3D pos = navButton->position();
+    int radius = navButton->boundingBox().maximum().x() - pos.x();
 
     float a=qAtan(navigateVector.y()/navigateVector.x());
 
