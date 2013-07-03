@@ -40,28 +40,28 @@ void NavigateButton::draw(QGLPainter *painter, float scale, bool drawCoords, qre
 
     if (subButton->position().isNull())
     {
-        QVector2D pos(m_size.width() - 10, 38);
+        QVector2D pos(m_size - 10, 38);
         subButton->setPosition(pos);
     }
 
     if (zoomInButton->position().isNull())
     {
-        QVector2D pos(m_size.width() - 10, 96);
+        QVector2D pos(m_size - 10, 96);
         zoomInButton->setPosition(pos);
     }
 
     if (zoomOutButton->position().isNull())
     {
-        QVector2D pos(m_size.width() - 10, 288);
+        QVector2D pos(m_size - 10, 288);
         zoomOutButton->setPosition(pos);
     }
 
     if (m_curDivisions != curDivisions)
     {
-        qint32 yPos = 250 - (150/numberDivisions*curDivisions);
-        qCritical() << yPos;
-        QVector2D pos(m_size.width() - 10, yPos);
+        qint32 yPos = 254 - (124/float(numberDivisions)*curDivisions);
+        QVector2D pos(m_size - 10, yPos);
         scaleButton->setPosition(pos);
+        m_curDivisions = curDivisions;
     }
 
     glDisable(GL_DEPTH_TEST);
@@ -73,7 +73,7 @@ void NavigateButton::draw(QGLPainter *painter, float scale, bool drawCoords, qre
     painter->setStandardEffect(QGL::FlatColor);
 
     painter->setVertexAttribute(QGL::Position , verts);
-    painter->setColor(QColor(0,149,183));
+    painter->setColor(QColor(0,80,140));
     painter->draw(QGL::Lines,verts.size());
 
     QGLSceneNode::draw(painter);
@@ -150,8 +150,8 @@ void NavigateButton::createButton()
     subButton->setObjectName("Navigate");
 
     QGLMaterial *mat = new QGLMaterial;
-    QImage im(":/navigate.png");
-    m_size = im.size();
+    QImage im(":/navigate_blue.png");
+    m_size = 48;
     QGLTexture2D *tex = new QGLTexture2D(mat);
     m_LoadedTextures.push_back(tex);
     tex->setImage(im);
@@ -198,7 +198,6 @@ void NavigateButton::createZoomButtons()
     zoomInButton = new QGLSceneNode(this);
     QGLMaterial *mat = new QGLMaterial;
     QImage im(":/icons/zoom_in.png");
-//    m_size = im.size();
     QGLTexture2D *tex = new QGLTexture2D(mat);
     m_LoadedTextures.push_back(tex);
     tex->setImage(im);
@@ -294,14 +293,14 @@ void NavigateButton::createScaleNode()
     scaleButton->setOption(QGLSceneNode::CullBoundingBox, false);
 
     verts.clear();
-    verts.append(m_size.width() - 10, 250);
-    verts.append(m_size.width() - 10, 136);
+    verts.append(m_size - 10, 254);
+    verts.append(m_size - 10, 130);
 
-    verts.append(m_size.width() - 6, 250);
-    verts.append(m_size.width() - 14, 250);
+    verts.append(m_size - 6, 254);
+    verts.append(m_size - 14, 254);
 
-    verts.append(m_size.width() - 6, 136);
-    verts.append(m_size.width() - 14, 136);
+    verts.append(m_size - 6, 130);
+    verts.append(m_size - 14, 130);
 }
 
 void NavigateButton::drawSector(QVector2D navigateVector, QGLPainter *painter)
@@ -323,7 +322,7 @@ void NavigateButton::drawSector(QVector2D navigateVector, QGLPainter *painter)
     painter->setStandardEffect(QGL::FlatColor);
     int alpha = qSqrt(qPow(navigateVector.x(), 2)+qPow(navigateVector.y(), 2));
 //    painter->setColor(QColor(88, 131, 190, alpha*4));
-    painter->setColor(QColor(0, 192, 0, alpha*4));
+    painter->setColor(QColor(46, 136, 216, alpha*4));
 
     QVector2DArray vertices;
     QVector3DArray normals;

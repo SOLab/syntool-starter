@@ -26,7 +26,7 @@ public:
     QGLSceneNode* scaleButton;
 
 private:
-    QSize m_size;
+    qint32 m_size;
     QList<QGLTexture2D*> m_LoadedTextures;
     bool m_hovering;
     qint32 numberDivisions;
