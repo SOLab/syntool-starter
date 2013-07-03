@@ -121,7 +121,14 @@ private:
     bool        navigateValueInit;
     QVector3D   centerNavigateButton;
     QVector2D   navigateVector;
-    int         radiusNavigateButton;
+    qint32      radiusNavigateButton;
+
+    bool        zoomInButtonPressed;
+    QVector3D   centerZoomInButton;
+    qint32      radiusZoomInButton;
+    bool        zoomOutButtonPressed;
+    QVector3D   centerZoomOutButton;
+    qint32      radiusZoomOutButton;
 
     QPoint      startPan, lastPan;
     QSizeF      scale2F;

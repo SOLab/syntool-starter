@@ -79,6 +79,8 @@ EarthView::EarthView(ConfigData *configData, QWindow *parent)
 //    camera()->setFarPlane(1000);
     mousePressed = false;
     navigateButtonPressed = false;
+    zoomInButtonPressed = false;
+    zoomOutButtonPressed = false;
     navigateValueInit = false;
 
     startPan = QPoint(-1, -1);
@@ -171,6 +173,13 @@ void EarthView::paintGL(QGLPainter *painter)
         centerNavigateButton = navigateButton->navButton->boundingBox().center();
         radiusNavigateButton =  (navigateButton->navButton->boundingBox().maximum().x() -
                       navigateButton->navButton->boundingBox().minimum().x()) / 2;
+
+        centerZoomInButton = navigateButton->zoomInButton->boundingBox().center();
+        radiusZoomInButton =  (navigateButton->zoomInButton->boundingBox().maximum().x() -
+                               navigateButton->zoomInButton->boundingBox().minimum().x()) / 2;
+        centerZoomOutButton = navigateButton->zoomOutButton->boundingBox().center();
+        radiusZoomOutButton =  (navigateButton->zoomOutButton->boundingBox().maximum().x() -
+                                navigateButton->zoomOutButton->boundingBox().minimum().x()) / 2;
         navigateValueInit = true;
     }
 
@@ -590,6 +599,24 @@ void EarthView::mousePressEvent(QMouseEvent *e)
         return;
     }
 
+    dX = mouseX - centerZoomInButton.x();
+    dY = mouseY - centerZoomInButton.y();
+    if (qSqrt(qPow(dX, 2)+qPow(dY, 2)) < radiusZoomInButton)
+    {
+        zoomInButtonPressed = true;
+        navigateButtonPress();
+        return;
+    }
+
+    dX = mouseX - centerZoomOutButton.x();
+    dY = mouseY - centerZoomOutButton.y();
+    if (qSqrt(qPow(dX, 2)+qPow(dY, 2)) < radiusZoomOutButton)
+    {
+        zoomOutButtonPressed = true;
+        navigateButtonPress();
+        return;
+    }
+
     mousePressed = true;
     startPan = e->pos();
     startEye = camera()->eye();
@@ -613,6 +640,8 @@ void EarthView::mouseReleaseEvent(QMouseEvent *e)
 
     mousePressed = false;
     navigateButtonPressed = false;
+    zoomInButtonPressed = false;
+    zoomOutButtonPressed = false;
 }
 
 void EarthView::timeout()
@@ -661,8 +690,8 @@ void EarthView::navigateButtonPress()
     {
         QPoint pos = this->mapFromGlobal(QCursor::pos());
 
-        int dX = qRound(centerNavigateButton.x()) - pos.x();
-        int dY = qRound(centerNavigateButton.y()) - pos.y();
+        qint32 dX = qRound(centerNavigateButton.x()) - pos.x();
+        qint32 dY = qRound(centerNavigateButton.y()) - pos.y();
 
         if (dX > 40) dX = 40;
         if (dX < -40) dX = -40;
@@ -674,6 +703,30 @@ void EarthView::navigateButtonPress()
 
 //        navigateButton->drawSector(3,3, this->context());
         QTimer::singleShot(60, this, SLOT(navigateButtonPress()));
+    }
+    else if (zoomInButtonPressed)
+    {
+        QPoint pos = this->mapFromGlobal(QCursor::pos());
+
+        qint32 dX = pos.x() - centerZoomInButton.x();
+        qint32 dY = pos.y() - centerZoomInButton.y();
+        if (qSqrt(qPow(dX, 2)+qPow(dY, 2)) < radiusZoomInButton)
+        {
+            scalePlus();
+            QTimer::singleShot(120, this, SLOT(navigateButtonPress()));
+        }
+    }
+    else if (zoomOutButtonPressed)
+    {
+        QPoint pos = this->mapFromGlobal(QCursor::pos());
+
+        qint32 dX = pos.x() - centerZoomOutButton.x();
+        qint32 dY = pos.y() - centerZoomOutButton.y();
+        if (qSqrt(qPow(dX, 2)+qPow(dY, 2)) < radiusZoomOutButton)
+        {
+            scaleMinus();
+            QTimer::singleShot(120, this, SLOT(navigateButtonPress()));
+        }
     }
     else
     {
