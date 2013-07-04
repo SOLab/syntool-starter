@@ -91,6 +91,8 @@ MainWindow::MainWindow(ConfigData *configValue, QWidget *parent)
 
     connect(productsWgt, &ProductsWidget::productAdded, layersWgt, &LayersWidget::addProduct);
     connect(productsWgt, &ProductsWidget::productDeleted, layersWgt, &LayersWidget::deleteProduct);
+    connect(this, &MainWindow::addSavedProductSignal, productsWgt, &ProductsWidget::addSavedProducts);
+
 
     connect(layersWgt, &LayersWidget::removeProductSignal, productsWgt, &ProductsWidget::removeProduct);
     connect(layersWgt, &LayersWidget::showLayer, datasetsWgt, &DatasetsWidget::setShowProduct);

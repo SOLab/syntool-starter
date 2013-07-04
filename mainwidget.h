@@ -75,6 +75,9 @@ protected:
 
 private:
 
+signals:
+    void addSavedProductSignal(bool favoritesOnly);
+
 public slots:
     void fileOpen();
     void fileSave();

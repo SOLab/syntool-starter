@@ -300,6 +300,7 @@ void ProductsWidget::slotReadyReadProductList()
 
     comboProducts->clear();
     comboProducts->addItems(productsList);
+    addSavedProducts(true);
 }
 
 void ProductsWidget::getErrorProductList(QNetworkReply::NetworkError)
@@ -432,13 +433,16 @@ void ProductsWidget::addProduct(ProductType::Type productType, QString productNa
     qDebug() << selectedProducts->keys();
 }
 
-void ProductsWidget::addSavedProducts()
+void ProductsWidget::addSavedProducts(bool favoritesOnly)
 {
     foreach (qint32 n, *_configData->favoriteProducts)
         addProduct(ProductType::Favorite, productsIdName->value(n));
 
-    foreach (qint32 n, *_configData->selectedProducts)
-        addProduct(ProductType::Product, productsIdName->value(n));
+    if (!favoritesOnly)
+    {
+        foreach (qint32 n, *_configData->selectedProducts)
+            addProduct(ProductType::Product, productsIdName->value(n));
+    }
 }
 
 void ProductsWidget::addProductToFavorites(bool value)
@@ -454,6 +458,16 @@ void ProductsWidget::addProductToFavorites(bool value)
         _configData->favoriteProducts->removeAll(currentKey);
         emit productDeleted(comboProducts->currentText());
     }
+
+    // save favorites
+    QSettings *settings = new QSettings(_configData->configFile, QSettings::IniFormat);
+
+    QStringList favoriteProductsStringList;
+    foreach(int n, *_configData->favoriteProducts) favoriteProductsStringList << QString::number(n);
+    settings->setValue("other/favorite_products", favoriteProductsStringList);
+
+    settings->sync();
+    delete settings;
 }
 
 void ProductsWidget::getNewGranules(int scale)

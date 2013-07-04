@@ -24,6 +24,7 @@
 #include "network/downloadimage.h"
 #include <QFile>
 #include <QDir>
+#include <QSettings>
 
 #include "more/ProductStructures.h"
 #include "more/structure.h"
@@ -100,7 +101,7 @@ public slots:
 
     void reloadProductsList();
     void addProduct(ProductType::Type productType = ProductType::Product, QString productName = "");
-    void addSavedProducts();
+    void addSavedProducts(bool favoritesOnly=false);
     void addProductToFavorites(bool value);
     void slotProductInfo();
 

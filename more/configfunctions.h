@@ -85,7 +85,7 @@ inline void writeTimeProductsToConfig(ConfigData* configData)
     settings->sync();
     delete settings;
 
-    configData = readConfigFile(configData);
+//    configData = readConfigFile(configData);
 }
 
 // remove all granules and tiles from cache
