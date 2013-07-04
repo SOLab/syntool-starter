@@ -183,7 +183,7 @@ void EarthView::paintGL(QGLPainter *painter)
         navigateValueInit = true;
     }
 
-    metaGLInfoNode->drawAll(painter);
+    metaGLInfoNode->drawAll(painter, showGridFlag);
 
     glDisable(GL_BLEND);
 }

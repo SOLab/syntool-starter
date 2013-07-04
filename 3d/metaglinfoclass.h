@@ -9,6 +9,7 @@
 #include "line3dnode.h"
 #include "point3dnode.h"
 #include "rect3dnode.h"
+#include "grid3d.h"
 
 class EarthView;
 
@@ -17,12 +18,13 @@ class MetaGLInfoClass : public QGLSceneNode
     Q_OBJECT
 public:
     explicit MetaGLInfoClass(EarthView *parentView, Earth *earth, QSharedPointer<QGLMaterialCollection> palette, ConfigData *configData);
-    void drawAll(QGLPainter *painter);
+    void drawAll(QGLPainter *painter, bool showGridFlag);
     QGLSceneNode* m_floor;
 
 private:
     QSharedPointer<QGLMaterialCollection> m_palette;
     ConfigData* m_configData;
+    Grid3D* grid3D;
 
     QVector3DArray verts;
 

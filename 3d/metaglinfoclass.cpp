@@ -10,10 +10,12 @@ MetaGLInfoClass::MetaGLInfoClass(EarthView *parentView, Earth *earth, QSharedPoi
     pointHash = new QMap<qint32, Point3DNode*>();
     rectHash = new QMap<qint32, Rect3DNode*>();
 
+    grid3D = new Grid3D(this);
+    grid3D->createGrid();
     //    setParent(parentView);
 }
 
-void MetaGLInfoClass::drawAll(QGLPainter *painter)
+void MetaGLInfoClass::drawAll(QGLPainter *painter, bool showGridFlag)
 {
     QMap<qint32, Line3DNode*>::const_iterator iLine = lineHash->constBegin();
     while (iLine != lineHash->constEnd()) {
@@ -32,6 +34,9 @@ void MetaGLInfoClass::drawAll(QGLPainter *painter)
         iRect.value()->draw(painter);
         ++iRect;
     }
+
+    if (showGridFlag)
+        grid3D->draw(painter);
 }
 
 void MetaGLInfoClass::addPoint(GeoCoords pos, Geometry::Type objectType)

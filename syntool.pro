@@ -53,7 +53,8 @@ SOURCES = \
     3d/line3dnode.cpp \
     3d/point3dnode.cpp \
     3d/rect3dnode.cpp \
-    additionalwidgets/placeboxwidget.cpp
+    additionalwidgets/placeboxwidget.cpp \
+    3d/grid3d.cpp
 HEADERS = \
     mainwidget.h \
     windowwidget.h \
@@ -102,7 +103,8 @@ HEADERS = \
     3d/line3dnode.h \
     3d/point3dnode.h \
     3d/rect3dnode.h \
-    additionalwidgets/placeboxwidget.h
+    additionalwidgets/placeboxwidget.h \
+    3d/grid3d.h
 RESOURCES += \
     syntool.qrc
 DEPENDPATH += resources
