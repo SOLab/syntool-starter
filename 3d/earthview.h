@@ -76,7 +76,7 @@ class EarthView : public QGLView
 {
     Q_OBJECT
 public:
-    EarthView(ConfigData *configData, QWindow *parent = 0);
+    explicit EarthView(ConfigData *configData, QSurfaceFormat sf, QWindow *parent = 0);
     ~EarthView();
 
     void        setupViewport(int width, int height);

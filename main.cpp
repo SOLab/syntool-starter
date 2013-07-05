@@ -89,7 +89,12 @@ int main(int argc, char *argv[])
 
     clearCacheDir(configData->cacheDir);
 
-    EarthView view(configData);
+    QWindow* win = new QWindow();
+    QSurfaceFormat surfaceFormat = QSurfaceFormat();
+    surfaceFormat.setStereo(false);
+    surfaceFormat.setSwapBehavior(QSurfaceFormat::DoubleBuffer);
+    surfaceFormat.setDepthBufferSize(24);
+    EarthView view(configData, surfaceFormat, win);
     app.set_view(&view);
 
 //    // process id
