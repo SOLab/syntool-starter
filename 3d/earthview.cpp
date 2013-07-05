@@ -128,10 +128,6 @@ EarthView::EarthView(ConfigData *configData, QSurfaceFormat sf, QWindow *parent)
 
 EarthView::~EarthView()
 {
-    delete earth;
-    delete m_scene;
-    delete m_skybox;
-    delete navigateButton;
 }
 
 void EarthView::initializeGL(QGLPainter *painter)

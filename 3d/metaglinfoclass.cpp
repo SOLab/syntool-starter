@@ -15,6 +15,25 @@ MetaGLInfoClass::MetaGLInfoClass(EarthView *parentView, Earth *earth, QSharedPoi
     //    setParent(parentView);
 }
 
+MetaGLInfoClass::~MetaGLInfoClass()
+{
+    QList<qint32> keyslist = lineHash->keys();
+    for (qint32 i = 0; i < keyslist.size(); ++i)
+        delete lineHash->value(keyslist.at(i));
+
+    keyslist = pointHash->keys();
+    for (qint32 i = 0; i < keyslist.size(); ++i)
+        delete pointHash->value(keyslist.at(i));
+
+    keyslist = rectHash->keys();
+    for (qint32 i = 0; i < keyslist.size(); ++i)
+        delete rectHash->value(keyslist.at(i));
+
+    delete lineHash;
+    delete pointHash;
+    delete rectHash;
+}
+
 void MetaGLInfoClass::drawAll(QGLPainter *painter, bool showGridFlag)
 {
     QMap<qint32, Line3DNode*>::const_iterator iLine = lineHash->constBegin();

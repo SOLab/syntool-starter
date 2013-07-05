@@ -18,6 +18,7 @@ class MetaGLInfoClass : public QGLSceneNode
     Q_OBJECT
 public:
     explicit MetaGLInfoClass(EarthView *parentView, Earth *earth, QSharedPointer<QGLMaterialCollection> palette, ConfigData *configData);
+    ~MetaGLInfoClass();
     void drawAll(QGLPainter *painter, bool showGridFlag);
     QGLSceneNode* m_floor;
 

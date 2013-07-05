@@ -35,11 +35,11 @@ MainWindow::MainWindow(ConfigData *configValue, QWidget *parent)
     vlayout->setSpacing(0);
     vlayout->setContentsMargins(5,0,5,2);
 
-    centralwgt = new QWidget;
+    centralwgt = new QWidget(this);
     centralwgt->setLayout(vlayout);
     setCentralWidget(centralwgt);
 
-    splitter = new QSplitter(parent);
+    splitter = new QSplitter(this);
 
     topMenu = new TopMenu(this);
     topMenu->setFixedHeight(28);
@@ -363,5 +363,4 @@ void MainWindow::log(QtMsgType type, const QMessageLogContext &context, const QS
 
 MainWindow::~MainWindow()
 {
-//    qInstallMessageHandler(oldMsgHandler);
 }

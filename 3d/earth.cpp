@@ -4,7 +4,6 @@ const double a = 6378137.0;
 
 Earth::Earth(QObject *parent, QSharedPointer<QGLMaterialCollection> materials, ConfigData *configData)
     : QGLSceneNode(parent)
-    , m_texture(0)
 {
     setPalette(materials);
     m_configData = configData;
@@ -439,7 +438,6 @@ Earth::~Earth()
 //    for (int i=0; i<m_LoadedTextures.count(); ++i) {
 //        m_LoadedTextures.at(i)->cleanupResources();
 //    }
-        m_texture->cleanupResources();
 }
 
 void Earth::cleanupResources()
