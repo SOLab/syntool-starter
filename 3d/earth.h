@@ -50,6 +50,7 @@ private:
     bool      newZoomFlag;
 
 //    QList<QGLTexture2D*> m_LoadedTextures;
+    QGLTexture2D*        m_texture;
     QString              cacheDir;
     ConfigData*          m_configData;
 

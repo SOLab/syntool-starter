@@ -8,7 +8,7 @@ SettingsWidget::SettingsWidget(ConfigData *configValue, QWidget *parent) :
     vLayout->setAlignment(Qt::AlignTop | Qt::AlignRight);
 
     setFixedSize(450, 260);
-    setWindowTitle(tr("Tools"));
+    setWindowTitle(tr("Settings"));
 
     setWindowIcon(QIcon(":/icon/settings.png"));
 

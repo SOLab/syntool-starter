@@ -153,7 +153,7 @@ void MainWindow::aboutProgram()
 
 void MainWindow::openHandBook()
 {
-    QDesktopServices::openUrl(QUrl("http://wiki.solab.rshu.ru/Main_Page"));
+    QDesktopServices::openUrl(QUrl("http://wiki.solab.rshu.ru/Syntool"));
 }
 
 void MainWindow::showTimeLine()
