@@ -239,17 +239,18 @@ QGLSceneNode* Earth::BuildSpherePart(int separation, qreal minSphereLat, qreal m
     double xTexCoordNext;
 
     // maxSphereLon with with an error of calculations (approximately)
-    qreal maxSphereLonApprox = maxSphereLon+0.0001;
     bool firstFlag = true;
     bool lastFlag = false;
+    qreal curSphereLon, curSphereLat;
 
-    for (qreal curSphereLat = minSphereLat; curSphereLat < maxSphereLat;
-                                            curSphereLat+=oneSphereStackDegrees) {
+    for (int lat_iter = 0; lat_iter <= stacks/(qreal)separation; lat_iter++)
+    {
+        curSphereLat = minSphereLat + lat_iter * oneSphereStackDegrees;
         // calculate next point latitude
         curSphereLatNext = curSphereLat + oneSphereStackDegrees;
 
         // if next latitude is max latitude
-        if (qAbs(curSphereLatNext - maxSphereLat) < 0.001)
+        if (qAbs(curSphereLatNext - maxSphereLat) < 0.0001)
         {
             curSphereLatNext = maxSphereLat;
             curSphereLat = maxSphereLat - oneSphereStackDegrees;
@@ -265,9 +266,10 @@ QGLSceneNode* Earth::BuildSpherePart(int separation, qreal minSphereLat, qreal m
         yTexCoordNext = (curMerLatNext - minMerLat) / qreal(maxMerLat - minMerLat);
 
         prim.clear();
-        for (qreal curSphereLon = minSphereLon; curSphereLon < maxSphereLonApprox;
-                                                curSphereLon += oneSphereSliceDegrees)
+
+        for (int lon_iter = 0; lon_iter <= slices/(qreal)separation; lon_iter++)
         {
+            curSphereLon = minSphereLon + lon_iter * oneSphereSliceDegrees;
             // calculate decart coordinates (x,y,z) for Vertex and Normal
             curDecart = llh2xyz((curSphereLat), curSphereLon);
 
