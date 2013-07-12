@@ -20,8 +20,8 @@ void Line3DNode::createLine(GeoCoords pos1, GeoCoords pos2)
     pos2.lon = -1*pos2.lon;
 
     // all stacks and slices
-    qint32 stacks = 64;
-    qint32 slices = 64;
+    qint32 stacks = 128;
+    qint32 slices = 128;
     qint32 separation = 1;
 
     if (qAbs(pos2.lon - pos1.lon) > M_PI)
@@ -87,8 +87,8 @@ void Line3DNode::createParallelLine(GeoCoords pos1, GeoCoords pos2)
     pos2.lon = M_PI;
 
     // all stacks and slices
-    qint32 stacks = 64;
-    qint32 slices = 64;
+    qint32 stacks = 128;
+    qint32 slices = 128;
 
     qreal oneStackDegrees = (pos2.lat - pos1.lat) / qreal(stacks);
     qreal oneSliceDegrees = (pos2.lon - pos1.lon) / qreal(slices);

@@ -16,21 +16,21 @@ Grid3D::~Grid3D()
 void Grid3D::createGrid()
 {
     // create meridians
-    qreal start = -M_PI;
-    qreal df = M_PI/18.0;
+    qreal one_part = -M_PI/18.0;
 
     GeoCoords pos1;
     GeoCoords pos2;
+    qreal cur_pos;
 
     pos1.lat = 85/180.0*M_PI;
     pos2.lat = -pos1.lat;
 
     for (int i = 0; i < 36; i++)
     {
-        start += df;
+        cur_pos = one_part * i;
 
-        pos1.lon = start;
-        pos2.lon = start;
+        pos1.lon = cur_pos;
+        pos2.lon = cur_pos;
 
         Line3DNode* lineNode = new Line3DNode(this);
         lineNode->setLineWidth(1.0f);
@@ -41,13 +41,14 @@ void Grid3D::createGrid()
     }
 
     // create parallels
-    start = -85/180.0*M_PI;
-    df = pos1.lat/17;
+    one_part = -85/(180.0*17)*M_PI;
 
-    for (int i = 0; i < 35; i++)
+    for (int i = -17; i < 18; i++)
     {
-        pos1.lat = start;
-        pos2.lat = start;
+        cur_pos = one_part * i;
+
+        pos1.lat = cur_pos;
+        pos2.lat = cur_pos;
 
         Line3DNode* lineNode = new Line3DNode(this);
         lineNode->setLineWidth(1.0f);
@@ -55,8 +56,6 @@ void Grid3D::createGrid()
 
         lineNode->createParallelLine(pos1, pos2);
         lines->append(lineNode);
-
-        start += df;
     }
 }
 
