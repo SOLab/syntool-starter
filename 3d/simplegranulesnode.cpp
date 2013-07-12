@@ -290,15 +290,16 @@ QGLSceneNode* SimpleGranulesNode::BuildGranuleMerNode(int separation, qreal minS
     double yTexCoordNext;
     double xTexCoord;
     double xTexCoordNext;
+    qreal curSphereLon, curSphereLat;
 
     // maxSphereLon with with an error of calculations (approximately)
-    qreal maxSphereLonApprox = maxSphereLon+0.0001;
     bool firstFlag = true;
     bool lastFlag = false;
-    m_altitude = 0.001 + height()/10000.0;
+    m_altitude = 0.0001 + height()/10000.0;
 
-    for (qreal curSphereLat = minSphereLat; curSphereLat < maxSphereLat;
-                                            curSphereLat+=oneSphereStackDegrees) {
+    for (int lat_iter = 0; lat_iter <= stacks/(qreal)separation; lat_iter++)
+    {
+        curSphereLat = minSphereLat + lat_iter * oneSphereStackDegrees;
         // calculate next point latitude
         curSphereLatNext = curSphereLat + oneSphereStackDegrees;
 
@@ -321,9 +322,10 @@ QGLSceneNode* SimpleGranulesNode::BuildGranuleMerNode(int separation, qreal minS
         yTexCoordNext = (curMerLatNext - minMerLat) / qreal(maxMerLat - minMerLat);
 
         prim.clear();
-        for (qreal curSphereLon = minSphereLon; curSphereLon < maxSphereLonApprox;
-                                                curSphereLon += oneSphereSliceDegrees)
+
+        for (int lon_iter = 0; lon_iter <= slices/(qreal)separation; lon_iter++)
         {
+            curSphereLon = minSphereLon + lon_iter * oneSphereSliceDegrees;
             // calculate decart coordinates (x,y,z) for Vertex and Normal
             curDecart = llh2xyz(curSphereLat, curSphereLon, m_altitude);
 
