@@ -144,6 +144,9 @@ void EarthView::paintGL(QGLPainter *painter)
 //    glDisable(GL_CULL_FACE);
     m_skybox->draw(painter);
     earth->draw(painter);
+
+    metaGLInfoNode->drawAll(painter, showGridFlag);
+
     if (!hideAllFlag)
     {
         metaGranulesNode->drawSimpleGranules(painter);
@@ -178,8 +181,6 @@ void EarthView::paintGL(QGLPainter *painter)
                                 navigateButton->zoomOutButton->boundingBox().minimum().x()) / 2;
         navigateValueInit = true;
     }
-
-    metaGLInfoNode->drawAll(painter, showGridFlag);
 
     glDisable(GL_BLEND);
 }

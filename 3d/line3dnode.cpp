@@ -40,7 +40,7 @@ void Line3DNode::createLine(GeoCoords pos1, GeoCoords pos2)
 
     // maxSphereLon with with an error of calculations (approximately)
 //    qreal maxSphereLonApprox = pos2.lon+0.0001;
-    qreal m_altitude = 0.001;// + height()/10000.0;
+    qreal m_altitude = 0.00001;
 
     qreal curLon = pos1.lon;
     qreal curLat = pos1.lat;
