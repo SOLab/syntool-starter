@@ -180,7 +180,7 @@ void Earth::textureDownloaded(qint32 cur_zoom, qint32 lonTileNum, qint32 latTile
         TileCacheNumber tileNumber = TileCacheNumber(cur_zoom, lonTileNum,separation-1-latTileNum);
 
         GLSceneNodeWrapper* sceneNodeWrapper = new GLSceneNodeWrapper;
-        sceneNodeWrapper->setGLSceneNodeObject(sceneNode);
+        sceneNodeWrapper->setGLSceneNodeObject(sceneNode, this);
 
         tileNodeCache->insert(tileNumber, sceneNodeWrapper);
         sceneNode->setObjectName(nodeObjectName);
@@ -341,8 +341,10 @@ bool Earth::addTextureToTile(QGLSceneNode* tempNode, int separation, int lonTile
     QGLMaterial *mat1 = new QGLMaterial;
     mat1->setTexture(tex, 0);
 
-//    m_LoadedTextures.insert(filepath, mat1->texture(0));
-//    m_LoadedTextures.push_back(mat1->texture(0));
+//    m_LoadedTextures.insert(filepath, tex);
+
+//    TileCacheNumber tileNumber = TileCacheNumber(cur_zoom, lonTileNum,separation-1-latTileNum);
+//    m_LoadedTextures.insert(tileNumber, tex);
     int earthMat = tempNode->palette()->addMaterial(mat1);
 
     tempNode->setMaterialIndex(earthMat);
@@ -417,7 +419,6 @@ void Earth::updateTilesSlot(qreal scale, GeoCoords geoCoords)
                     if (tileNodeCache->contains(currentCacheNumber))
                     {
                         tileNodeCache->object(currentCacheNumber)->glSceneNodeObject()->setOptions(QGLSceneNode::HideNode);
-
                         removeNode(tileNodeCache->object(currentCacheNumber)->glSceneNodeObject());
                     }
                 }
