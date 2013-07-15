@@ -261,7 +261,7 @@ inline TileRange *getTileRange(TileNumber NCenterTile, qint32 rangeTiles, qint32
             tileRanges[0].startX = 0;
             tileRanges[0].endX = maxTileNumber;
 
-            tileRanges[0].startY = NCenterTile.y - rangeTiles - 1;
+            tileRanges[0].startY = NCenterTile.y - rangeTiles - 2;
             tileRanges[0].endY = maxTileNumber;
             tileRanges[0].end = true;
         }
@@ -274,7 +274,7 @@ inline TileRange *getTileRange(TileNumber NCenterTile, qint32 rangeTiles, qint32
             tileRanges[0].endX = maxTileNumber;
 
             tileRanges[0].startY = 0;
-            tileRanges[0].endY = NCenterTile.y + rangeTiles + 1;
+            tileRanges[0].endY = NCenterTile.y + rangeTiles + 2;
             tileRanges[0].end = true;
         }
 
