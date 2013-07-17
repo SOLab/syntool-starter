@@ -26,6 +26,7 @@
 #include "topmenuwidgets/settingswidget.h"
 #include "3d/earthview.h"
 #include "3d/metagranules.h"
+#include "additionalwidgets/addimagewidget.h"
 
 class TimeLine;
 
@@ -88,6 +89,7 @@ public slots:
 
     void showSettings();
     void setFullScreen(bool value=false);
+    void addImageLayerSlot();
 };
 
 #endif // MAINWIDGET_H

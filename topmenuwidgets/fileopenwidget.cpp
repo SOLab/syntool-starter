@@ -22,7 +22,7 @@ FileOpenWidget::FileOpenWidget(QString type, QString caption, QString directory,
 //    try
 //        {toolButton->setIcon(QIcon::fromTheme("document-open"));}
 //    catch (int)
-        {toolButton->setText(tr("Change"));}
+        {toolButton->setText(tr("Edit"));}
 
     toolButton->setMaximumWidth(72);
 
@@ -87,4 +87,9 @@ QStringList FileOpenWidget::valueList()
         return dataList;
     else
         return text().split(",");
+}
+
+void FileOpenWidget::setDefaultDir(QString dir)
+{
+    dialogDir = dir;
 }

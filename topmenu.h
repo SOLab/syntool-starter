@@ -56,7 +56,7 @@ signals:
     void showCoordsAction(bool value);
     void showGridAction(bool value);
     void hideAllAction(bool value);
-    void addPictureLayerAction();
+    void addImageLayerAction();
 
 public slots:
     void setCheckedButton(bool value);

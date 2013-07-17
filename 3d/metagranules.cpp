@@ -158,3 +158,8 @@ void MetaGranules::objectPicked()
     Q_ASSERT(node);
     SimpleGranulesNode *target = qobject_cast<SimpleGranulesNode*>(node->target());
 }
+
+void MetaGranules::addSarImage(QString imagePath)
+{
+    qCritical() << "Add SAR Image" << imagePath;
+}

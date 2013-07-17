@@ -57,6 +57,8 @@ public slots:
     void registerPicking(SimpleGranulesNode *granulesNode);
     void unregisterPicking();
     void objectPicked();
+
+    void addSarImage(QString imagePath);
 };
 
 #endif // METAGRANULES_H

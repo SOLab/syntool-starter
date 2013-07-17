@@ -20,6 +20,7 @@ public:
     void setLabel();
     QStringList valueList();
 
+    void setDefaultDir(QString dir);
 protected:
     QString dialogType;
     QString dialogCaption;

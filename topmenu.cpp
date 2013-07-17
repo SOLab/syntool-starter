@@ -68,7 +68,7 @@ TopMenu::TopMenu(QWidget *parent) :
     addPictureButton = new TopMenuButton;
     addPictureButton->setIcon(QIcon(":/icons/picture.png"));
     addPictureButton->setToolTip(tr("Overlay an image"));
-    connect(addPictureButton, &QPushButton::clicked, this, &TopMenu::addPictureLayerAction);
+    connect(addPictureButton, &QPushButton::clicked, this, &TopMenu::addImageLayerAction);
 
     // create right side
 

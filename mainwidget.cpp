@@ -100,6 +100,8 @@ MainWindow::MainWindow(ConfigData *configValue, QWidget *parent)
 
     connect(timeLine, &TimeLine::changedDisplayGranules, datasetsWgt, &DatasetsWidget::addDatasets);
 
+    connect(topMenu, &TopMenu::addImageLayerAction, this, &MainWindow::addImageLayerSlot);
+
     productsWgt->setObjectsPointer(timeLine);
 
     rightSidebar->setMinimumWidth(136);
@@ -275,6 +277,13 @@ void MainWindow::setFullScreen(bool value)
         showFullScreen();
         fullScreenAction->setChecked(true);
     }
+}
+
+void MainWindow::addImageLayerSlot()
+{
+    AddImageWidget* imageWgt = new AddImageWidget(configData);
+    connect(imageWgt, &AddImageWidget::tileCreatedSignal, metaGranulesPointer, &MetaGranules::addSarImage);
+    imageWgt->show();
 }
 
 void MainWindow::showSettings()

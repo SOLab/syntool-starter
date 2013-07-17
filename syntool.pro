@@ -54,7 +54,9 @@ SOURCES = \
     3d/point3dnode.cpp \
     3d/rect3dnode.cpp \
     additionalwidgets/placeboxwidget.cpp \
-    3d/grid3d.cpp
+    3d/grid3d.cpp \
+    additionalwidgets/addimagewidget.cpp \
+    3d/sarimagenode.cpp
 HEADERS = \
     mainwidget.h \
     windowwidget.h \
@@ -104,7 +106,9 @@ HEADERS = \
     3d/point3dnode.h \
     3d/rect3dnode.h \
     additionalwidgets/placeboxwidget.h \
-    3d/grid3d.h
+    3d/grid3d.h \
+    additionalwidgets/addimagewidget.h \
+    3d/sarimagenode.h
 RESOURCES += \
     syntool.qrc
 DEPENDPATH += resources
@@ -121,7 +125,7 @@ OTHER_FILES +=
 
 RC_FILE = syntool.rc
 
-LIBS += -lglut -lGL -lGLU
+#LIBS += -lglut -lGL -lGLU
 
 QTPLUGIN += xcb
 

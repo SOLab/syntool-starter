@@ -257,7 +257,7 @@ inline TileRange *getTileRange(TileNumber NCenterTile, qint32 rangeTiles, qint32
         // center-bottom
         if(NCenterTile.y + rangeTiles > maxTileNumber)
         {
-            qCritical () << "center-bottom";
+            qDebug() << "center-bottom";
             tileRanges[0].startX = 0;
             tileRanges[0].endX = maxTileNumber;
 
@@ -269,7 +269,7 @@ inline TileRange *getTileRange(TileNumber NCenterTile, qint32 rangeTiles, qint32
         // center-top
         else if(NCenterTile.y - rangeTiles < 0)
         {
-            qCritical () << "center-top" << NCenterTile.y << rangeTiles << NCenterTile.zoom;
+            qDebug() << "center-top" << NCenterTile.y << rangeTiles << NCenterTile.zoom;
             tileRanges[0].startX = 0;
             tileRanges[0].endX = maxTileNumber;
 
@@ -287,10 +287,6 @@ inline TileRange *getTileRange(TileNumber NCenterTile, qint32 rangeTiles, qint32
             tileRanges[0].endY = NCenterTile.y + rangeTiles;
 
             tileRanges[0].end = true;
-//            tileRanges[1].startX = 0;
-//            tileRanges[1].startY = 0;
-//            tileRanges[1].endX = 0;
-//            tileRanges[1].endY = 0;
         }
     }
 
