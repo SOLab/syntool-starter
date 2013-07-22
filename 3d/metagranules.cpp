@@ -8,6 +8,9 @@ MetaGranules::MetaGranules(EarthView *parentView, QSharedPointer<QGLMaterialColl
 
     simpleGranuleCache = new QCache<int, SimpleGranulesNode>;
     simpleGranuleCache->setMaxCost(configData->numberCachedSimpleGranules);
+
+    sarGranuleCache = new QCache<QString, SarImageNode>;
+    sarGranuleCache->setMaxCost(configData->numberCachedTiledGranules);
 }
 
 void MetaGranules::drawSimpleGranules(QGLPainter *painter)
@@ -37,6 +40,15 @@ void MetaGranules::drawSimpleGranules(QGLPainter *painter)
                 nodeToDraw->draw(painter);
             }
         }
+
+        if (sarGranuleCache->contains(sarGranuleNameIdHash.key(j)))
+        {
+            SarImageNode* nodeToDraw = sarGranuleCache->object(sarGranuleNameIdHash.key(j));
+            if (nodeToDraw)
+            {
+                nodeToDraw->draw(painter);
+            }
+        }
     }
 }
 
@@ -52,7 +64,8 @@ void MetaGranules::setParent(EarthView *parentView)
 
 void MetaGranules::addGranuleNode(qint32 granuleId, qint32 productId, qint32 height, GranuleType::Type type)
 {
-    addSimpleGranuleNode(granuleId, productId, height);
+    if (type == GranuleType::Simple)
+        addSimpleGranuleNode(granuleId, productId, height);
 }
 
 void MetaGranules::addSimpleGranuleNode(qint32 granuleId, qint32 productId, qint32 height)
@@ -89,6 +102,53 @@ void MetaGranules::removeSimpleGranuleNode(qint32 granuleId, qint32 productId)
 
     emit displayed();
 }
+
+
+
+void MetaGranules::addSarImage(QString granuleName)
+{
+    qint32 height = 5;
+    qint32 granuleId = -height;
+
+    qCritical() << "Add SAR Image" << granuleName;
+
+    if (!sarGranuleCache->contains(granuleName))
+    {
+        SarImageNode* granulesNode = new SarImageNode(m_configData, granuleName, this);
+        connect(this, &MetaGranules::updatedAllTilesSignal, granulesNode, &SarImageNode::updateAllTileSlot);
+        connect(this, &MetaGranules::updatedTilesRangeSignal, granulesNode, &SarImageNode::updateTileRangeSlot);
+        granulesNode->setHeight(height);
+        granulesNode->show();
+
+        sarGranuleCache->insert(granuleName, granulesNode);
+        heightGranuleMap.insert(height, granuleId);
+        sarGranuleNameIdHash.insert(granuleName, granuleId);
+
+        connect(granulesNode, &SarImageNode::updated, this, &MetaGranules::displayed);
+    }
+    else
+    {
+        // displayed granule
+        if (!heightGranuleMap.contains(sarGranuleCache->object(granuleName)->height()))
+            heightGranuleMap.insert(sarGranuleCache->object(granuleName)->height(), granuleId);
+        sarGranuleCache->object(granuleName)->show();
+        sarGranuleNameIdHash.insert(granuleName, granuleId);
+        emit displayed();
+    }
+}
+
+void MetaGranules::removeSarImageNode(QString granuleName)
+{
+    if(sarGranuleCache->object(granuleName))
+    {
+        heightGranuleMap.remove(sarGranuleCache->object(granuleName)->height());
+        sarGranuleCache->object(granuleName)->hide();
+        sarGranuleNameIdHash.remove(granuleName);
+    }
+
+    emit displayed();
+}
+
 
 void MetaGranules::setGranuleTransparency(qint32 granuleId, qint32 productId, qint32 transparency)
 {
@@ -157,9 +217,4 @@ void MetaGranules::objectPicked()
     QGLPickNode *node = qobject_cast<QGLPickNode*>(sender());
     Q_ASSERT(node);
     SimpleGranulesNode *target = qobject_cast<SimpleGranulesNode*>(node->target());
-}
-
-void MetaGranules::addSarImage(QString imagePath)
-{
-    qCritical() << "Add SAR Image" << imagePath;
 }

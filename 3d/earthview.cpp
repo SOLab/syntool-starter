@@ -106,7 +106,8 @@ EarthView::EarthView(ConfigData *configData, QSurfaceFormat sf, QWindow *parent)
 
     metaGranulesNode = new MetaGranules(this, m_palette, configData);
     connect (metaGranulesNode, &MetaGranules::displayed, this, &EarthView::update);
-
+    connect (earth, &Earth::updatedTilesRangeSignal, metaGranulesNode, &MetaGranules::updatedTilesRangeSignal);
+    connect (earth, &Earth::updatedAllTilesSignal, metaGranulesNode, &MetaGranules::updatedAllTilesSignal);
 
     metaGLInfoNode = new MetaGLInfoClass(this, earth, m_palette, configData);
     connect (metaGLInfoNode, &MetaGLInfoClass::displayed, this, &EarthView::update);
@@ -158,12 +159,9 @@ void EarthView::paintGL(QGLPainter *painter)
     else
         navigateButton->draw(painter, scale, showCoordsFlag);
 
-//    getMemUsage();
-
     if (navigateButtonPressed)
     {
         navigateButton->drawSector(navigateVector, painter);
-//        earth->drawImage(painter);
     }
 
     // calculate position 2D buttons

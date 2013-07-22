@@ -94,8 +94,8 @@ void SettingsTabWidget::createCacheWidget()
 
     QLabel* numberCachedTiledGranulesLabel = new QLabel(tr("Number of cache tiled granules"), cacheWidget);
     numberCachedTiledGranulesEdit = new QSpinBox(cacheWidget);
-    numberCachedTiledGranulesEdit->setMaximum(1000);
-    numberCachedTiledGranulesEdit->setMinimum(10);
+    numberCachedTiledGranulesEdit->setMaximum(500);
+    numberCachedTiledGranulesEdit->setMinimum(5);
     numberCachedTiledGranulesEdit->setValue(configData->numberCachedTiledGranules);
 
     cacheGridLayout->addWidget(numberCachedTiledGranulesLabel, 3,0);

@@ -72,6 +72,8 @@ private:
 
 signals:
     void textureDownloadedSignal(qint32 cur_zoom, qint32 lonTileNum, qint32 latTileNum);
+    void updatedTilesRangeSignal(qint32 curZoom, TileRange tileRange1, TileRange tileRange2);
+    void updatedAllTilesSignal(qint32 curZoom);
 
 public slots:
     void updateTilesSlot(qreal scale, GeoCoords geoCoords);

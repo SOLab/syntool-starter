@@ -23,7 +23,8 @@ namespace GranuleType {
     enum Type{
         Error = 0,
         Simple = 1,
-        Tiled = 2
+        Tiled = 2,
+        Image = 3
     };
 }
 

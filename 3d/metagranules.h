@@ -11,6 +11,7 @@
 #include "more/ProductStructures.h"
 #include "tilecachenumbersclass.h"
 #include "simplegranulesnode.h"
+#include "sarimagenode.h"
 
 class EarthView;
 
@@ -32,6 +33,10 @@ private:
     QMap<qint32, qint32> heightGranuleMap;
 
     QCache<TileCacheNumber, QGLSceneNode> tiledGranuleCache;
+    // <granuleName, granuleNode>
+    QCache<QString, SarImageNode>* sarGranuleCache;
+    QHash<QString, qint32>         sarGranuleNameIdHash;
+
     QSharedPointer<QGLMaterialCollection> m_palette;
 
     QGLView*  m_parentView;
@@ -44,6 +49,8 @@ private:
 
 signals:
     void displayed();
+    void updatedTilesRangeSignal(qint32 curZoom, TileRange tileRange1, TileRange tileRange2);
+    void updatedAllTilesSignal(qint32 curZoom);
     
 public slots:
     void addSimpleGranuleNode(qint32 granuleId, qint32 productId, qint32 height);
@@ -58,7 +65,8 @@ public slots:
     void unregisterPicking();
     void objectPicked();
 
-    void addSarImage(QString imagePath);
+    void addSarImage(QString granuleName);
+    void removeSarImageNode(QString granuleName);
 };
 
 #endif // METAGRANULES_H

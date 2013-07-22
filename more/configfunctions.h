@@ -49,7 +49,7 @@ inline ConfigData* readConfigFile(ConfigData *configData)
     configData->cacheDir = settings->value("cache/dir", "/tmp/syntool").toString();
     configData->numberCachedTiles = settings->value("cache/number_tiles", 200).toInt();
     configData->numberCachedSimpleGranules = settings->value("cache/number_simple_granules", 50).toInt();
-    configData->numberCachedTiledGranules = settings->value("cache/number_tiled_granules", 100).toInt();
+    configData->numberCachedTiledGranules = settings->value("cache/number_tiled_granules", 25).toInt();
 
     configData->timeLineMoveFrequency = settings->value("other/timeline_move_frequency", 500).toInt();
 

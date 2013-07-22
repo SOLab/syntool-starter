@@ -88,6 +88,8 @@ void Earth::buildEarthNode(qreal radius, int divisions, int cur_zoom)
         TileNumber tileNumber = deg2TileNum(curGeoCoords, cur_zoom);
 
         TileRange* tileRange = getTileRange(tileNumber, numberTiles, cur_zoom);
+        emit updatedTilesRangeSignal(cur_zoom, tileRange[0], tileRange[1]);
+
 //        qCritical() << "=========>";
 //        qCritical() << tileRange[0].startX << tileRange[0].endX << tileRange[0].startY << tileRange[0].endY << tileRange[0].end;
 //        qCritical() << tileRange[1].startX << tileRange[1].endX << tileRange[1].startY << tileRange[1].endY;
@@ -111,6 +113,7 @@ void Earth::buildEarthNode(qreal radius, int divisions, int cur_zoom)
     }
     else
     {
+        emit updatedAllTilesSignal(cur_zoom);
         for (int lonTileNum = 0; lonTileNum < separation; lonTileNum++)
         {
             for (int latTileNum = 0; latTileNum < separation; latTileNum++)
@@ -190,6 +193,7 @@ void Earth::textureDownloaded(qint32 cur_zoom, qint32 lonTileNum, qint32 latTile
     }
     else
     {
+        delete sceneNode;
         qWarning() << tr("Texture not added");
     }
     emit displayed();

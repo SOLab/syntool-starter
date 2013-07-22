@@ -10,11 +10,15 @@ AddImageWidget::AddImageWidget(ConfigData* configData, QWidget *parent) :
     imageLabel = new QLabel(tr("PNG file"), this);
     imageWgt = new FileOpenWidget("file", tr("Image"), configData->cacheDir, this);
     connect(imageWgt, &FileOpenWidget::textChanged, this, &AddImageWidget::imageTextChangedSlot);
+
     gridLayout->addWidget(imageLabel, 0,0);
     gridLayout->addWidget(imageWgt, 0,1,1,5);
 
     kmlLabel = new QLabel(tr("KML file"), this);
     kmlWgt = new FileOpenWidget("file", tr("KML"), configData->cacheDir, this);
+
+    imageWgt->setText("/mnt/d/distr/test_MER/MER.FRS.1PNEPA20100401.1542.VarBn_kml");
+    kmlWgt->setText("/mnt/d/distr/test_MER/MER.FRS.1PNEPA20100401.1542.VarBn_kml.kml");
 
     gridLayout->addWidget(kmlLabel, 1,0);
     gridLayout->addWidget(kmlWgt, 1,1,1,5);
@@ -24,11 +28,11 @@ AddImageWidget::AddImageWidget(ConfigData* configData, QWidget *parent) :
 
     lowZoom = new QSpinBox(this);
     lowZoom->setValue(3);
-    lowZoom->setRange(3, 12);
+    lowZoom->setRange(0, 12);
 
     topZoom = new QSpinBox(this);
     topZoom->setValue(7);
-    topZoom->setRange(3, 12);
+    topZoom->setRange(0, 12);
 
     gridLayout->addWidget(zoomLabel, 2,0);
     gridLayout->addWidget(lowZoom, 2,1);

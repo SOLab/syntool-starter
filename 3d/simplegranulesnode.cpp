@@ -5,7 +5,6 @@ SimpleGranulesNode::SimpleGranulesNode(QObject *parent, QSharedPointer<QGLMateri
     QGLSceneNode(parent)
 {
     Q_UNUSED(materials);
-    Q_UNUSED(configData);
     visible = true;
 
     isGlobalCoverage = IsGlobalCoverage;
