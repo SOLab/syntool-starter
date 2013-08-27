@@ -30,20 +30,22 @@ SarImageNode::SarImageNode(ConfigData *configData, QString granuleName, QObject 
     // set maximum cost for cache
     tileNodeCache->setMaxCost(configData->numberCachedTiles);
 
-    QGraphicsRotation3D *rotateX = new QGraphicsRotation3D(this);
+    rotateX = new QGraphicsRotation3D(this);
     rotateX->setAngle(180.0f);
     rotateX->setAxis(QVector3D(1,0,0));
 
-    QGraphicsRotation3D *rotateY = new QGraphicsRotation3D(this);
+    rotateY = new QGraphicsRotation3D(this);
     rotateY->setAngle(90.0f);
     rotateY->setAxis(QVector3D(0,1,0));
 
-    addTransform(rotateX);
-    addTransform(rotateY);
+//    addTransform(rotateX);
+//    addTransform(rotateY);
 }
 
 void SarImageNode::updateTileRangeSlot(qint32 curZoom, TileRange tileRange1, TileRange tileRange2)
 {
+    updateAllTileSlot(curZoom);
+    return;
     qCritical() << "updateTileRangeSlot" << tileRange1.startX << tileRange1.endX << tileRange1.startY << tileRange1.endY;
     qCritical() << "curZoom" << curZoom << m_curZoom;
 //    if (curZoom != m_curZoom)
@@ -75,7 +77,6 @@ void SarImageNode::updateTileRangeSlot(qint32 curZoom, TileRange tileRange1, Til
         }
         tileNodeCache->clear();
     }
-
 
     m_curZoom = curZoom;
     qint32 separation = qPow(2, curZoom);
@@ -185,15 +186,12 @@ bool SarImageNode::checkNodeInCache(qint32 zoom, qint32 x, qint32 y)
     if (tileNodeCache->contains(currentCacheNumber))
     {
         QGLSceneNode* sceneNode = tileNodeCache->object(currentCacheNumber)->glSceneNodeObject();
-        qCritical() << "aaaaaaaaa";
+
         if (sceneNode->options().testFlag(QGLSceneNode::HideNode))
         {
-            qCritical() << "bbbbbbbbbbb";
             sceneNode->setOptions(QGLSceneNode::CullBoundingBox);
             addNode(sceneNode);
         }
-
-        qCritical() << "cccccccccc";
 
 //        emit displayed();
         return true;
@@ -224,6 +222,8 @@ void SarImageNode::addTileNode(int curZoom, qint32 lonTileNum, qint32 latTileNum
     qCritical() << minSphereLat << maxSphereLat << minSphereLon << maxSphereLon;
     QGLSceneNode* sceneNode = BuildSpherePart(separation, minSphereLat, maxSphereLat,
                                              minSphereLon, maxSphereLon);
+    sceneNode->addTransform(rotateX);
+    sceneNode->addTransform(rotateY);
 
     QString nodeObjectName = QString(m_granuleName+"-%1-%2-%3").arg(curZoom).arg(lonTileNum)
                                                      .arg(separation-1-latTileNum);
@@ -260,6 +260,7 @@ void SarImageNode::addTileNode(int curZoom, qint32 lonTileNum, qint32 latTileNum
 QGLSceneNode *SarImageNode::BuildSpherePart(qint32 separation, qreal minSphereLat, qreal maxSphereLat, qreal minSphereLon, qreal maxSphereLon)
 {
     m_altitude = 0.0001 + height()/10000.0;
+//    m_altitude = 0.05;
     qCritical() << m_altitude;
     qreal minMerLat = Lat2MercatorLatitude(minSphereLat);
     qreal maxMerLat = Lat2MercatorLatitude(maxSphereLat);
@@ -371,4 +372,11 @@ void SarImageNode::hide()
     qCritical() << "HIDEHIDEHIDEHIDE";
     visible = false;
     setOptions(QGLSceneNode::HideNode);
+}
+
+void SarImageNode::drawNode(QGLPainter *painter)
+{
+    QList<QGLSceneNode*>::iterator cit = children().begin();
+    for ( ; cit != children().end(); ++cit)
+        (*cit)->draw(painter); // <==== тут косяк!!!
 }

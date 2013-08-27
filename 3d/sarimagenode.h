@@ -18,6 +18,7 @@ public:
 
     void show();
     void hide();
+    void drawNode(QGLPainter *painter);
 private:
     QCache<TileCacheNumber, GLSceneNodeWrapper>* tileNodeCache;
 
@@ -38,6 +39,9 @@ private:
     QGLSceneNode* BuildSpherePart(qint32 separation, qreal minSphereLat, qreal maxSphereLat,
                                   qreal minSphereLon, qreal maxSphereLon);
     bool          checkNodeInCache(qint32 zoom, qint32 x, qint32 y);
+
+    QGraphicsRotation3D *rotateX;
+    QGraphicsRotation3D *rotateY;
 signals:
     
 public slots:
