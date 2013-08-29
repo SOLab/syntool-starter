@@ -115,10 +115,10 @@ void MetaGranules::addSarImage(QString granuleName)
     if (!sarGranuleCache->contains(granuleName))
     {
         SarImageNode* granulesNode = new SarImageNode(m_configData, granuleName, this);
-        connect(this, &MetaGranules::updatedAllTilesSignal, granulesNode, &SarImageNode::updateAllTileSlot);
-        connect(this, &MetaGranules::updatedTilesRangeSignal, granulesNode, &SarImageNode::updateTileRangeSlot);
+        connect(this, &MetaGranules::updateTilesSignal, granulesNode, &SarImageNode::updateTilesSlot);
+
         granulesNode->setHeight(height);
-        granulesNode->show();
+//        granulesNode->show();
 
         sarGranuleCache->insert(granuleName, granulesNode);
         heightGranuleMap.insert(height, granuleId);
@@ -131,7 +131,7 @@ void MetaGranules::addSarImage(QString granuleName)
         // displayed granule
         if (!heightGranuleMap.contains(sarGranuleCache->object(granuleName)->height()))
             heightGranuleMap.insert(sarGranuleCache->object(granuleName)->height(), granuleId);
-        sarGranuleCache->object(granuleName)->show();
+//        sarGranuleCache->object(granuleName)->show();
         sarGranuleNameIdHash.insert(granuleName, granuleId);
         emit displayed();
     }
@@ -142,7 +142,7 @@ void MetaGranules::removeSarImageNode(QString granuleName)
     if(sarGranuleCache->object(granuleName))
     {
         heightGranuleMap.remove(sarGranuleCache->object(granuleName)->height());
-        sarGranuleCache->object(granuleName)->hide();
+//        sarGranuleCache->object(granuleName)->hide();
         sarGranuleNameIdHash.remove(granuleName);
     }
 

@@ -109,6 +109,9 @@ EarthView::EarthView(ConfigData *configData, QSurfaceFormat sf, QWindow *parent)
     connect (earth, &Earth::updatedTilesRangeSignal, metaGranulesNode, &MetaGranules::updatedTilesRangeSignal);
     connect (earth, &Earth::updatedAllTilesSignal, metaGranulesNode, &MetaGranules::updatedAllTilesSignal);
 
+    connect (this, &EarthView::updatedTilesSignal, metaGranulesNode, &MetaGranules::updateTilesSignal);
+    connect (metaGranulesNode, &MetaGranules::displayed, this, &EarthView::update);
+
     metaGLInfoNode = new MetaGLInfoClass(this, earth, m_palette, configData);
     connect (metaGLInfoNode, &MetaGLInfoClass::displayed, this, &EarthView::update);
 

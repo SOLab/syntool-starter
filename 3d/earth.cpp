@@ -15,7 +15,7 @@ Earth::Earth(QObject *parent, QSharedPointer<QGLMaterialCollection> materials, C
     mapThemeList.insert("yandexSatellite", "http://sat.maps.yandex.net/tiles?l=sat&v=3.102.0&z=%1&x=%2&y=%3&lang=ru_RU");
     mapThemeList.insert("yandexMaps", "http://vec.maps.yandex.net/tiles?l=map&v=2.45.0&z=%1&x=%2&y=%3&lang=ru_RU");
     mapThemeList.insert("googleMaps", "http://mts.google.com/vt/lyrs=m&hl=en&z=%1&x=%2&y=%3&s=Galile");
-    mapThemeList.insert("googleSatellite", "http://khms.google.ru/kh/v=130&src=app&z=%1&x=%2&y=%3&s=Gal");
+    mapThemeList.insert("googleSatellite", "http://khms.google.ru/kh/v=135&src=app&z=%1&x=%2&y=%3&s=Gal");
 
     currentMapTheme = configData->mapThemeName;
     currentMapThemeUrl = mapThemeList.value(currentMapTheme);

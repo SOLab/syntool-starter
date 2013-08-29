@@ -44,7 +44,7 @@ inline ConfigData* readConfigFile(ConfigData *configData)
     configData->serverName = settings->value("common/server_name", "http://staging.satin.rshu.ru").toString();
     configData->logLevel = (LogLevel::LogLevelValue)settings->value("common/logging_level", LogLevel::ErrorOnly).toInt();
     configData->lang = settings->value("common/lang", QLocale::system().name()).toString();
-    configData->mapThemeName = settings->value("common/map_theme", "OSM").toString();
+    configData->mapThemeName = settings->value("common/map_theme", "googleSatellite").toString();
 
     configData->cacheDir = settings->value("cache/dir", "/tmp/syntool").toString();
     configData->numberCachedTiles = settings->value("cache/number_tiles", 200).toInt();

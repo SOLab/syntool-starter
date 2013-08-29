@@ -106,7 +106,7 @@ MainWindow::MainWindow(ConfigData *configValue, QWidget *parent)
 
     rightSidebar->setMinimumWidth(136);
 
-    setWindowTitle("Syntool");
+    setWindowTitle("Syntool Starter");
 }
 
 void MainWindow::setHostedWindow(EarthView *window)

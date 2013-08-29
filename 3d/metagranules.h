@@ -51,6 +51,7 @@ signals:
     void displayed();
     void updatedTilesRangeSignal(qint32 curZoom, TileRange tileRange1, TileRange tileRange2);
     void updatedAllTilesSignal(qint32 curZoom);
+    void updateTilesSignal(qreal scale, GeoCoords geoCoords);
     
 public slots:
     void addSimpleGranuleNode(qint32 granuleId, qint32 productId, qint32 height);
