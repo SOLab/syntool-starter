@@ -304,7 +304,7 @@ void TimeLine::wheelEvent(QWheelEvent *pe)
         control_.markerDistance -= 360;
         emit getNewAllGranules(control_.markerDistance/360);
     }
-    else if (pe->delta() > 0 && control_.markerDistance < 1440)
+    else if (pe->delta() > 0 && control_.markerDistance < 5760)
     {
         control_.markerDistance += 360;
 //        emit getNewAllGranules(control_.markerDistance/360);

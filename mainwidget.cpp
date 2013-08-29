@@ -70,7 +70,6 @@ MainWindow::MainWindow(ConfigData *configValue, QWidget *parent)
 
     timeLine = new TimeLine(configData, this);
     timeLine->setFixedHeight(100);
-    timeLine->hide();
 
     vlayout->addWidget(topMenu);
     vlayout->addWidget(splitter);

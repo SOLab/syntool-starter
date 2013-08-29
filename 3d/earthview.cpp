@@ -128,6 +128,11 @@ EarthView::EarthView(ConfigData *configData, QSurfaceFormat sf, QWindow *parent)
 
     test = false;
     firstPointFlag = true;
+
+//    GeoCoords defaultCoords;
+//    defaultCoords.lat = 60;
+//    defaultCoords.lon = 30;
+//    rotateToCoords(defaultCoords);
 }
 
 EarthView::~EarthView()
