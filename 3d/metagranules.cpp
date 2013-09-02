@@ -22,7 +22,7 @@ void MetaGranules::drawSimpleGranules(QGLPainter *painter)
     QList<qint32> keysFirst = heightGranuleMap.keys();
 
     // Draw only 20 granules (with a maximum height)
-    qint32 countToDraw = 20;
+    qint32 countToDraw = m_configData->numberDisplayedGranules;
     qint32 startPosition = 0;
     if (keysFirst.count() > countToDraw)
         startPosition = keysFirst.count() - countToDraw;

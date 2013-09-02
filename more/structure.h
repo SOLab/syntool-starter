@@ -72,6 +72,7 @@ struct ConfigData{
     qint32  numberCachedTiledGranules;
 
     qint32 timeLineMoveFrequency;
+    qint32 numberDisplayedGranules;
 
     QList<qint32>* favoriteProducts;
     QList<qint32>* selectedProducts;

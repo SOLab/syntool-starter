@@ -28,6 +28,7 @@ public:
     QSpinBox*       numberCachedTiledGranulesEdit;
 
     QSpinBox*       timelineFrequencyEdit;
+    QSpinBox*       numberDisplayedGranulesEdit;
 
 protected:
     ConfigData* configData;

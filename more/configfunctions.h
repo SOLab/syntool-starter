@@ -52,6 +52,7 @@ inline ConfigData* readConfigFile(ConfigData *configData)
     configData->numberCachedTiledGranules = settings->value("cache/number_tiled_granules", 25).toInt();
 
     configData->timeLineMoveFrequency = settings->value("other/timeline_move_frequency", 500).toInt();
+    configData->numberDisplayedGranules = settings->value("other/number_displayed_granules", 20).toInt();
 
     configData->datetime = settings->value("other/current_datetime",
                                            QDateTime::currentDateTime().toString(Qt::ISODate)).toDateTime();

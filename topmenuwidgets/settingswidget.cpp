@@ -99,6 +99,7 @@ void SettingsWidget::saveChanges()
     else if (mainTabWidget->currentIndex() == 2)
     {
         settings->setValue("other/timeline_move_frequency",mainTabWidget->timelineFrequencyEdit->value());
+        settings->setValue("other/number_displayed_granules",mainTabWidget->numberDisplayedGranulesEdit->value());
     }
     settings->sync();
     delete settings;

@@ -122,6 +122,16 @@ void SettingsTabWidget::createOtherWidget()
     otherGridLayout->addWidget(TimelineFrequencyLabel, 0,0);
     otherGridLayout->addWidget(timelineFrequencyEdit, 0,1);
 
+    QLabel* granuleDisplayNumberLabel = new QLabel(tr("The number of displayed granules"), otherWidget);
+    numberDisplayedGranulesEdit = new QSpinBox(otherWidget);
+    numberDisplayedGranulesEdit->setMaximum(50);
+    numberDisplayedGranulesEdit->setMinimum(5);
+    numberDisplayedGranulesEdit->setSingleStep(5);
+    numberDisplayedGranulesEdit->setValue(configData->numberDisplayedGranules);
+
+    otherGridLayout->addWidget(granuleDisplayNumberLabel, 1,0);
+    otherGridLayout->addWidget(numberDisplayedGranulesEdit, 1,1);
+
     otherGridLayout->setAlignment(Qt::AlignTop);
 
     addTab(otherWidget, tr("Other"));
