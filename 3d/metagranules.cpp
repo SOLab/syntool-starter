@@ -103,8 +103,6 @@ void MetaGranules::removeSimpleGranuleNode(qint32 granuleId, qint32 productId)
     emit displayed();
 }
 
-
-
 void MetaGranules::addSarImage(QString granuleName)
 {
     qint32 height = 5;
