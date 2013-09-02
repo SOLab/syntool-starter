@@ -47,6 +47,7 @@ public:
 
     void log(QtMsgType type, const QMessageLogContext &context, const QString &msg);
     static MainWindow *self;
+
 protected:
     QSplitter*    splitter;
     WindowWidget* glwgt;

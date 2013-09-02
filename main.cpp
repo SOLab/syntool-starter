@@ -43,6 +43,7 @@
 #include "myapplication.h"
 #include "more/structure.h"
 #include "more/configfunctions.h"
+#include "additionalwidgets/startinfowidget.h"
 
 #include <QGuiApplication>
 #include <QDir>
@@ -130,11 +131,15 @@ int main(int argc, char *argv[])
     MainWindow wgt(configData);
     wgt.setHostedWindow(&view);
     wgt.resize(900,900);
+    wgt.move(0,0);
+    wgt.show();
 
     app.setMainWidget(&wgt);
 
     app.setWindowIcon(QIcon(":/icons/layers.png"));
-    wgt.show();
+
+    StartInfoWidget* siwgt = new StartInfoWidget(configData, &wgt);
+    siwgt->show();
 
     return app.exec();
 }
