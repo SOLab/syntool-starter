@@ -145,6 +145,9 @@ void TimeLine::actionPropertiesSlot() {
 
 void TimeLine::moveTimeLine(QDateTime dateTime)
 {
+    if (!isVisible())
+        show();
+
     control_.currentDate = dateTime;
 
     qint64 daysDiff = notChangedDate.daysTo(control_.currentDate.date());
