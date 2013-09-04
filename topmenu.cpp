@@ -70,6 +70,12 @@ TopMenu::TopMenu(QWidget *parent) :
     addPictureButton->setToolTip(tr("Overlay an image"));
     connect(addPictureButton, &QPushButton::clicked, this, &TopMenu::addImageLayerAction);
 
+    addProductButton = new TopMenuButton;
+    addProductButton->setFixedSize(96,24);
+    addProductButton->setText(tr("Add product"));
+    addProductButton->setToolTip(tr("add a new product"));
+    connect(addProductButton, &QPushButton::clicked, this, &TopMenu::addProductAction);
+
     // create right side
 
     TimeLineButton = new TopMenuButton;
@@ -99,6 +105,7 @@ TopMenu::TopMenu(QWidget *parent) :
     leftLayout->addWidget(addGridButton);
     leftLayout->addWidget(addShowButton);
     leftLayout->addWidget(addPictureButton);
+    leftLayout->addWidget(addProductButton);
 
     QFrame* VLine2 = new QFrame();
     VLine2->setFrameShape(QFrame::VLine);

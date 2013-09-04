@@ -91,6 +91,7 @@ public slots:
     void showSettings();
     void setFullScreen(bool value=false);
     void addImageLayerSlot();
+    void showProductsWidgetSlot();
 };
 
 #endif // MAINWIDGET_H

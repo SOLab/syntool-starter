@@ -41,6 +41,8 @@ protected:
     TopMenuButton* showCoordsButton;
     TopMenuButton* addPictureButton;
     TopMenuButton* addGridButton;
+    TopMenuButton* addProductButton;
+
     TopMenuButton* TimeLineButton;
     TopMenuButton* PythonScriptButton;
     QHBoxLayout*   topLayout;
@@ -57,6 +59,7 @@ signals:
     void showGridAction(bool value);
     void hideAllAction(bool value);
     void addImageLayerAction();
+    void addProductAction();
 
 public slots:
     void setCheckedButton(bool value);

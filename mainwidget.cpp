@@ -50,13 +50,14 @@ MainWindow::MainWindow(ConfigData *configValue, QWidget *parent)
 //    create right toolBox
     rightSidebar = new RightSidebar;
 
+    productsWgt = new ProductsWidget(configData, centralwgt);
+    productsWgt->hide();
     layersWgt = new LayersWidget(centralwgt);
     mapsWgt = new MapsWidget(configData, centralwgt);
-    productsWgt = new ProductsWidget(configData, centralwgt);
     datasetsWgt = new DatasetsWidget(configData, centralwgt);
     placeWgt = new PlaceWidget(centralwgt);
 
-    rightSidebar->addItem(productsWgt, tr("Products"));
+//    rightSidebar->addItem(productsWgt, tr("Products"));
     rightSidebar->addItem(layersWgt, tr("Layers"));
     rightSidebar->addItem(mapsWgt, tr("Maps"));
     rightSidebar->addItem(datasetsWgt, tr("Datasets"));
@@ -100,6 +101,7 @@ MainWindow::MainWindow(ConfigData *configValue, QWidget *parent)
     connect(timeLine, &TimeLine::changedDisplayGranules, datasetsWgt, &DatasetsWidget::addDatasets);
 
     connect(topMenu, &TopMenu::addImageLayerAction, this, &MainWindow::addImageLayerSlot);
+    connect(topMenu, &TopMenu::addProductAction, this, &MainWindow::showProductsWidgetSlot);
 
     productsWgt->setObjectsPointer(timeLine);
 
@@ -283,6 +285,11 @@ void MainWindow::addImageLayerSlot()
     AddImageWidget* imageWgt = new AddImageWidget(configData);
     connect(imageWgt, &AddImageWidget::tileCreatedSignal, metaGranulesPointer, &MetaGranules::addSarImage);
     imageWgt->show();
+}
+
+void MainWindow::showProductsWidgetSlot()
+{
+    productsWgt->show();
 }
 
 void MainWindow::showSettings()

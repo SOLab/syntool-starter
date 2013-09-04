@@ -2,7 +2,7 @@
 #include <QSizePolicy>
 
 ProductsWidget::ProductsWidget(ConfigData *configData, QWidget *parent):
-    QWidget(parent)
+    QWidget()
 {
     _configData = configData;
     productsHash = new QHash<QString, Product>;
@@ -402,6 +402,8 @@ void ProductsWidget::setObjectsPointer(TimeLine *timeLine)
 // add new product
 void ProductsWidget::addProduct(ProductType::Type productType, QString productName)
 {
+    hide();
+
     selectedProduct newSelectedProduct;
 
     if (productName.isEmpty())
@@ -447,6 +449,7 @@ void ProductsWidget::addSavedProducts(bool favoritesOnly)
 
 void ProductsWidget::addProductToFavorites(bool value)
 {
+    hide();
     qint32 currentKey = productsIdName->key(comboProducts->currentText());
     if (value && !_configData->favoriteProducts->contains(currentKey))
     {
