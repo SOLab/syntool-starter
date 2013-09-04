@@ -143,6 +143,20 @@ void TimeLine::actionPropertiesSlot() {
     currentGranuleWidget->show();
 }
 
+void TimeLine::moveTimeLine(QDateTime dateTime)
+{
+    control_.currentDate = dateTime;
+
+    qint64 daysDiff = notChangedDate.daysTo(control_.currentDate.date());
+    if (qAbs(daysDiff) > 2)
+    {
+        notChangedDate = control_.currentDate.date();
+        changedDay();
+    }
+
+    update();
+}
+
 void TimeLine::paintEvent(QPaintEvent * pe)
 {
     Q_UNUSED(pe);

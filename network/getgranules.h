@@ -33,6 +33,7 @@ protected:
     int             countGranule;
     int             currentCountGranule;
     int             currentStep;
+    bool            newProduct;
 
 private:
     QReadWriteLock lock;
@@ -40,6 +41,7 @@ private:
 signals:
   void timeLineRepaint();
   void selfRun();
+  void moveTimeLine(QDateTime);
 //  void selfClose();
     
 public slots:

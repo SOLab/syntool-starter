@@ -50,15 +50,15 @@ MainWindow::MainWindow(ConfigData *configValue, QWidget *parent)
 //    create right toolBox
     rightSidebar = new RightSidebar;
 
+    layersWgt = new LayersWidget(centralwgt);
     mapsWgt = new MapsWidget(configData, centralwgt);
     productsWgt = new ProductsWidget(configData, centralwgt);
     datasetsWgt = new DatasetsWidget(configData, centralwgt);
     placeWgt = new PlaceWidget(centralwgt);
-    layersWgt = new LayersWidget(centralwgt);
 
     rightSidebar->addItem(productsWgt, tr("Products"));
-    rightSidebar->addItem(mapsWgt, tr("Maps"));
     rightSidebar->addItem(layersWgt, tr("Layers"));
+    rightSidebar->addItem(mapsWgt, tr("Maps"));
     rightSidebar->addItem(datasetsWgt, tr("Datasets"));
     rightSidebar->addItem(placeWgt, tr("Markers"));
 

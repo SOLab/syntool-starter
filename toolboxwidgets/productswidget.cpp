@@ -542,6 +542,7 @@ void ProductsWidget::getGranulesForNewProduct()
 
     GetGranules* getGranules = new GetGranules();
     connect(getGranules, SIGNAL(timeLineRepaint()), timeLinePointer, SLOT(update()));
+    connect(getGranules, SIGNAL(moveTimeLine(QDateTime)), timeLinePointer, SLOT(moveTimeLine(QDateTime)));
 //    connect (getGranules, SIGNAL(finished()), getGranules, SLOT(deleteLater()));
     getGranules->setSelectedProducts(selectedProducts, granulesHash);
     getGranules->setParameters(request, "getGranulesForNewProduct");

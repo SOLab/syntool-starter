@@ -142,6 +142,8 @@ private slots:
     void actionKmlSlot();
     void actionPropertiesSlot();
 
+    void moveTimeLine(QDateTime dateTime);
+
 signals:
     void getNewAllGranules(int scale);
     void changedDisplayGranules(QHash<qint32, qint32>* displayedGranules);

@@ -6,6 +6,7 @@ GetGranules::GetGranules(QObject *parent) :
     countGranule = 0;
     currentCountGranule = 0;
     currentStep = 0;
+    newProduct = false;
     networkManager = new QNetworkAccessManager(this);
     connect(this, &GetGranules::selfRun, this, &GetGranules::run);
 //    connect(this, &GetGranules::selfClose, this, &GetGranules::deleteLater);
@@ -56,6 +57,7 @@ void GetGranules::run()
 
 void GetGranules::getGranulesForNewProduct()
 {
+    newProduct = true;
     QNetworkReply* reply = networkManager->get(m_request);
     connect(reply, &QNetworkReply::readyRead, this, &GetGranules::slotReadyReadGranules);
     connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
@@ -139,6 +141,11 @@ void GetGranules::slotReadyReadGranules()
                 while ( !mElement.isNull() )
                 {
                     Granule newGranule = createGranuleFromXml(mElement);
+                    if (newProduct)
+                    {
+                        emit moveTimeLine(newGranule.startDate);
+                        newProduct = false;
+                    }
                     countGranule++;
 
                     if (!granulesHash->contains(QString::number(newGranule.granuleId)))
