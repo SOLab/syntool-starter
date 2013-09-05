@@ -8,10 +8,11 @@ ProductsWidget::ProductsWidget(ConfigData *configData, QWidget *parent):
     productsHash = new QHash<QString, Product>;
     productsIdName = new QHash<qint32, QString>;
 
-    vLayout = new QVBoxLayout(this);
-    vLayout->setContentsMargins(0,2,0,0);
-//    vLayout->setSpacing(3);
-    vLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+    gLayout = new QGridLayout(this);
+//    gLayout->setContentsMargins(0,2,0,0);
+    gLayout->setSpacing(8);
+//    qCritical() << gLayout->spacing();
+//    gLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
 
     QHBoxLayout* infoLayout = new QHBoxLayout;
     productsLbl = new QLabel(tr("Products list:"), this);
@@ -38,17 +39,13 @@ ProductsWidget::ProductsWidget(ConfigData *configData, QWidget *parent):
     connect(reloadProductsButton, &QPushButton::clicked, this, &ProductsWidget::reloadProductsList);
     reloadProductsButton->hide();
 
-    vLayout->addLayout(infoLayout);
-//    vLayout->addWidget(productsLbl);
-    vLayout->addWidget(comboProducts);
-    vLayout->addWidget(productImageLbl);
-    vLayout->addWidget(reloadProductsButton);
+    gLayout->addLayout(infoLayout, 0,0, 1, 2);
+//    gLayout->addWidget(productsLbl);
+    gLayout->addWidget(comboProducts, 1, 0, 1, 2);
+    gLayout->addWidget(productImageLbl, 2, 0, 2, 2);
+    gLayout->addWidget(reloadProductsButton);
 
-    QFrame* hLine1 = new QFrame();
-    hLine1->setFrameShape(QFrame::HLine);
-    hLine1->setFrameShadow(QFrame::Sunken);
-    vLayout->addWidget(hLine1);
-// Create request Url
+    // Create request Url
     serverName = configData->serverName;
     cacheDir = configData->cacheDir;
 
@@ -57,75 +54,16 @@ ProductsWidget::ProductsWidget(ConfigData *configData, QWidget *parent):
 
     reloadProductsList();
 
-// Add widgets for select Area
-
-    QHBoxLayout* selectAreaLayout = new QHBoxLayout;
-    QLabel* AreaLbl = new QLabel(tr("Select Area:"), this);
-    AreaLbl->setContentsMargins(0,2,0,0);
-
-    leftTopButton = new QPushButton(this);
-    leftTopButton->setContentsMargins(0,0,0,0);
-    leftTopButton->setFixedSize(24,24);
-    leftTopButton->setIconSize(QSize(16, 16));
-    leftTopButton->setFocusPolicy(Qt::NoFocus);
-
-    leftTopButton->setIcon(QIcon(":/icons/left_top.png"));
-    leftTopButton->setToolTip(tr("Overlay an image"));
-    leftTopButton->setCheckable(true);
-    connect(leftTopButton, &QPushButton::clicked, this, &ProductsWidget::setCheckedButton);
-
-    selectAreaLayout->addWidget(AreaLbl);
-    selectAreaLayout->addWidget(leftTopButton);
-
-    vLayout->addLayout(selectAreaLayout);
-
-    North = new InputBox(tr("North: "), this);
-    North->setValidator("double");
-    North->setText("90.00");
-    North->setDisabled(true);
-
-    South = new InputBox(tr("South: "), this);
-    South->setValidator("double");
-    South->setText("-90.00");
-    South->setDisabled(true);
-
-    West = new InputBox(tr("West: "), this);
-    West->setValidator("double");
-    West->setText("-180.00");
-    West->setDisabled(true);
-
-    East = new InputBox(tr("East: "), this);
-    East->setValidator("double");
-    East->setText("180.00");
-    East->setDisabled(true);
-
-    vLayout->addWidget(North);
-    vLayout->addWidget(East);
-    vLayout->addWidget(South);
-    vLayout->addWidget(West);
-
-    QFrame* hLine2 = new QFrame();
-    hLine2->setFrameShape(QFrame::HLine);
-    hLine2->setFrameShadow(QFrame::Sunken);
-    vLayout->addWidget(hLine2);
-
-// select parameters
-
+    // select parameters
     parametersLbl = new QLabel(tr("Select parameter: "), this);
     comboParameters = new QComboBox(this);
     comboParameters->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Fixed);
     comboParameters->setDisabled(true);
 
-    vLayout->addWidget(parametersLbl);
-    vLayout->addWidget(comboParameters);
+    gLayout->addWidget(parametersLbl, 0, 2, 1, 2);
+    gLayout->addWidget(comboParameters, 1, 2, 1, 2);
 
-// add button
-    QFrame* hLine3 = new QFrame();
-    hLine3->setFrameShape(QFrame::HLine);
-    hLine3->setFrameShadow(QFrame::Sunken);
-    vLayout->addWidget(hLine3);
-
-
+    // add button
     addProductToFavoritesButton = new QPushButton(this);
     addProductToFavoritesButton->setContentsMargins(0,0,0,0);
     addProductToFavoritesButton->setFixedSize(24,24);
@@ -147,7 +85,59 @@ ProductsWidget::ProductsWidget(ConfigData *configData, QWidget *parent):
     bottomLayout->addWidget(addProductToFavoritesButton);
     bottomLayout->addWidget(addProductLabel);
 
-    vLayout->addLayout(bottomLayout);
+    gLayout->addLayout(bottomLayout, 2, 2, 1, 2);
+
+    QFrame* hLine1 = new QFrame();
+    hLine1->setFrameShape(QFrame::HLine);
+    hLine1->setFrameShadow(QFrame::Sunken);
+    gLayout->addWidget(hLine1, 4, 0, 1, 4);
+
+// Add widgets for select Area
+
+    QHBoxLayout* selectAreaLayout = new QHBoxLayout;
+    QLabel* AreaLbl = new QLabel(tr("Select Area:"), this);
+    AreaLbl->setContentsMargins(0,2,0,0);
+
+    leftTopButton = new QPushButton(this);
+    leftTopButton->setContentsMargins(0,0,0,0);
+    leftTopButton->setFixedSize(24,24);
+    leftTopButton->setIconSize(QSize(16, 16));
+    leftTopButton->setFocusPolicy(Qt::NoFocus);
+
+    leftTopButton->setIcon(QIcon(":/icons/left_top.png"));
+    leftTopButton->setToolTip(tr("Overlay an image"));
+    leftTopButton->setCheckable(true);
+    connect(leftTopButton, &QPushButton::clicked, this, &ProductsWidget::setCheckedButton);
+
+    selectAreaLayout->addWidget(AreaLbl);
+    selectAreaLayout->addWidget(leftTopButton);
+
+    gLayout->addLayout(selectAreaLayout, 5, 0, 1, 2);
+
+    North = new InputBox(tr("North: "), this);
+    North->setValidator("double");
+    North->setText("90.00");
+    North->setDisabled(true);
+
+    South = new InputBox(tr("South: "), this);
+    South->setValidator("double");
+    South->setText("-90.00");
+    South->setDisabled(true);
+
+    West = new InputBox(tr("West: "), this);
+    West->setValidator("double");
+    West->setText("-180.00");
+    West->setDisabled(true);
+
+    East = new InputBox(tr("East: "), this);
+    East->setValidator("double");
+    East->setText("180.00");
+    East->setDisabled(true);
+
+    gLayout->addWidget(North, 6, 0, 2, 2);
+    gLayout->addWidget(East, 6, 2, 2, 2);
+    gLayout->addWidget(South, 8, 0, 2, 2);
+    gLayout->addWidget(West, 8, 2, 2, 2);
 
 // Set style
 

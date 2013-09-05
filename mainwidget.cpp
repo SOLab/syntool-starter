@@ -290,6 +290,9 @@ void MainWindow::addImageLayerSlot()
 void MainWindow::showProductsWidgetSlot()
 {
     productsWgt->show();
+    productsWgt->move(width()/2 - productsWgt->width()/2 + pos().x(),
+                      height()/2 - productsWgt->height()/2 + pos().y());
+
 }
 
 void MainWindow::showSettings()

@@ -2,7 +2,7 @@
 #define PRODUCTSWIDGET_H
 
 #include <QWidget>
-#include <QVBoxLayout>
+#include <QGridLayout>
 #include <QComboBox>
 #include <QLabel>
 
@@ -43,7 +43,7 @@ public:
 
     void updateButtons();
 protected:
-    QVBoxLayout*           vLayout;
+    QGridLayout*           gLayout;
     QDomDocument*          dom;
     ConfigData*            _configData;
     QString                serverName;
