@@ -505,6 +505,7 @@ void EarthView::mousePressEvent(QMouseEvent *e)
         {
             if (firstPointFlag)
             {
+                metaGLInfoNode->removeIteractionRect();
                 firstPointFlag = false;
                 firstPoint = GeoCoordsDeg2Rad(pos);
                 metaGLInfoNode->addIteractionRect(firstPoint, firstPoint);
