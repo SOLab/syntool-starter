@@ -239,6 +239,7 @@ void MainWindow::createMenuBar()
     connect (settingAction, &QAction::triggered, this, &MainWindow::showSettings);
 
     QAction* rulerAction = new QAction(QIcon(":/icons/ruler.png"), tr("Ruler"), this);
+    rulerAction->setDisabled(true);
 
     toolsMenu->addAction(rulerAction);
     toolsMenu->addAction(settingAction);
@@ -292,7 +293,6 @@ void MainWindow::showProductsWidgetSlot()
     productsWgt->show();
     productsWgt->move(width()/2 - productsWgt->width()/2 + pos().x(),
                       height()/2 - productsWgt->height()/2 + pos().y());
-
 }
 
 void MainWindow::showSettings()

@@ -36,6 +36,7 @@ TopMenu::TopMenu(QWidget *parent) :
     addTagButton->setIcon(QIcon(":/icons/tag.png"));
     addTagButton->setToolTip(tr("Add tag"));
     addTagButton->setCheckable(true);
+    addTagButton->hide();
     connect(addTagButton, &QPushButton::clicked, this, &TopMenu::setCheckedButton);
 
     addPinButton = new TopMenuButton;
@@ -68,6 +69,7 @@ TopMenu::TopMenu(QWidget *parent) :
     addPictureButton = new TopMenuButton;
     addPictureButton->setIcon(QIcon(":/icons/picture.png"));
     addPictureButton->setToolTip(tr("Overlay an image"));
+    addPictureButton->hide();
     connect(addPictureButton, &QPushButton::clicked, this, &TopMenu::addImageLayerAction);
 
     addProductButton = new TopMenuButton;
@@ -93,7 +95,7 @@ TopMenu::TopMenu(QWidget *parent) :
     leftLayout->addWidget(moveButton);
     leftLayout->addWidget(addLineButton);
     leftLayout->addWidget(addRectButton);
-    leftLayout->addWidget(addTagButton);
+//    leftLayout->addWidget(addTagButton);
     leftLayout->addWidget(addPinButton);
 
     QFrame* VLine = new QFrame();
@@ -104,7 +106,7 @@ TopMenu::TopMenu(QWidget *parent) :
     leftLayout->addWidget(showCoordsButton);
     leftLayout->addWidget(addGridButton);
     leftLayout->addWidget(addShowButton);
-    leftLayout->addWidget(addPictureButton);
+//    leftLayout->addWidget(addPictureButton);
     leftLayout->addWidget(addProductButton);
 
     QFrame* VLine2 = new QFrame();

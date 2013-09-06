@@ -13,15 +13,15 @@ MapsWidget::MapsWidget(ConfigData *configData, QWidget *parent) :
                   .arg(parent->palette().background().color().green())
                   .arg(parent->palette().background().color().blue()));
 
-    vLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-    QLabel* projections = new QLabel(tr("Projections"));
-    vLayout->addWidget(projections);
+//    vLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+//    QLabel* projections = new QLabel(tr("Projections"));
+//    vLayout->addWidget(projections);
 
-    supportedProjections = new QComboBox;
-    QStringList projList;
-    projList << tr("Globe") << tr("Flat Map") << tr("Mercator");
-    supportedProjections->addItems(projList);
-    vLayout->addWidget(supportedProjections);
+//    supportedProjections = new QComboBox;
+//    QStringList projList;
+//    projList << tr("Globe") << tr("Flat Map") << tr("Mercator");
+//    supportedProjections->addItems(projList);
+//    vLayout->addWidget(supportedProjections);
 
     QLabel* themesLbl = new QLabel(tr("Themes"));
     vLayout->addWidget(themesLbl);
