@@ -14,7 +14,10 @@ StartInfoWidget::StartInfoWidget(ConfigData *configData, QWidget *mainWindow, QW
     gridLayout = new QGridLayout(wgt);
 //    gridLayout->setAlignment(Qt::AlignTop | Qt::AlignRight);
 
-    label = new QLabel("SynTool Starter", wgt);
+    label = new QLabel(tr("Syntool Starter developed in the Satellite Oceanography Laboratory of the "
+                          "Russian State Hydrometeorological University (SOLab RSHU).") + "\n\n" +
+                       tr("To get started, select a product by clicking \"Add product\" on the top menu."), wgt);
+    label->setWordWrap(true);
 
     button = new QPushButton("Close", wgt);
 //    button->setFixedSize(48,48);
