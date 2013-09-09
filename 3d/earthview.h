@@ -84,6 +84,9 @@ public:
     EarthScene* scene() { return m_scene; }
     float       getMemUsage();
     void        timeout();
+    void        setScale(float _scale){scale = _scale;}
+    float       getScale(){return scale;}
+    void        setDefaultPosition();
 
     MetaGranules* metaGranulesNode;
     Earth *earth;

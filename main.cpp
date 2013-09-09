@@ -95,6 +95,7 @@ int main(int argc, char *argv[])
     surfaceFormat.setStereo(false);
     surfaceFormat.setSwapBehavior(QSurfaceFormat::DoubleBuffer);
     surfaceFormat.setDepthBufferSize(24);
+
     EarthView view(configData, surfaceFormat, win);
     app.set_view(&view);
 
@@ -133,6 +134,9 @@ int main(int argc, char *argv[])
     wgt.resize(900,900);
     wgt.move(0,0);
     wgt.show();
+
+    // set default position
+    view.setDefaultPosition();
 
     app.setMainWidget(&wgt);
 

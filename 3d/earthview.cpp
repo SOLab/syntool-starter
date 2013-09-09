@@ -128,11 +128,6 @@ EarthView::EarthView(ConfigData *configData, QSurfaceFormat sf, QWindow *parent)
 
     test = false;
     firstPointFlag = true;
-
-//    GeoCoords defaultCoords;
-//    defaultCoords.lat = 60;
-//    defaultCoords.lon = 30;
-//    rotateToCoords(defaultCoords);
 }
 
 EarthView::~EarthView()
@@ -664,6 +659,15 @@ void EarthView::timeout()
 
         lastMouseMoveTime = QTime::currentTime();
     }
+}
+
+void EarthView::setDefaultPosition()
+{
+    // set default position
+    rotate(-60, 119);
+    setScale(64);
+    update();
+    scalePlus();
 }
 
 void EarthView::rotateInertia()
