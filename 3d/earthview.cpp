@@ -665,8 +665,7 @@ void EarthView::setDefaultPosition()
 {
     // set default position
     rotate(-60, 119);
-    setScale(64);
-    update();
+    setScale(14);
     scalePlus();
 }
 
