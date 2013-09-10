@@ -311,6 +311,7 @@ void ProductsWidget::reloadProductsList()
 
     networkManager = new QNetworkAccessManager (this);
     QNetworkReply* reply = networkManager->get(request);
+    qDebug() << request.url();
     connect(reply, &QNetworkReply::readyRead, this, &ProductsWidget::slotReadyReadProductList);
     connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
             this, SLOT(getErrorProductList(QNetworkReply::NetworkError)));

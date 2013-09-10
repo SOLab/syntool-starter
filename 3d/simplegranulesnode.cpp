@@ -65,6 +65,7 @@ void SimpleGranulesNode::getGranuleImageUrl()
 //    qCritical() << request.url();
 
     QNetworkReply* reply = networkManager->get(request);
+    qDebug() << reply->url();
     connect(reply, &QNetworkReply::readyRead, this, &SimpleGranulesNode::slotReadyReadImageUrl);
     connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
             this, SLOT(getErrorImageUrl(QNetworkReply::NetworkError)));

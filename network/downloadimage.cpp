@@ -13,6 +13,7 @@ void DownloadImage::run()
 
     QNetworkRequest request(m_imageUrl);
     QNetworkReply* reply = m_netwManager->get(request);
+    qDebug() << reply->url();
 
     connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
             this, SLOT(getError(QNetworkReply::NetworkError)));
