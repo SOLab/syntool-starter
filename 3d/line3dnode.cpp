@@ -50,14 +50,14 @@ void Line3DNode::createLine(GeoCoords pos1, GeoCoords pos2)
     for (int i = 0; i < slices; i++)
     {
         // if next latitude is max latitude
-        if (qAbs(curLat - pos2.lat) < 0.001)
+        if (qAbs(curLat - pos2.lat) < 0.00001)
         {
             curLat = pos2.lat;
         }
         curLatNext = curLat + oneStackDegrees;
 
         // if next lon is max lon
-        if (qAbs(curLon - pos2.lon) < 0.001)
+        if (qAbs(curLon - pos2.lon) < 0.00001)
         {
             curLon = pos2.lon;
         }
