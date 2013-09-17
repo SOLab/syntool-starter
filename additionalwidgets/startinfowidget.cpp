@@ -24,7 +24,7 @@ StartInfoWidget::StartInfoWidget(ConfigData *configData, QWidget *mainWindow, QW
 
     connect(button, &QPushButton::clicked, this, &StartInfoWidget::close);
 
-    setFixedSize(512,256);
+    setFixedSize(512,224);
 
     gridLayout->addWidget(label, 0, 1);
     gridLayout->addWidget(button, 1, 1);
