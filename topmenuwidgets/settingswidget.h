@@ -17,7 +17,7 @@ class SettingsWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit SettingsWidget(ConfigData *configValue, QWidget *parent = 0);
+    explicit SettingsWidget(ConfigData *configValue, QWidget *mainWindow, QWidget *parent = 0);
 
 protected:
     ConfigData*  configData;

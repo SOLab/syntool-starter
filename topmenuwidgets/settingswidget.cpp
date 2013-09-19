@@ -1,6 +1,6 @@
 #include "settingswidget.h"
 
-SettingsWidget::SettingsWidget(ConfigData *configValue, QWidget *parent) :
+SettingsWidget::SettingsWidget(ConfigData *configValue, QWidget *mainWindow, QWidget *parent) :
     QWidget(parent)
 {
     configData = configValue;
@@ -17,8 +17,9 @@ SettingsWidget::SettingsWidget(ConfigData *configValue, QWidget *parent) :
     setAttribute(Qt::WA_DeleteOnClose);
 
     createForm();
-    //    gui_signal = QtCore.Signal()
-    //    other_signal = QtCore.Signal()
+
+    move(mainWindow->pos().x() + mainWindow->width()/2 - size().width()/2,
+         mainWindow->pos().y() + mainWindow->height()/2 - size().height()/2);
 }
 
 void SettingsWidget::createForm()

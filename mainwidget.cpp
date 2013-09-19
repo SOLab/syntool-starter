@@ -297,7 +297,7 @@ void MainWindow::showProductsWidgetSlot()
 
 void MainWindow::showSettings()
 {
-    settingsWidget = new SettingsWidget(configData);
+    settingsWidget = new SettingsWidget(configData, this);
     settingsWidget->show();
 }
 
