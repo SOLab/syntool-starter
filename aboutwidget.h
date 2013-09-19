@@ -12,7 +12,7 @@ class AboutWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit AboutWidget(ConfigData *configData, QWidget *parent = 0);
+    explicit AboutWidget(ConfigData *configData, QWidget *mainWindow, QWidget *parent = 0);
     
 protected:
     QLabel*      statusLabel;

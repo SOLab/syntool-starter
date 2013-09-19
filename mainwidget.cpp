@@ -151,7 +151,7 @@ void MainWindow::setHostedWindow(EarthView *window)
 
 void MainWindow::aboutProgram()
 {
-    aboutWgt = new AboutWidget(configData);
+    aboutWgt = new AboutWidget(configData, this);
 }
 
 void MainWindow::openHandBook()
