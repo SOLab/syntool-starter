@@ -92,6 +92,8 @@ public slots:
     void setFullScreen(bool value=false);
     void addImageLayerSlot();
     void showProductsWidgetSlot();
+
+    void setEnabledTrue(){setEnabled(true);}
 };
 
 #endif // MAINWIDGET_H

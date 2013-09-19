@@ -134,6 +134,7 @@ int main(int argc, char *argv[])
     wgt.resize(900,900);
     wgt.move(0,0);
     wgt.show();
+//    wgt.setDisabled(true);
 
     // set default position
     view.setDefaultPosition();
@@ -144,6 +145,7 @@ int main(int argc, char *argv[])
 
     StartInfoWidget* siwgt = new StartInfoWidget(configData, &wgt);
     siwgt->show();
+//    QObject::connect(siwgt, &StartInfoWidget::destroyed, &wgt, &MainWindow::setEnabledTrue);
 
     return app.exec();
 }

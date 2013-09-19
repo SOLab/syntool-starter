@@ -114,7 +114,7 @@ TopMenu::TopMenu(QWidget *parent) :
     VLine2->setFrameShadow(QFrame::Sunken);
     rightLayout->addWidget(VLine2);
     rightLayout->addWidget(TimeLineButton, 0, Qt::AlignRight);
-    rightLayout->addWidget(PythonScriptButton, 0, Qt::AlignRight);
+//    rightLayout->addWidget(PythonScriptButton, 0, Qt::AlignRight);
 
     topLayout->addLayout(leftLayout, 10);
     topLayout->setAlignment(leftLayout, Qt::AlignLeft);
