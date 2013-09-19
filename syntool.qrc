@@ -8,6 +8,7 @@
         <file alias="logo-en.png">resources/logo-en.png</file>
         <file alias="ru.qm">ru.qm</file>
         <file alias="navigate_blue.png">resources/circle_blue.png</file>
+        <file alias="navigate_circle.png">resources/circle-navigate.png</file>
     </qresource>
     <qresource prefix="/skybox">
         <file alias="top">resources/stars.png</file>

@@ -140,7 +140,7 @@ void NavigateButton::drawText(QGLPainter *painter, const QString& str, const QPo
 
 void NavigateButton::createButtons()
 {
-    navButton = createButton(":/navigate_blue.png");
+    navButton = createButton(":/navigate_circle.png");
 
     zoomInButton = createButton(":/icons/zoom_in.png");
 
