@@ -85,6 +85,11 @@ TopMenu::TopMenu(QWidget *parent) :
     TimeLineButton->setToolTip(tr("TimeLine"));
     connect(TimeLineButton, SIGNAL(clicked()), parent, SLOT(showTimeLine()));
 
+    SatinButton = new TopMenuButton;
+    SatinButton->setIcon(QIcon(":/icons/satin.png"));
+    SatinButton->setToolTip(tr("Satin log in"));
+    connect(SatinButton, SIGNAL(clicked()), parent, SLOT(showSatinWgt()));
+
     PythonScriptButton = new TopMenuButton;
     PythonScriptButton->setIcon(QIcon(":/icons/script.png"));
     PythonScriptButton->setToolTip(tr("PythonQt Script"));
@@ -114,6 +119,7 @@ TopMenu::TopMenu(QWidget *parent) :
     VLine2->setFrameShadow(QFrame::Sunken);
     rightLayout->addWidget(VLine2);
     rightLayout->addWidget(TimeLineButton, 0, Qt::AlignRight);
+    rightLayout->addWidget(SatinButton, 0, Qt::AlignRight);
 //    rightLayout->addWidget(PythonScriptButton, 0, Qt::AlignRight);
 
     topLayout->addLayout(leftLayout, 10);

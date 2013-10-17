@@ -143,8 +143,11 @@ int main(int argc, char *argv[])
 
     app.setWindowIcon(QIcon(":/icons/layers.png"));
 
-    StartInfoWidget* siwgt = new StartInfoWidget(configData, &wgt);
-    siwgt->show();
+    if (!configData->hideStartWidget)
+    {
+        StartInfoWidget* siwgt = new StartInfoWidget(configData, &wgt);
+        siwgt->show();
+    }
 //    QObject::connect(siwgt, &StartInfoWidget::destroyed, &wgt, &MainWindow::setEnabledTrue);
 
     return app.exec();

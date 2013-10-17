@@ -44,6 +44,7 @@ protected:
     TopMenuButton* addProductButton;
 
     TopMenuButton* TimeLineButton;
+    TopMenuButton* SatinButton;
     TopMenuButton* PythonScriptButton;
     QHBoxLayout*   topLayout;
     QHBoxLayout*   leftLayout;

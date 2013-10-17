@@ -7,7 +7,9 @@
 #include <QGridLayout>
 #include <QLabel>
 #include <QPushButton>
+#include <QCheckBox>
 #include <QImageReader>
+#include <QSettings>
 #include <QDebug>
 
 #include "more/structure.h"
@@ -23,13 +25,18 @@ public:
     QVBoxLayout* mainLayout;
     QLabel* label;
     QLabel* imageLabel;
-    QPushButton* button;
+    QCheckBox* hideCheckBox;
+    QPushButton* closeButton;
     QWidget* wgt;
+
+    ConfigData* _configData;
     
 signals:
     
 public slots:
     
+protected:
+    void closeEvent(QCloseEvent *ev);
 };
 
 #endif // STARTINFOWIDGET_H

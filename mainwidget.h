@@ -16,6 +16,7 @@
 #include "timeline.h"
 #include "toolboxwidgets/rightsidebar.h"
 #include "network/getgranules.h"
+#include "network/satinlogin.h"
 #include "more/structure.h"
 
 #include "toolboxwidgets/layerswidget.h"
@@ -65,10 +66,11 @@ protected:
     QHBoxLayout* hlayout;
     QWidget*     centralwgt;
 
-    AboutWidget*    aboutWgt;
-    SettingsWidget* settingsWidget;
-    EarthView*      earthViewPointer;
-    MetaGranules*   metaGranulesPointer;
+    AboutWidget*      aboutWgt;
+    SatinLoginWidget* satinWgt;
+    SettingsWidget*   settingsWidget;
+    EarthView*        earthViewPointer;
+    MetaGranules*     metaGranulesPointer;
 
     void createMenuBar();
     void createPythonConsole();
@@ -87,6 +89,7 @@ public slots:
     void aboutProgram();
     void openHandBook();
     void showTimeLine();
+    void showSatinWgt();
 
     void showSettings();
     void setFullScreen(bool value=false);

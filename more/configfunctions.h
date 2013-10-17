@@ -57,6 +57,8 @@ inline ConfigData* readConfigFile(ConfigData *configData)
     configData->datetime = settings->value("other/current_datetime",
                                            QDateTime::currentDateTime().toString(Qt::ISODate)).toDateTime();
 
+    configData->hideStartWidget = settings->value("other/hide_start_widget", 0).toInt();
+
     configData->favoriteProducts->clear();
     QStringList favoriteProductsStringList = settings->value("other/favorite_products").toStringList();
     foreach(QString n, favoriteProductsStringList) configData->favoriteProducts->append(n.toInt());

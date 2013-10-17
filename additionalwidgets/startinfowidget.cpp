@@ -8,6 +8,8 @@ StartInfoWidget::StartInfoWidget(ConfigData *configData, QWidget *mainWindow, QW
 //    setModal(true);
     setAttribute(Qt::WA_DeleteOnClose);
 
+    _configData = configData;
+
     wgt = new QWidget(this);
 
     mainLayout = new QVBoxLayout(this);
@@ -19,19 +21,21 @@ StartInfoWidget::StartInfoWidget(ConfigData *configData, QWidget *mainWindow, QW
                        tr("To get started, select a product by clicking \"Add product\" on the top menu."), wgt);
     label->setWordWrap(true);
 
-    button = new QPushButton("Close", wgt);
+    closeButton = new QPushButton("Close", wgt);
 //    button->setFixedSize(48,48);
+    connect(closeButton, &QPushButton::clicked, this, &StartInfoWidget::close);
 
-    connect(button, &QPushButton::clicked, this, &StartInfoWidget::close);
+    hideCheckBox = new QCheckBox(tr("Hide during next launch"), this);
 
     setFixedSize(512,224);
 
+    gridLayout->addWidget(hideCheckBox, 1,0);
     gridLayout->addWidget(label, 0, 1);
-    gridLayout->addWidget(button, 1, 1);
+    gridLayout->addWidget(closeButton, 1, 1, 1, 1, Qt::AlignRight);
 
     // add logo
     QImageReader *ir = new QImageReader;
-    if (configData->lang.toLower().startsWith("ru"))
+    if (_configData->lang.toLower().startsWith("ru"))
         ir->setFileName(":/logo-ru.png");
     else
         ir->setFileName(":/logo-en.png");
@@ -51,4 +55,16 @@ StartInfoWidget::StartInfoWidget(ConfigData *configData, QWidget *mainWindow, QW
 
     move(mainWindow->width()/2 - size().width()/2,
          mainWindow->height()/2 - size().height()/2);
+}
+
+void StartInfoWidget::closeEvent(QCloseEvent *ev)
+{
+    if (hideCheckBox->isChecked())
+    {
+        QSettings *settings = new QSettings(_configData->configFile, QSettings::IniFormat);
+        settings->setValue("other/hide_start_widget", 1);
+        settings->sync();
+        delete settings;
+    }
+    QDialog::closeEvent(ev);
 }

@@ -57,7 +57,8 @@ SOURCES = \
     3d/grid3d.cpp \
     additionalwidgets/addimagewidget.cpp \
     3d/sarimagenode.cpp \
-    additionalwidgets/startinfowidget.cpp
+    additionalwidgets/startinfowidget.cpp \
+    network/satinlogin.cpp
 HEADERS = \
     mainwidget.h \
     windowwidget.h \
@@ -110,7 +111,8 @@ HEADERS = \
     3d/grid3d.h \
     additionalwidgets/addimagewidget.h \
     3d/sarimagenode.h \
-    additionalwidgets/startinfowidget.h
+    additionalwidgets/startinfowidget.h \
+    network/satinlogin.h
 RESOURCES += \
     syntool.qrc
 DEPENDPATH += resources

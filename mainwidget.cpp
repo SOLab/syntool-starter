@@ -167,6 +167,11 @@ void MainWindow::showTimeLine()
         timeLine->show();
 }
 
+void MainWindow::showSatinWgt()
+{
+    satinWgt = new SatinLoginWidget(this);
+}
+
 void MainWindow::createMenuBar()
 {
     menuBar()->setContentsMargins(0,0,0,0);

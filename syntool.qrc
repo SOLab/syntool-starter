@@ -75,5 +75,6 @@
         <file alias="zoom_in.png">resources/icons/zoom_in.png</file>
         <file alias="zoom_out.png">resources/icons/zoom_out.png</file>
         <file alias="scale_button.png">resources/icons/scale_button.png</file>
+        <file alias="satin.png">resources/icons/satin.png</file>
     </qresource>
 </RCC>
