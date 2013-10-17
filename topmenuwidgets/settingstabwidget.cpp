@@ -132,6 +132,16 @@ void SettingsTabWidget::createOtherWidget()
     otherGridLayout->addWidget(granuleDisplayNumberLabel, 1,0);
     otherGridLayout->addWidget(numberDisplayedGranulesEdit, 1,1);
 
+    QLabel* hideStartWidgetLabel = new QLabel(tr("Hide StartWidget during next launch"), otherWidget);
+    hideStartWidget = new QCheckBox(this);
+    if(configData->hideStartWidget)
+        hideStartWidget->setChecked(true);
+    else
+        hideStartWidget->setChecked(false);
+
+    otherGridLayout->addWidget(hideStartWidgetLabel, 2,0);
+    otherGridLayout->addWidget(hideStartWidget, 2,1);
+
     otherGridLayout->setAlignment(Qt::AlignTop);
 
     addTab(otherWidget, tr("Other"));

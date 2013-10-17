@@ -9,6 +9,7 @@
 #include <QSpinBox>
 #include <QDebug>
 #include <QSettings>
+#include <QCheckBox>
 
 #include "more/structure.h"
 #include "fileopenwidget.h"
@@ -29,6 +30,7 @@ public:
 
     QSpinBox*       timelineFrequencyEdit;
     QSpinBox*       numberDisplayedGranulesEdit;
+    QCheckBox*      hideStartWidget;
 
 protected:
     ConfigData* configData;

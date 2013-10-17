@@ -101,6 +101,10 @@ void SettingsWidget::saveChanges()
     {
         settings->setValue("other/timeline_move_frequency",mainTabWidget->timelineFrequencyEdit->value());
         settings->setValue("other/number_displayed_granules",mainTabWidget->numberDisplayedGranulesEdit->value());
+        if (mainTabWidget->hideStartWidget->isChecked())
+            settings->setValue("other/hide_start_widget", 1);
+        else
+            settings->setValue("other/hide_start_widget", 0);
     }
     settings->sync();
     delete settings;
