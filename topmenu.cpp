@@ -88,6 +88,7 @@ TopMenu::TopMenu(QWidget *parent) :
     SatinButton = new TopMenuButton;
     SatinButton->setIcon(QIcon(":/icons/satin.png"));
     SatinButton->setToolTip(tr("Satin log in"));
+    SatinButton->hide();
     connect(SatinButton, SIGNAL(clicked()), parent, SLOT(showSatinWgt()));
 
     PythonScriptButton = new TopMenuButton;
