@@ -16,17 +16,17 @@ Dependences
 freeglut
 
 Install on Debian
-
+```bash
   sudo apt-get install freeglut3
-
+```
 Install on Fedora
-
+```bash
   sudo yum install freeglut-devel
-
+```
 Install on Gentoo
-
+```bash
   sudo emerge media-libs/freeglut
-
+```
 
 ==================================
 
@@ -38,7 +38,7 @@ Directories
 ===============================
 
 Build Qt5.1 + QT3D on linux
-
+```bash
   mkdir depot
 
   mkdir -p build/qt5
@@ -58,11 +58,11 @@ Build Qt5.1 + QT3D on linux
   ./qtbase/bin/qmake ../../depot/qt5/qt3d/qt3d.pro
 
   make -j 9
-
+```
 ==================================================
 
 Build SynTool Starter. And Run.
-
+```bash
   git clone https://github.com/SpiritD/syntool
 
   cd syntool
@@ -72,7 +72,7 @@ Build SynTool Starter. And Run.
   make -j9
 
   bin/syntool
-
+```
 =============
 
 ![ScreenShot](http://wiki.solab.rshu.ru/images/0/06/Syntool_layers.png)
