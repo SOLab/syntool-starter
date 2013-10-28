@@ -1,0 +1,13 @@
+moc_*
+*.o
+*.fsh
+*.vsh
+*.txt
+solarsystem
+*.ico
+Makefile
+*.user
+*.autosave
+bin/*
+qrc_*
+syntool.pro.user*
