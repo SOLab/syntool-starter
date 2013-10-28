@@ -74,3 +74,5 @@ Build SynTool Starter. And Run.
   bin/syntool
 
 =============
+
+![ScreenShot](http://wiki.solab.rshu.ru/images/0/06/Syntool_layers.png)
