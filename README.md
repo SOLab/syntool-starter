@@ -37,7 +37,7 @@ Directories
 
 ===============================
 
-Build Qt5.1 + QT3D on linux
+Build Qt5.1 + Qt3D on linux
 ```bash
 mkdir depot
 mkdir -p build/qt5
